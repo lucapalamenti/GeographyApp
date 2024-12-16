@@ -1,0 +1,12 @@
+services:
+  app:
+    build: ./app
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+    volumes:
+      - ./app/src:/app/src
+      - ./app/static:/app/static
+      - ./app/templates:/app/templates
+    env_file:
+      - .env

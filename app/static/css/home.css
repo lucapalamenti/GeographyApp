@@ -1,0 +1,31 @@
+/* * {
+    border: 1px solid black;
+} */
+
+header div {
+    background-color: rgb(31, 151, 71);
+}
+
+header nav {
+    background-color: rgb(28, 134, 64);
+}
+
+svg {
+    width: 100%;
+    border: 8px solid black;
+    background-color: rgb(146, 192, 204) !important;
+    background-image: url(../images/USA_Map.png);
+    background-size: cover;
+}
+
+polygon {
+    fill: rgba(0, 255, 0, 0.5);
+    stroke-width: 0.25;
+    stroke: black;
+}
+polygon:hover {
+    fill: green;
+}
+polygon:active {
+    fill: darkgreen;
+}
