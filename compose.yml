@@ -10,3 +10,16 @@ services:
       - ./app/templates:/app/templates
     env_file:
       - .env
+
+  database:
+    image: mariadb:latest
+    restart: unless-stopped
+    ports:
+      - 3307:3306
+    volumes:
+      # Mount a volume for mariadb's persistent files for lifecycle outside of stack
+      - "./database/data:/var/lib/mysql"
+      # Mount the db_schema directory into the container to be auto-read and created in the new db
+      - "./database/db_schema:/docker-entrypoint-initdb.d"
+    env_file:
+      - .env
