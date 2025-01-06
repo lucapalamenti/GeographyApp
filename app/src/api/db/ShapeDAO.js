@@ -16,7 +16,8 @@ const getShapeById = ( shape_id ) => {
     });
 };
 
-const createShape = ( shape_map_id, shape_name, shape_points ) => {
+const createShape = ( shapeData ) => {
+    const { shape_map_id, shape_name, shape_points } = shapeData;
     return database.query('INSERT INTO shape (shape_map_id, shape_name, shape_points) VALUES (?,?,?)', [shape_map_id, shape_name, shape_points]).then( rows => {
         if ( rows.affectedRows === 1 ) {
             return getShapeById( rows.insertId );
@@ -25,8 +26,30 @@ const createShape = ( shape_map_id, shape_name, shape_points ) => {
     });
 };
 
+const updatePoints = ( shapeData ) => {
+    const { shape_id, shape_points } = shapeData;
+    return database.query('UPDATE shape SET shape_points = ? WHERE shape_id = ?', [shape_points, shape_id]).then( rows => {
+        if ( rows.affectedRows === 1 ) {
+            return getShapeById( shape_id );
+        }
+        throw new Error('Error appending points to shape!');
+    });
+}
+
+const appendPoints = ( appendData ) => {
+    const { shape_id, shape_points } = appendData;
+    return database.query('UPDATE shape SET shape_points = CONCAT(shape_points, ?, ?) WHERE shape_id = ?', [' ', shape_points, shape_id]).then( rows => {
+        if ( rows.affectedRows === 1 ) {
+            return getShapeById( shape_id );
+        }
+        throw new Error('Error appending points to shape!');
+    });
+}
+
 module.exports = {
     getShapes,
     getShapeById,
-    createShape
+    createShape,
+    updatePoints,
+    appendPoints
 };

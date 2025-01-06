@@ -17,8 +17,30 @@ APIRouter.get('/shapes', (req, res) => {
 });
 
 APIRouter.post('/shapes', (req, res) => {
-    const data = req.body;
-    ShapeDAO.createShape( data.shape_map_id, data.shape_name, data.shape_points );
+    ShapeDAO.createShape( req.body ).then( shape => {
+        res.json( shape );
+    })
+    .catch( err => {
+        res.status(500).json({error:err, message: 'Error creating shape'});
+    });
+});
+
+APIRouter.put('/shapes', (req, res) => {
+    ShapeDAO.updatePoints( req.body ).then( shape => {
+        res.json( shape );
+    })
+    .catch( err => {
+        res.status(500).json({error:err, message: 'Error updating shape'});
+    })
+});
+
+APIRouter.put('/shapes/points', (req, res) => {
+    ShapeDAO.appendPoints( req.body ).then( shape => {
+        res.json( shape );
+    })
+    .catch( err => {
+        res.status(500).json({error:err, message: 'Error updating shape'});
+    })
 });
 
 module.exports = APIRouter;

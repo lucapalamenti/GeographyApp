@@ -11,7 +11,7 @@ header nav {
 }
 
 svg {
-    width: 100%;
+    width: 3200px;
     border: 8px solid black;
     background-color: rgb(146, 192, 204) !important;
     background-image: url(../images/USA_Map.png);
@@ -28,4 +28,8 @@ polygon:hover {
 }
 polygon:active {
     fill: darkgreen;
+}
+
+:not(svg) {
+    transform-origin: 0px 0px;
 }

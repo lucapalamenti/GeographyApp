@@ -2,14 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="css/all.css" />
-    <link rel="stylesheet" href="css/home.css" />
-    <link rel="stylesheet" href="css/RhodeIsland.css" />
+    <link rel="stylesheet" href="css/home.css"/>
 
     <script src="js/parse.js" type="module"></script>
-
     <title>Map1</title>
 </head>
 <body>
@@ -23,8 +22,14 @@
     </header>
     <main>
         <svg viewBox="0 0 1600 900" preserveAspectRatio="none" style='background-color: whitesmoke'>
-            <polygon id="RhodeIsland" points="627,40 655,38 835,33 845,31.5 932,30 932,153 962,148" />
+            
         </svg>
+        <button>HERE</button>
     </main>
+    <template id="polygon-template">
+        <svg>
+            <polygon points="" />
+        </svg>
+    </template>
 </body>
 </html>

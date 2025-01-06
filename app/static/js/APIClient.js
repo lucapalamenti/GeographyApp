@@ -10,21 +10,41 @@ const handleAuthError = ( error ) => {
     throw error;
 };
 
-const getShapes = () => {
-    return HTTPClient.get(`${BASE_API_PATH}/shapes`)
-        .catch(handleAuthError);
+const getShapes = async () => {
+    try {
+        return await HTTPClient.get(`${BASE_API_PATH}/shapes`);
+    } catch (error) {
+        return handleAuthError(error);
+    }
 };
 
-const createShape = ( shape_map_id, shape_name, shape_points ) => {
-    const data = {
-        shape_map_id: shape_map_id,
-        shape_name: shape_name,
-        shape_points: shape_points
+const createShape = async ( shapeData ) => {
+    try {
+        return await HTTPClient.post(`${BASE_API_PATH}/shapes`, shapeData);
+    } catch (error) {
+        return handleAuthError(error);
     }
-    return HTTPClient.post(`${BASE_API_PATH}/shapes`, data);
-}
+};
+
+const updatePoints = async ( shapeData ) => {
+    try {
+        return await HTTPClient.put(`${BASE_API_PATH}/shapes`, shapeData);
+    } catch (error) {
+        return handleAuthError(error);
+    }
+};
+
+const appendPoints = async ( appendData ) => {
+    try {
+        return await HTTPClient.put(`${BASE_API_PATH}/shapes/points`, appendData);
+    } catch (error) {
+        return handleAuthError(error);
+    }
+};
 
 export default {
     getShapes,
-    createShape
+    createShape,
+    updatePoints,
+    appendPoints
 }
