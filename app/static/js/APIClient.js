@@ -42,9 +42,18 @@ const appendPoints = async ( appendData ) => {
     }
 };
 
+const deleteShapesFromMap = async ( mapId ) => {
+    try {
+        return await HTTPClient.delete(`${BASE_API_PATH}/shapes/map/${mapId}`);
+    } catch (error) {
+        return handleAuthError(error);
+    }
+};
+
 export default {
     getShapes,
     createShape,
     updatePoints,
-    appendPoints
+    appendPoints,
+    deleteShapesFromMap
 }

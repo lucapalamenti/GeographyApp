@@ -34,7 +34,7 @@ const updatePoints = ( shapeData ) => {
         }
         throw new Error('Error appending points to shape!');
     });
-}
+};
 
 const appendPoints = ( appendData ) => {
     const { shape_id, shape_points } = appendData;
@@ -44,12 +44,19 @@ const appendPoints = ( appendData ) => {
         }
         throw new Error('Error appending points to shape!');
     });
-}
+};
+
+const deleteShapesFromMap = ( mapId ) => {
+    return database.query('DELETE FROM shape', [mapId]).then( rows => {
+        return rows.affectedRows;
+    });
+};
 
 module.exports = {
     getShapes,
     getShapeById,
     createShape,
     updatePoints,
-    appendPoints
+    appendPoints,
+    deleteShapesFromMap
 };

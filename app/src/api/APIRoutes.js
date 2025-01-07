@@ -31,7 +31,7 @@ APIRouter.put('/shapes', (req, res) => {
     })
     .catch( err => {
         res.status(500).json({error:err, message: 'Error updating shape'});
-    })
+    });
 });
 
 APIRouter.put('/shapes/points', (req, res) => {
@@ -40,7 +40,16 @@ APIRouter.put('/shapes/points', (req, res) => {
     })
     .catch( err => {
         res.status(500).json({error:err, message: 'Error updating shape'});
+    });
+});
+
+APIRouter.delete('/shapes/map/:mapId', (req, res) => {
+    ShapeDAO.deleteShapesFromMap( req.params.mapId ).then( affectedRows => {
+        res.json( affectedRows );
     })
+    .catch( err => {
+        res.status(500).json({error:err, message: 'Error deleting shapes'});
+    });
 });
 
 module.exports = APIRouter;
