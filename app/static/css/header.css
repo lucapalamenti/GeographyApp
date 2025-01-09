@@ -1,0 +1,17 @@
+header {
+    color: black !important;
+}
+
+header div {
+    padding: 2px;
+    background-color: rgb(31, 151, 71);
+}
+
+header nav {
+    padding: 2px;
+    background-color: rgb(28, 134, 64);
+}
+
+header a {
+    text-decoration: none;
+}

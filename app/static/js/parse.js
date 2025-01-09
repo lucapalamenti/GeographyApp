@@ -4,54 +4,17 @@ import US_states from '../test/US_states.js';
 const text = US_states.text;
 const b1 = document.querySelector('#b1');
 const b2 = document.querySelector('#b2');
-const svg = document.querySelector('SVG');
 const SVG_WIDTH = 1600; // in pixels
 const SVG_HEIGHT = 900; // in pixels
 const Y_SCALE = 1.25; // stretches in Y axis to account for squished appearance
 const PADDING = 10; // in pixels
 
-const ALASKA_OFFSET_X = 600;
-const ALASKA_OFFSET_Y = 910;
-const ALASKA_SCALE = 0.4;
-const HAWAII_OFFSET_X = 1475;
+const ALASKA_OFFSET_X = 475;
+const ALASKA_OFFSET_Y = 900;
+const ALASKA_SCALE_X = 0.3;
+const ALASKA_SCALE_Y = 0.4;
+const HAWAII_OFFSET_X = 1400;
 const HAWAII_OFFSET_Y = -225;
-
-document.addEventListener('DOMContentLoaded', () => {
-    loadAll();
-});
-
-const loadAll = () => {
-    APIClient.getShapes().then( returnedShapes => {
-        returnedShapes.forEach( shape => {
-            const polygon = document.getElementById('polygon-template').content.cloneNode(true).querySelector('POLYGON');
-            polygon.setAttribute('class', shape.shape_name.split(' ').join('_'));
-            polygon.setAttribute('points', shape.shape_points);
-            svg.appendChild( polygon );
-            polygon.addEventListener('mouseover', () => {
-                document.querySelectorAll(`.${polygon.className.baseVal}`).forEach( eWithSameClass => {
-                    eWithSameClass.style.fill = "rgb(0, 200, 0)";
-                });
-            });
-            polygon.addEventListener('mousedown', () => {
-                document.querySelectorAll(`.${polygon.className.baseVal}`).forEach( eWithSameClass => {
-                    eWithSameClass.style.fill = "rgb(0, 150, 0)";
-                });
-            });
-            polygon.addEventListener('mouseup', () => {
-                document.querySelectorAll(`.${polygon.className.baseVal}`).forEach( eWithSameClass => {
-                    eWithSameClass.style.fill = "rgb(0, 200, 0)";
-                });
-            });
-            polygon.addEventListener('mouseout', () => {
-                document.querySelectorAll(`.${polygon.className.baseVal}`).forEach( eWithSameClass => {
-                    eWithSameClass.style.fill = "";
-                });
-            });
-        });
-    }).catch( err => {
-        console.error( err );
-    });
-}
 
 const stateNames = [
     "Alabama",
@@ -200,7 +163,8 @@ b1.addEventListener('click', () => {
         const multiplier = Math.min( ( SVG_WIDTH - PADDING * 2 ) / ( maxX - minX ), ( SVG_HEIGHT - PADDING * 2 ) / ( maxY - minY ) / Y_SCALE );
         const offsetX = ( name === "Alaska" ) ? ALASKA_OFFSET_X : ( ( name === "Hawaii" ) ? HAWAII_OFFSET_X : 0);
         const offsetY = ( name === "Alaska" ) ? ALASKA_OFFSET_Y : ( ( name === "Hawaii" ) ? HAWAII_OFFSET_Y : 0);
-        const scale = ( name === "Alaska" ) ? ALASKA_SCALE : 1;
+        const scaleX = ( name === "Alaska" ) ? ALASKA_SCALE_X : 1;
+        const scaleY = ( name === "Alaska" ) ? ALASKA_SCALE_Y : 1;
 
         // For each set of points for THIS POLYGON
         // 2. Now we can create the polygons
@@ -212,8 +176,8 @@ b1.addEventListener('click', () => {
 
             for ( let i = 0; i < L; i++ ) {
                 let xy = updatedPoints[i].split(',');
-                let x = Math.round( ( ( Number( xy[0] ) - minX ) * multiplier * scale + PADDING + offsetX ) * 1000000 ) / 1000000;
-                let y = Math.round( ( ( Number( xy[1] ) - maxY ) * multiplier * Y_SCALE * scale - PADDING - offsetY ) * 1000000 ) / -1000000;
+                let x = Math.round( ( ( Number( xy[0] ) - minX ) * multiplier * scaleX + PADDING + offsetX ) * 1000000 ) / 1000000;
+                let y = Math.round( ( ( Number( xy[1] ) - maxY ) * multiplier * Y_SCALE * scaleY - PADDING - offsetY ) * 1000000 ) / -1000000;
                 updatedPoints[i] = `${x},${y}`;
             }
 
@@ -254,7 +218,6 @@ b1.addEventListener('click', () => {
             }
         });
     });
-    loadAll();
 });
 
 b2.addEventListener('click', () => {

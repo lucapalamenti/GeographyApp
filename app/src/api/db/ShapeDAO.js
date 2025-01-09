@@ -16,6 +16,12 @@ const getShapeById = ( shape_id ) => {
     });
 };
 
+const getShapesByMapId = ( shape_map_id ) => {
+    return database.query('SELECT * FROM shape WHERE shape_map_id=?', [shape_map_id]).then( rows => {
+        return rows;
+    });
+};
+
 const createShape = ( shapeData ) => {
     const { shape_map_id, shape_name, shape_points } = shapeData;
     return database.query('INSERT INTO shape (shape_map_id, shape_name, shape_points) VALUES (?,?,?)', [shape_map_id, shape_name, shape_points]).then( rows => {
@@ -55,6 +61,7 @@ const deleteShapesFromMap = ( mapId ) => {
 module.exports = {
     getShapes,
     getShapeById,
+    getShapesByMapId,
     createShape,
     updatePoints,
     appendPoints,
