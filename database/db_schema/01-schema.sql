@@ -14,14 +14,24 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+-- Dumping structure for table geographyapp.map
+CREATE TABLE IF NOT EXISTS `map` (
+  `map_id` int(10) NOT NULL,
+  `map_name` varchar(100) NOT NULL DEFAULT '',
+  `map_shape_names` mediumtext DEFAULT NULL,
+  PRIMARY KEY (`map_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+
+-- Data exporting was unselected.
+
 -- Dumping structure for table geographyapp.shape
 CREATE TABLE IF NOT EXISTS `shape` (
   `shape_id` int(10) NOT NULL AUTO_INCREMENT,
-  `shape_map_id` int(10) NOT NULL,
+  `shape_map_id` int(10) NOT NULL DEFAULT 0,
   `shape_name` tinytext NOT NULL,
   `shape_points` mediumtext NOT NULL,
   PRIMARY KEY (`shape_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=70737 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 -- Data exporting was unselected.
 
