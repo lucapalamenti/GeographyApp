@@ -56,3 +56,4 @@ await APIClient.getShapesByMapId( map_id ).then( returnedShapes => {
     console.error( err );
 });
 
+console.log( shapeNames );

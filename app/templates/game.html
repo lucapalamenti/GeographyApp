@@ -20,13 +20,60 @@
             <h1>Geography App</h1>
         </div>
         <nav id="nav-bar">
+            <button id="b1">BUTTON</button>
             <a href="../">Home</a>
             <strong>></strong>
         </nav>
     </header>
+    <div id="covering"></div>
     <main>
-        <svg viewBox="0 0 1600 900" preserveAspectRatio="none" style='background-color: whitesmoke'></svg>
-        <button id="b1">BUTTON</button>
+        <!-- Shows up on page on load and when switching gamemodes -->
+        <div id="gamemodePanel">
+            <h3>Select Gamemode</h3>
+            <div class="input-label">
+                <input type="radio" name="gamemode" id="click" value="click">
+                <label for="click">Click</label>
+            </div>
+            <div class="input-label">
+                <input type="radio" name="gamemode" id="clickDisappear" value="clickDisappear">
+                <label for="clickDisappear">Click (Disappear)</label>
+            </div>
+            <div class="input-label">
+                <input type="radio" name="gamemode" id="clickEndless" value="clickEndless">
+                <label for="clickEndless">Click (Endless)</label>
+            </div>
+            <div class="input-label">
+                <input type="radio" name="gamemode" id="type" value="type">
+                <label for="type">Type</label>
+            </div>
+            <div class="input-label">
+                <input type="radio" name="gamemode" id="typeHard" value="typeHard">
+                <label for="typeHard">Type (Hard)</label>
+            </div>
+            <div class="input-label">
+                <input type="radio" name="gamemode" id="typeEndless" value="typeEndless">
+                <label for="typeEndless">Type (Endless)</label>
+            </div>
+            <div class="input-label">
+                <input type="radio" name="gamemode" id="noMap" value="noMap">
+                <label for="noMap">No Map</label>
+            </div>
+            <div class="input-label">
+                <input type="radio" name="gamemode" id="noList" value="noList">
+                <label for="noList">No List</label>
+            </div>
+            <div id="gamemode-button-panel">
+                <button id="btn-select">Select</button>
+                <button id="btn-cancel">Cancel</button>
+            </div>
+        </div>
+
+        <div id="game-area">
+            <div id="prompt-bar">
+                Click on <strong>Alabama</strong>
+            </div>
+            <svg viewBox="0 0 1600 900" preserveAspectRatio="none" style='background-color: whitesmoke'></svg>
+        </div>
     </main>
     <template id="polygon-template">
         <svg>

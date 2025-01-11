@@ -1,6 +1,63 @@
-svg {
+#covering {
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+#gamemodePanel {
+    z-index: 1;
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    border: 5px solid rgb(28, 134, 64);
+    border-radius: 15px;
+    padding: 10px;
+    background-color: rgb(31, 151, 71);
+}
+
+#gamemodePanel h3 {
+    border-bottom: 3px solid rgb(28, 134, 64);
+}
+
+#gamemode-button-panel {
+    display: flex;
+    justify-content: end;
+    gap: 5px;
+}
+
+#gamemode-button-panel button {
+    border-radius: 5px;
+    padding: 8px;
+    color: black;
+    cursor: pointer;
+}
+
+#btn-select {
+    border: 3px solid rgb(19, 92, 44);
+    background-color: rgb(96, 204, 69);
+}
+
+#btn-cancel {
+    background-color: rgb(216, 216, 216);
+    border: 3px solid white;
+}
+
+.input-label {
+    display: flex;
+    gap: 5px;
+}
+
+#game-area {
     width: 80%;
-    border: 8px solid black;
+}
+
+svg {
+    border: 8px solid rgb(28, 134, 64);
     background-color: rgb(141, 209, 226) !important;
     /* background-image: url(../images/USA_Map.png); */
     background-size: cover;
@@ -12,8 +69,19 @@ polygon {
     stroke: rgb(46, 46, 26);
 }
 
+#prompt-bar {
+    border: 3px solid rgb(28, 134, 64);
+    border-bottom: none;
+    background-color: rgb(31, 151, 71);
+    font-size: 1.5rem;
+}
+
+#prompt-bar strong {
+    font-size: 1.5rem;
+}
+
 @media screen and (max-width : 600px) {
-    svg {
+    #game-area {
         width: 100%;
     } 
 }
