@@ -11,8 +11,8 @@ frontendRouter.get('/', (req, res) => {
     res.sendFile(`${html_dir}index.html`);
 });
 
-frontendRouter.get('/USA', (req, res) => {
-    res.sendFile(`${html_dir}USA.html`);
+frontendRouter.get('/game', (req, res) => {
+    res.sendFile(`${html_dir}game.html`);
 });
 
 module.exports = frontendRouter;

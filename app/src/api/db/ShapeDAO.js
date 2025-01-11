@@ -8,7 +8,7 @@ const getShapes = () => {
 };
 
 const getShapeById = ( shape_id ) => {
-    return database.query('SELECT * FROM shape WHERE shape_id=?', [shape_id]).then( rows => {
+    return database.query('SELECT * FROM shape WHERE shape_id = ?', [shape_id]).then( rows => {
         if ( rows.length === 1 ) {
             return new Shape( rows[0] );
         }
@@ -17,7 +17,7 @@ const getShapeById = ( shape_id ) => {
 };
 
 const getShapesByMapId = ( shape_map_id ) => {
-    return database.query('SELECT * FROM shape WHERE shape_map_id=?', [shape_map_id]).then( rows => {
+    return database.query('SELECT * FROM shape WHERE shape_map_id = ? ORDER BY shape_name', [shape_map_id]).then( rows => {
         return rows;
     });
 };

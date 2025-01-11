@@ -8,37 +8,33 @@
     <link rel="stylesheet" href="css/header.css" />
     <link rel="stylesheet" href="css/index.css" />
 
+    <script src="js/index.js" type="module"></script>
+
     <title>Map1</title>
 </head>
 <body>
     <header>
         <div>
-            <h1>My App</h1>
+            <h1>Geography App</h1>
         </div>
         <nav>
             <a href="../">Home</a>
             <strong>></strong>
-            <a href="USA">USA</a>
-            <strong>></strong>
-            <a href="">All 50 States</a>
         </nav>
     </header>
     <main>
-        <div class="map-region-button-container">
-            <div class="map-region-button-top">
-                <h3>USA</h3>
-            </div>
-            <div class="map-region-button-bottom">
-                bottom
-            </div>
-        </div>
+        <nav id="map-navigation">
+        </nav>
     </main>
 
     <!-- Templates -->
-    <template id="map-region-button-template">
-        <div class="map-region-button-container">
-            a
-        </div>
+    <template id="map-button-template">
+        <a href="" class="map-button-container">
+            <div class="map-button-top">
+                <h4 class="map-button-label"></h4>
+            </div>
+            <div class="map-button-bottom"></div>
+        </a>
     </template>
 
 </body>

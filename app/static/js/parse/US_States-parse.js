@@ -1,9 +1,8 @@
-import APIClient from './APIClient.js';
-import US_states from '../test/US_states.js';
+import APIClient from '../APIClient.js';
+import US_states from '../../../test/US_states.js';
 
 const text = US_states.text;
 const b1 = document.querySelector('#b1');
-const b2 = document.querySelector('#b2');
 const SVG_WIDTH = 1600; // in pixels
 const SVG_HEIGHT = 900; // in pixels
 const Y_SCALE = 1.25; // stretches in Y axis to account for squished appearance
@@ -185,7 +184,7 @@ b1.addEventListener('click', () => {
 
             const MAX_PAYLOAD_LENGTH = 1000;
             const shapeData = {
-                shape_map_id: 0,
+                shape_map_id: 2,
                 shape_name: name,
                 shape_points: updatedPoints.slice( 0, MAX_PAYLOAD_LENGTH ).join(' ')
             };
@@ -217,13 +216,5 @@ b1.addEventListener('click', () => {
                 }
             }
         });
-    });
-});
-
-b2.addEventListener('click', () => {
-    APIClient.deleteShapesFromMap( 0 ).then( affectedRows => {
-        console.log( "Affected rows:", affectedRows );
-    }).catch( err => {
-        console.error( err );
     });
 });
