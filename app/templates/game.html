@@ -70,11 +70,19 @@
         <div id="game-area">
             <!--  Used for Clicking gamemodes -->
             <div id="prompt-bar-1" class="prompt-bar">
-                <p>Click on</p><strong></strong>
+                <div class="flex-row">
+                    <p>Click on</p>
+                    <strong></strong>
+                </div>
+                <p id="tally"></p>
             </div>
             <!--  Used for Typing gamemodes -->
             <div id="prompt-bar-2" class="prompt-bar">
-                <p>Type the highlighted region</p><input type="text">
+                <div class="flex-row">
+                    <p>Name the highlighted region</p>
+                    <input type="text">
+                </div>
+                <p id="tally"></p>
             </div>
             <svg viewBox="0 0 1600 900" preserveAspectRatio="none" style='background-color: whitesmoke'></svg>
             <button id="b1">Populate svg with Polygons</button>

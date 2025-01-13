@@ -83,7 +83,7 @@ polygon {
 
 .prompt-bar {
     display: none;
-    gap: 5px;
+    justify-content: space-between;
     border: 3px solid rgb(28, 134, 64);
     border-bottom: none;
     padding: 5px;
@@ -95,7 +95,6 @@ polygon {
 }
 
 .prompt-bar input {
-    width: 100%;
     max-width: 300px;
     padding-left: 5px;
     color: black;

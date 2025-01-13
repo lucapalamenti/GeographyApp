@@ -37,3 +37,9 @@ h5 {
 h6 {
     font-size: 1.25rem;
 }
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}
