@@ -1,10 +1,15 @@
 import APIClient from './APIClient.js';
+import { gamemodeMap } from './gamemodes.js';
 
 const query = window.location.search;
 let parameters = new URLSearchParams( query );
 const map_id = Number( parameters.get('mapId') );
 
 const svg = document.querySelector('SVG');
+const selectButton = document.getElementById('btn-select');
+const cancelButton = document.getElementById('btn-cancel');
+const gamemodePanel = document.getElementById('gamemodePanel');
+const covering = document.getElementById('covering');
 
 // Update header bar
 await APIClient.getMapById( map_id ).then( returnedMap => {
@@ -32,23 +37,31 @@ await APIClient.getShapesByMapId( map_id ).then( returnedShapes => {
         svg.appendChild( polygon );
         shapeNames.add( shape.shape_name );
         polygon.addEventListener('mouseover', () => {
-            document.querySelectorAll(`.${polygon.className.baseVal}`).forEach(eWithSameClass => {
-                eWithSameClass.style.fill = "rgb(210, 211, 117)";
+            document.querySelectorAll(`.${polygon.classList[0]}`).forEach(eWithSameClass => {
+                if ( polygon.classList.length === 1 ) {
+                    eWithSameClass.style.fill = "rgb(210, 211, 117)";
+                }
             });
         });
         polygon.addEventListener('mousedown', () => {
-            document.querySelectorAll(`.${polygon.className.baseVal}`).forEach(eWithSameClass => {
-                eWithSameClass.style.fill = "rgb(190, 191, 97)";
+            document.querySelectorAll(`.${polygon.classList[0]}`).forEach(eWithSameClass => {
+                if ( polygon.classList.length === 1 ) {
+                    eWithSameClass.style.fill = "rgb(190, 191, 97)";
+                }
             });
         });
         polygon.addEventListener('mouseup', () => {
-            document.querySelectorAll(`.${polygon.className.baseVal}`).forEach(eWithSameClass => {
-                eWithSameClass.style.fill = "rgb(210, 211, 117)";
+            document.querySelectorAll(`.${polygon.classList[0]}`).forEach(eWithSameClass => {
+                if ( polygon.classList.length === 1 ) {
+                    eWithSameClass.style.fill = "rgb(210, 211, 117)";
+                }
             });
         });
         polygon.addEventListener('mouseout', () => {
-            document.querySelectorAll(`.${polygon.className.baseVal}`).forEach(eWithSameClass => {
-                eWithSameClass.style.fill = "";
+            document.querySelectorAll(`.${polygon.classList[0]}`).forEach(eWithSameClass => {
+                if ( polygon.classList.length === 1 ) {
+                    eWithSameClass.style.fill = "";
+                }
             });
         });
     });
@@ -56,4 +69,23 @@ await APIClient.getShapesByMapId( map_id ).then( returnedShapes => {
     console.error( err );
 });
 
-console.log( shapeNames );
+let currentGamemode = null;
+
+selectButton.addEventListener('click', () => {
+    const gmInput = document.querySelector('input[name="gamemode"]:checked');
+    // If a gamemode radio button has been selected
+    if ( gmInput ) {
+        currentGamemode = gmInput.value;
+        covering.style.visibility = "hidden";
+        gamemodePanel.style.visibility = "hidden";
+        gamemodePanel.style.cursor = "default";
+        gamemodeMap[currentGamemode]( Array.from( shapeNames ) );
+    }
+});
+
+cancelButton.addEventListener('click', () => {
+    // If no gamemode is selected, go back to previous page
+    if ( !currentGamemode ) {
+        document.location = '../';
+    }
+});

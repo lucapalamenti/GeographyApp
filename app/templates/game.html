@@ -20,7 +20,6 @@
             <h1>Geography App</h1>
         </div>
         <nav id="nav-bar">
-            <button id="b1">BUTTON</button>
             <a href="../">Home</a>
             <strong>></strong>
         </nav>
@@ -69,16 +68,23 @@
         </div>
 
         <div id="game-area">
-            <div id="prompt-bar">
-                Click on <strong>Alabama</strong>
+            <!--  Used for Clicking gamemodes -->
+            <div id="prompt-bar-1" class="prompt-bar">
+                <p>Click on</p><strong></strong>
+            </div>
+            <!--  Used for Typing gamemodes -->
+            <div id="prompt-bar-2" class="prompt-bar">
+                <p>Type the highlighted region</p><input type="text">
             </div>
             <svg viewBox="0 0 1600 900" preserveAspectRatio="none" style='background-color: whitesmoke'></svg>
+            <button id="b1">Populate svg with Polygons</button>
         </div>
     </main>
+    <!-- Polygon template ( it is necessary to copy polygons from inside an svg inside a
+         template instead of creating new polygons in a js file, since a standard <polygon>
+         element will be unrecognized ) -->
     <template id="polygon-template">
-        <svg>
-            <polygon points="" />
-        </svg>
+        <svg><polygon points="" /></svg>
     </template>
 </body>
 </html>
