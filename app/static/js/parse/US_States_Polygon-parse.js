@@ -13,10 +13,9 @@ b1.addEventListener('click', () => {
     tokens.shift();
     tokens.forEach( token => {
         let newTokens = token.split( '"' );
-        console.log( newTokens );
         const shapeData = {
             shape_map_id: 1,
-            shape_name: newTokens[0],
+            shape_name: newTokens[0].toLowerCase(),
             shape_points: newTokens[2]
         };
         APIClient.createShape( shapeData );

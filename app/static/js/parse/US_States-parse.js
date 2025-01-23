@@ -185,7 +185,7 @@ b1.addEventListener('click', () => {
             const MAX_PAYLOAD_LENGTH = 1000;
             const shapeData = {
                 shape_map_id: 2,
-                shape_name: name,
+                shape_name: name.toLowerCase(),
                 shape_points: updatedPoints.slice( 0, MAX_PAYLOAD_LENGTH ).join(' ')
             };
             // If there are too many points to send over the payload
