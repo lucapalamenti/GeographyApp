@@ -1,7 +1,7 @@
 import APIClient from '../APIClient.js';
-import US_Counties from '../../test/US_Counties.js';
+// import US_Counties from '../../test/US_Counties.js';
 
-const text = US_Counties.text;
+// const text = US_Counties.text;
 const b1 = document.querySelector('#b1');
 const SVG_WIDTH = 1600; // in pixels
 const SVG_HEIGHT = 900; // in pixels
@@ -203,8 +203,6 @@ b1.addEventListener('click', () => {
                             console.error( err, "ERROR 1" );
                         }
                     }
-                    
-                    
                 }).catch( err => {
                     console.error( err, "ERROR 2" );
                 });
