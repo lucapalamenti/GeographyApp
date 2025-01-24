@@ -1,7 +1,7 @@
 import APIClient from '../APIClient.js';
-import US_states_polygon from '../../test/US_states_polygon.js';
+import US_States_Polygon from '../../test/US_States_Polygon.js';
 
-const text = US_states_polygon.text;
+const text = US_States_Polygon.text;
 const b1 = document.querySelector('#b1');
 const SVG_WIDTH = 1600; // in pixels
 const SVG_HEIGHT = 900; // in pixels

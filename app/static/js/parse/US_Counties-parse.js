@@ -1,7 +1,7 @@
 import APIClient from '../APIClient.js';
-import US_states from '../../test/US_States.js';
+import US_Counties from '../../test/US_Counties.js';
 
-const text = US_states.text;
+const text = US_Counties.text;
 const b1 = document.querySelector('#b1');
 const SVG_WIDTH = 1600; // in pixels
 const SVG_HEIGHT = 900; // in pixels
