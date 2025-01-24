@@ -18,7 +18,7 @@
 CREATE TABLE IF NOT EXISTS `map` (
   `map_id` int(10) NOT NULL,
   `map_name` varchar(100) NOT NULL DEFAULT '',
-  `map_shape_names` mediumtext DEFAULT NULL,
+  `map_thumbnail` tinytext DEFAULT NULL,
   PRIMARY KEY (`map_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
