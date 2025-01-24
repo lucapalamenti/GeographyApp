@@ -36,37 +36,15 @@ await APIClient.getShapesByMapId( map_id ).then( returnedShapes => {
         polygon.setAttribute('points', shape.shape_points);
         svg.appendChild( polygon );
         shapeNames.add( shape.shape_name );
-        polygon.addEventListener('mouseover', () => {
-            document.querySelectorAll(`.${polygon.classList[0]}`).forEach(eWithSameClass => {
-                if ( polygon.classList.length === 1 ) {
-                    eWithSameClass.style.fill = "rgb(210, 211, 117)";
-                }
-            });
-        });
-        polygon.addEventListener('mousedown', () => {
-            document.querySelectorAll(`.${polygon.classList[0]}`).forEach(eWithSameClass => {
-                if ( polygon.classList.length === 1 ) {
-                    eWithSameClass.style.fill = "rgb(190, 191, 97)";
-                }
-            });
-        });
-        polygon.addEventListener('mouseup', () => {
-            document.querySelectorAll(`.${polygon.classList[0]}`).forEach(eWithSameClass => {
-                if ( polygon.classList.length === 1 ) {
-                    eWithSameClass.style.fill = "rgb(210, 211, 117)";
-                }
-            });
-        });
-        polygon.addEventListener('mouseout', () => {
-            document.querySelectorAll(`.${polygon.classList[0]}`).forEach(eWithSameClass => {
-                if ( polygon.classList.length === 1 ) {
-                    eWithSameClass.style.fill = "";
-                }
-            });
-        });
     });
 }).catch( err => {
     console.error( err );
+});
+
+window.addEventListener('scroll', () => {
+    // Update background covering
+    covering.style.height = `calc(100% + ${window.scrollY}px)`;
+    covering.style.top = `${document.querySelector('HEADER').offsetHeight - window.scrollY}px`;
 });
 
 let currentGamemode = null;
