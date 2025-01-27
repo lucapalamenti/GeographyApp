@@ -180,41 +180,29 @@ b1.addEventListener('click', () => {
                 updatedPoints[i] = `${x},${y}`;
             }
 
-            // let updatedPoints3 = updatedPoints.join(' ');
-
-            const MAX_PAYLOAD_LENGTH = 1000;
+            const MAX_PAYLOAD_LENGTH = 1000; // Pairs of points
             const shapeData = {
                 shape_map_id: 2,
                 shape_name: name.toLowerCase(),
                 shape_points: updatedPoints.slice( 0, MAX_PAYLOAD_LENGTH ).join(' ')
             };
             // If there are too many points to send over the payload
-            if ( updatedPoints.length >  MAX_PAYLOAD_LENGTH ) {
-                // Start off by creating part of the Polygon
-                await APIClient.createShape( shapeData ).then( async shape => {
-                    for ( let i = MAX_PAYLOAD_LENGTH; i < updatedPoints.length; i += MAX_PAYLOAD_LENGTH ) {
-                        const appendData = {
-                            shape_id: shape.shape_id,
-                            shape_points: updatedPoints.slice( i, i + MAX_PAYLOAD_LENGTH ).join(' ')
-                        };
-                        try {
-                            await APIClient.appendPoints( appendData );
-                        } catch ( err ) {
-                            console.error( err, "ERROR 1" );
-                        }
+            // Start off by creating part of the Polygon
+            await APIClient.createShape( shapeData ).then( async shape => {
+                for ( let i = MAX_PAYLOAD_LENGTH; i < updatedPoints.length; i += MAX_PAYLOAD_LENGTH ) {
+                    const appendData = {
+                        shape_id: shape.shape_id,
+                        shape_points: updatedPoints.slice( i, i + MAX_PAYLOAD_LENGTH ).join(' ')
+                    };
+                    try {
+                        await APIClient.appendPoints( appendData );
+                    } catch ( err ) {
+                        console.error( err, "ERROR 1" );
                     }
-                    
-                    
-                }).catch( err => {
-                    console.error( err, "ERROR 2" );
-                });
-            } else {
-                try {
-                    await APIClient.createShape( shapeData )
-                } catch ( err ) {
-                    console.error( err, "ERROR 3" );
                 }
-            }
+            }).catch( err => {
+                console.error( err, "ERROR 2" );
+            });
         });
     });
 });
