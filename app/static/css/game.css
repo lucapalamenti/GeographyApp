@@ -65,6 +65,8 @@
 
 #game-area {
     width: 80%;
+    resize: horizontal;
+    overflow: auto;
 }
 
 svg {

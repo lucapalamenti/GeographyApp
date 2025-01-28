@@ -16,7 +16,7 @@ const promptBar2 = document.getElementById('prompt-bar-2');
 let tally;
 let numCorrect = 0;
 let guesses = 0;
-const clickColors = [ 'rgb(106, 235, 89)', 'rgb(233, 196, 31)', 'rgb(243, 130, 24)', 'rgb(235, 89, 89)' ];
+const clickColors = [ 'rgb(106, 235, 89)', 'rgb(240, 219, 35)', 'rgb(243, 148, 24)', 'rgb(235, 89, 89)' ];
 
 function click ( shapeNames ) { clickGamemodes( shapeNames, false, false ); }
 function clickDisappear ( shapeNames ) { clickGamemodes( shapeNames, true, false ); }
@@ -341,8 +341,6 @@ function endGame() {
  * @param {String} string 
  */
 function capitalizeFirst( string ) {
-    // "west virginia"
-    // "texas"
     const arr = string.split(' ');
     for ( let i = 0; i < arr.length; i++ ) {
         arr[i] = arr[i].slice(0, 1).toUpperCase().concat( arr[i].slice(1) );
