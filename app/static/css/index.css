@@ -29,7 +29,6 @@
     justify-content: end;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
-    background-image: linear-gradient( to top, rgb(28, 134, 64), rgba(0, 0, 0, 0) );
     word-wrap: break-word;
     text-align: center;
 }
@@ -40,4 +39,8 @@
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
     background-color: rgb(31, 151, 71);
+}
+
+.map-button-label {
+    text-shadow: -1px 3px black;
 }

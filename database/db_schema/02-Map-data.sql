@@ -1,6 +1,6 @@
 INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (1, 'US States Polygon', 'US_States_Polygon_Thumbnail.png', '0,0,0');
 INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (2, 'US States', 'US_States_Thumbnail.png', '10,49,97');
-INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (3, 'Alabama Counties', 'Alabama_Counties_Thumbnail.png', '255,0,0');
+INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (3, 'Alabama Counties', 'Alabama_Counties_Thumbnail.png', '178,0,27');
 INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (4, 'Alaska Counties', 'Alaska_Counties_Thumbnail.png', '254,182,24');
 INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (5, 'Arizona Counties', 'Arizona_Counties_Thumbnail.png', '0,33,100');
 INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (6, 'Arkansas Counties', 'Arkansas_Counties_Thumbnail.png', '0,35,104');
@@ -8,8 +8,8 @@ INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) V
 INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (8, 'Colorado Counties', 'Colorado_Counties_Thumbnail.png', '0,35,104');
 INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (9, 'Connecticut Counties', 'Connecticut_Counties_Thumbnail.png', '177,0,177');
 INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (10, 'Delaware Counties', 'Delaware_Counties_Thumbnail.png', '231,200,52');
-INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (11, 'Florida Counties', 'Florida_Counties_Thumbnail.png', '255,186,0');
-INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (12, 'Georgia Counties', 'Georgia_Counties_Thumbnail.png', '238,209,0');
+INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (11, 'Florida Counties', 'Florida_Counties_Thumbnail.png', '169,1,49');
+INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (12, 'Georgia Counties', 'Georgia_Counties_Thumbnail.png', '182,0,34');
 INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (13, 'Hawaii Counties', 'Hawaii_Counties_Thumbnail.png', '1,33,105');
 INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (14, 'Idaho Counties', 'Idaho_Counties_Thumbnail.png', '239,0,57');
 INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (15, 'Illinois Counties', 'Illinois_Counties_Thumbnail.png', '65,138,65');
