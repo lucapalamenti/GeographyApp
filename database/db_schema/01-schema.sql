@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `shape` (
   `shape_name` tinytext NOT NULL,
   `shape_points` mediumtext NOT NULL,
   PRIMARY KEY (`shape_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=70737 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 -- Data exporting was unselected.
 
