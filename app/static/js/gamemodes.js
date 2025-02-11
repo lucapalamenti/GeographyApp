@@ -10,69 +10,90 @@ export const gamemodeMap = {
 };
 
 const svg = document.querySelector('SVG');
-let promptBar;
 const promptBar1 = document.getElementById('prompt-bar-1');
 const promptBar2 = document.getElementById('prompt-bar-2');
-let tally;
 let numCorrect = 0;
 let guesses = 0;
 const clickColors = [ 'rgb(106, 235, 89)', 'rgb(240, 219, 35)', 'rgb(243, 148, 24)', 'rgb(235, 89, 89)' ];
 
-function click ( shapeNames ) { clickGamemodes( shapeNames, false, false ); }
+function click ( shapeNames ) {
+    const promptBar = promptBar1;
+    // Add mouse event listeners to each polygon
+    document.querySelectorAll('G').forEach( group => {
+        group.classList.add('groupClickable');
+    });
+
+    const strong = promptBar.querySelector('STRONG');
+    let arr = shuffleArray( shapeNames );
+    
+    let current = arr.pop();
+    strong.textContent = capitalizeFirst( current );
+    promptBar.style.display = "flex";
+    const tally = promptBar.querySelector('#tally');
+    tally.textContent = `Correct: ${numCorrect}/${shapeNames.length}`;
+
+    svg.addEventListener('click', e => {
+        const group = e.target;
+        if ( Array( group.classList ).includes('groupClickable') ) {
+            // Correct region clicked
+            if ( group.getAttribute('id') === current.split(' ').join('_') ) {
+                if ( guesses === 0 ) { numCorrect++; }
+                document.querySelectorAll(`.${group.className.baseVal}`).forEach( polygon => {
+                    polygon.style.fill = clickColors[guesses];
+                    polygon.classList.add('polygonCorrect');
+                });
+                tally.textContent = `Correct: ${numCorrect}/${shapeNames.length}`;
+                if ( !( current = arr.pop() ) ) {
+                    strong.textContent = '-';
+                    endGame();
+                } else {
+                    strong.textContent = capitalizeFirst( current );
+                    guesses = 0;
+                }
+            }
+            // Incorrect region clicked
+            else {
+                guesses++;
+                document.querySelectorAll(`.${group.className.baseVal}`).forEach( polygon => {
+                    polygon.classList.add('polygonClicked');
+                    polygon.style.fill = 'rgb(235, 89, 89)';
+                    disappearTrigger( polygon );
+                });
+                // If too many guesses have been taken
+                if ( guesses === clickColors.length - 1 ) {
+                    // Highlight the correct answer
+                    document.querySelectorAll(`.${current.split(' ').join('_')}`).forEach( polygon => {
+                        polygon.style.fill = clickColors[guesses];
+                        polygon.classList.add('polygonCorrect');
+                    });
+                    if ( !( current = arr.pop() ) ) {
+                        endGame();
+                    } else {
+                        strong.textContent = capitalizeFirst( current );
+                        guesses = 0;
+                    }
+                }
+            }
+        }
+    });
+}
+// function click ( shapeNames ) { clickGamemodes( shapeNames, false, false ); }
 function clickDisappear ( shapeNames ) { clickGamemodes( shapeNames, true, false ); }
 function clickEndless ( shapeNames ) { clickGamemodes( shapeNames, true, true ); }
 
 function clickGamemodes( shapeNames, disappear, endless ) {
-    promptBar = promptBar1;
-    // Add mouse event listeners to each polygon
-    document.querySelectorAll('POLYGON').forEach( polygon => {
-        polygon.addEventListener('mouseover', () => {
-            document.querySelectorAll(`.${polygon.classList[0]}`).forEach(eWithSameClass => {
-                if ( polygon.classList.length === 1 ) {
-                    eWithSameClass.style.fill = "rgb(210, 211, 117)";
-                }
-            });
-        });
-        polygon.addEventListener('mousedown', () => {
-            document.querySelectorAll(`.${polygon.classList[0]}`).forEach(eWithSameClass => {
-                if ( polygon.classList.length === 1 ) {
-                    eWithSameClass.style.fill = "rgb(190, 191, 97)";
-                }
-            });
-        });
-        polygon.addEventListener('mouseup', () => {
-            document.querySelectorAll(`.${polygon.classList[0]}`).forEach(eWithSameClass => {
-                if ( polygon.classList.length === 1 ) {
-                    eWithSameClass.style.fill = "rgb(210, 211, 117)";
-                }
-            });
-        });
-        polygon.addEventListener('mouseout', () => {
-            document.querySelectorAll(`.${polygon.classList[0]}`).forEach(eWithSameClass => {
-                if ( polygon.classList.length === 1 ) {
-                    eWithSameClass.style.fill = "";
-                }
-            });
-        });
-    });
+    const promptBar = promptBar1;
 
     const totalShapes = endless ? Infinity : shapeNames.length;
     const strong = promptBar.querySelector('STRONG');
-    let arr = shapeNames;
-    // Shuffle the array
-    for ( let i = shapeNames.length - 1; i >= 0; i-- ) {
-        const j = Math.floor( Math.random() * i );
-        const temp = arr[i];
-        arr[i] = arr[j];
-        arr[j] = temp;
-    }
+    let arr = shuffleArray( shapeNames );
     
     let current = arr.pop();
     strong.textContent = capitalizeFirst( current );
     let endlessQueue = [current];
     promptBar.style.display = "flex";
-    tally = promptBar.querySelector('#tally');
-    tally.textContent = `${numCorrect}/${totalShapes}`;
+    const tally = promptBar.querySelector('#tally');
+    tally.textContent = `Correct: ${numCorrect}/${totalShapes}`;
 
     svg.addEventListener('click', e => {
         const target = e.target;
@@ -85,21 +106,14 @@ function clickGamemodes( shapeNames, disappear, endless ) {
                     // Disappear gamemode
                     if ( disappear ) {
                         polygon.classList.add('polygonClicked');
-                        setTimeout( function() {
-                            polygon.style.transition = 'fill 1s ease';
-                            polygon.style.fill = '';
-                            setTimeout( function() {
-                                polygon.style.transition = '';
-                                polygon.classList.remove('polygonClicked');
-                            }, 1000 );
-                        }, 1000 );
+                        disappearTrigger( polygon );
                     }
                     // Standard gamemode
                     else {
                         polygon.classList.add('polygonCorrect');
                     }
                 });
-                tally.textContent = `${numCorrect}/${totalShapes}`;
+                tally.textContent = `Correct: ${numCorrect}/${totalShapes}`;
                 if ( !( current = arr.pop() ) ) {
                     strong.textContent = '-';
                     endGame();
@@ -116,14 +130,7 @@ function clickGamemodes( shapeNames, disappear, endless ) {
                 document.querySelectorAll(`.${target.className.baseVal}`).forEach( polygon => {
                     polygon.classList.add('polygonClicked');
                     polygon.style.fill = 'rgb(235, 89, 89)';
-                    setTimeout( function() {
-                        polygon.style.transition = 'fill 1s ease';
-                        polygon.style.fill = '';
-                        setTimeout( function() {
-                            polygon.style.transition = '';
-                            polygon.classList.remove('polygonClicked');
-                        }, 1000 );
-                    }, 1000 );
+                    disappearTrigger( polygon );
                 });
                 // If too many guesses have been taken
                 if ( guesses === clickColors.length - 1 ) {
@@ -133,14 +140,7 @@ function clickGamemodes( shapeNames, disappear, endless ) {
                         // Disappear gamemode
                         if ( disappear ) {
                             polygon.classList.add('polygonClicked');
-                            setTimeout( function() {
-                                polygon.style.transition = 'fill 1s ease';
-                                polygon.style.fill = '';
-                                setTimeout( function() {
-                                    polygon.style.transition = '';
-                                    polygon.classList.remove('polygonClicked');
-                                }, 1000 );
-                            }, 1000 );
+                            disappearTrigger( polygon );
                         }
                         // Standard gamemode
                         else {
@@ -179,20 +179,13 @@ function typeEndless( shapeNames ) { typeGamemodes( shapeNames, true, true ); }
 
 function typeGamemodes( shapeNames, hard, endless ) {
     const totalShapes = endless ? Infinity : shapeNames.length;
-    promptBar = promptBar2;
-    tally = promptBar.querySelector('#tally');
-    tally.textContent = `${numCorrect}/${totalShapes}`;
+    const promptBar = promptBar2;
+    const tally = promptBar.querySelector('#tally');
+    tally.textContent = `Correct: ${numCorrect}/${totalShapes}`;
     const input = promptBar.querySelector('INPUT');
     input.focus();
 
-    let arr = shapeNames;
-    // Shuffle the array
-    for ( let i = shapeNames.length - 1; i >= 0; i-- ) {
-        const j = Math.floor( Math.random() * i );
-        const temp = arr[i];
-        arr[i] = arr[j];
-        arr[j] = temp;
-    }
+    let arr = shuffleArray( shapeNames );
 
     // For hard and endless type gamemodes
     if ( hard ) {
@@ -200,7 +193,7 @@ function typeGamemodes( shapeNames, hard, endless ) {
         let currentShapes = document.querySelectorAll(`.${current.split(' ').join('_')}`);
         let endlessQueue = [current];
         currentShapes.forEach( polygon => {
-            polygon.style.fill = 'rgb(255, 174, 0)';
+            polygon.style.fill = 'rgb(0, 255, 213)';
         });
 
         promptBar.querySelector('P').textContent = "Name the highlighted region";
@@ -217,14 +210,7 @@ function typeGamemodes( shapeNames, hard, endless ) {
                             polygon.style.fill = clickColors[guesses];
                             if ( endless ) {
                                 polygon.classList.add('polygonClicked');
-                                setTimeout( function() {
-                                    polygon.style.transition = 'fill 1s ease';
-                                    polygon.style.fill = '';
-                                    setTimeout( function() {
-                                        polygon.style.transition = '';
-                                        polygon.classList.remove('polygonClicked');
-                                    }, 1000 );
-                                }, 1000 );
+                                disappearTrigger( polygon );
                             }
                         });
                         if ( guesses === 0 ) { numCorrect++; }
@@ -234,7 +220,7 @@ function typeGamemodes( shapeNames, hard, endless ) {
                         } else {
                             currentShapes = document.querySelectorAll(`.${current.split(' ').join('_')}`);
                             currentShapes.forEach( polygon => {
-                                polygon.style.fill = 'rgb(255, 174, 0)';
+                                polygon.style.fill = 'rgb(0, 255, 213)';
                             });
                             // Endless gamemode
                             if ( endless ) { runEndless(); }
@@ -249,14 +235,7 @@ function typeGamemodes( shapeNames, hard, endless ) {
                                 polygon.style.fill = clickColors[guesses];
                                 if ( endless ) {
                                     polygon.classList.add('polygonClicked');
-                                    setTimeout( function() {
-                                        polygon.style.transition = 'fill 1s ease';
-                                        polygon.style.fill = '';
-                                        setTimeout( function() {
-                                            polygon.style.transition = '';
-                                            polygon.classList.remove('polygonClicked');
-                                        }, 1000 );
-                                    }, 1000 );
+                                    disappearTrigger( polygon );
                                 }
                             });
                             input.value = "";
@@ -265,7 +244,7 @@ function typeGamemodes( shapeNames, hard, endless ) {
                             } else {
                                 currentShapes = document.querySelectorAll(`.${current.split(' ').join('_')}`);
                                 currentShapes.forEach( polygon => {
-                                    polygon.style.fill = 'rgb(255, 174, 0)';
+                                    polygon.style.fill = 'rgb(0, 255, 149)';
                                 });
                                 // Endless gamemode
                                 if ( endless ) { runEndless(); }
@@ -275,7 +254,7 @@ function typeGamemodes( shapeNames, hard, endless ) {
                     }
                 }
             }
-            tally.textContent = `${numCorrect}/${totalShapes}`;
+            tally.textContent = `Correct: ${numCorrect}/${totalShapes}`;
         });
         function runEndless() {
             endlessQueue.push( current );
@@ -346,4 +325,29 @@ function capitalizeFirst( string ) {
         arr[i] = arr[i].slice(0, 1).toUpperCase().concat( arr[i].slice(1) );
     }
     return arr.join(' ');
+}
+
+function disappearTrigger( polygon ) {
+    setTimeout( function() {
+        polygon.style.transition = 'fill 1s ease';
+        polygon.style.fill = '';
+        setTimeout( function() {
+            polygon.style.transition = '';
+            polygon.classList.remove('polygonClicked');
+        }, 1000 );
+    }, 1000 );
+}
+
+/**
+ * Randomly shuffles an array
+ * @param {Array} arr 
+ */
+function shuffleArray( arr ) {
+    for ( let i = arr.length - 1; i >= 0; i-- ) {
+        const j = Math.floor( Math.random() * i );
+        const temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+    return arr;
 }
