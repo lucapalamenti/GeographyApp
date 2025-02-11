@@ -10,6 +10,16 @@ const handleAuthError = ( error ) => {
     throw error;
 };
 
+// ----- CustomDAO CALLS -----
+
+const custom = async () => {
+    try {
+        return await HTTPClient.get(`${BASE_API_PATH}/custom`);
+    } catch (error) {
+        return handleAuthError(error);
+    }
+};
+
 // ----- ShapeDAO CALLS -----
 
 const getShapes = async () => {
@@ -79,6 +89,8 @@ const getMapById = async ( map_id ) => {
 };
 
 export default {
+    custom,
+    
     getShapes,
     createShape,
     updatePoints,

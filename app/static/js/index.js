@@ -14,8 +14,9 @@ await APIClient.getMaps().then( returnedMaps => {
 
         mapButtonElement.href = '/game?mapId=' + map.map_id;
         mapButtonElement.style["background-image"] = `url('../images/${map.map_thumbnail}')`;
-        mapButtonBottom.style["background-color"] = `rgb(${map.map_primary_color})`;
-        mapButtonTop.style["background-image"] = `linear-gradient( to top, rgba(${map.map_primary_color},0.5), rgba(0,0,0,0) )`;
+        mapButtonBottom.style["background-color"] = `rgba(${map.map_primary_color},0.5)`;
+        // mapButtonBottom.style["background-color"] = `rgb(${map.map_primary_color})`;
+        mapButtonTop.style["background-image"] = `linear-gradient( to top, rgba(${map.map_primary_color},0.5), rgba(${map.map_primary_color},0)`;
         mapButtonLabel.textContent = map.map_name;
 
         mapNavigation.appendChild(mapButtonElement);
