@@ -1,0 +1,8 @@
+INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (0, 'Test Map', 'Test_Map_Thumbnail.png', '0,0,0');
+
+INSERT INTO `shape` (`shape_id`, `shape_map_id`, `shape_name`, `shape_points`) VALUES (0, 0, 'california', '                         <@     r@     @b@     r@      r@     à€@     r@     0ƒ@      l@     Xƒ@      <@     r@');
+INSERT INTO `shape` (`shape_id`, `shape_map_id`, `shape_name`, `shape_points`) VALUES (1, 0, 'nevada', '                        @b@     r@     @s@     r@     @s@     €}@      r@     à€@     @b@     r@');
+INSERT INTO `shape` (`shape_id`, `shape_map_id`, `shape_name`, `shape_points`) VALUES (2, 0, 'utah', '                        @s@     r@     Px@     r@      {@     Ðt@      {@     €}@     @s@     €}@     @s@     r@');
+INSERT INTO `shape` (`shape_id`, `shape_map_id`, `shape_name`, `shape_points`) VALUES (3, 0, 'arizona', '                        @s@     €}@      {@     €}@      {@     ˆ„@     r@     0ƒ@      r@     à€@     @s@     €}@');
+INSERT INTO `shape` (`shape_id`, `shape_map_id`, `shape_name`, `shape_points`) VALUES (4, 0, 'new mexico', '                         {@     €}@     ð‚@     €}@     ð‚@     ~@     à@     „@      {@     ˆ„@      {@     €}@');
+INSERT INTO `shape` (`shape_id`, `shape_map_id`, `shape_name`, `shape_points`) VALUES (5, 0, 'colorado', '                         {@     Ðt@     ‚@     Ðt@     Àƒ@      w@     Àƒ@     €}@      {@     €}@      {@     Ðt@');

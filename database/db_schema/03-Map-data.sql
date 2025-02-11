@@ -1,7 +1,7 @@
 INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (1, 'US States Polygon', 'US_States_Polygon_Thumbnail.png', '0,0,0');
 INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (2, 'US States', 'US_States_Thumbnail.png', '10,49,97');
 INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (3, 'Alabama Counties', 'Alabama_Counties_Thumbnail.png', '178,0,27');
-INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (4, 'Alaska Counties', 'Alaska_Counties_Thumbnail.png', '254,182,24');
+INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (4, 'Alaska Boroughs & Census Areas', 'Alaska_Boroughs_and_Census_Areas_Thumbnail.png', '254,182,24');
 INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (5, 'Arizona Counties', 'Arizona_Counties_Thumbnail.png', '0,33,100');
 INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (6, 'Arkansas Counties', 'Arkansas_Counties_Thumbnail.png', '0,35,104');
 INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (7, 'California Counties', 'California_Counties_Thumbnail.png', '183,18,52');
@@ -17,7 +17,7 @@ INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) V
 INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (17, 'Iowa Counties', 'Iowa_Counties_Thumbnail.png', '91,15,0');
 INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (18, 'Kansas Counties', 'Kansas_Counties_Thumbnail.png', '77,145,198');
 INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (19, 'Kentucky Counties', 'Kentucky_Counties_Thumbnail.png', '45,147,125');
-INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (20, 'Louisiana Counties', 'Louisiana_Counties_Thumbnail.png', '234,164,95');
+INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (20, 'Louisiana Parishes', 'Louisiana_Parishes_Thumbnail.png', '234,164,95');
 INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (21, 'Maine Counties', 'Maine_Counties_Thumbnail.png', '196,0,29');
 INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (22, 'Maryland Counties', 'Maryland_Counties_Thumbnail.png', '0,0,0');
 INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (23, 'Massachusetts Counties', 'Massachusetts_Counties_Thumbnail.png', '32,44,92');
@@ -30,7 +30,7 @@ INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) V
 INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (30, 'Nevada Counties', 'Nevada_Counties_Thumbnail.png', '255,163,0');
 INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (31, 'New Hampshire Counties', 'New_Hampshire_Counties_Thumbnail.png', '63,134,63');
 INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (32, 'New Jersey Counties', 'New_Jersey_Counties_Thumbnail.png', '16,138,224');
-INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (33, 'New Mexico Counties', 'New_Mexico_Counties_Thumbnail.png', '252,224,32');
+INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (33, 'New Mexico Counties', 'New_Mexico_Counties_Thumbnail.png', '191,10,48');
 INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (34, 'New York Counties', 'New_York_Counties_Thumbnail.png', '108,44,19');
 INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (35, 'North Carolina Counties', 'North_Carolina_Counties_Thumbnail.png', '255,202,0');
 INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (36, 'North Dakota Counties', 'North_Dakota_Counties_Thumbnail.png', '120,100,69');
@@ -43,11 +43,10 @@ INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) V
 INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (43, 'South Dakota Counties', 'South_Dakota_Counties_Thumbnail.png', '255,196,0');
 INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (44, 'Tennessee Counties', 'Tennessee_Counties_Thumbnail.png', '0,45,101');
 INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (45, 'Texas Counties', 'Texas_Counties_Thumbnail.png', '192,5,60');
-INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (46, 'Utah Counties', 'Utah_Counties_Thumbnail.png', '255,184,29');
+INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (46, 'Utah Counties', 'Utah_Counties_Thumbnail.png', '170,2,0');
 INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (47, 'Vermont Counties', 'Vermont_Counties_Thumbnail.png', '194,75,32');
-INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (48, 'Virginia Counties', 'Virginia_Counties_Thumbnail.png', '222,24,36');
+INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (48, 'Virginia Counties & Independent Cities', 'Virginia_Counties_Thumbnail.png', '222,24,36');
 INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (49, 'Washington Counties', 'Washington_Counties_Thumbnail.png', '255,213,32');
 INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (50, 'West Virginia Counties', 'West_Virginia_Counties_Thumbnail.png', '10,49,97');
 INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (51, 'Wisconsin Counties', 'Wisconsin_Counties_Thumbnail.png', '119,166,198');
 INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (52, 'Wyoming Counties', 'Wyoming_Counties_Thumbnail.png', '191,10,48');
-
