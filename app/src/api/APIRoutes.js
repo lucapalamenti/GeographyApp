@@ -7,6 +7,16 @@ APIRouter.use( express.json() );
 const { TokenMiddleware, generateToken, removeToken } = require('../middleware/tokenMiddleware.js');
 const ShapeDAO = require('./db/ShapeDAO.js');
 const MapDAO = require('./db/MapDAO.js');
+const CustomDAO = require('./db/CustomDAO.js');
+
+APIRouter.get('/custom', (req, res) => {
+    CustomDAO.custom().then( r => {
+        res.json( r );
+    })
+    .catch( err => {
+        res.status(500).json({error:err, message: 'Error with GET request to /custom'});
+    });
+});
 
 APIRouter.get('/shapes', (req, res) => {
     ShapeDAO.getShapes().then( shapes => {
