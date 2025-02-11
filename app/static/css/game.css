@@ -63,25 +63,6 @@
     font-weight: bold;
 }
 
-#game-area {
-    width: 80%;
-    resize: horizontal;
-    overflow: auto;
-}
-
-svg {
-    border: 8px solid rgb(28, 134, 64);
-    background-color: rgb(141, 209, 226) !important;
-    /* background-image: url(../images/USA_Map.png); */
-    background-size: cover;
-}
-
-polygon {
-    fill: rgb(230, 231, 137);
-    stroke-width: 0.1%;
-    stroke: rgb(46, 46, 26);
-}
-
 .prompt-bar {
     display: none;
     justify-content: space-between;
@@ -99,10 +80,4 @@ polygon {
     max-width: 300px;
     padding-left: 5px;
     color: black;
-}
-
-@media screen and (max-width : 600px) {
-    #game-area {
-        width: 100%;
-    } 
 }
