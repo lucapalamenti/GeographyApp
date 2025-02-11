@@ -1,7 +1,7 @@
 import APIClient from '../APIClient.js';
-// import US_Counties from '../../test/US_Counties.js';
+import US_Counties from '../../test/US_Counties.js';
 
-// const text = US_Counties.text;
+const text = US_Counties.text;
 const b1 = document.querySelector('#b1');
 const SVG_WIDTH = 1600; // in pixels
 const SVG_HEIGHT = 900; // in pixels
@@ -89,10 +89,12 @@ b1.addEventListener('click', async () => {
     tokens2.forEach( t => {
         tokensByMapId[ t.shape_map_id - 3 ].push( t );
     });
+    
+    console.log( tokensByMapId );
 
     tokensByMapId.forEach( async state => {
         // For testing only do alabama
-        if ( state[0].shape_map_id == 3 ) {
+        //if ( state[0].shape_map_id == 3 ) {
             // Find the min and max X & Y values for the map
             let maxWidth = 0;
             let minX = 0;
@@ -148,6 +150,6 @@ b1.addEventListener('click', async () => {
                     console.error( err, "ERROR 2" );
                 });
             });
-        }
+        //}
     });
 });
