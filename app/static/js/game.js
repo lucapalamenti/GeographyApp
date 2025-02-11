@@ -1,4 +1,5 @@
 import APIClient from './APIClient.js';
+import format from './format.js';
 import { gamemodeMap } from './gamemodes.js';
 
 const query = window.location.search;
@@ -30,11 +31,23 @@ const shapeNames = new Set();
 
 // Load shapes for the current map onto the screen
 await APIClient.getShapesByMapId( map_id ).then( returnedShapes => {
+    const polygonTemplate = document.getElementById('polygon-template').content;
     returnedShapes.forEach( shape => {
-        const polygon = document.getElementById('polygon-template').content.cloneNode( true ).querySelector('POLYGON');
-        polygon.setAttribute('class', shape.shape_name.split(' ').join('_'));
-        polygon.setAttribute('points', shape.shape_points);
-        svg.appendChild( polygon );
+        const group = polygonTemplate.cloneNode( true ).querySelector('G');
+        // Remove empty polygon element
+        group.innerHTML = "";
+        group.setAttribute('id', shape.shape_name.split(' ').join('_'));
+        // Iterate through multipolygon
+        shape.shape_points.coordinates.forEach( polygon => {
+            const p = polygonTemplate.cloneNode( true ).querySelector('POLYGON');
+            let points = polygon[0];
+            for ( let i = 0; i < points.length; i++ ) {
+                points[i] = points[i].join(',');
+            }
+            p.setAttribute('points', points.join(' ') );
+            group.appendChild( p );
+        });
+        svg.appendChild( group );
         shapeNames.add( shape.shape_name );
     });
 }).catch( err => {
