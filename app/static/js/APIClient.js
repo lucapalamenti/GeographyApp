@@ -20,6 +20,14 @@ const custom = async () => {
     }
 };
 
+const printShapesToFile = async ( data ) => {
+    try {
+        return await HTTPClient.post(`${BASE_API_PATH}/customPrint`, data);
+    } catch (error) {
+        return handleAuthError(error);
+    }
+}
+
 // ----- ShapeDAO CALLS -----
 
 const getShapes = async () => {
@@ -90,6 +98,7 @@ const getMapById = async ( map_id ) => {
 
 export default {
     custom,
+    printShapesToFile,
     
     getShapes,
     createShape,

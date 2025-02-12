@@ -1,4 +1,5 @@
 const database = require('./databaseConnections.js');
+const fs = require('fs');
 
 const custom = () => {
     return database.query(`
@@ -9,6 +10,15 @@ const custom = () => {
     });
 };
 
+const printShapesToFile = ( valuesString ) => {
+    const { string } = valuesString;
+    const content = `INSERT INTO \`shape\` (\`shape_id\`, \`shape_map_id\`, \`shape_name\`, \`shape_points\`) VALUES (${string});\n`;
+    console.log( content );
+    fs.appendFileSync('./src/api/db/usableQueries.txt', content);
+    return database.query(`SELECT * FROM shape WHERE shape_map_id = 0`);
+}
+
 module.exports = {
-    custom
+    custom,
+    printShapesToFile
 };
