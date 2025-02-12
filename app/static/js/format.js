@@ -1,6 +1,6 @@
 /**
  * Input an array of strings. Each string is a Geometry "points" attribute.
- * Returns the first parameter for a Multipolygon
+ * Returns a Multipolygon
  * Ex:
  * Input  = "58,26 227,26 230,146 37,136 17,47 58,26"
  * Output = "((58 26, 227 26, 230 146, 37 136, 17 47, 58 26))"
@@ -9,15 +9,12 @@
 const pointsToMultiPolygon = ( strArr ) => {
     const arr = [];
     strArr.forEach( pointsSet => {
-        let pointsArr = pointsSet.split(' ');
+        const pointsArr = pointsSet.split(' ');
         for ( let i = 0; i < pointsArr.length; i++ ) {
             // Replace ',' with ' '
             pointsArr[i] = pointsArr[i].split(',').join(' ');
         }
-        // pointsArr: ["12 13", "83 10", "23 73"]
-        pointsArr = pointsArr.join(',');
-        // pointsArr: ["12 13,83 10,23 73"]
-        arr.push( pointsArr );
+        arr.push( pointsArr.join(',') );
     });
     return `MULTIPOLYGON(((${arr.join(')),((')})))`;
 };
@@ -30,11 +27,16 @@ const pointsToMultiPolygon = ( strArr ) => {
 const shapeToPoints = ( shape ) => {
     const MultiPolygon = shape.shape_points.coordinates;
     MultiPolygon.forEach( polygon => {
-
+        console.log( polygon );
     })
+};
+
+const printToFile = () => {
+
 };
 
 export default {
     pointsToMultiPolygon,
-    shapeToPoints
+    shapeToPoints,
+    printToFile
 }
