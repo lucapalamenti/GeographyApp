@@ -40,7 +40,8 @@ await APIClient.getShapesByMapId( map_id ).then( returnedShapes => {
         // Iterate through multipolygon
         shape.shape_points.coordinates.forEach( polygon => {
             const p = polygonTemplate.cloneNode( true ).querySelector('POLYGON');
-            let points = polygon[0];
+            const points = polygon[0];
+            // Convert points[i] from [0, 0] to "0,0"
             for ( let i = 0; i < points.length; i++ ) {
                 points[i] = points[i].join(',');
             }
