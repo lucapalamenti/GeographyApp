@@ -20,7 +20,7 @@ const custom = async () => {
     }
 };
 
-const printShapesToFile = async ( data ) => {
+const printShapeInsertQuery = async ( data ) => {
     try {
         return await HTTPClient.post(`${BASE_API_PATH}/customPrint`, data);
     } catch (error) {
@@ -98,7 +98,7 @@ const getMapById = async ( map_id ) => {
 
 export default {
     custom,
-    printShapesToFile,
+    printShapeInsertQuery,
     
     getShapes,
     createShape,

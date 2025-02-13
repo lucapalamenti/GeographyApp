@@ -10,7 +10,7 @@ const custom = () => {
     });
 };
 
-const printShapesToFile = ( valuesString ) => {
+const printShapeInsertQuery = ( valuesString ) => {
     const { string } = valuesString;
     const content = `INSERT INTO \`shape\` (\`shape_id\`, \`shape_map_id\`, \`shape_name\`, \`shape_points\`) VALUES (${string});\n`;
     console.log( content );
@@ -20,5 +20,5 @@ const printShapesToFile = ( valuesString ) => {
 
 module.exports = {
     custom,
-    printShapesToFile
+    printShapeInsertQuery
 };

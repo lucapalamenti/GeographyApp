@@ -21,7 +21,7 @@ APIRouter.get('/custom', (req, res) => {
 });
 
 APIRouter.post('/customPrint', (req, res) => {
-    CustomDAO.printShapesToFile( req.body ).then( r => {
+    CustomDAO.printShapeInsertQuery( req.body ).then( r => {
         res.json( r );
     })
     .catch( err => {
