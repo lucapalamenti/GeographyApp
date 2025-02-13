@@ -1,3 +1,4 @@
+import APIClient from './APIClient.js';
 /**
  * Input an array of strings. Each string is a Geometry "points" attribute.
  * Returns a Multipolygon
@@ -31,12 +32,12 @@ const shapeToPoints = ( shape ) => {
     })
 };
 
-const printToFile = () => {
-
+const shapeToInsertQuery = ( shapeData ) => {
+    return `${shapeData.shape_id}, ${shapeData.shape_map_id}, '${shapeData.shape_name}', ST_GEOMFROMTEXT('${pointsToMultiPolygon([shapeData.shape_points])}')`;
 };
 
 export default {
     pointsToMultiPolygon,
     shapeToPoints,
-    printToFile
+    shapeToInsertQuery
 }
