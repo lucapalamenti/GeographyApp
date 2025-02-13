@@ -25,6 +25,6 @@ b1.addEventListener('click', () => {
         const data = {
             string: format.shapeToInsertQuery( shapeData )
         };
-        APIClient.printShapeInsertQuery( data );
+        APIClient.printShapeInsertQuery( null, data );
     });
 });

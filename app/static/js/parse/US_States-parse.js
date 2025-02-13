@@ -1,4 +1,5 @@
 import APIClient from '../APIClient.js';
+import format from '../format.js';
 import US_states from '../../test/US_States.js';
 
 const text = US_states.text;
@@ -184,25 +185,30 @@ b1.addEventListener('click', () => {
             const shapeData = {
                 shape_map_id: 2,
                 shape_name: name.toLowerCase(),
-                shape_points: updatedPoints.slice( 0, MAX_PAYLOAD_LENGTH ).join(' ')
+                //shape_points: updatedPoints.slice( 0, MAX_PAYLOAD_LENGTH ).join(' ')
+                shape_points: updatedPoints.join(' ')
             };
+            const data = {
+                string: format.shapeToInsertQuery( shapeData )
+            };
+            APIClient.printShapeInsertQuery( null, data );
             // If there are too many points to send over the payload
             // Start off by creating part of the Polygon
-            await APIClient.createShape( shapeData ).then( async shape => {
-                for ( let i = MAX_PAYLOAD_LENGTH; i < updatedPoints.length; i += MAX_PAYLOAD_LENGTH ) {
-                    const appendData = {
-                        shape_id: shape.shape_id,
-                        shape_points: updatedPoints.slice( i, i + MAX_PAYLOAD_LENGTH ).join(' ')
-                    };
-                    try {
-                        await APIClient.appendPoints( appendData );
-                    } catch ( err ) {
-                        console.error( err, "ERROR 1" );
-                    }
-                }
-            }).catch( err => {
-                console.error( err, "ERROR 2" );
-            });
+            // await APIClient.createShape( shapeData ).then( async shape => {
+            //     for ( let i = MAX_PAYLOAD_LENGTH; i < updatedPoints.length; i += MAX_PAYLOAD_LENGTH ) {
+            //         const appendData = {
+            //             shape_id: shape.shape_id,
+            //             shape_points: updatedPoints.slice( i, i + MAX_PAYLOAD_LENGTH ).join(' ')
+            //         };
+            //         try {
+            //             await APIClient.appendPoints( appendData );
+            //         } catch ( err ) {
+            //             console.error( err, "ERROR 1" );
+            //         }
+            //     }
+            // }).catch( err => {
+            //     console.error( err, "ERROR 2" );
+            // });
         });
     });
 });

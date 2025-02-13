@@ -20,13 +20,29 @@ APIRouter.get('/custom', (req, res) => {
     });
 });
 
-APIRouter.post('/customPrint', (req, res) => {
-    CustomDAO.printShapeInsertQuery( req.body ).then( r => {
-        res.json( r );
-    })
-    .catch( err => {
-        res.status(500).json({error:err, message: 'Error with GET request to /custom'});
-    });
+APIRouter.post('/customPrint/:method', (req, res) => {
+    const method = req.params.method;
+    try {
+        if ( !method ) {
+            CustomDAO.printShapeInsertQuery( req.body ).then( r => {
+                res.json( r );
+            });
+        } else if ( method == "pre" ) {
+            CustomDAO.printShapeInsertQueryPre( req.body ).then( r => {
+                res.json( r );
+            });
+        } else if ( method == "points" ) {
+            CustomDAO.printShapeInsertQueryPoints( req.body ).then( r => {
+                res.json( r );
+            });
+        } else if ( method == "post" ) {
+            CustomDAO.printShapeInsertQueryPost( req.body ).then( r => {
+                res.json( r );
+            });
+        }
+    } catch ( err ) {
+        res.status(500).json({error:err, message: 'Error with GET request to /customPrint/:method'});
+    }
 });
 
 // ----- ShapeDAO ROUTES -----

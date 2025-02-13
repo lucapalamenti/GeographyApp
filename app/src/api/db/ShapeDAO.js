@@ -1,16 +1,16 @@
 const database = require('./databaseConnections.js');
 const Shape = require('./models/Shape.js');
 
-const getShapes = () => {
-    return database.query(`
+const getShapes = async () => {
+    return await database.query(`
         SELECT * FROM shape
         `, []).then( rows => {
         return rows.map( row => new Shape( row ) );
     });
 };
 
-const getShapeById = ( shape_id ) => {
-    return database.query(`
+const getShapeById = async ( shape_id ) => {
+    return await database.query(`
         SELECT * FROM shape
         WHERE shape_id = ?
         `, [shape_id]).then( rows => {
@@ -21,8 +21,8 @@ const getShapeById = ( shape_id ) => {
     });
 };
 
-const getShapesByMapId = ( shape_map_id ) => {
-    return database.query(`
+const getShapesByMapId = async ( shape_map_id ) => {
+    return await database.query(`
         SELECT * FROM shape WHERE shape_map_id = ?
         ORDER BY shape_name
         `, [shape_map_id]).then( rows => {
@@ -30,9 +30,9 @@ const getShapesByMapId = ( shape_map_id ) => {
     });
 };
 
-const createShape = ( shapeData ) => {
+const createShape = async ( shapeData ) => {
     const { shape_map_id, shape_name, shape_points } = shapeData;
-    return database.query(`
+    return await database.query(`
         INSERT INTO shape (shape_map_id, shape_name, shape_points)
         VALUES (?, ?, ST_GEOMFROMTEXT(?))
         `, [shape_map_id, shape_name, shape_points]).then( rows => {
@@ -43,9 +43,9 @@ const createShape = ( shapeData ) => {
     });
 };
 
-const updatePoints = ( shapeData ) => {
+const updatePoints = async ( shapeData ) => {
     const { shape_id, shape_points } = shapeData;
-    return database.query(`
+    return await database.query(`
         UPDATE shape SET shape_points = ?
         WHERE shape_id = ?
         `, [shape_points, shape_id]).then( rows => {
@@ -56,9 +56,9 @@ const updatePoints = ( shapeData ) => {
     });
 };
 
-const appendPoints = ( appendData ) => {
+const appendPoints = async ( appendData ) => {
     const { shape_id, shape_points } = appendData;
-    return database.query(`
+    return await database.query(`
         UPDATE shape SET shape_points = CONCAT(shape_points, ?, ?)
         WHERE shape_id = ?
         `, [' ', shape_points, shape_id]).then( rows => {
@@ -69,8 +69,8 @@ const appendPoints = ( appendData ) => {
     });
 };
 
-const deleteShapesFromMap = ( mapId ) => {
-    return database.query(`
+const deleteShapesFromMap = async ( mapId ) => {
+    return await database.query(`
         DELETE FROM shape WHERE map_id = ?
         `, [mapId]).then( rows => {
         return rows.affectedRows;

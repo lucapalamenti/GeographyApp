@@ -20,9 +20,9 @@ const custom = async () => {
     }
 };
 
-const printShapeInsertQuery = async ( data ) => {
+const printShapeInsertQuery = async ( method, data ) => {
     try {
-        return await HTTPClient.post(`${BASE_API_PATH}/customPrint`, data);
+        return await HTTPClient.post(`${BASE_API_PATH}/customPrint/${method}`, data);
     } catch (error) {
         return handleAuthError(error);
     }
