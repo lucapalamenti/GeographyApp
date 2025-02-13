@@ -12,11 +12,13 @@ export const gamemodeMap = {
 const svg = document.querySelector('SVG');
 const promptBar1 = document.getElementById('prompt-bar-1');
 const promptBar2 = document.getElementById('prompt-bar-2');
+let numPrompts;
 let numCorrect = 0;
 let guesses = 0;
 const clickColors = [ 'rgb(106, 235, 89)', 'rgb(240, 219, 35)', 'rgb(243, 148, 24)', 'rgb(235, 89, 89)' ];
 
 function click ( shapeNames ) {
+    numPrompts = shapeNames.length;
     const promptBar = promptBar1;
     // Add mouse event listeners to each polygon
     document.querySelectorAll('G').forEach( group => {
@@ -30,19 +32,19 @@ function click ( shapeNames ) {
     strong.textContent = capitalizeFirst( current );
     promptBar.style.display = "flex";
     const tally = promptBar.querySelector('#tally');
-    tally.textContent = `Correct: ${numCorrect}/${shapeNames.length}`;
+    tally.textContent = `Correct: ${numCorrect}/${numPrompts}`;
 
     svg.addEventListener('click', e => {
-        const group = e.target;
-        if ( Array( group.classList ).includes('groupClickable') ) {
+        const group = e.target.parentNode;
+        if ( group.classList.contains('groupClickable') ) {
             // Correct region clicked
             if ( group.getAttribute('id') === current.split(' ').join('_') ) {
                 if ( guesses === 0 ) { numCorrect++; }
-                document.querySelectorAll(`.${group.className.baseVal}`).forEach( polygon => {
+                group.classList.remove('groupClickable');
+                group.querySelectorAll('POLYGON').forEach( polygon => {
                     polygon.style.fill = clickColors[guesses];
-                    polygon.classList.add('polygonCorrect');
                 });
-                tally.textContent = `Correct: ${numCorrect}/${shapeNames.length}`;
+                tally.textContent = `Correct: ${numCorrect}/${numPrompts}`;
                 if ( !( current = arr.pop() ) ) {
                     strong.textContent = '-';
                     endGame();
@@ -54,17 +56,15 @@ function click ( shapeNames ) {
             // Incorrect region clicked
             else {
                 guesses++;
-                document.querySelectorAll(`.${group.className.baseVal}`).forEach( polygon => {
-                    polygon.classList.add('polygonClicked');
-                    polygon.style.fill = 'rgb(235, 89, 89)';
-                    disappearTrigger( polygon );
-                });
+                disappearTrigger( group );
+                
                 // If too many guesses have been taken
                 if ( guesses === clickColors.length - 1 ) {
                     // Highlight the correct answer
-                    document.querySelectorAll(`.${current.split(' ').join('_')}`).forEach( polygon => {
+                    const correctGroup = svg.getElementById( current.split(' ').join('_') );
+                    correctGroup.classList.remove('groupClickable');
+                    correctGroup.querySelectorAll('POLYGON').forEach( polygon => {
                         polygon.style.fill = clickColors[guesses];
-                        polygon.classList.add('polygonCorrect');
                     });
                     if ( !( current = arr.pop() ) ) {
                         endGame();
@@ -327,15 +327,21 @@ function capitalizeFirst( string ) {
     return arr.join(' ');
 }
 
-function disappearTrigger( polygon ) {
-    setTimeout( function() {
-        polygon.style.transition = 'fill 1s ease';
-        polygon.style.fill = '';
+function disappearTrigger( group ) {
+    group.classList.remove('groupClickable');
+    group.querySelectorAll('POLYGON').forEach( polygon => {
+        polygon.style.fill = 'rgb(235, 89, 89)';
+        // Hold the color for 1 second
         setTimeout( function() {
-            polygon.style.transition = '';
-            polygon.classList.remove('polygonClicked');
+            polygon.style.transition = 'fill 1s ease';
+            polygon.style.fill = '';
+            // Fade out for 1 second
+            setTimeout( function() {
+                polygon.style.transition = '';
+                group.classList.add('groupClickable');
+            }, 1000 );
         }, 1000 );
-    }, 1000 );
+    });
 }
 
 /**
