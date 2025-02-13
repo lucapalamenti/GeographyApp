@@ -12,7 +12,7 @@ const custom = () => {
 
 const printShapeInsertQuery = ( valuesString ) => {
     const { string } = valuesString;
-    const content = `INSERT INTO \`shape\` (\`shape_id\`, \`shape_map_id\`, \`shape_name\`, \`shape_points\`) VALUES (${string});\n`;
+    const content = `INSERT INTO \`shape\` (\`shape_map_id\`, \`shape_name\`, \`shape_points\`) VALUES (${string});\n`;
     console.log( content );
     fs.appendFileSync('./src/api/db/usableQueries.txt', content);
     return database.query(`SELECT * FROM shape WHERE shape_map_id = 0`);

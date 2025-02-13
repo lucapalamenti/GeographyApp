@@ -13,8 +13,8 @@ const b1 = document.querySelector('#b1');
 b1.addEventListener('click', () => {
     for ( let i = 0; i < shapeNames.length; i++ ) {
         const data = {
-            string: `${i+1}, 0, '${shapeNames[i]}', ST_GEOMFROMTEXT('${format.pointsToMultiPolygon( [shapePoints[i]] )}')`
+            string: `0, '${shapeNames[i]}', ST_GEOMFROMTEXT('${format.pointsToMultiPolygon( [shapePoints[i]] )}')`
         };
-        APIClient.shapeToInsertQuery( data );
+        APIClient.printShapeInsertQuery( data );
     }
 });

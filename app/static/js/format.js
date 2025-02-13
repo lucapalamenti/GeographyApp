@@ -33,7 +33,7 @@ const shapeToPoints = ( shape ) => {
 };
 
 const shapeToInsertQuery = ( shapeData ) => {
-    return `${shapeData.shape_id}, ${shapeData.shape_map_id}, '${shapeData.shape_name}', ST_GEOMFROMTEXT('${pointsToMultiPolygon([shapeData.shape_points])}')`;
+    return `${shapeData.shape_map_id}, '${shapeData.shape_name}', ST_GEOMFROMTEXT('${pointsToMultiPolygon([shapeData.shape_points])}')`;
 };
 
 export default {
