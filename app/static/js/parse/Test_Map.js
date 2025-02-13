@@ -15,6 +15,6 @@ b1.addEventListener('click', () => {
         const data = {
             string: `${i+1}, 0, '${shapeNames[i]}', ST_GEOMFROMTEXT('${format.pointsToMultiPolygon( [shapePoints[i]] )}')`
         };
-        APIClient.printShapesToFile( data );
+        APIClient.shapeToInsertQuery( data );
     }
 });
