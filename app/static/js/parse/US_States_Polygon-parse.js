@@ -12,16 +12,21 @@ b1.addEventListener('click', () => {
     // Shift to remove unwanted first element
     let tokens = text.split('<polygon id="');
     tokens.shift();
+    let shapeId = 5;
     tokens.forEach( token => {
         const newTokens = token.split( '"' );
         let points = newTokens[2];
         // Add first point as last point
         points = points.concat( ' ', points.substring( 0, points.indexOf(' ') ) );
         const shapeData = {
+            shape_id: shapeId++,
             shape_map_id: 1,
             shape_name: newTokens[0].toLowerCase(),
-            shape_points: format.pointsToMultiPolygon( [points] )
+            shape_points: points
         };
-        APIClient.createShape( shapeData );
+        const data = {
+            string: format.shapeToInsertQuery( shapeData )
+        };
+        APIClient.printShapeInsertQuery( data );
     });
 });
