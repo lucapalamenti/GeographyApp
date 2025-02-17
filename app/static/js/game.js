@@ -1,5 +1,4 @@
 import APIClient from './APIClient.js';
-import format from './format.js';
 import { gamemodeMap } from './gamemodes.js';
 
 const query = window.location.search;
@@ -33,10 +32,15 @@ const shapeNames = new Set();
 await APIClient.getShapesByMapId( map_id ).then( returnedShapes => {
     const polygonTemplate = document.getElementById('polygon-template').content;
     returnedShapes.forEach( shape => {
-        const group = polygonTemplate.cloneNode( true ).querySelector('G');
-        // Remove empty polygon element
-        group.innerHTML = "";
-        group.setAttribute('id', shape.shape_name.split(' ').join('_'));
+        let group = svg.querySelector(`#${shape.shape_name}`);
+        // If a group doesn't already exist for this shape's name
+        console.log( group, shape.shape_name );
+        if ( !group ) {
+            group = polygonTemplate.cloneNode( true ).querySelector('G');
+            // Remove empty polygon element
+            group.innerHTML = "";
+            group.setAttribute('id', shape.shape_name.split(' ').join('_'));
+        }
         // Iterate through multipolygon
         shape.shape_points.coordinates.forEach( polygon => {
             const p = polygonTemplate.cloneNode( true ).querySelector('POLYGON');
