@@ -34,7 +34,6 @@ await APIClient.getShapesByMapId( map_id ).then( returnedShapes => {
     returnedShapes.forEach( shape => {
         let group = svg.querySelector(`#${shape.shape_name}`);
         // If a group doesn't already exist for this shape's name
-        console.log( group, shape.shape_name );
         if ( !group ) {
             group = polygonTemplate.cloneNode( true ).querySelector('G');
             // Remove empty polygon element
