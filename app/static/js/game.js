@@ -11,6 +11,13 @@ const cancelButton = document.getElementById('btn-cancel');
 const gamemodePanel = document.getElementById('gamemodePanel');
 const covering = document.getElementById('covering');
 
+document.getElementById('b1').addEventListener('click', () => {
+    APIClient.printShapeInsertQuery().then( r => {
+    }).catch( err => {
+        console.error( err );
+    });
+});
+
 // Update header bar
 await APIClient.getMapById( map_id ).then( returnedMap => {
     const navBar = document.getElementById('nav-bar');
@@ -32,13 +39,13 @@ const shapeNames = new Set();
 await APIClient.getShapesByMapId( map_id ).then( returnedShapes => {
     const polygonTemplate = document.getElementById('polygon-template').content;
     returnedShapes.forEach( shape => {
-        let group = svg.querySelector(`#${shape.shape_name}`);
+        let group = svg.querySelector(`#${nameToClass( shape.shape_name )}`);
         // If a group doesn't already exist for this shape's name
         if ( !group ) {
             group = polygonTemplate.cloneNode( true ).querySelector('G');
             // Remove empty polygon element
             group.innerHTML = "";
-            group.setAttribute('id', shape.shape_name.split(' ').join('_'));
+            group.setAttribute('id', nameToClass( shape.shape_name ));
         }
         // Iterate through multipolygon
         shape.shape_points.coordinates.forEach( polygon => {
@@ -84,3 +91,7 @@ cancelButton.addEventListener('click', () => {
         document.location = '../';
     }
 });
+
+function nameToClass( name ) {
+    return name.split(' ').join('_').split("'").join('-');
+}
