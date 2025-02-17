@@ -1,5 +1,5 @@
 const database = require('./databaseConnections.js');
-const US_States_Parse = require('./backend/parse/US_States-Parse.js');
+// const US_Counties_Parse = require('./backend/test/US_Counties-parse.js');
 
 const custom = async () => {
     return await database.query(`
@@ -11,7 +11,7 @@ const custom = async () => {
 };
 
 const printShapeInsertQuery = () => {
-    US_States_Parse.parse();
+    // US_Counties_Parse.parse();
     return database.query(`SELECT * FROM shape WHERE shape_map_id = 0`);
 };
 
