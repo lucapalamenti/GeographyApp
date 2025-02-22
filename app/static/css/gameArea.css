@@ -18,6 +18,13 @@ g.groupClickable:active polygon {
     fill: rgb(190, 191, 97);
 }
 
+g.typed polygon {
+    fill: rgb(106, 235, 89);
+}
+g.typeCurrent polygon {
+    fill: rgb(0, 255, 213);
+}
+
 polygon {
     fill: rgb(230, 231, 137);
     stroke-width: 0.1%;

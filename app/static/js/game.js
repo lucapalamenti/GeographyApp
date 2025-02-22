@@ -61,6 +61,7 @@ await APIClient.getShapesByMapId( map_id ).then( returnedShapes => {
         svg.appendChild( group );
         shapeNames.add( shape.shape_name );
     });
+    if ( map_id == 48 ) virginiaFix();
 }).catch( err => {
     console.error( err );
 });
@@ -93,5 +94,19 @@ cancelButton.addEventListener('click', () => {
 });
 
 function nameToClass( name ) {
-    return name.split(' ').join('_').split("'").join('-');
+    return name.split(' ').join('_').split("'").join('-').toLowerCase();
+}
+
+/**
+ * Moves Virginia cities to the bottom of the svg element so that they show up on
+ * top of the counties that surround them
+ */
+function virginiaFix() {
+    const arr = [];
+    svg.querySelectorAll('G').forEach( group => {
+        if ( group.id.endsWith( "_city" ) ) arr.push( svg.removeChild( group ) );
+    });
+    arr.forEach( group => {
+        svg.append( group );
+    });
 }
