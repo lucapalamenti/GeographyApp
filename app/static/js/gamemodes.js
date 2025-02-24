@@ -13,6 +13,7 @@ const svg = document.querySelector('SVG');
 const promptBar1 = document.getElementById('prompt-bar-1');
 const promptBar2 = document.getElementById('prompt-bar-2');
 const input = promptBar2.querySelector('INPUT');
+const tooltip = document.getElementById('tooltip');
 let strong;
 let tally;
 
@@ -36,8 +37,16 @@ function clickGamemodes( shapeNames, endless ) {
 
     arr = shuffleArray( shapeNames );
     current = arr.pop();
-    strong.textContent = capitalizeFirst( current );
+    updateLabels();
     promptBar1.style.display = "flex";
+
+    svg.addEventListener('mousemove', e => {
+        tooltip.style.transform = `translate( calc( -50% + ${e.clientX}px ), calc( -150% + ${e.clientY}px ) )`;
+        tooltip.style.display = "block" ;
+    });
+    svg.addEventListener('mouseout', e => {
+        tooltip.style.display = "none" ;
+    });
 }
 function click ( shapeNames ) {
     clickGamemodes( shapeNames, false );
@@ -66,10 +75,9 @@ function click ( shapeNames ) {
             polygon.style.fill = clickColors[guesses];
         });
         if ( !( current = arr.pop() ) ) {
-            strong.textContent = '-';
             endGame();
         } else {
-            strong.textContent = capitalizeFirst( current );
+            updateLabels();
             guesses = 0;
         }
         tally.textContent = `Correct: ${numCorrect}/${numPrompts}`;
@@ -100,10 +108,9 @@ function clickDisappear ( shapeNames, endless ) {
     function next( group ) {
         disappearTrigger( group );
         if ( !( current = arr.pop() ) ) {
-            strong.textContent = '-';
             endGame();
         } else {
-            strong.textContent = capitalizeFirst( current );
+            updateLabels();
             if ( endless ) runEndless();
             guesses = 0;
         }
@@ -232,11 +239,6 @@ function noMap( shapeNames ) {  }
 
 function noList( shapeNames ) {  }
 
-function endGame() {
-    input.setAttribute('disabled', true);
-    console.log( "YOU WIN!" );
-}
-
 function disappearTrigger( group, color ) {
     group.classList.remove('groupClickable');
     group.querySelectorAll('POLYGON').forEach( polygon => {
@@ -267,6 +269,16 @@ function capitalizeFirst( string ) {
 }
 
 /**
+ * Updates all labels with the class 'click-on' to contain the current shape
+ * to click on
+ */
+function updateLabels() {
+    document.querySelectorAll('.click-on').forEach( label => {
+        label.textContent = capitalizeFirst( current );
+    });
+}
+
+/**
  * Randomly shuffles an array
  * @param {Array} arr 
  */
@@ -282,4 +294,11 @@ function shuffleArray( arr ) {
 
 function inputToClass( input ) {
     return input.split(' ').join('_').split("'").join('-').toLowerCase();
+}
+
+function endGame() {
+    current = "-";
+    updateLabels();
+    input.setAttribute('disabled', true);
+    console.log( "YOU WIN!" );
 }
