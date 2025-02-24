@@ -63,7 +63,7 @@
     font-weight: bold;
 }
 
-.prompt-bar {
+#prompt-bar {
     display: none;
     justify-content: space-between;
     border: 3px solid rgb(28, 134, 64);
@@ -72,11 +72,11 @@
     background-color: rgb(31, 151, 71);
 }
 
-.prompt-bar * {
+#prompt-bar * {
     font-size: 1.5rem;
 }
 
-.prompt-bar input {
+#prompt-bar input {
     max-width: 300px;
     padding-left: 5px;
     color: black;

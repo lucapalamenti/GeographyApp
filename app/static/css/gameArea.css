@@ -37,6 +37,7 @@ polygon {
     border-radius: 5px;
     padding: 5px;
     background-color: rgb(31, 151, 71);
+    font-size: 1rem;
 }
 
 @media screen and (max-width : 600px) {

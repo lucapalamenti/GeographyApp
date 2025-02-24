@@ -15,6 +15,7 @@
     <title>Map1</title>
 </head>
 <body>
+    <div id="tooltip">Click on <strong class="click-on"></strong></div>
     <header>
         <div>
             <h1>Geography App</h1>
@@ -25,7 +26,6 @@
         </nav>
     </header>
     <div id="covering"></div>
-    <div id="tooltip">Click on <strong class="click-on"></strong></div>
     <main>
         <!-- Shows on load and when switching gamemodes -->
         <div id="gamemodePanel">
@@ -69,23 +69,18 @@
         </div>
 
         <div id="game-area">
-            <!--  Used for Clicking gamemodes -->
-            <div id="prompt-bar-1" class="prompt-bar">
+            <div id="prompt-bar">
                 <div class="flex-row">
-                    <p>Click on</p>
+                    <p></p>
                     <strong class="click-on"></strong>
-                </div>
-                <p id="tally"></p>
-            </div>
-            <!--  Used for the Type gamemodes -->
-            <div id="prompt-bar-2" class="prompt-bar">
-                <div class="flex-row">
-                    <p>Name all regions</p>
                     <input type="text">
                 </div>
+                <p id="incorrectLabel"></p>
                 <p id="tally"></p>
             </div>
             <svg viewBox="0 0 1600 900" preserveAspectRatio="none" style='background-color: whitesmoke'></svg>
+            <!-- Used for No Map gamemode -->
+            
         </div>
         <button id="b1">Populate svg with Polygons</button>
     </main>

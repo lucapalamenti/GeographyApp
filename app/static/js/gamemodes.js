@@ -1,21 +1,10 @@
-export const gamemodeMap = {
-    'click': click,
-    'clickDisappear': clickDisappear,
-    'clickEndless': clickEndless,
-    'type': type,
-    'typeHard': typeHard,
-    'typeEndless': typeEndless,
-    'noMap': noMap,
-    'noList': noList
-};
-
 const svg = document.querySelector('SVG');
-const promptBar1 = document.getElementById('prompt-bar-1');
-const promptBar2 = document.getElementById('prompt-bar-2');
-const input = promptBar2.querySelector('INPUT');
+const promptBar = document.getElementById('prompt-bar');
+const input = promptBar.querySelector('INPUT');
+const promptLabel = promptBar.querySelector('P');;
+const tally = promptBar.querySelector('#tally');
+
 const tooltip = document.getElementById('tooltip');
-let strong;
-let tally;
 
 let arr;
 let current;
@@ -31,22 +20,25 @@ function clickGamemodes( shapeNames, endless ) {
         group.classList.add('groupClickable');
     });
 
-    strong = promptBar1.querySelector('STRONG');
-    tally = promptBar1.querySelector('#tally');
+    promptLabel.textContent = "Click on";
+    input.style.display = 'none';
     tally.textContent = `Correct: ${numCorrect}/${numPrompts}`;
 
     arr = shuffleArray( shapeNames );
     current = arr.pop();
     updateLabels();
-    promptBar1.style.display = "flex";
+    
+    promptBar.style.display = "flex";
 
-    svg.addEventListener('mousemove', e => {
-        tooltip.style.transform = `translate( calc( -50% + ${e.clientX}px ), calc( -150% + ${e.clientY}px ) )`;
-        tooltip.style.display = "block" ;
-    });
+    svg.addEventListener('mousemove', moveToolTip );
+    svg.addEventListener('scroll', moveToolTip );
     svg.addEventListener('mouseout', e => {
         tooltip.style.display = "none" ;
     });
+    function moveToolTip( e ) {
+        tooltip.style.transform = `translate( calc( -50% + ${e.clientX}px ), calc( 60% + ${e.clientY + window.scrollY}px ) )`;
+        tooltip.style.display = "block";
+    }
 }
 function click ( shapeNames ) {
     clickGamemodes( shapeNames, false );
@@ -54,18 +46,18 @@ function click ( shapeNames ) {
         const group = e.target.parentNode;
         if ( group.classList.contains('groupClickable') ) {
             // Correct region clicked
-            if ( group.getAttribute('id') === inputToClass( current ) ) {
+            if ( group.getAttribute('id') === inputToId( current ) ) {
                 if ( guesses === 0 ) numCorrect++;
                 next( group );
             }
             // Incorrect region clicked
             else {
                 guesses++;
-                disappearTrigger( group, clickColors[3] );
+                incorrect( group );
+                shapeDisappearTrigger( group, clickColors[3], true );
                 // If too many guesses have been taken then highlight the correct answer
                 if ( guesses === clickColors.length - 1 )
-                    next( svg.getElementById( inputToClass( current ) ) );
-                incorrect( group );
+                    next( svg.getElementById( inputToId( current ) ) );
             }
         }
     });
@@ -91,22 +83,23 @@ function clickDisappear ( shapeNames, endless ) {
         const group = e.target.parentNode;
         if ( group.classList.contains('groupClickable') ) {
             // Correct region clicked
-            if ( group.getAttribute('id') === inputToClass( current ) ) {
+            if ( group.getAttribute('id') === inputToId( current ) ) {
                 if ( guesses === 0 ) numCorrect++;
                 next( group );
             }
             // Incorrect region clicked
             else {
                 guesses++;
-                disappearTrigger( group, clickColors[3] );
+                incorrect();
+                shapeDisappearTrigger( group, clickColors[3], true );
                 // If too many guesses have been taken then highlight the correct answer
                 if ( guesses === clickColors.length - 1 )
-                    next( svg.getElementById( inputToClass( current ) ) );
+                    next( svg.getElementById( inputToId( current ) ) );
             }
         }
     });
     function next( group ) {
-        disappearTrigger( group );
+        shapeDisappearTrigger( group, clickColors[guesses], true );
         if ( !( current = arr.pop() ) ) {
             endGame();
         } else {
@@ -132,32 +125,27 @@ function clickDisappear ( shapeNames, endless ) {
 function clickEndless( shapeNames ) { clickDisappear( shapeNames, true ) }
 
 function incorrect( group ) {
-    const label = document.createElement('P');
-    label.textContent = group.getAttribute('id');
-    label.classList.add('incorrectLabel');
-
-    svg.after( label );
-    console.log( 'here ' );
+    
 }
 
 function typeGamemodes( shapeNames, endless ) {
     numPrompts = endless ? "Endless" : shapeNames.length;
     
-    tally = promptBar2.querySelector('#tally');
     tally.textContent = `Correct: ${numCorrect}/${numPrompts}`;
 
     arr = shuffleArray( shapeNames );
     current = arr.pop();
-    promptBar2.style.display = "flex";
+    promptBar.style.display = "flex";
     input.focus();
 }
 function type( shapeNames ) {
     typeGamemodes( shapeNames, false );
+    promptLabel.textContent = "Name all regions";
     input.addEventListener('keypress', e => {
         if ( e.key === 'Enter' ) {
             // Only check the value if it isn't blank
             if ( input.value !== '' ) {
-                const group = svg.querySelector(`#${inputToClass( input.value )}`);
+                const group = svg.querySelector(`#${inputToId( input.value )}`);
                 if ( group && !group.classList.contains('typed') ) {
                     group.classList.add('typed');
                     input.value = "";
@@ -171,10 +159,10 @@ function type( shapeNames ) {
     });
 }
 function typeHard( shapeNames, endless ) {
-    promptBar2.querySelector('P').textContent = "Name the highlighted region";
+    promptLabel.textContent = "Name the highlighted region";
     typeGamemodes( shapeNames, endless );
 
-    let currentGroup = svg.querySelector(`#${inputToClass( current )}`);
+    let currentGroup = svg.querySelector(`#${inputToId( current )}`);
     let endlessQueue = [current];
     currentGroup.classList.add('typeCurrent');
 
@@ -185,35 +173,30 @@ function typeHard( shapeNames, endless ) {
             if ( input.value !== '' ) {
                 // If input is correct
                 if ( input.value.toLowerCase() === current.toLowerCase() ) {
-                    currentGroup.classList.remove('typeCurrent');
-                    currentGroup.querySelectorAll('POLYGON').forEach( polygon => {
-                        polygon.style.fill = clickColors[guesses];
-                        if ( endless ) disappearTrigger( currentGroup );
-                    });
-                    if ( guesses === 0 ) numCorrect++;
                     next();
                 }
                 // If input is incorrect
                 else {
                     guesses++;
-                    if ( guesses === clickColors.length - 1 ) {
-                        currentGroup.querySelectorAll('POLYGON').forEach( polygon => {
-                            polygon.style.fill = clickColors[guesses];
-                            if ( endless ) disappearTrigger( currentGroup );
-                        });
-                        next();
-                    }
+                    // If too many guesses have been given
+                    if ( guesses === clickColors.length - 1 ) next();
                 }
             }
         }
         tally.textContent = `Correct: ${numCorrect}/${numPrompts}`;
     });
     function next() {
+        currentGroup.classList.remove('typeCurrent');
+        currentGroup.querySelectorAll('POLYGON').forEach( polygon => {
+            polygon.style.fill = clickColors[guesses];
+            if ( endless ) shapeDisappearTrigger( currentGroup, clickColors[guesses], false );
+        });
+        if ( guesses === 0 ) numCorrect++;
         input.value = "";
         if ( !( current = arr.pop() ) ) {
             endGame();
         } else {
-            currentGroup = svg.querySelector(`#${inputToClass( current )}`);
+            currentGroup = svg.querySelector(`#${inputToId( current )}`);
             currentGroup.classList.add('typeCurrent');
             // Endless gamemode
             if ( endless ) runEndless();
@@ -235,14 +218,22 @@ function typeHard( shapeNames, endless ) {
 }
 function typeEndless( shapeNames ) { typeHard( shapeNames, true ); }
 
-function noMap( shapeNames ) {  }
+function noMap( shapeNames ) {
+    numPrompts = shapeNames.length;
+
+    tally.textContent = `Correct: ${numCorrect}/${numPrompts}`;
+    
+    document.querySelector('#game-area').removeChild( svg );
+    promptBar.style.borderBottom = "3px solid rgb(28, 134, 64)";
+    promptBar.style.display = "flex";
+}
 
 function noList( shapeNames ) {  }
 
-function disappearTrigger( group, color ) {
+function shapeDisappearTrigger( group, color, clickable ) {
     group.classList.remove('groupClickable');
     group.querySelectorAll('POLYGON').forEach( polygon => {
-        polygon.style.fill = color ? color : clickColors[guesses];
+        polygon.style.fill = color;
         // Hold for 1 second
         setTimeout( function() {
             polygon.style.transition = 'fill 1s ease';
@@ -250,7 +241,7 @@ function disappearTrigger( group, color ) {
             // Fade out for 1 second
             setTimeout( function() {
                 polygon.style.transition = '';
-                group.classList.add('groupClickable');
+                if ( clickable ) group.classList.add('groupClickable');
             }, 1000 );
         }, 1000 );
     });
@@ -292,8 +283,11 @@ function shuffleArray( arr ) {
     return arr;
 }
 
-function inputToClass( input ) {
+function inputToId( input ) {
     return input.split(' ').join('_').split("'").join('-').toLowerCase();
+}
+function idToInput( id ) {
+    return capitalizeFirst( id.split('_').join(' ').split('-').join("'") );
 }
 
 function endGame() {
@@ -302,3 +296,14 @@ function endGame() {
     input.setAttribute('disabled', true);
     console.log( "YOU WIN!" );
 }
+
+export const gamemodeMap = {
+    'click': click,
+    'clickDisappear': clickDisappear,
+    'clickEndless': clickEndless,
+    'type': type,
+    'typeHard': typeHard,
+    'typeEndless': typeEndless,
+    'noMap': noMap,
+    'noList': noList
+};
