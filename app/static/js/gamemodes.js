@@ -131,7 +131,7 @@ function incorrect( group, e ) {
     p.style.transform = `translate( calc( -50% + ${e.clientX}px ), calc( -120% + ${e.clientY + window.scrollY}px ) )`;
     tooltip.before( p );
 
-    // Hold for 1 second WORK ON THISSSSSSSSSSSSSSS
+    // Show for 1.5 seconds
     setTimeout( function() {
         tooltip.parentNode.removeChild( p );
     }, 1500 );
