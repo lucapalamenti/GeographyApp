@@ -40,6 +40,7 @@ polygon {
     background-color: white;
     color: black;
     font-size: 0.75rem;
+    cursor: default;
 }
 
 #tooltip {
