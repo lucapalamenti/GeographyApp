@@ -2,7 +2,6 @@ const svg = document.querySelector('SVG');
 const promptBar = document.getElementById('prompt-bar');
 const input = promptBar.querySelector('INPUT');
 const promptLabel = promptBar.querySelector('P');
-const incorrectLabel = promptBar.querySelector('#incorrectLabel');
 const tally = promptBar.querySelector('#tally');
 
 const tooltip = document.getElementById('tooltip');
