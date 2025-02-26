@@ -30,6 +30,18 @@ polygon {
     stroke: rgb(46, 46, 26);
 }
 
+.incorrectLabel {
+    position: absolute;
+    border: 2px solid black;
+    border-radius: 5px;
+    padding-bottom: 1px;
+    padding-left: 3px;
+    padding-right: 3px;
+    background-color: white;
+    color: black;
+    font-size: 0.75rem;
+}
+
 #tooltip {
     display: none;
     position: absolute;

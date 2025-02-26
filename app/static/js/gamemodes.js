@@ -1,7 +1,8 @@
 const svg = document.querySelector('SVG');
 const promptBar = document.getElementById('prompt-bar');
 const input = promptBar.querySelector('INPUT');
-const promptLabel = promptBar.querySelector('P');;
+const promptLabel = promptBar.querySelector('P');
+const incorrectLabel = promptBar.querySelector('#incorrectLabel');
 const tally = promptBar.querySelector('#tally');
 
 const tooltip = document.getElementById('tooltip');
@@ -53,7 +54,7 @@ function click ( shapeNames ) {
             // Incorrect region clicked
             else {
                 guesses++;
-                incorrect( group );
+                incorrect( group, e );
                 shapeDisappearTrigger( group, clickColors[3], true );
                 // If too many guesses have been taken then highlight the correct answer
                 if ( guesses === clickColors.length - 1 )
@@ -90,7 +91,7 @@ function clickDisappear ( shapeNames, endless ) {
             // Incorrect region clicked
             else {
                 guesses++;
-                incorrect();
+                incorrect( group, e );
                 shapeDisappearTrigger( group, clickColors[3], true );
                 // If too many guesses have been taken then highlight the correct answer
                 if ( guesses === clickColors.length - 1 )
@@ -124,15 +125,22 @@ function clickDisappear ( shapeNames, endless ) {
 }
 function clickEndless( shapeNames ) { clickDisappear( shapeNames, true ) }
 
-function incorrect( group ) {
-    
+function incorrect( group, e ) {
+    const p = document.createElement('P');
+    p.classList.add('incorrectLabel');
+    p.textContent = idToInput( group.id );
+    p.style.transform = `translate( calc( -50% + ${e.clientX}px ), calc( -120% + ${e.clientY + window.scrollY}px ) )`;
+    tooltip.before( p );
+
+    // Hold for 1 second WORK ON THISSSSSSSSSSSSSSS
+    setTimeout( function() {
+        tooltip.parentNode.removeChild( p );
+    }, 1500 );
 }
 
 function typeGamemodes( shapeNames, endless ) {
     numPrompts = endless ? "Endless" : shapeNames.length;
-    
     tally.textContent = `Correct: ${numCorrect}/${numPrompts}`;
-
     arr = shuffleArray( shapeNames );
     current = arr.pop();
     promptBar.style.display = "flex";
