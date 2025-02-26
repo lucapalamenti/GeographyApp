@@ -53,12 +53,12 @@ function click ( shapeNames ) {
             // Incorrect region clicked
             else {
                 guesses++;
-                incorrect( group, e );
                 shapeDisappearTrigger( group, clickColors[3], true );
                 // If too many guesses have been taken then highlight the correct answer
                 if ( guesses === clickColors.length - 1 )
                     next( svg.getElementById( inputToId( current ) ) );
             }
+            clickLabel( group, e );
         }
     });
     function next( group ) {
@@ -90,12 +90,12 @@ function clickDisappear ( shapeNames, endless ) {
             // Incorrect region clicked
             else {
                 guesses++;
-                incorrect( group, e );
                 shapeDisappearTrigger( group, clickColors[3], true );
                 // If too many guesses have been taken then highlight the correct answer
                 if ( guesses === clickColors.length - 1 )
                     next( svg.getElementById( inputToId( current ) ) );
             }
+            clickLabel( group, e );
         }
     });
     function next( group ) {
@@ -124,9 +124,9 @@ function clickDisappear ( shapeNames, endless ) {
 }
 function clickEndless( shapeNames ) { clickDisappear( shapeNames, true ) }
 
-function incorrect( group, e ) {
+function clickLabel( group, e ) {
     const p = document.createElement('P');
-    p.classList.add('incorrectLabel');
+    p.classList.add('clickLabel');
     p.textContent = idToInput( group.id );
     p.style.transform = `translate( calc( -50% + ${e.clientX}px ), calc( -120% + ${e.clientY + window.scrollY}px ) )`;
     tooltip.before( p );
