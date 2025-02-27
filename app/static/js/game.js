@@ -66,12 +66,6 @@ await APIClient.getShapesByMapId( map_id ).then( returnedShapes => {
     console.error( err );
 });
 
-window.addEventListener('scroll', () => {
-    // Update background covering
-    covering.style.height = `calc(100% + ${window.scrollY}px)`;
-    covering.style.top = `${document.querySelector('HEADER').offsetHeight - window.scrollY}px`;
-});
-
 let currentGamemode = null;
 
 selectButton.addEventListener('click', () => {
