@@ -161,8 +161,7 @@ function type( shapeNames ) {
             }
         }
         tally.textContent = `${numCorrect}/${numPrompts}`;
-        if ( numCorrect === numPrompts )
-            endGame();
+        if ( numCorrect === numPrompts ) endGame();
     });
 }
 function typeHard( shapeNames, endless ) {
@@ -174,14 +173,11 @@ function typeHard( shapeNames, endless ) {
     currentGroup.classList.add('typeCurrent');
 
     input.addEventListener('keypress', e => {
-        // When enter button pressed
         if ( e.key === 'Enter' ) {
             // Only check the value if it isn't blank
             if ( input.value !== '' ) {
                 // If input is correct
-                if ( input.value.toLowerCase() === current.toLowerCase() ) {
-                    next();
-                }
+                if ( input.value.toLowerCase() === current.toLowerCase() ) next(); 
                 // If input is incorrect
                 else {
                     guesses++;
@@ -226,13 +222,42 @@ function typeHard( shapeNames, endless ) {
 function typeEndless( shapeNames ) { typeHard( shapeNames, true ); }
 
 function noMap( shapeNames ) {
+    const noMapArea = document.getElementById('no-map-area');
     numPrompts = shapeNames.length;
 
+    let n = 1;
+    const arr = {};
+    shapeNames.forEach( name => {
+        arr[ inputToId( name ) ] = n++;
+    });
+
+    for ( let i = 0; i < numPrompts; i++ ) {
+        noMapArea.appendChild( document.createElement('P') );
+    }
+
+    promptLabel.textContent = "Name all regions";
     tally.textContent = `Correct: ${numCorrect}/${numPrompts}`;
+    noMapArea.style.display = "flex";
     
     document.querySelector('#game-area').removeChild( svg );
-    promptBar.style.borderBottom = "3px solid rgb(28, 134, 64)";
     promptBar.style.display = "flex";
+
+    input.addEventListener('keypress', e => {
+        if ( e.key === 'Enter' ) {
+            // Only check the value if it isn't blank
+            if ( input.value !== '' ) {
+                const myInput = inputToId( input.value );
+                if ( arr[ myInput ] ) {
+                    noMapArea.childNodes[ arr[ myInput ] ].textContent = idToInput( myInput );
+                    arr[ myInput ] = null;
+                    input.value = "";
+                    numCorrect++;
+                }
+            }
+        }
+        tally.textContent = `Correct: ${numCorrect}/${numPrompts}`;
+        if ( numCorrect === numPrompts ) endGame();
+    });
 }
 
 function noList( shapeNames ) {  }
@@ -252,18 +277,6 @@ function shapeDisappearTrigger( group, color, clickable ) {
             }, 1000 );
         }, 1000 );
     });
-}
-
-/**
- * Capitalizes the firt letter of each word (separated by a space) in a string
- * @param {String} string 
- */
-function capitalizeFirst( string ) {
-    const arr = string.split(' ');
-    for ( let i = 0; i < arr.length; i++ ) {
-        arr[i] = arr[i].slice(0, 1).toUpperCase().concat( arr[i].slice(1) );
-    }
-    return arr.join(' ');
 }
 
 /**
@@ -288,6 +301,18 @@ function shuffleArray( arr ) {
         arr[j] = temp;
     }
     return arr;
+}
+
+/**
+ * Capitalizes the firt letter of each word (separated by a space) in a string
+ * @param {String} string 
+ */
+function capitalizeFirst( string ) {
+    const arr = string.split(' ');
+    for ( let i = 0; i < arr.length; i++ ) {
+        arr[i] = arr[i].slice(0, 1).toUpperCase().concat( arr[i].slice(1) );
+    }
+    return arr.join(' ');
 }
 
 function inputToId( input ) {
