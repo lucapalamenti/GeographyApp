@@ -239,7 +239,7 @@ function noMap( shapeNames ) {
     tally.textContent = `Correct: ${numCorrect}/${numPrompts}`;
     noMapArea.style.display = "flex";
     
-    document.querySelector('#game-area').removeChild( svg );
+    document.getElementById('game-area').removeChild( document.getElementById('svg-container') );
     promptBar.style.display = "flex";
 
     input.addEventListener('keypress', e => {
@@ -248,7 +248,10 @@ function noMap( shapeNames ) {
             if ( input.value !== '' ) {
                 const myInput = inputToId( input.value );
                 if ( arr[ myInput ] ) {
-                    noMapArea.childNodes[ arr[ myInput ] ].textContent = idToInput( myInput );
+                    const correctNode = noMapArea.childNodes[ arr[ myInput ] ];
+                    correctNode.textContent = idToInput( myInput );
+                    correctNode.style["background-color"] = "rgb(75, 255, 75)";
+                    correctNode.style["border"] = "1px solid green";
                     arr[ myInput ] = null;
                     input.value = "";
                     numCorrect++;
@@ -327,6 +330,30 @@ function endGame() {
     updateLabels();
     input.setAttribute('disabled', true);
     console.log( "YOU WIN!" );
+}
+
+
+// Right click to zoom
+svg.addEventListener( 'contextmenu', zoom );
+function zoom( e ) {
+    e.preventDefault();
+    const rect = svg.getBoundingClientRect();
+    const x = ( e.clientX - rect.left ) * 1600 / rect.width;
+    const y = ( e.clientY - rect.top ) * 900 / rect.height;
+    svg.setAttribute('viewBox', `${x-160} ${y-90} 320 180`);
+    svg.classList.add('zoomed');
+    svg.removeEventListener( 'contextmenu', zoom );
+}
+
+// Escape key to unzoom
+document.addEventListener('keydown', e => {
+    console.log( e.key === 'Escape' );
+    if ( e.key === 'Escape' ) unzoom(e);
+});
+function unzoom( e ) {
+    svg.classList.remove('zoomed');
+    svg.setAttribute('viewBox', "0 0 1600 900");
+    svg.addEventListener( 'contextmenu', zoom );
 }
 
 export const gamemodeMap = {
