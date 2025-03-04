@@ -14,6 +14,9 @@ let numCorrect = 0;
 let guesses = 0;
 const clickColors = [ 'rgb(106, 235, 89)', 'rgb(240, 219, 35)', 'rgb(243, 148, 24)', 'rgb(235, 89, 89)' ];
 
+const SVG_WIDTH = 1600;
+const SVG_HEIGHT = 900;
+
 function clickGamemodes( shapeNames, endless ) {
     numPrompts = endless ? "Endless" : shapeNames.length;
     document.querySelectorAll('G').forEach( group => {
@@ -338,19 +341,24 @@ svg.addEventListener( 'contextmenu', zoom );
 function zoom( e ) {
     e.preventDefault();
     const rect = svg.getBoundingClientRect();
-    const x = ( e.clientX - rect.left ) * 1600 / rect.width;
-    const y = ( e.clientY - rect.top ) * 900 / rect.height;
-    svg.setAttribute('viewBox', `${x-160} ${y-90} 320 180`);
+    // X coordinate of zoom viewport
+    let startX = ( e.clientX - rect.left ) * SVG_WIDTH / rect.width - SVG_WIDTH / 10;
+    // Y coordinate of zoom viewport
+    let startY = ( e.clientY - rect.top ) * SVG_HEIGHT / rect.height - SVG_HEIGHT / 10;
+    // Adjust so zoom is not greater than original viewport
+    startX = startX < 0 ? 0 : ( startX > SVG_WIDTH * 0.8 ? SVG_WIDTH * 0.8 : startX );
+    startY = startY < 0 ? 0 : ( startY > SVG_HEIGHT * 0.8 ? SVG_HEIGHT * 0.8 : startY );
+
+    svg.setAttribute('viewBox', `${startX} ${startY} ${ SVG_WIDTH / 5 } ${ SVG_HEIGHT / 5 }`);
     svg.classList.add('zoomed');
     svg.removeEventListener( 'contextmenu', zoom );
 }
 
 // Escape key to unzoom
 document.addEventListener('keydown', e => {
-    console.log( e.key === 'Escape' );
-    if ( e.key === 'Escape' ) unzoom(e);
+    if ( e.key === 'Escape' ) unzoom();
 });
-function unzoom( e ) {
+function unzoom() {
     svg.classList.remove('zoomed');
     svg.setAttribute('viewBox', "0 0 1600 900");
     svg.addEventListener( 'contextmenu', zoom );
@@ -366,3 +374,6 @@ export const gamemodeMap = {
     'noMap': noMap,
     'noList': noList
 };
+
+// THINGS TO GET DONE
+// - after 3rd Incorrect click the correct state will also get a label
