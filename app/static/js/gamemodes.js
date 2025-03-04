@@ -58,10 +58,12 @@ function click ( shapeNames ) {
                 guesses++;
                 shapeDisappearTrigger( group, clickColors[3], true );
                 // If too many guesses have been taken then highlight the correct answer
-                if ( guesses === clickColors.length - 1 )
+                if ( guesses === clickColors.length - 1 ) {
+                    clickLabel( svg.getElementById( inputToId( current ) ), e, true );
                     next( svg.getElementById( inputToId( current ) ) );
+                }
             }
-            clickLabel( group, e );
+            clickLabel( group, e, false );
         }
     });
     function next( group ) {
@@ -95,8 +97,9 @@ function clickDisappear ( shapeNames, endless ) {
                 guesses++;
                 shapeDisappearTrigger( group, clickColors[3], true );
                 // If too many guesses have been taken then highlight the correct answer
-                if ( guesses === clickColors.length - 1 )
+                if ( guesses === clickColors.length - 1 ) {
                     next( svg.getElementById( inputToId( current ) ) );
+                }
             }
             clickLabel( group, e );
         }
@@ -127,11 +130,16 @@ function clickDisappear ( shapeNames, endless ) {
 }
 function clickEndless( shapeNames ) { clickDisappear( shapeNames, true ) }
 
-function clickLabel( group, e ) {
+function clickLabel( group, e, center ) {
     const p = document.createElement('P');
     p.classList.add('clickLabel');
     p.textContent = idToInput( group.id );
-    p.style.transform = `translate( calc( -50% + ${e.clientX}px ), calc( -120% + ${e.clientY + window.scrollY}px ) )`;
+    if ( center ) {
+        const rect = group.getBoundingClientRect();
+        p.style.transform = `translate( calc( -50% + ${rect.left + rect.width / 2}px ), calc( -50% + ${rect.top + rect.height / 2}px ) )`;
+    } else {
+        p.style.transform = `translate( calc( -50% + ${e.clientX}px ), calc( -120% + ${e.clientY + window.scrollY}px ) )`;
+    }
     tooltip.before( p );
 
     // Show for 1.5 seconds
@@ -374,6 +382,3 @@ export const gamemodeMap = {
     'noMap': noMap,
     'noList': noList
 };
-
-// THINGS TO GET DONE
-// - after 3rd Incorrect click the correct state will also get a label
