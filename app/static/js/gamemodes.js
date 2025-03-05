@@ -343,11 +343,10 @@ function endGame() {
     console.log( "YOU WIN!" );
 }
 
-
 // Right click to zoom
+svg.addEventListener( 'contextmenu', e => { e.preventDefault(); });
 svg.addEventListener( 'contextmenu', zoom );
 function zoom( e ) {
-    e.preventDefault();
     const rect = svg.getBoundingClientRect();
     // X coordinate of zoom viewport
     let startX = ( e.clientX - rect.left ) * SVG_WIDTH / rect.width - SVG_WIDTH / 10;
