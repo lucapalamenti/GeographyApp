@@ -140,6 +140,7 @@ function clickLabel( group, e, center ) {
     } else {
         p.style.transform = `translate( calc( -50% + ${e.clientX}px ), calc( -120% + ${e.clientY + window.scrollY}px ) )`;
     }
+    p.addEventListener('contextmenu', e => { e.preventDefault() });
     tooltip.before( p );
 
     // Show for 1.5 seconds
@@ -347,6 +348,9 @@ function endGame() {
 svg.addEventListener( 'contextmenu', e => { e.preventDefault(); });
 svg.addEventListener( 'contextmenu', zoom );
 function zoom( e ) {
+    document.querySelectorAll('.clickLabel').forEach( label => {
+        label.style.display = "none";
+    });
     const rect = svg.getBoundingClientRect();
     // X coordinate of zoom viewport
     let startX = ( e.clientX - rect.left ) * SVG_WIDTH / rect.width - SVG_WIDTH / 10;
