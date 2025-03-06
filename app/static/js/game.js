@@ -6,9 +6,12 @@ let parameters = new URLSearchParams( query );
 const map_id = Number( parameters.get('mapId') );
 
 const svg = document.querySelector('SVG');
-const selectButton = document.getElementById('btn-select');
-const cancelButton = document.getElementById('btn-cancel');
-const gamemodePanel = document.getElementById('gamemodePanel');
+const gamemodePanel = document.getElementById('gamemode-panel');
+const selectButton = gamemodePanel.querySelector('NAV .btn-green');
+const cancelButton = gamemodePanel.querySelector('NAV .btn-grey');
+const gameEndPanel = document.getElementById('game-end-panel');
+const playAgainButton = gameEndPanel.querySelector('NAV .btn-green');
+const homeButton = gameEndPanel.querySelector('NAV .btn-grey');
 const covering = document.getElementById('covering');
 
 document.getElementById('b1').addEventListener('click', () => {
@@ -83,6 +86,14 @@ cancelButton.addEventListener('click', () => {
     if ( !currentGamemode ) {
         document.location = '../';
     }
+});
+
+playAgainButton.addEventListener('click', () => {
+    location.reload();
+});
+
+homeButton.addEventListener('click', () => {
+    document.location = '../';
 });
 
 function nameToClass( name ) {

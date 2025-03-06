@@ -28,7 +28,7 @@
     </header>
     <main>
         <!-- Shows on load and when switching gamemodes -->
-        <div id="gamemodePanel">
+        <form id="gamemode-panel" class="main-panel">
             <h3>Select Gamemode</h3>
             <div class="input-label">
                 <input type="radio" name="gamemode" id="click" value="click">
@@ -62,10 +62,19 @@
                 <input type="radio" name="gamemode" id="noList" value="noList">
                 <label for="noList">No List</label>
             </div>
-            <div id="gamemode-button-panel">
-                <button id="btn-select">Select</button>
-                <button id="btn-cancel">Cancel</button>
-            </div>
+            <nav>
+                <button class="btn-green" type="button">Select</button>
+                <button class="btn-grey" type="button">Cancel</button>
+            </nav>
+        </form>
+
+        <!-- Shows after ending a game -->
+        <div id="game-end-panel" class="main-panel">
+            <h3>Game Finished</h3>
+            <nav>
+                <button class="btn-green">Play Again</button>
+                <button class="btn-grey">Home</button>
+            </nav>
         </div>
 
         <div id="game-area">
@@ -78,6 +87,7 @@
                 <p id="incorrectLabel"></p>
                 <p id="tally"></p>
             </div>
+            <!-- Used for all gamemodes with a map -->
             <div id="svg-container">
                 <svg viewBox="0 0 1600 900" preserveAspectRatio="none" style='background-color: whitesmoke'></svg>
             </div>

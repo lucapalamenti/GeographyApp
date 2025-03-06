@@ -5,6 +5,8 @@ const promptLabel = promptBar.querySelector('P');
 const tally = promptBar.querySelector('#tally');
 
 const tooltip = document.getElementById('tooltip');
+const gameEndPanel = document.getElementById('game-end-panel');
+const covering = document.getElementById('covering');
 
 let arr;
 let current;
@@ -275,7 +277,9 @@ function noMap( shapeNames ) {
     });
 }
 
-function noList( shapeNames ) {  }
+function noList( shapeNames ) {
+
+}
 
 function shapeDisappearTrigger( group, color, clickable ) {
     group.classList.remove('groupClickable');
@@ -337,13 +341,6 @@ function idToInput( id ) {
     return capitalizeFirst( id.split('_').join(' ').split('-').join("'") );
 }
 
-function endGame() {
-    current = "-";
-    updateLabels();
-    input.setAttribute('disabled', true);
-    console.log( "YOU WIN!" );
-}
-
 // Right click to zoom
 svg.addEventListener( 'contextmenu', e => { e.preventDefault(); });
 svg.addEventListener( 'contextmenu', zoom );
@@ -373,6 +370,15 @@ function unzoom() {
     svg.classList.remove('zoomed');
     svg.setAttribute('viewBox', "0 0 1600 900");
     svg.addEventListener( 'contextmenu', zoom );
+}
+
+function endGame() {
+    current = "-";
+    updateLabels();
+    input.setAttribute('disabled', true);
+    covering.style.visibility = "";
+    gameEndPanel.style.display = "flex";
+    console.log( "YOU WIN!" );
 }
 
 export const gamemodeMap = {
