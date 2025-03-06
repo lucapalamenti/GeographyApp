@@ -42,22 +42,20 @@ await APIClient.getShapesByMapId( map_id ).then( returnedShapes => {
         let group = svg.querySelector(`#${nameToClass( shape.shape_name )}`);
         // If a group doesn't already exist for this shape's name
         if ( !group ) {
+            // Create a new group
             group = polygonTemplate.cloneNode( true ).querySelector('G');
             // Remove empty polygon element
             group.innerHTML = "";
             group.setAttribute('id', nameToClass( shape.shape_name ));
         }
-        // Iterate through multipolygon
-        shape.shape_points.coordinates.forEach( polygon => {
-            const p = polygonTemplate.cloneNode( true ).querySelector('POLYGON');
-            const points = polygon[0];
-            // Convert points[i] from [0, 0] to "0,0"
-            for ( let i = 0; i < points.length; i++ ) {
-                points[i] = points[i].join(',');
-            }
-            p.setAttribute('points', points.join(' ') );
-            group.appendChild( p );
-        });
+        // Create a polygon for the current shape
+        const p = polygonTemplate.cloneNode( true ).querySelector('POLYGON');
+        const points = shape.shape_points.coordinates[0];
+        // Convert each array index from [1,2] to "1,2"
+        for ( let i = 0; i < points.length; i++ )
+            points[i] = points[i].join(',');
+        p.setAttribute('points', points.join(' ') );
+        group.appendChild( p );
         svg.appendChild( group );
         shapeNames.add( shape.shape_name );
     });

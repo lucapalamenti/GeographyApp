@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `shape` (
   `shape_id` int(10) NOT NULL AUTO_INCREMENT,
   `shape_map_id` int(10) NOT NULL DEFAULT 0,
   `shape_name` tinytext NOT NULL,
-  `shape_points` multipolygon NOT NULL,
+  `shape_points` polygon NOT NULL,
   PRIMARY KEY (`shape_id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
