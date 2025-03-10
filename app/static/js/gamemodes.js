@@ -19,8 +19,8 @@ const clickColors = [ 'rgb(106, 235, 89)', 'rgb(240, 219, 35)', 'rgb(243, 148, 2
 const SVG_WIDTH = 1600;
 const SVG_HEIGHT = 900;
 
-function clickGamemodes( shapeNames, endless ) {
-    numPrompts = endless ? "Endless" : shapeNames.length;
+function clickGamemodes( shapeNames ) {
+    numPrompts = shapeNames.length;
     document.querySelectorAll('G').forEach( group => {
         group.classList.add('groupClickable');
     });
@@ -82,10 +82,8 @@ function click ( shapeNames ) {
         tally.textContent = `Correct: ${numCorrect}/${numPrompts}`;
     }
 }
-function clickDisappear ( shapeNames, endless ) {
-    clickGamemodes( shapeNames, endless );
-    // For endless gamemode
-    let endlessQueue = [current];
+function clickDisappear ( shapeNames ) {
+    clickGamemodes( shapeNames );
     svg.addEventListener('click', e => {
         const group = e.target.parentNode;
         if ( group.classList.contains('groupClickable') ) {
@@ -112,25 +110,11 @@ function clickDisappear ( shapeNames, endless ) {
             endGame();
         } else {
             updateLabels();
-            if ( endless ) runEndless();
             guesses = 0;
         }
         tally.textContent = `Correct: ${numCorrect}/${numPrompts}`;
     }
-    function runEndless() {
-        endlessQueue.push( current );
-        if ( endlessQueue.length > arr.length) {
-            // Pick a random index in the front half of the waiting queue
-            const index1 = Math.floor( Math.random() * endlessQueue.length / 2 );
-            // Pick a random index in the back half of the current queue
-            const index2 = Math.floor( Math.random() * arr.length / 2 );
-            // Insert the value from waiting queue into the current queue
-            arr = arr.slice( 0, index2 ).concat( endlessQueue.at( index1 ), arr.slice( index2 ) );
-            endlessQueue = endlessQueue.slice(0, index1).concat( endlessQueue.slice( index1 + 1 ) );
-        }
-    }
 }
-function clickEndless( shapeNames ) { clickDisappear( shapeNames, true ) }
 
 function clickLabel( group, e, center ) {
     const p = document.createElement('P');
@@ -138,7 +122,7 @@ function clickLabel( group, e, center ) {
     p.textContent = idToInput( group.id );
     if ( center ) {
         const rect = group.getBoundingClientRect();
-        p.style.transform = `translate( calc( -50% + ${rect.left + rect.width / 2}px ), calc( -50% + ${rect.top + rect.height / 2}px ) )`;
+        p.style.transform = `translate( calc( -50% + ${rect.left + rect.width / 2 + scrollX}px ), calc( -50% + ${rect.top + rect.height / 2 + scrollY}px ) )`;
     } else {
         p.style.transform = `translate( calc( -50% + ${e.clientX}px ), calc( -120% + ${e.clientY + window.scrollY}px ) )`;
     }
@@ -151,8 +135,8 @@ function clickLabel( group, e, center ) {
     }, 1500 );
 }
 
-function typeGamemodes( shapeNames, endless ) {
-    numPrompts = endless ? "Endless" : shapeNames.length;
+function typeGamemodes( shapeNames ) {
+    numPrompts = shapeNames.length;
     tally.textContent = `Correct: ${numCorrect}/${numPrompts}`;
     arr = shuffleArray( shapeNames );
     current = arr.pop();
@@ -178,12 +162,11 @@ function type( shapeNames ) {
         if ( numCorrect === numPrompts ) endGame();
     });
 }
-function typeHard( shapeNames, endless ) {
+function typeHard( shapeNames ) {
     promptLabel.textContent = "Name the highlighted region";
-    typeGamemodes( shapeNames, endless );
+    typeGamemodes( shapeNames );
 
     let currentGroup = svg.querySelector(`#${inputToId( current )}`);
-    let endlessQueue = [current];
     currentGroup.classList.add('typeCurrent');
 
     input.addEventListener('keypress', e => {
@@ -206,7 +189,6 @@ function typeHard( shapeNames, endless ) {
         currentGroup.classList.remove('typeCurrent');
         currentGroup.querySelectorAll('POLYGON').forEach( polygon => {
             polygon.style.fill = clickColors[guesses];
-            if ( endless ) shapeDisappearTrigger( currentGroup, clickColors[guesses], false );
         });
         if ( guesses === 0 ) numCorrect++;
         input.value = "";
@@ -215,25 +197,10 @@ function typeHard( shapeNames, endless ) {
         } else {
             currentGroup = svg.querySelector(`#${inputToId( current )}`);
             currentGroup.classList.add('typeCurrent');
-            // Endless gamemode
-            if ( endless ) runEndless();
             guesses = 0;
         }
     }
-    function runEndless() {
-        endlessQueue.push( current );
-        if ( endlessQueue.length > arr.length) {
-            // Pick a random index in the front half of the waiting queue
-            const index1 = Math.floor( Math.random() * endlessQueue.length / 2 );
-            // Pick a random index in the back half of the current queue
-            const index2 = Math.floor( Math.random() * arr.length / 2 );
-            // Insert the value from waiting queue into the current queue
-            arr = arr.slice( 0, index2 ).concat( endlessQueue.at( index1 ), arr.slice( index2 ) );
-            endlessQueue = endlessQueue.slice(0, index1).concat( endlessQueue.slice( index1 + 1 ) );
-        }
-    }
 }
-function typeEndless( shapeNames ) { typeHard( shapeNames, true ); }
 
 function noMap( shapeNames ) {
     const noMapArea = document.getElementById('no-map-area');
@@ -278,6 +245,10 @@ function noMap( shapeNames ) {
 }
 
 function noList( shapeNames ) {
+
+}
+
+function outline( shapeNames ) {
 
 }
 
@@ -384,10 +355,9 @@ function endGame() {
 export const gamemodeMap = {
     'click': click,
     'clickDisappear': clickDisappear,
-    'clickEndless': clickEndless,
     'type': type,
     'typeHard': typeHard,
-    'typeEndless': typeEndless,
     'noMap': noMap,
-    'noList': noList
+    'noList': noList,
+    'outline': outline
 };

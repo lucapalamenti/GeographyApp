@@ -39,10 +39,6 @@
                 <label for="clickDisappear">Click (Disappear)</label>
             </div>
             <div class="input-label">
-                <input type="radio" name="gamemode" id="clickEndless" value="clickEndless">
-                <label for="clickEndless">Click (Endless)</label>
-            </div>
-            <div class="input-label">
                 <input type="radio" name="gamemode" id="type" value="type">
                 <label for="type">Type</label>
             </div>
@@ -51,16 +47,16 @@
                 <label for="typeHard">Type (Hard)</label>
             </div>
             <div class="input-label">
-                <input type="radio" name="gamemode" id="typeEndless" value="typeEndless">
-                <label for="typeEndless">Type (Endless)</label>
-            </div>
-            <div class="input-label">
                 <input type="radio" name="gamemode" id="noMap" value="noMap">
                 <label for="noMap">No Map</label>
             </div>
             <div class="input-label">
                 <input type="radio" name="gamemode" id="noList" value="noList">
                 <label for="noList">No List</label>
+            </div>
+            <div class="input-label">
+                <input type="radio" name="gamemode" id="outline" value="outline">
+                <label for="outline">Outline</label>
             </div>
             <nav>
                 <button class="btn-green" type="button">Select</button>
@@ -89,7 +85,12 @@
             </div>
             <!-- Used for all gamemodes with a map -->
             <div id="svg-container">
-                <svg viewBox="0 0 1600 900" preserveAspectRatio="none" style='background-color: whitesmoke'></svg>
+                <svg viewBox="0 0 1600 900" preserveAspectRatio="none">
+                    <!-- Surrounding area shapes will go here -->
+                    <g class="grey-out">
+
+                    </g>
+                </svg>
             </div>
             <!-- Used for No Map gamemode -->
             <div id="no-map-area">
