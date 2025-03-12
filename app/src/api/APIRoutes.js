@@ -39,6 +39,24 @@ APIRouter.get('/shapes', (req, res) => {
     });
 });
 
+APIRouter.get('/shapes/:shapeId', (req, res) => {
+    ShapeDAO.getShapeById( req.params.shapeId ).then( shape => {
+        res.json( shape );
+    })
+    .catch( err => {
+        res.status(500).json({error:err, message: 'Error with POST request to /shapes'});
+    });
+});
+
+APIRouter.get('/shapeOffset/:mapId/:shapeId', (req, res) => {
+    ShapeDAO.getShapeOffset( req.params.mapId, req.params.shapeId ).then( shape => {
+        res.json( shape );
+    })
+    .catch( err => {
+        res.status(500).json({error:err, message: 'Error with POST request to /shapes'});
+    });
+});
+
 APIRouter.post('/shapes', (req, res) => {
     ShapeDAO.createShape( req.body ).then( shape => {
         res.json( shape );

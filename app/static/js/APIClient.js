@@ -38,6 +38,22 @@ const getShapes = async () => {
     }
 };
 
+const getShapeById = async ( shape_id ) => {
+    try {
+        return await HTTPClient.get(`${BASE_API_PATH}/shapes/${shape_id}`);
+    } catch (error) {
+        return handleAuthError(error);
+    }
+};
+
+const getShapeOffset = async ( shapeOffset_map_id, shapeOffset_shape_id ) => {
+    try {
+        return await HTTPClient.get(`${BASE_API_PATH}/shapeOffset/${shapeOffset_map_id}/${shapeOffset_shape_id}`);
+    } catch (error) {
+        return handleAuthError(error);
+    }
+};
+
 const createShape = async ( shapeData ) => {
     try {
         return await HTTPClient.post(`${BASE_API_PATH}/shapes`, shapeData);
@@ -101,6 +117,8 @@ export default {
     printShapeInsertQuery,
     
     getShapes,
+    getShapeById,
+    getShapeOffset,
     createShape,
     updatePoints,
     appendPoints,

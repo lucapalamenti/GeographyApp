@@ -23,10 +23,20 @@ const getShapeById = async ( shape_id ) => {
 
 const getShapesByMapId = async ( shape_map_id ) => {
     return await database.query(`
-        SELECT * FROM shape WHERE shape_map_id = ?
+        SELECT * FROM shape
+        WHERE shape_map_id = ?
         ORDER BY shape_name
         `, [shape_map_id]).then( rows => {
         return rows;
+    });
+};
+
+const getShapeOffset = async ( shapeOffset_map_id, shapeOffset_shape_id ) => {
+    return await database.query(`
+        SELECT * FROM shapeOffset
+        WHERE shapeOffset_map_id = ? AND shapeOffset_shape_id = ?
+        `, [shapeOffset_map_id, shapeOffset_shape_id]).then( rows => {
+        return rows[0];
     });
 };
 
@@ -71,7 +81,8 @@ const appendPoints = async ( appendData ) => {
 
 const deleteShapesFromMap = async ( mapId ) => {
     return await database.query(`
-        DELETE FROM shape WHERE map_id = ?
+        DELETE FROM shape
+        WHERE map_id = ?
         `, [mapId]).then( rows => {
         return rows.affectedRows;
     });
@@ -81,6 +92,7 @@ module.exports = {
     getShapes,
     getShapeById,
     getShapesByMapId,
+    getShapeOffset,
     createShape,
     updatePoints,
     appendPoints,
