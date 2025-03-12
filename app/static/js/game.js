@@ -15,14 +15,17 @@ const homeButton = gameEndPanel.querySelector('NAV .btn-grey');
 const covering = document.getElementById('covering');
 
 document.getElementById('b1').addEventListener('click', () => {
+    //APIClient.custom();
     APIClient.printShapeInsertQuery().then( r => {
     }).catch( err => {
         console.error( err );
     });
 });
 
+let map;
 // Update header bar
 await APIClient.getMapById( map_id ).then( returnedMap => {
+    map = returnedMap;
     const navBar = document.getElementById('nav-bar');
     const nextLink = document.createElement('A');
     nextLink.href = '/game?mapId=' + map_id;
@@ -41,26 +44,34 @@ const shapeNames = new Set();
 // Load shapes for the current map onto the screen
 await APIClient.getShapesByMapId( map_id ).then( returnedShapes => {
     const polygonTemplate = document.getElementById('polygon-template').content;
-    returnedShapes.forEach( shape => {
-        let group = svg.querySelector(`#${nameToClass( shape.shape_name )}`);
+    returnedShapes.forEach( async region => {
+        let group = svg.querySelector(`#${nameToId( region.shape_name )}`);
         // If a group doesn't already exist for this shape's name
         if ( !group ) {
             // Create a new group
             group = polygonTemplate.cloneNode( true ).querySelector('G');
             // Remove empty polygon element
             group.innerHTML = "";
-            group.setAttribute('id', nameToClass( shape.shape_name ));
+            group.setAttribute('id', nameToId( region.shape_name ));
         }
-        // Create a polygon for the current shape
-        const p = polygonTemplate.cloneNode( true ).querySelector('POLYGON');
-        const points = shape.shape_points.coordinates[0];
-        // Convert each array index from [1,2] to "1,2"
-        for ( let i = 0; i < points.length; i++ )
-            points[i] = points[i].join(',');
-        p.setAttribute('points', points.join(' ') );
-        group.appendChild( p );
-        svg.appendChild( group );
-        shapeNames.add( shape.shape_name );
+        await APIClient.getShapeOffset( map_id, region.shape_id ).then( returnedOffset => {
+            region.shape_points.coordinates.forEach( shape => {
+                // Create a polygon for the current shape
+                const p = polygonTemplate.cloneNode( true ).querySelector('POLYGON');
+                const points = shape[0];
+                // Convert each array index from [1,2] to "1,2" and apply scaling & offsets
+                for ( let i = 0; i < points.length; i++ ) {
+                    let X = points[i][0] * map.map_scale + returnedOffset.shapeOffset_X;
+                    let Y = points[i][1] * map.map_scale + returnedOffset.shapeOffset_Y;
+                    points[i] = `${X},${Y}`;
+                }
+                
+                p.setAttribute('points', points.join(' ') );
+                group.appendChild( p );
+                svg.appendChild( group );
+                shapeNames.add( region.shape_name );
+            });
+        });
     });
     if ( map_id == 48 ) virginiaFix();
 }).catch( err => {
@@ -96,7 +107,7 @@ homeButton.addEventListener('click', () => {
     document.location = '../';
 });
 
-function nameToClass( name ) {
+function nameToId( name ) {
     return name.split(' ').join('_').split("'").join('-').toLowerCase();
 }
 
