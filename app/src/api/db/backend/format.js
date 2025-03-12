@@ -1,4 +1,3 @@
-import APIClient from './APIClient.js';
 /**
  * Input an array of strings. Each string is a Geometry "points" attribute.
  * Returns a Multipolygon
