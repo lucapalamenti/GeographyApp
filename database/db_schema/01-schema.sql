@@ -17,10 +17,10 @@
 -- Dumping structure for table geographyapp.map
 CREATE TABLE IF NOT EXISTS `map` (
   `map_id` int(10) NOT NULL,
-  `map_scale` int(10) NOT NULL DEFAULT 1,
+  `map_scale` Decimal(8,6) NOT NULL DEFAULT 1.000000,
   `map_name` varchar(100) NOT NULL DEFAULT '',
   `map_thumbnail` tinytext DEFAULT '',
-  `map_primary_color` varchar(31) NOT NULL DEFAULT 'rgb(255,255,255)',
+  `map_primary_color` varchar(31) NOT NULL DEFAULT '255,255,255',
   PRIMARY KEY (`map_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
