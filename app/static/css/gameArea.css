@@ -33,6 +33,10 @@ svg {
     background-color: rgb(141, 209, 226) !important;
 }
 
+svg.hide-polygons polygon {
+    visibility: hidden;
+}
+
 svg.zoomed polygon {
     stroke-width: 0.25px;
 }

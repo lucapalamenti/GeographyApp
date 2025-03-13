@@ -26,6 +26,7 @@ let map;
 // Update header bar
 await APIClient.getMapById( map_id ).then( returnedMap => {
     map = returnedMap;
+    document.querySelector('TITLE').textContent = returnedMap.map_name;
     const navBar = document.getElementById('nav-bar');
     const nextLink = document.createElement('A');
     nextLink.href = '/game?mapId=' + map_id;
@@ -42,9 +43,9 @@ await APIClient.getMapById( map_id ).then( returnedMap => {
 const shapeNames = new Set();
 
 // Load shapes for the current map onto the screen
-await APIClient.getShapesByMapId( map_id ).then( returnedShapes => {
+await APIClient.getShapesByMapId( map_id ).then( async returnedShapes => {
     const polygonTemplate = document.getElementById('polygon-template').content;
-    returnedShapes.forEach( async region => {
+    for ( const region of returnedShapes ) {
         let group = svg.querySelector(`#${nameToId( region.shape_name )}`);
         // If a group doesn't already exist for this shape's name
         if ( !group ) {
@@ -65,15 +66,15 @@ await APIClient.getShapesByMapId( map_id ).then( returnedShapes => {
                     let Y = points[i][1] * map.map_scale + returnedOffset.shapeOffset_Y;
                     points[i] = `${X},${Y}`;
                 }
-                
                 p.setAttribute('points', points.join(' ') );
                 group.appendChild( p );
                 svg.appendChild( group );
                 shapeNames.add( region.shape_name );
             });
         });
-    });
+    };
     if ( map_id == 48 ) virginiaFix();
+    svg.classList.remove('hide-polygons');
 }).catch( err => {
     console.error( err );
 });
