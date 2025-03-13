@@ -46,9 +46,9 @@ const getShapeById = async ( shape_id ) => {
     }
 };
 
-const getShapeOffset = async ( shapeOffset_map_id, shapeOffset_shape_id ) => {
+const getMapShape = async ( mapShape_map_id, mapShape_shape_id ) => {
     try {
-        return await HTTPClient.get(`${BASE_API_PATH}/shapeOffset/${shapeOffset_map_id}/${shapeOffset_shape_id}`);
+        return await HTTPClient.get(`${BASE_API_PATH}/mapShape/${mapShape_map_id}/${mapShape_shape_id}`);
     } catch (error) {
         return handleAuthError(error);
     }
@@ -102,7 +102,7 @@ export default {
     
     getShapes,
     getShapeById,
-    getShapeOffset,
+    getMapShape,
     createShape,
     getShapesByMapId,
     deleteShapesFromMap,

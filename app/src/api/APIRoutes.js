@@ -48,12 +48,12 @@ APIRouter.get('/shapes/:shapeId', (req, res) => {
     });
 });
 
-APIRouter.get('/shapeOffset/:mapId/:shapeId', (req, res) => {
-    ShapeDAO.getShapeOffset( req.params.mapId, req.params.shapeId ).then( shape => {
+APIRouter.get('/mapShape/:mapId/:shapeId', (req, res) => {
+    ShapeDAO.getMapShape( req.params.mapId, req.params.shapeId ).then( shape => {
         res.json( shape );
     })
     .catch( err => {
-        res.status(500).json({error:err, message: 'Error with POST request to /shapes'});
+        res.status(500).json({error:err, message: 'Error with POST request to /mapShape'});
     });
 });
 
