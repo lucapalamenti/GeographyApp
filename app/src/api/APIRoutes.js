@@ -66,24 +66,6 @@ APIRouter.post('/shapes', (req, res) => {
     });
 });
 
-APIRouter.put('/shapes', (req, res) => {
-    ShapeDAO.updatePoints( req.body ).then( shape => {
-        res.json( shape );
-    })
-    .catch( err => {
-        res.status(500).json({error:err, message: 'Error with PUT request to /shapes'});
-    });
-});
-
-APIRouter.put('/shapes/points', (req, res) => {
-    ShapeDAO.appendPoints( req.body ).then( shape => {
-        res.json( shape );
-    })
-    .catch( err => {
-        res.status(500).json({error:err, message: 'Error with PUT request to /shapes/points'});
-    });
-});
-
 APIRouter.get('/shapes/map/:mapId', (req, res) => {
     ShapeDAO.getShapesByMapId( req.params.mapId ).then( shapes => {
         res.json( shapes );

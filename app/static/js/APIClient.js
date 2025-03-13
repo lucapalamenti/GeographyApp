@@ -62,22 +62,6 @@ const createShape = async ( shapeData ) => {
     }
 };
 
-const updatePoints = async ( shapeData ) => {
-    try {
-        return await HTTPClient.put(`${BASE_API_PATH}/shapes`, shapeData);
-    } catch (error) {
-        return handleAuthError(error);
-    }
-};
-
-const appendPoints = async ( appendData ) => {
-    try {
-        return await HTTPClient.put(`${BASE_API_PATH}/shapes/points`, appendData);
-    } catch (error) {
-        return handleAuthError(error);
-    }
-};
-
 const getShapesByMapId = async ( map_id ) => {
     try {
         return await HTTPClient.get(`${BASE_API_PATH}/shapes/map/${map_id}`);
@@ -120,8 +104,6 @@ export default {
     getShapeById,
     getShapeOffset,
     createShape,
-    updatePoints,
-    appendPoints,
     getShapesByMapId,
     deleteShapesFromMap,
 

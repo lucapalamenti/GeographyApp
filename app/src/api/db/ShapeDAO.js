@@ -36,46 +36,24 @@ const getShapeOffset = async ( shapeOffset_map_id, shapeOffset_shape_id ) => {
         SELECT * FROM shapeOffset
         WHERE shapeOffset_map_id = ? AND shapeOffset_shape_id = ?
         `, [shapeOffset_map_id, shapeOffset_shape_id]).then( rows => {
-        return rows[0];
+        if ( rows.length ) {
+            return rows[0];
+        } else {
+            return null;
+        }
     });
 };
 
 const createShape = async ( shapeData ) => {
-    const { shape_map_id, shape_name, shape_points } = shapeData;
+    const { shape_name, shape_points } = shapeData;
     return await database.query(`
-        INSERT INTO shape (shape_map_id, shape_name, shape_points)
-        VALUES (?, ?, ST_GEOMFROMTEXT(?))
-        `, [shape_map_id, shape_name, shape_points]).then( rows => {
+        INSERT INTO shape (shape_name, shape_points)
+        VALUES (?, ST_GEOMFROMTEXT(?))
+        `, [shape_name, shape_points]).then( rows => {
         if ( rows.affectedRows === 1 ) {
             return getShapeById( rows.insertId );
         }
         throw new Error('Shape could not be created!');
-    });
-};
-
-const updatePoints = async ( shapeData ) => {
-    const { shape_id, shape_points } = shapeData;
-    return await database.query(`
-        UPDATE shape SET shape_points = ?
-        WHERE shape_id = ?
-        `, [shape_points, shape_id]).then( rows => {
-        if ( rows.affectedRows === 1 ) {
-            return getShapeById( shape_id );
-        }
-        throw new Error('Error appending points to shape!');
-    });
-};
-
-const appendPoints = async ( appendData ) => {
-    const { shape_id, shape_points } = appendData;
-    return await database.query(`
-        UPDATE shape SET shape_points = CONCAT(shape_points, ?, ?)
-        WHERE shape_id = ?
-        `, [' ', shape_points, shape_id]).then( rows => {
-        if ( rows.affectedRows === 1 ) {
-            return getShapeById( shape_id );
-        }
-        throw new Error('Error appending points to shape!');
     });
 };
 
@@ -94,7 +72,5 @@ module.exports = {
     getShapesByMapId,
     getShapeOffset,
     createShape,
-    updatePoints,
-    appendPoints,
     deleteShapesFromMap
 };
