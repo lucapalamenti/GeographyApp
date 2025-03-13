@@ -14,10 +14,15 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+
+-- Dumping database structure for geographyapp
+CREATE DATABASE IF NOT EXISTS `geographyapp` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_ai_ci */;
+USE `geographyapp`;
+
 -- Dumping structure for table geographyapp.map
 CREATE TABLE IF NOT EXISTS `map` (
   `map_id` int(10) NOT NULL,
-  `map_scale` Decimal(8,6) NOT NULL DEFAULT 1.000000,
+  `map_scale` decimal(8,6) NOT NULL DEFAULT 1.000000,
   `map_name` varchar(100) NOT NULL DEFAULT '',
   `map_thumbnail` tinytext DEFAULT '',
   `map_primary_color` varchar(31) NOT NULL DEFAULT '255,255,255',
@@ -29,29 +34,28 @@ CREATE TABLE IF NOT EXISTS `map` (
 -- Dumping structure for table geographyapp.shape
 CREATE TABLE IF NOT EXISTS `shape` (
   `shape_id` int(10) NOT NULL AUTO_INCREMENT,
-  `shape_map_id` int(10) NOT NULL DEFAULT 0,
   `shape_name` tinytext NOT NULL,
   `shape_points` multipolygon NOT NULL,
-  PRIMARY KEY (`shape_id`) USING BTREE,
-  KEY `FK_shape_map` (`shape_map_id`),
-  CONSTRAINT `FK_shape_map` FOREIGN KEY (`shape_map_id`) REFERENCES `map` (`map_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+  PRIMARY KEY (`shape_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=103 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 -- Data exporting was unselected.
 
--- Dumping structure for table geographyapp.shapeOffset
-CREATE TABLE IF NOT EXISTS `shapeOffset` (
-  `shapeOffset_id` int(10) NOT NULL AUTO_INCREMENT,
-  `shapeOffset_map_id` int(10) DEFAULT NULL,
-  `shapeOffset_shape_id` int(10) DEFAULT NULL,
-  `shapeOffset_X` int(10) DEFAULT NULL,
-  `shapeOffset_Y` int(10) DEFAULT NULL,
-  PRIMARY KEY (`shapeOffset_id`),
-  KEY `FK_shapeOffset_map` (`shapeOffset_map_id`),
-  KEY `FK_shapeOffset_shape` (`shapeOffset_shape_id`),
-  CONSTRAINT `FK_shapeOffset_map` FOREIGN KEY (`shapeOffset_map_id`) REFERENCES `map` (`map_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `FK_shapeOffset_shape` FOREIGN KEY (`shapeOffset_shape_id`) REFERENCES `shape` (`shape_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+-- Dumping structure for table geographyapp.mapShape
+CREATE TABLE IF NOT EXISTS `mapShape` (
+  `mapShape_id` int(10) NOT NULL AUTO_INCREMENT,
+  `mapShape_map_id` int(10) NOT NULL DEFAULT 0,
+  `mapShape_shape_id` int(10) NOT NULL DEFAULT 0,
+  `mapShape_offsetX` decimal(12,8) NOT NULL DEFAULT 0.00000000,
+  `mapShape_offsetY` decimal(12,8) NOT NULL DEFAULT 0.00000000,
+  `mapShape_scaleX` decimal(12,8) NOT NULL DEFAULT 0.00000000,
+  `mapShape_scaleY` decimal(12,8) NOT NULL DEFAULT 0.00000000,
+  PRIMARY KEY (`mapShape_id`) USING BTREE,
+  KEY `FK_mapShape_map` (`mapShape_map_id`) USING BTREE,
+  KEY `FK_mapShape_shape` (`mapShape_shape_id`) USING BTREE,
+  CONSTRAINT `FK_mapShape_map` FOREIGN KEY (`mapShape_map_id`) REFERENCES `map` (`map_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_mapShape_shape` FOREIGN KEY (`mapShape_shape_id`) REFERENCES `shape` (`shape_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=103 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 -- Data exporting was unselected.
 
