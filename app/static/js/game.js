@@ -4,6 +4,7 @@ import { gamemodeMap } from './gamemodes.js';
 const query = window.location.search;
 let parameters = new URLSearchParams( query );
 const map_id = Number( parameters.get('mapId') );
+const svgPadding = 10;
 
 const svg = document.querySelector('SVG');
 const gamemodePanel = document.getElementById('gamemode-panel');
@@ -55,22 +56,20 @@ await APIClient.getShapesByMapId( map_id ).then( async returnedShapes => {
             group.innerHTML = "";
             group.setAttribute('id', nameToId( region.shape_name ));
         }
-        await APIClient.getShapeOffset( map_id, region.shape_id ).then( returnedOffset => {
-            region.shape_points.coordinates.forEach( shape => {
-                // Create a polygon for the current shape
-                const p = polygonTemplate.cloneNode( true ).querySelector('POLYGON');
-                const points = shape[0];
-                // Convert each array index from [1,2] to "1,2" and apply scaling & offsets
-                for ( let i = 0; i < points.length; i++ ) {
-                    let X = points[i][0] * map.map_scale + returnedOffset.shapeOffset_X;
-                    let Y = points[i][1] * map.map_scale + returnedOffset.shapeOffset_Y;
-                    points[i] = `${X},${Y}`;
-                }
-                p.setAttribute('points', points.join(' ') );
-                group.appendChild( p );
-                svg.appendChild( group );
-                shapeNames.add( region.shape_name );
-            });
+        region.shape_points.coordinates.forEach( shape => {
+            // Create a polygon for the current shape
+            const p = polygonTemplate.cloneNode( true ).querySelector('POLYGON');
+            const points = shape[0];
+            // Convert each array index from [1,2] to "1,2" and apply scaling & offsets
+            for ( let i = 0; i < points.length; i++ ) {
+                let X = ( points[i][0] + Number( region.mapShape_offsetX ) ) * map.map_scale * region.mapShape_scaleX + svgPadding;
+                let Y = ( points[i][1] + Number( region.mapShape_offsetY ) ) * map.map_scale * region.mapShape_scaleY + svgPadding;
+                points[i] = `${X.toFixed(6)},${Y.toFixed(6)}`;
+            }
+            p.setAttribute('points', points.join(' ') );
+            group.appendChild( p );
+            svg.appendChild( group );
+            shapeNames.add( region.shape_name );
         });
     };
     if ( map_id == 48 ) virginiaFix();
