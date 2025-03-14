@@ -21,14 +21,13 @@ const getShapeById = async ( shape_id ) => {
     });
 };
 
-const getShapesByMapId = async ( shape_map_id ) => {
+const getShapesByMapId = async ( mapShape_map_id ) => {
     return await database.query(`
-        SELECT shape_id, shape_name, shape_points
-        FROM mapShape JOIN shape
+        SELECT * FROM mapShape JOIN shape
         ON mapShape_shape_id = shape_id
         WHERE mapShape_map_id = ?
         ORDER BY shape_name
-        `, [shape_map_id]).then( rows => {
+        `, [mapShape_map_id]).then( rows => {
         return rows;
     });
 };
@@ -47,8 +46,8 @@ const getMapShape = async ( mapShape_map_id, mapShape_shape_id ) => {
                 mapShape_shape_id : -1,
                 mapShape_offsetX : 0,
                 mapShape_offsetY : 0,
-                mapShape_scaleX : 0,
-                mapShape_scaleY : 0,
+                mapShape_scaleX : 1,
+                mapShape_scaleY : 1,
             };
         }
     });
