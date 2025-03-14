@@ -1,7 +1,7 @@
 import APIClient from './APIClient.js';
 
 // Populates map buttons on screen from database
-await APIClient.getMaps("map_name").then( returnedMaps => {
+await APIClient.getMaps("map_id").then( returnedMaps => {
     const mapNavigation = document.getElementById('map-navigation');
     const mapButtonTemplate = document.getElementById('map-button-template');
     for ( const map of returnedMaps ) {
