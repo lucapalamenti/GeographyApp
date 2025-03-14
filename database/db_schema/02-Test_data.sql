@@ -5,7 +5,7 @@ INSERT INTO `shape` (`shape_id`, `shape_name`, `shape_points`) VALUES (2, 'Top R
 INSERT INTO `shape` (`shape_id`, `shape_name`, `shape_points`) VALUES (3, 'Bottom Left', ST_GEOMFROMTEXT('MULTIPOLYGON(((0 0, 10 0, 10 10, 0 10, 0 0)),((20 20, 25 20, 25 25, 20 25, 20 20)))'));
 INSERT INTO `shape` (`shape_id`, `shape_name`, `shape_points`) VALUES (4, 'Bottom Right', ST_GEOMFROMTEXT('MULTIPOLYGON(((0 0, 10 0, 10 10, 0 10, 0 0)),((20 20, 25 20, 25 25, 20 25, 20 20)))'));
 
-INSERT INTO `mapShape` (`mapShape_map_id`, `mapShape_shape_id`, `mapShape_offsetX`, `mapShape_offsetY`, `mapShape_scaleX`, `mapShape_scaleY`) VALUES (0, 1, 0, 0, 20, 15);
-INSERT INTO `mapShape` (`mapShape_map_id`, `mapShape_shape_id`, `mapShape_offsetX`, `mapShape_offsetY`, `mapShape_scaleX`, `mapShape_scaleY`) VALUES (0, 2, 10, 0, 20, 15);
-INSERT INTO `mapShape` (`mapShape_map_id`, `mapShape_shape_id`, `mapShape_offsetX`, `mapShape_offsetY`, `mapShape_scaleX`, `mapShape_scaleY`) VALUES (0, 3, 0, 10, 20, 15);
-INSERT INTO `mapShape` (`mapShape_map_id`, `mapShape_shape_id`, `mapShape_offsetX`, `mapShape_offsetY`, `mapShape_scaleX`, `mapShape_scaleY`) VALUES (0, 4, 10, 10, 20, 15);
+INSERT INTO `mapShape` (`mapShape_map_id`, `mapShape_shape_id`, `mapShape_offsetX`, `mapShape_offsetY`, `mapShape_scaleX`, `mapShape_scaleY`) VALUES (0, 1, 0, 0, 1.25, 0.75);
+INSERT INTO `mapShape` (`mapShape_map_id`, `mapShape_shape_id`, `mapShape_offsetX`, `mapShape_offsetY`, `mapShape_scaleX`, `mapShape_scaleY`) VALUES (0, 2, 10, 0, 1.25, 0.75);
+INSERT INTO `mapShape` (`mapShape_map_id`, `mapShape_shape_id`, `mapShape_offsetX`, `mapShape_offsetY`, `mapShape_scaleX`, `mapShape_scaleY`) VALUES (0, 3, 0, 10, 1.25, 0.75);
+INSERT INTO `mapShape` (`mapShape_map_id`, `mapShape_shape_id`, `mapShape_offsetX`, `mapShape_offsetY`, `mapShape_scaleX`, `mapShape_scaleY`) VALUES (0, 4, 10, 10, 1.25, 0.75);
