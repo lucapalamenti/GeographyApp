@@ -86,8 +86,8 @@ APIRouter.delete('/shapes/map/:mapId', (req, res) => {
 
 // ----- MapDAO ROUTES -----
 
-APIRouter.get('/maps', (req, res) => {
-    MapDAO.getMaps().then( maps => {
+APIRouter.get('/maplist/:orderBy', (req, res) => {
+    MapDAO.getMaps( req.params.orderBy ).then( maps => {
         res.json( maps );
     })
     .catch( err => {

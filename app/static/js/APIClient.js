@@ -80,9 +80,9 @@ const deleteShapesFromMap = async ( map_id ) => {
 
 // ----- MapDAO CALLS -----
 
-const getMaps = async () => {
+const getMaps = async ( ORDER_BY ) => {
     try {
-        return await HTTPClient.get(`${BASE_API_PATH}/maps`);
+        return await HTTPClient.get(`${BASE_API_PATH}/maplist/${ORDER_BY}`);
     } catch (error) {
         return handleAuthError(error);
     }

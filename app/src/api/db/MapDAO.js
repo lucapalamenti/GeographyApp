@@ -1,9 +1,10 @@
 const database = require('./databaseConnections.js');
 const Map = require('./models/Map.js');
 
-const getMaps = async () => {
+const getMaps = async ( ORDER_BY ) => {
     return await database.query(`
         SELECT * FROM map
+        ORDER BY ${ORDER_BY}
         `, []).then( rows => {
         return rows.map( row => new Map( row ) );
     });
