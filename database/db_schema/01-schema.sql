@@ -46,6 +46,7 @@ CREATE TABLE IF NOT EXISTS `mapShape` (
   `mapShape_id` int(10) NOT NULL AUTO_INCREMENT,
   `mapShape_map_id` int(10) NOT NULL DEFAULT 0,
   `mapShape_shape_id` int(10) NOT NULL DEFAULT 0,
+  `mapShape_parent` varchar(64) NOT NULL DEFAULT '',
   `mapShape_offsetX` decimal(12,8) NOT NULL DEFAULT 0.00000000,
   `mapShape_offsetY` decimal(12,8) NOT NULL DEFAULT 0.00000000,
   `mapShape_scaleX` decimal(12,8) NOT NULL DEFAULT 0.00000000,
