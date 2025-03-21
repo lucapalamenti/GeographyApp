@@ -44,9 +44,11 @@ svg.hide-polygons polygon {
     visibility: hidden;
 }
 
-svg.zoomed polygon {
-    stroke-width: 0.25px;
-}
+svg.zoom-1 polygon { stroke-width: 0.25px; }
+svg.zoom-2 polygon { stroke-width: 0.20px; }
+svg.zoom-3 polygon { stroke-width: 0.15px; }
+svg.zoom-4 polygon { stroke-width: 0.10px; }
+svg.zoom-5 polygon { stroke-width: 0.05px; }
 
 g.groupClickable:hover polygon {
     fill: rgb(210, 211, 117);

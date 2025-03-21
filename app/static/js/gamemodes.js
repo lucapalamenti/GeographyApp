@@ -214,7 +214,7 @@ function noMap( shapeNames, parents ) {
     const noMapArea = document.getElementById('no-map-area');
     numPrompts = shapeNames.length;
 
-    const n = 1;
+    let n = 1;
     const array = {};
     shapeNames.forEach( name => {
         array[ inputToId( name ) ] = n++;
@@ -335,7 +335,7 @@ function idToInput( id ) {
 svg.addEventListener( 'contextmenu', e => { e.preventDefault(); });
 svg.addEventListener( 'contextmenu', zoom );
 function zoom( e ) {
-    const zoomLevel = zoomSlider.value;
+    const zoomLevel = zoomSlider.value * 10;
     document.querySelectorAll('.clickLabel').forEach( label => {
         label.style.display = "none";
     });
@@ -351,8 +351,9 @@ function zoom( e ) {
     startY = startY < 0 ? 0 : ( startY > ratioY ) ? ratioY : startY;
 
     svg.setAttribute('viewBox', `${startX} ${startY} ${ SVG_WIDTH / zoomLevel * 2 } ${ SVG_HEIGHT / zoomLevel * 2 }`);
-    svg.classList.add('zoomed');
+    svg.classList.add(`zoom-${zoomSlider.value}`);
     svg.removeEventListener( 'contextmenu', zoom );
+    zoomSlider.setAttribute( 'disabled', true );
 }
 
 // Escape key to unzoom
@@ -360,12 +361,13 @@ document.addEventListener('keydown', e => {
     if ( e.key === 'Escape' ) unzoom();
 });
 function unzoom() {
-    svg.classList.remove('zoomed');
+    svg.classList.remove(`zoom-${zoomSlider.value}`);
     svg.setAttribute('viewBox', "0 0 1600 900");
     svg.addEventListener( 'contextmenu', zoom );
     document.querySelectorAll('.clickLabel').forEach( label => {
         label.style.display = "none";
     });
+    zoomSlider.removeAttribute( 'disabled' );
 }
 
 function endGame() {
