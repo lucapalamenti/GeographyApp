@@ -32,6 +32,19 @@ const getShapesByMapId = async ( mapShape_map_id ) => {
     });
 };
 
+const getShapeParentsForMap = async ( mapShape_map_id ) => {
+    return await database.query(`
+        SELECT DISTINCT mapShape_parent FROM mapShape
+        WHERE mapShape_map_id = ?
+        `, [mapShape_map_id]).then( rows => {
+        const parents = [];
+        rows.forEach( row => {
+            parents.push( row.mapShape_parent );
+        });
+        return parents;
+    });
+};
+
 const getMapShape = async ( mapShape_map_id, mapShape_shape_id ) => {
     return await database.query(`
         SELECT * FROM mapShape
@@ -44,6 +57,7 @@ const getMapShape = async ( mapShape_map_id, mapShape_shape_id ) => {
                 mapShape_id : -1,
                 mapShape_map_id : -1,
                 mapShape_shape_id : -1,
+                mapShape_parent : '',
                 mapShape_offsetX : 0,
                 mapShape_offsetY : 0,
                 mapShape_scaleX : 1,
@@ -80,6 +94,7 @@ module.exports = {
     getShapeById,
     getShapesByMapId,
     getMapShape,
+    getShapeParentsForMap,
     createShape,
     deleteShapesFromMap
 };

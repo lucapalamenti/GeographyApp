@@ -48,6 +48,15 @@ APIRouter.get('/shapes/:shapeId', (req, res) => {
     });
 });
 
+APIRouter.get('/mapShape/parents/:mapId', (req, res) => {
+    ShapeDAO.getShapeParentsForMap( req.params.mapId ).then( parents => {
+        res.json( parents );
+    })
+    .catch( err => {
+        res.status(500).json({error:err, message: 'Error with POST request to /mapShape'});
+    });
+});
+
 APIRouter.get('/mapShape/:mapId/:shapeId', (req, res) => {
     ShapeDAO.getMapShape( req.params.mapId, req.params.shapeId ).then( shape => {
         res.json( shape );
