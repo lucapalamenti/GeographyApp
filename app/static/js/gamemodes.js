@@ -4,9 +4,11 @@ const input = promptBar.querySelector('INPUT');
 const promptLabel = promptBar.querySelector('P');
 const tally = promptBar.querySelector('#tally');
 
+const zoomSlider = document.getElementById('zoom-slider');
 const tooltip = document.getElementById('tooltip');
 const gameEndPanel = document.getElementById('game-end-panel');
 const covering = document.getElementById('covering');
+const selectParent = document.getElementById('select-parent');
 
 let arr;
 let current;
@@ -51,7 +53,7 @@ function click ( shapeNames ) {
         const group = e.target.parentNode;
         if ( group.classList.contains('groupClickable') ) {
             // Correct region clicked
-            if ( group.getAttribute('id') === inputToId( current ) ) {
+            if ( idToInput( group.getAttribute('id') ) === idToInput( current ) ) {
                 if ( guesses === 0 ) numCorrect++;
                 next( group );
             }
@@ -61,8 +63,8 @@ function click ( shapeNames ) {
                 shapeDisappearTrigger( group, clickColors[3], true );
                 // If too many guesses have been taken then highlight the correct answer
                 if ( guesses === clickColors.length - 1 ) {
-                    clickLabel( svg.getElementById( inputToId( current ) ), e, true );
-                    next( svg.getElementById( inputToId( current ) ) );
+                    clickLabel( svg.getElementById( current ), e, true );
+                    next( svg.getElementById( current ) );
                 }
             }
             clickLabel( group, e, false );
@@ -88,7 +90,7 @@ function clickDisappear ( shapeNames ) {
         const group = e.target.parentNode;
         if ( group.classList.contains('groupClickable') ) {
             // Correct region clicked
-            if ( group.getAttribute('id') === inputToId( current ) ) {
+            if ( idToInput( group.getAttribute('id') ) === idToInput( current ) ) {
                 if ( guesses === 0 ) numCorrect++;
                 next( group );
             }
@@ -98,10 +100,11 @@ function clickDisappear ( shapeNames ) {
                 shapeDisappearTrigger( group, clickColors[3], true );
                 // If too many guesses have been taken then highlight the correct answer
                 if ( guesses === clickColors.length - 1 ) {
-                    next( svg.getElementById( inputToId( current ) ) );
+                    clickLabel( svg.getElementById( current ), e, true );
+                    next( svg.getElementById( current ) );
                 }
             }
-            clickLabel( group, e );
+            clickLabel( group, e, false );
         }
     });
     function next( group ) {
@@ -143,14 +146,15 @@ function typeGamemodes( shapeNames ) {
     promptBar.style.display = "flex";
     input.focus();
 }
-function type( shapeNames ) {
+function type( shapeNames, parents ) {
+    populateSelect( parents );
     typeGamemodes( shapeNames, false );
     promptLabel.textContent = "Name all regions";
     input.addEventListener('keypress', e => {
         if ( e.key === 'Enter' ) {
             // Only check the value if it isn't blank
             if ( input.value !== '' ) {
-                const group = svg.querySelector(`#${inputToId( input.value )}`);
+                const group = svg.querySelector(`#${selectParent.value}__${inputToId( input.value )}`);
                 if ( group && !group.classList.contains('typed') ) {
                     group.classList.add('typed');
                     input.value = "";
@@ -166,7 +170,7 @@ function typeHard( shapeNames ) {
     promptLabel.textContent = "Name the highlighted region";
     typeGamemodes( shapeNames );
 
-    let currentGroup = svg.querySelector(`#${inputToId( current )}`);
+    let currentGroup = svg.querySelector(`#${current}`);
     currentGroup.classList.add('typeCurrent');
 
     input.addEventListener('keypress', e => {
@@ -174,12 +178,15 @@ function typeHard( shapeNames ) {
             // Only check the value if it isn't blank
             if ( input.value !== '' ) {
                 // If input is correct
-                if ( input.value.toLowerCase() === current.toLowerCase() ) next(); 
+                if ( input.value.toLowerCase() === idToInput( current ).toLowerCase() ) next(); 
                 // If input is incorrect
                 else {
                     guesses++;
                     // If too many guesses have been given
-                    if ( guesses === clickColors.length - 1 ) next();
+                    if ( guesses === clickColors.length - 1 ) {
+                        clickLabel( svg.getElementById( current ), null, true );
+                        next();
+                    }
                 }
             }
         }
@@ -195,21 +202,22 @@ function typeHard( shapeNames ) {
         if ( !( current = arr.pop() ) ) {
             endGame();
         } else {
-            currentGroup = svg.querySelector(`#${inputToId( current )}`);
+            currentGroup = svg.querySelector(`#${current}`);
             currentGroup.classList.add('typeCurrent');
             guesses = 0;
         }
     }
 }
 
-function noMap( shapeNames ) {
+function noMap( shapeNames, parents ) {
+    populateSelect( parents );
     const noMapArea = document.getElementById('no-map-area');
     numPrompts = shapeNames.length;
 
-    let n = 1;
-    const arr = {};
+    const n = 1;
+    const array = {};
     shapeNames.forEach( name => {
-        arr[ inputToId( name ) ] = n++;
+        array[ inputToId( name ) ] = n++;
     });
 
     for ( let i = 0; i < numPrompts; i++ ) {
@@ -227,13 +235,13 @@ function noMap( shapeNames ) {
         if ( e.key === 'Enter' ) {
             // Only check the value if it isn't blank
             if ( input.value !== '' ) {
-                const myInput = inputToId( input.value );
-                if ( arr[ myInput ] ) {
-                    const correctNode = noMapArea.childNodes[ arr[ myInput ] ];
+                const myInput = `__${inputToId( input.value )}`;
+                if ( array[ myInput ] ) {
+                    const correctNode = noMapArea.childNodes[ array[ myInput ] ];
                     correctNode.textContent = idToInput( myInput );
                     correctNode.style["background-color"] = "rgb(75, 255, 75)";
                     correctNode.style["border"] = "1px solid green";
-                    arr[ myInput ] = null;
+                    array[ myInput ] = null;
                     input.value = "";
                     numCorrect++;
                 }
@@ -275,7 +283,7 @@ function shapeDisappearTrigger( group, color, clickable ) {
  */
 function updateLabels() {
     document.querySelectorAll('.click-on').forEach( label => {
-        label.textContent = capitalizeFirst( current );
+        label.textContent = capitalizeFirst( idToInput( current ) );
     });
 }
 
@@ -291,6 +299,17 @@ function shuffleArray( arr ) {
         arr[j] = temp;
     }
     return arr;
+}
+
+function populateSelect( parents ) {
+    if ( parents[0] === '' ) return;
+    parents.forEach( name => {
+        const option = document.createElement('OPTION');
+        option.value = name;
+        option.innerText = name.split('_').join(' ');
+        selectParent.appendChild( option );
+    });
+    selectParent.style.display = "block";
 }
 
 /**
@@ -309,26 +328,29 @@ function inputToId( input ) {
     return input.split(' ').join('_').split("'").join('-').toLowerCase();
 }
 function idToInput( id ) {
-    return capitalizeFirst( id.split('_').join(' ').split('-').join("'") );
+    return capitalizeFirst( id.split('__')[1].split('_').join(' ').split('-').join("'") );
 }
 
 // Right click to zoom
 svg.addEventListener( 'contextmenu', e => { e.preventDefault(); });
 svg.addEventListener( 'contextmenu', zoom );
 function zoom( e ) {
+    const zoomLevel = zoomSlider.value;
     document.querySelectorAll('.clickLabel').forEach( label => {
         label.style.display = "none";
     });
     const rect = svg.getBoundingClientRect();
     // X coordinate of zoom viewport
-    let startX = ( e.clientX - rect.left ) * SVG_WIDTH / rect.width - SVG_WIDTH / 10;
+    let startX = ( e.clientX - rect.left ) * SVG_WIDTH / rect.width - SVG_WIDTH / zoomLevel;
     // Y coordinate of zoom viewport
-    let startY = ( e.clientY - rect.top ) * SVG_HEIGHT / rect.height - SVG_HEIGHT / 10;
+    let startY = ( e.clientY - rect.top ) * SVG_HEIGHT / rect.height - SVG_HEIGHT / zoomLevel;
     // Adjust so zoom is not greater than original viewport
-    startX = startX < 0 ? 0 : ( startX > SVG_WIDTH * 0.8 ? SVG_WIDTH * 0.8 : startX );
-    startY = startY < 0 ? 0 : ( startY > SVG_HEIGHT * 0.8 ? SVG_HEIGHT * 0.8 : startY );
+    const ratioX = SVG_WIDTH * ( 1 - 2 / zoomLevel );
+    const ratioY = SVG_HEIGHT * ( 1 - 2 / zoomLevel );
+    startX = startX < 0 ? 0 : ( startX > ratioX ) ? ratioX : startX;
+    startY = startY < 0 ? 0 : ( startY > ratioY ) ? ratioY : startY;
 
-    svg.setAttribute('viewBox', `${startX} ${startY} ${ SVG_WIDTH / 5 } ${ SVG_HEIGHT / 5 }`);
+    svg.setAttribute('viewBox', `${startX} ${startY} ${ SVG_WIDTH / zoomLevel * 2 } ${ SVG_HEIGHT / zoomLevel * 2 }`);
     svg.classList.add('zoomed');
     svg.removeEventListener( 'contextmenu', zoom );
 }
@@ -341,6 +363,9 @@ function unzoom() {
     svg.classList.remove('zoomed');
     svg.setAttribute('viewBox', "0 0 1600 900");
     svg.addEventListener( 'contextmenu', zoom );
+    document.querySelectorAll('.clickLabel').forEach( label => {
+        label.style.display = "none";
+    });
 }
 
 function endGame() {

@@ -47,14 +47,14 @@ const shapeNames = new Set();
 await APIClient.getShapesByMapId( map_id ).then( async returnedShapes => {
     const polygonTemplate = document.getElementById('polygon-template').content;
     for ( const region of returnedShapes ) {
-        let group = svg.querySelector(`#${nameToId( region.shape_name )}`);
+        let group = svg.querySelector(`#${nameToId( region.shape_name, region.mapShape_parent )}`);
         // If a group doesn't already exist for this shape's name
         if ( !group ) {
             // Create a new group
             group = polygonTemplate.cloneNode( true ).querySelector('G');
             // Remove empty polygon element
             group.innerHTML = "";
-            group.setAttribute('id', nameToId( region.shape_name ));
+            group.setAttribute('id', nameToId( region.shape_name, region.mapShape_parent ));
         }
         region.shape_points.coordinates.forEach( shape => {
             // Create a polygon for the current shape
@@ -69,10 +69,10 @@ await APIClient.getShapesByMapId( map_id ).then( async returnedShapes => {
             p.setAttribute('points', points.join(' ') );
             group.appendChild( p );
             svg.appendChild( group );
-            shapeNames.add( region.shape_name );
+            shapeNames.add( nameToId( region.shape_name, region.mapShape_parent ) );
         });
     };
-    if ( map_id == 48 ) virginiaFix();
+    if ( map_id === 3 || map_id === 48 ) virginiaFix();
     svg.classList.remove('hide-polygons');
 }).catch( err => {
     console.error( err );
@@ -88,7 +88,9 @@ selectButton.addEventListener('click', () => {
         covering.style.visibility = "hidden";
         gamemodePanel.style.visibility = "hidden";
         gamemodePanel.style.cursor = "default";
-        gamemodeMap[currentGamemode]( Array.from( shapeNames ) );
+        APIClient.getShapeParentsForMap( map_id ).then( parents => {
+            gamemodeMap[currentGamemode]( Array.from( shapeNames ), parents );
+        });
     }
 });
 
@@ -107,8 +109,8 @@ homeButton.addEventListener('click', () => {
     document.location = '../';
 });
 
-function nameToId( name ) {
-    return name.split(' ').join('_').split("'").join('-').toLowerCase();
+function nameToId( name, parent ) {
+    return `${parent}__${name.split(' ').join('_').split("'").join('-').toLowerCase()}`;
 }
 
 /**

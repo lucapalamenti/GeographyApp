@@ -21,6 +21,13 @@
     padding-left: 5px;
     color: black;
 }
+#prompt-bar select {
+    color: black;
+}
+#prompt-bar option {
+    color: black;
+    font-size: 1rem;
+}
 
 #svg-container {
     width: 100%;
@@ -63,8 +70,8 @@ g.grey-out {
 
 polygon {
     fill: rgb(230, 231, 137);
-    stroke-width: 0.1%;
-    stroke: rgb(46, 46, 26);
+    stroke-width: 0.05%;
+    stroke: rgb(0, 0, 0);
 }
 
 .clickLabel {
