@@ -79,6 +79,9 @@
                     <p></p>
                     <strong class="click-on"></strong>
                     <input type="text">
+                    <select name="parent" id="select-parent" hidden>
+                        <option value="" selected>Select State</option>
+                    </select>
                 </div>
                 <p id="incorrectLabel"></p>
                 <p id="tally"></p>
@@ -97,6 +100,7 @@
                 
             </div>
         </div>
+        <input type="range" name="zoom" min="10" max="50" value="10" id="zoom-slider">
         <button id="b1">Populate svg with Polygons</button>
     </main>
     <!-- Polygon template ( it is necessary to copy polygons from inside an svg instead of creating new
