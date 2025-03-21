@@ -43,3 +43,9 @@ h6 {
     flex-direction: row;
     gap: 5px;
 }
+
+.flex-col {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
