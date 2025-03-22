@@ -23,6 +23,7 @@
 }
 #prompt-bar select {
     color: black;
+    border-radius: 10px;
 }
 #prompt-bar option {
     color: black;

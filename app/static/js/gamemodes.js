@@ -63,11 +63,11 @@ function click ( shapeNames ) {
                 shapeDisappearTrigger( group, clickColors[3], true );
                 // If too many guesses have been taken then highlight the correct answer
                 if ( guesses === clickColors.length - 1 ) {
-                    clickLabel( svg.getElementById( current ), e, true );
+                    showLabel( svg.getElementById( current ), e, true );
                     next( svg.getElementById( current ) );
                 }
             }
-            clickLabel( group, e, false );
+            showLabel( group, e, false );
         }
     });
     function next( group ) {
@@ -100,11 +100,11 @@ function clickDisappear ( shapeNames ) {
                 shapeDisappearTrigger( group, clickColors[3], true );
                 // If too many guesses have been taken then highlight the correct answer
                 if ( guesses === clickColors.length - 1 ) {
-                    clickLabel( svg.getElementById( current ), e, true );
+                    showLabel( svg.getElementById( current ), e, true );
                     next( svg.getElementById( current ) );
                 }
             }
-            clickLabel( group, e, false );
+            showLabel( group, e, false );
         }
     });
     function next( group ) {
@@ -119,7 +119,7 @@ function clickDisappear ( shapeNames ) {
     }
 }
 
-function clickLabel( group, e, center ) {
+function showLabel( group, e, center ) {
     const p = document.createElement('P');
     p.classList.add('clickLabel');
     p.textContent = idToInput( group.id );
@@ -151,19 +151,24 @@ function type( shapeNames, parents ) {
     typeGamemodes( shapeNames, false );
     promptLabel.textContent = "Name all regions";
     input.addEventListener('keypress', e => {
-        if ( e.key === 'Enter' ) {
-            // Only check the value if it isn't blank
-            if ( input.value !== '' ) {
-                const group = svg.querySelector(`#${selectParent.value}__${inputToId( input.value )}`);
-                if ( group && !group.classList.contains('typed') ) {
-                    group.classList.add('typed');
-                    input.value = "";
-                    numCorrect++;
+        // Only continute if Enter is pressed
+        if ( e.key !== 'Enter' ) return;
+        // Only check the value if it isn't blank
+        if ( input.value !== '' ) {
+            const regex = new RegExp(`${selectParent.value}__[0-9]{0,4}__${inputToId( input.value )}`);
+            shapeNames.forEach( name => {
+                if ( regex.test( name ) ) {
+                    const group = svg.querySelector(`#${name}`);
+                    if ( group && !group.classList.contains('typed') ) {
+                        group.classList.add('typed');
+                        input.value = "";
+                        numCorrect++;
+                    }
                 }
-            }
+            });
+            tally.textContent = `Correct: ${numCorrect}/${numPrompts}`;
+            if ( numCorrect === numPrompts ) endGame();
         }
-        tally.textContent = `${numCorrect}/${numPrompts}`;
-        if ( numCorrect === numPrompts ) endGame();
     });
 }
 function typeHard( shapeNames ) {
@@ -174,23 +179,22 @@ function typeHard( shapeNames ) {
     currentGroup.classList.add('typeCurrent');
 
     input.addEventListener('keypress', e => {
-        if ( e.key === 'Enter' ) {
-            // Only check the value if it isn't blank
-            if ( input.value !== '' ) {
-                // If input is correct
-                if ( input.value.toLowerCase() === idToInput( current ).toLowerCase() ) next(); 
-                // If input is incorrect
-                else {
-                    guesses++;
-                    // If too many guesses have been given
-                    if ( guesses === clickColors.length - 1 ) {
-                        clickLabel( svg.getElementById( current ), null, true );
-                        next();
-                    }
+        if ( e.key !== 'Enter' ) return;
+        // Only check the value if it isn't blank
+        if ( input.value !== '' ) {
+            // If input is correct
+            if ( input.value.toLowerCase() === idToInput( current ).toLowerCase() ) next(); 
+            // If input is incorrect
+            else {
+                guesses++;
+                // If too many guesses have been given
+                if ( guesses === clickColors.length - 1 ) {
+                    showLabel( svg.getElementById( current ), null, true );
+                    next();
                 }
             }
+            tally.textContent = `Correct: ${numCorrect}/${numPrompts}`;
         }
-        tally.textContent = `Correct: ${numCorrect}/${numPrompts}`;
     });
     function next() {
         currentGroup.classList.remove('typeCurrent');
@@ -301,6 +305,10 @@ function shuffleArray( arr ) {
     return arr;
 }
 
+/**
+ * Populates the Select dropdown for gamemodes that need it
+ * @param {Array<String>} parents 
+ */
 function populateSelect( parents ) {
     if ( parents[0] === '' ) return;
     parents.forEach( name => {
@@ -328,7 +336,7 @@ function inputToId( input ) {
     return input.split(' ').join('_').split("'").join('-').toLowerCase();
 }
 function idToInput( id ) {
-    return capitalizeFirst( id.split('__')[1].split('_').join(' ').split('-').join("'") );
+    return capitalizeFirst( id.split('__')[2].split('_').join(' ').split('-').join("'") );
 }
 
 // Right click to zoom
@@ -354,13 +362,14 @@ function zoom( e ) {
     svg.classList.add(`zoom-${zoomSlider.value}`);
     svg.removeEventListener( 'contextmenu', zoom );
     zoomSlider.setAttribute( 'disabled', true );
+
+    // Escape key to unzoom
+    document.addEventListener( 'keydown', unzoom );
 }
 
-// Escape key to unzoom
-document.addEventListener('keydown', e => {
-    if ( e.key === 'Escape' ) unzoom();
-});
-function unzoom() {
+
+function unzoom( e ) {
+    if ( e.key !== 'Escape' ) return;
     svg.classList.remove(`zoom-${zoomSlider.value}`);
     svg.setAttribute('viewBox', "0 0 1600 900");
     svg.addEventListener( 'contextmenu', zoom );
@@ -368,6 +377,8 @@ function unzoom() {
         label.style.display = "none";
     });
     zoomSlider.removeAttribute( 'disabled' );
+
+    document.removeEventListener( 'keydown', unzoom );
 }
 
 function endGame() {

@@ -47,14 +47,15 @@ const shapeNames = new Set();
 await APIClient.getShapesByMapId( map_id ).then( async returnedShapes => {
     const polygonTemplate = document.getElementById('polygon-template').content;
     for ( const region of returnedShapes ) {
-        let group = svg.querySelector(`#${nameToId( region.shape_name, region.mapShape_parent )}`);
+        const regionId = `${region.mapShape_parent}__${region.mapShape_id}__${region.shape_name.split(' ').join('_').split("'").join('-').toLowerCase()}`;
+        let group = svg.querySelector(`#a`);
         // If a group doesn't already exist for this shape's name
         if ( !group ) {
             // Create a new group
             group = polygonTemplate.cloneNode( true ).querySelector('G');
             // Remove empty polygon element
             group.innerHTML = "";
-            group.setAttribute('id', nameToId( region.shape_name, region.mapShape_parent ));
+            group.setAttribute('id', regionId);
         }
         region.shape_points.coordinates.forEach( shape => {
             // Create a polygon for the current shape
@@ -69,8 +70,8 @@ await APIClient.getShapesByMapId( map_id ).then( async returnedShapes => {
             p.setAttribute('points', points.join(' ') );
             group.appendChild( p );
             svg.appendChild( group );
-            shapeNames.add( nameToId( region.shape_name, region.mapShape_parent ) );
         });
+        shapeNames.add( regionId );
     };
     if ( map_id === 3 || map_id === 48 ) virginiaFix();
     svg.classList.remove('hide-polygons');
@@ -108,10 +109,6 @@ playAgainButton.addEventListener('click', () => {
 homeButton.addEventListener('click', () => {
     document.location = '../';
 });
-
-function nameToId( name, parent ) {
-    return `${parent}__${name.split(' ').join('_').split("'").join('-').toLowerCase()}`;
-}
 
 /**
  * Moves Virginia cities to the bottom of the svg element so that they show up on
