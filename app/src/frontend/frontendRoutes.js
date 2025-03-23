@@ -15,4 +15,8 @@ frontendRouter.get('/game', (req, res) => {
     res.sendFile(`${html_dir}game.html`);
 });
 
+frontendRouter.get('/create', (req, res) => {
+    res.sendFile(`${html_dir}create.html`);
+});
+
 module.exports = frontendRouter;
