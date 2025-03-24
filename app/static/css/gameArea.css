@@ -21,14 +21,6 @@
     padding-left: 5px;
     color: black;
 }
-#prompt-bar select {
-    color: black;
-    border-radius: 10px;
-}
-#prompt-bar option {
-    color: black;
-    font-size: 1rem;
-}
 
 #svg-container {
     width: 100%;

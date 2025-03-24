@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="css/header.css" />
     <link rel="stylesheet" href="css/index.css" />
 
+    <script src="js/create.js" type="module"></script>
+
     <title>Geography App</title>
 </head>
 <body>
@@ -21,17 +23,35 @@
         </nav>
     </header>
     <main>
-        <nav id="map-navigation"></nav>
+        <form class="flex-col">
+            <h3>Create Custom Map</h3>
+            <div class="input-label">
+                <label for="custom-map-name">Map Name</label>
+                <input type="text" name="custom-map-name" id="custom-map-name">
+            </div>
+            <div class="input-label">
+                <label for="select-template">Choose Template</label>
+                <select name="select-template" id="select-template">
+                    <option value="-1">Select</option>
+                </select>
+            </div>
+            
+            <nav class="flex-row">
+                <button class="btn-green" type="button">Create</button>
+                <a href="../" class="btn-grey">Cancel</a>
+            </nav>
+        </form>
+        <svg viewBox="0 0 1600 900" preserveAspectRatio="none" id="templateMap">
+            
+        </svg>
     </main>
 
     <!-- Templates -->
-    <template id="map-button-template">
-        <a href="" class="map-button-container">
-            <div class="map-button-top">
-                <h4 class="map-button-label"></h4>
-            </div>
-            <div class="map-button-bottom"></div>
-        </a>
+
+    <!-- Polygon template ( it is necessary to copy polygons from inside an svg instead of creating new
+         polygons in a js file, since a standard <polygon> element will be unrecognized ) -->
+    <template id="polygon-template">
+        <svg><g><polygon/></g></svg>
     </template>
 
 </body>

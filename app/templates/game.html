@@ -28,7 +28,7 @@
     </header>
     <main>
         <!-- Shows on load and when switching gamemodes -->
-        <form id="gamemode-panel" class="main-panel">
+        <form id="gamemode-panel" class="page-center flex-col">
             <h3>Select Gamemode</h3>
             <div class="input-label">
                 <input type="radio" name="gamemode" id="click" value="click">
@@ -58,9 +58,9 @@
                 <input type="radio" name="gamemode" id="outline" value="outline">
                 <label for="outline">Outline</label>
             </div>
-            <nav>
+            <nav class="flex-row">
                 <button class="btn-green" type="button">Select</button>
-                <button class="btn-grey" type="button">Cancel</button>
+                <a href="../" class="btn-grey" type="button">Cancel</a>
             </nav>
         </form>
 

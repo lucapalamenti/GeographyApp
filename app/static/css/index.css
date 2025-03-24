@@ -14,7 +14,6 @@
     border-radius: 20px;
     background-color: aliceblue;
     background-size: 100%;
-    text-decoration: none;
 }
 .map-button-container:hover h4 {
     text-decoration: underline;

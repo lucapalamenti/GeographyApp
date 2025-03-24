@@ -14,54 +14,6 @@
     display: none;
 }
 
-.main-panel {
-    z-index: 1;
-    position: fixed;
-    top: 50%;
-    transform: translateY(-50%);
-    flex-direction: column;
-    gap: 3px;
-    border: 5px solid rgb(28, 134, 64);
-    border-radius: 15px;
-    padding: 10px;
-    background-color: rgb(31, 151, 71);
-}
-
-.main-panel h3 {
-    border-bottom: 3px solid rgb(28, 134, 64);
-}
-
-.main-panel nav {
-    display: flex;
-    justify-content: end;
-    gap: 5px;
-}
-
-.main-panel nav button {
-    border-radius: 5px;
-    padding: 8px;
-    color: black;
-    cursor: pointer;
-}
-
-.btn-green {
-    border: 3px solid rgb(19, 92, 44);
-    background-color: rgb(96, 204, 69);
-}
-.btn-green:hover {
-    background-color: rgb(80, 168, 58);
-    transition: background-color 0.25s;
-}
-
-.btn-grey {
-    background-color: rgb(216, 216, 216);
-    border: 3px solid rgb(124, 124, 124);
-}
-.btn-grey:hover {
-    background-color: rgb(173, 173, 173);
-    transition: background-color 0.25s;
-}
-
 .input-label {
     display: flex;
 }

@@ -19,6 +19,10 @@ main {
     padding-top: 20px;
 }
 
+a {
+    text-decoration: none;
+}
+
 h1 {
     font-size: 2.5rem;
 }
@@ -38,6 +42,44 @@ h6 {
     font-size: 1.25rem;
 }
 
+form select, form option, form input {
+    color: black;
+}
+
+select {
+    border-radius: 10px;
+}
+option {
+    font-size: 1rem;
+}
+
+/* Utility Classes */
+
+.page-center {
+    z-index: 1;
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.btn-green {
+    border: 3px solid rgb(19, 92, 44);
+    background-color: rgb(96, 204, 69);
+}
+.btn-green:hover {
+    background-color: rgb(80, 168, 58);
+    transition: background-color 0.25s;
+}
+
+.btn-grey {
+    background-color: rgb(216, 216, 216);
+    border: 3px solid rgb(124, 124, 124);
+}
+.btn-grey:hover {
+    background-color: rgb(173, 173, 173);
+    transition: background-color 0.25s;
+}
+
 .flex-row {
     display: flex;
     flex-direction: row;
@@ -48,4 +90,34 @@ h6 {
     display: flex;
     flex-direction: column;
     gap: 5px;
+}
+
+/* FORM */
+
+form {
+    gap: 3px;
+    border: 5px solid rgb(28, 134, 64);
+    border-radius: 15px;
+    padding: 10px;
+    background-color: rgb(31, 151, 71);
+}
+
+form h3 {
+    border-bottom: 3px solid rgb(28, 134, 64);
+}
+
+form nav {
+    justify-content: end;
+}
+
+form nav button, form nav a {
+    border-radius: 5px;
+    padding: 8px;
+    color: black;
+    cursor: pointer;
+}
+
+form .input-label  input[type="text"] {
+    padding: 2px;
+    padding-left: 5px;
 }
