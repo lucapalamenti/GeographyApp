@@ -48,9 +48,11 @@ form select, form option, form input {
 
 select {
     border-radius: 10px;
+    color: black;
 }
 option {
     font-size: 1rem;
+    color: black;
 }
 
 /* Utility Classes */

@@ -18,7 +18,7 @@ await APIClient.getMaps( 'map_name' ).then( maps => {
 selectTemplate.addEventListener('change', async e => {
     await APIClient.getMapById( selectTemplate.value ).then( async map => {
         await populateSVG( map, svg ).then( shapeNames => {
-
+            
         });
     });
     

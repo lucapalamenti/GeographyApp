@@ -13,7 +13,7 @@ export default async function populateSVG( map, svg ) {
     await APIClient.getShapesByMapId( map.map_id ).then( async returnedShapes => {
         const polygonTemplate = document.getElementById('polygon-template').content;
         for ( const region of returnedShapes ) {
-            const regionId = `${region.mapShape_parent}__${region.mapShape_id}__${region.shape_name.split(' ').join('_').split("'").join('-').toLowerCase()}`;
+            const regionId = `${region.mapShape_parent}__${region.shape_name.split(' ').join('_').split("'").join('-').toLowerCase()}`;
             let group = svg.querySelector(`#a`);
             // If a group doesn't already exist for this shape's name
             if ( !group ) {

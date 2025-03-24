@@ -155,9 +155,9 @@ function type( shapeNames, parents ) {
         if ( e.key !== 'Enter' ) return;
         // Only check the value if it isn't blank
         if ( input.value !== '' ) {
-            const regex = new RegExp(`${selectParent.value}__[0-9]{0,4}__${inputToId( input.value )}`);
+            const regex = new RegExp();
             shapeNames.forEach( name => {
-                if ( regex.test( name ) ) {
+                if ( name === `${selectParent.value}__${inputToId( input.value )}` ) {
                     const group = svg.querySelector(`#${name}`);
                     if ( group && !group.classList.contains('typed') ) {
                         group.classList.add('typed');
@@ -336,7 +336,7 @@ function inputToId( input ) {
     return input.split(' ').join('_').split("'").join('-').toLowerCase();
 }
 function idToInput( id ) {
-    return capitalizeFirst( id.split('__')[2].split('_').join(' ').split('-').join("'") );
+    return capitalizeFirst( id.split('__')[1].split('_').join(' ').split('-').join("'") );
 }
 
 // Right click to zoom
