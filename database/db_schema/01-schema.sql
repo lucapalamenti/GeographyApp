@@ -21,13 +21,13 @@ USE `geographyapp`;
 
 -- Dumping structure for table geographyapp.map
 CREATE TABLE IF NOT EXISTS `map` (
-  `map_id` int(10) NOT NULL,
+  `map_id` int(10) NOT NULL, AUTO_INCREMENT,
   `map_scale` decimal(8,6) NOT NULL DEFAULT 1.000000,
   `map_name` varchar(100) NOT NULL DEFAULT '',
   `map_thumbnail` tinytext DEFAULT '',
   `map_primary_color` varchar(31) NOT NULL DEFAULT '255,255,255',
   PRIMARY KEY (`map_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 -- Data exporting was unselected.
 
