@@ -61,12 +61,13 @@ selectTemplate.addEventListener('change', async e => {
 
 function displaySelection () {
     selectedList.innerHTML = "";
+    selectedList.style.display = "flex";
     const sort = {};
     selectedShapes.forEach( shapeName => {
         const split = shapeName.split('__');
         let parent = split[0];
         // If there is no parent
-        if ( parent === "" ) parent = "Other";
+        if ( parent === "" ) parent = "Regions";
         // If there isn't already a section for this parent
         if ( !sort[parent] ) {
             sort[parent] = [`__${split[1]}`];
