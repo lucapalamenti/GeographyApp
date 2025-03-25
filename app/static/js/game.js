@@ -1,6 +1,6 @@
-import APIClient from './APIClient.js';
-import { gamemodeMap } from './gamemodes.js';
-import populateSVG from './populateSVG.js';
+import APIClient from "./APIClient.js";
+import { gamemodeMap } from "./gamemodes.js";
+import populateSVG from "./populateSVG.js";
 
 const query = window.location.search;
 let parameters = new URLSearchParams( query );

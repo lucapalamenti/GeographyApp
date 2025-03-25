@@ -1,4 +1,4 @@
-import APIClient from './APIClient.js';
+import APIClient from "./APIClient.js";
 
 const svgPadding = 10;
 

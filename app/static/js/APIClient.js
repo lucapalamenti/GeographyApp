@@ -1,11 +1,11 @@
-import HTTPClient from './HTTPClient.js'
+import HTTPClient from "./HTTPClient.js";
 
-const BASE_API_PATH = './api';
+const BASE_API_PATH = "./api";
 
 const handleAuthError = ( error ) => {
     // Unauthorized error
     if( error.status === 401 ) {
-        document.location = './login';
+        document.location = "./login";
     }
     throw error;
 };

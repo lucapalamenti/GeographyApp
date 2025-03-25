@@ -1,4 +1,4 @@
-import APIClient from './APIClient.js';
+import APIClient from "./APIClient.js";
 
 // Populates map buttons on screen from database
 await APIClient.getMaps("map_id").then( returnedMaps => {

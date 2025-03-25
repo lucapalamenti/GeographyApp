@@ -1,0 +1,49 @@
+polygon {
+    fill: grey;
+    stroke-width: 0.05%;
+    stroke: rgb(68, 68, 68);
+}
+
+g.selected polygon {
+    fill: rgb(230, 231, 137);
+    stroke: black;
+}
+
+svg.zoom-1 polygon { stroke-width: 0.25px; }
+svg.zoom-2 polygon { stroke-width: 0.20px; }
+svg.zoom-3 polygon { stroke-width: 0.16px; }
+svg.zoom-4 polygon { stroke-width: 0.13px; }
+svg.zoom-5 polygon { stroke-width: 0.10px; }
+
+#hidden-area {
+    align-items: center;
+    width: 90%;
+}
+
+#hidden-area input[type="range"] {
+    width: 150px;
+}
+
+#selected-list {
+    align-items: center;
+    gap: 0;
+}
+
+#selected-list h5 {
+    color: rgb(16, 97, 43);
+}
+
+#selected-list div {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+#selected-list div p {
+    padding: 3px;
+}
+#selected-list div p:nth-child(even) {
+    font-weight: bold;
+}
+

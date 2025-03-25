@@ -6,7 +6,7 @@
 
     <link rel="stylesheet" href="css/all.css" />
     <link rel="stylesheet" href="css/header.css" />
-    <link rel="stylesheet" href="css/index.css" />
+    <link rel="stylesheet" href="css/create.css" />
 
     <script src="js/create.js" type="module"></script>
 
@@ -41,9 +41,14 @@
                 <a href="../" class="btn-grey">Cancel</a>
             </nav>
         </form>
-        <svg viewBox="0 0 1600 900" preserveAspectRatio="none" id="templateMap">
+        <div id="hidden-area" hidden>
+            <svg viewBox="0 0 1600 900" preserveAspectRatio="none" id="templateMap">
             
-        </svg>
+            </svg>
+            <input type="range" name="zoom" min="1" max="5" value="1" id="zoom-slider">
+            <form class="flex-col" id="selected-list"></form>
+        </div>
+        
     </main>
 
     <!-- Templates -->

@@ -1,3 +1,5 @@
+import util from "./util.js";
+
 const svg = document.querySelector('SVG');
 const promptBar = document.getElementById('prompt-bar');
 const input = promptBar.querySelector('INPUT');
@@ -53,7 +55,7 @@ function click ( shapeNames ) {
         const group = e.target.parentNode;
         if ( group.classList.contains('groupClickable') ) {
             // Correct region clicked
-            if ( idToInput( group.getAttribute('id') ) === idToInput( current ) ) {
+            if ( util.idToInput( group.getAttribute('id') ) === util.idToInput( current ) ) {
                 if ( guesses === 0 ) numCorrect++;
                 next( group );
             }
@@ -90,7 +92,7 @@ function clickDisappear ( shapeNames ) {
         const group = e.target.parentNode;
         if ( group.classList.contains('groupClickable') ) {
             // Correct region clicked
-            if ( idToInput( group.getAttribute('id') ) === idToInput( current ) ) {
+            if ( util.idToInput( group.getAttribute('id') ) === util.idToInput( current ) ) {
                 if ( guesses === 0 ) numCorrect++;
                 next( group );
             }
@@ -122,7 +124,7 @@ function clickDisappear ( shapeNames ) {
 function showLabel( group, e, center ) {
     const p = document.createElement('P');
     p.classList.add('clickLabel');
-    p.textContent = idToInput( group.id );
+    p.textContent = util.idToInput( group.id );
     if ( center ) {
         const rect = group.getBoundingClientRect();
         p.style.transform = `translate( calc( -50% + ${rect.left + rect.width / 2 + scrollX}px ), calc( -50% + ${rect.top + rect.height / 2 + scrollY}px ) )`;
@@ -157,7 +159,7 @@ function type( shapeNames, parents ) {
         if ( input.value !== '' ) {
             const regex = new RegExp();
             shapeNames.forEach( name => {
-                if ( name === `${selectParent.value}__${inputToId( input.value )}` ) {
+                if ( name === `${selectParent.value}__${util.inputToId( input.value )}` ) {
                     const group = svg.querySelector(`#${name}`);
                     if ( group && !group.classList.contains('typed') ) {
                         group.classList.add('typed');
@@ -183,7 +185,7 @@ function typeHard( shapeNames ) {
         // Only check the value if it isn't blank
         if ( input.value !== '' ) {
             // If input is correct
-            if ( input.value.toLowerCase() === idToInput( current ).toLowerCase() ) next(); 
+            if ( input.value.toLowerCase() === util.idToInput( current ).toLowerCase() ) next(); 
             // If input is incorrect
             else {
                 guesses++;
@@ -221,7 +223,7 @@ function noMap( shapeNames, parents ) {
     let n = 1;
     const array = {};
     shapeNames.forEach( name => {
-        array[ inputToId( name ) ] = n++;
+        array[ util.inputToId( name ) ] = n++;
     });
 
     for ( let i = 0; i < numPrompts; i++ ) {
@@ -239,10 +241,10 @@ function noMap( shapeNames, parents ) {
         if ( e.key === 'Enter' ) {
             // Only check the value if it isn't blank
             if ( input.value !== '' ) {
-                const myInput = `__${inputToId( input.value )}`;
+                const myInput = `__${util.inputToId( input.value )}`;
                 if ( array[ myInput ] ) {
                     const correctNode = noMapArea.childNodes[ array[ myInput ] ];
-                    correctNode.textContent = idToInput( myInput );
+                    correctNode.textContent = util.idToInput( myInput );
                     correctNode.style["background-color"] = "rgb(75, 255, 75)";
                     correctNode.style["border"] = "1px solid green";
                     array[ myInput ] = null;
@@ -287,7 +289,7 @@ function shapeDisappearTrigger( group, color, clickable ) {
  */
 function updateLabels() {
     document.querySelectorAll('.click-on').forEach( label => {
-        label.textContent = capitalizeFirst( idToInput( current ) );
+        label.textContent = util.capitalizeFirst( util.idToInput( current ) );
     });
 }
 
@@ -318,25 +320,6 @@ function populateSelect( parents ) {
         selectParent.appendChild( option );
     });
     selectParent.style.display = "block";
-}
-
-/**
- * Capitalizes the firt letter of each word (separated by a space) in a string
- * @param {String} string 
- */
-function capitalizeFirst( string ) {
-    const arr = string.split(' ');
-    for ( let i = 0; i < arr.length; i++ ) {
-        arr[i] = arr[i].slice(0, 1).toUpperCase().concat( arr[i].slice(1) );
-    }
-    return arr.join(' ');
-}
-
-function inputToId( input ) {
-    return input.split(' ').join('_').split("'").join('-').toLowerCase();
-}
-function idToInput( id ) {
-    return capitalizeFirst( id.split('__')[1].split('_').join(' ').split('-').join("'") );
 }
 
 // Right click to zoom
