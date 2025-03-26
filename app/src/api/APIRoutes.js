@@ -113,4 +113,13 @@ APIRouter.get('/maps/:mapId', (req, res) => {
     });
 });
 
+APIRouter.post('/maps', (req, res) => {
+    MapDAO.createMap( req.body ).then( map => {
+        res.json( map );
+    })
+    .catch( err => {
+        res.status(500).json({error:err, message: 'Error with POST request to /maps'});
+    });
+});
+
 module.exports = APIRouter;

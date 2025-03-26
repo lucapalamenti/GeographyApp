@@ -104,6 +104,14 @@ const getMapById = async ( map_id ) => {
     }
 };
 
+const createMap = async ( mapData ) => {
+    try {
+        return await HTTPClient.post(`${BASE_API_PATH}/maps`, mapData);
+    } catch (error) {
+        return handleAuthError(error);
+    }
+}
+
 export default {
     custom,
     printShapeInsertQuery,
@@ -117,5 +125,6 @@ export default {
     deleteShapesFromMap,
 
     getMaps,
-    getMapById
+    getMapById,
+    createMap
 }

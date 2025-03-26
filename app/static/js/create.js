@@ -7,6 +7,7 @@ const svg = document.getElementById('templateMap');
 const hiddenArea = document.getElementById('hidden-area');
 const zoomSlider = document.getElementById('zoom-slider');
 const selectedList = document.getElementById('selected-list');
+const createButton = document.getElementById('create-button');
 
 const SVG_WIDTH = 1600;
 const SVG_HEIGHT = 900;
@@ -26,25 +27,11 @@ let dragging = false;
 let selectedShapes = new Set();
 selectTemplate.addEventListener('change', async e => {
     svg.innerHTML = "";
+    selectedList.style.display = "none";
+    dragging = false;
+    selectedShapes = new Set();
     await APIClient.getMapById( selectTemplate.value ).then( async map => {
         await populateSVG( map, svg ).then( shapeNames => {
-            svg.addEventListener('mousedown', e => {
-                if ( e.button === 0 ) {
-                    if ( e.target.parentNode.classList.contains('selected') ) {
-                        selectedShapes.delete( e.target.parentNode.id );
-                        e.target.parentNode.classList.remove('selected');
-                    } else {
-                        dragging = true;
-                        selectedShapes.add( e.target.parentNode.id );
-                        e.target.parentNode.classList.add('selected');
-                    }
-                }
-            });
-            svg.addEventListener('mouseup', e => {
-                dragging = false;
-                if ( e.target.tagName !== "polygon" ) return;
-                displaySelection();
-            });
             svg.querySelectorAll('POLYGON').forEach( polygon => {
                 polygon.addEventListener('mouseover', e => {
                     if ( e.button === 0 && dragging ) {
@@ -59,10 +46,31 @@ selectTemplate.addEventListener('change', async e => {
     hiddenArea.classList.add("flex-col");
 });
 
-function displaySelection () {
+svg.addEventListener('mousedown', e => {
+    if ( e.button === 0 && e.target.tagName === "polygon" ) {
+        if ( e.target.parentNode.classList.contains('selected') ) {
+            selectedShapes.delete( e.target.parentNode.id );
+            e.target.parentNode.classList.remove('selected');
+        } else {
+            dragging = true;
+            selectedShapes.add( e.target.parentNode.id );
+            e.target.parentNode.classList.add('selected');
+        }
+    }
+});
+svg.addEventListener('mouseup', e => {
+    dragging = false;
+    displaySelection();
+});
+
+function displaySelection() {
     selectedList.innerHTML = "";
     selectedList.style.display = "flex";
     const sort = {};
+    if ( selectedShapes.size === 0 ) {
+        selectedList.style.display = "none";
+        return;
+    }
     selectedShapes.forEach( shapeName => {
         const split = shapeName.split('__');
         let parent = split[0];
@@ -119,7 +127,6 @@ function zoom( e ) {
     document.addEventListener( 'keydown', unzoom );
 }
 
-
 function unzoom( e ) {
     if ( e.key !== 'Escape' ) return;
     svg.classList.remove(`zoom-${zoomSlider.value}`);
@@ -131,4 +138,32 @@ function unzoom( e ) {
     zoomSlider.removeAttribute( 'disabled' );
 
     document.removeEventListener( 'keydown', unzoom );
+}
+
+const mapName = document.getElementById('map-name');
+const mapColor = document.getElementById('map-color');
+createButton.addEventListener('click', async e => {
+    let mapId;
+    await APIClient.getMaps( 'map_id DESC' ).then( maps => {
+        mapId = maps[0].map_id + 1;
+    });
+    let mapData = {
+        map_id : mapId,
+        map_scale : 1.0,
+        map_name : mapName.value,
+        map_thumbnail : `${mapName.value.split(' ').join('_')}_Thumbnail.png`,
+        map_primary_color : hexToRGB( mapColor.value )
+    };
+    APIClient.createMap( mapData ).then( map => {
+        console.log( map );
+    }).catch( err => {
+        console.error( err );
+    });
+});
+
+function hexToRGB( hex ) {
+    const r = parseInt( hex.substr(1,2), 16 )
+    const g = parseInt( hex.substr(3,2), 16 )
+    const b = parseInt( hex.substr(5,2), 16 )
+    return `${r},${g},${b}`;
 }
