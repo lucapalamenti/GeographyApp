@@ -2,22 +2,27 @@ import APIClient from "./APIClient.js";
 import populateSVG from "./populateSVG.js";
 import util from "./util.js";
 
-const selectTemplate = document.getElementById('select-template');
+const mapName = document.getElementById('map-name');
+const mapTemplate = document.getElementById('select-template');
+const mapColor = document.getElementById('map-color');
+
 const svg = document.getElementById('templateMap');
 const hiddenArea = document.getElementById('hidden-area');
 const zoomSlider = document.getElementById('zoom-slider');
 const selectedList = document.getElementById('selected-list');
 const createButton = document.getElementById('create-button');
 
-const SVG_WIDTH = 1600;
-const SVG_HEIGHT = 900;
+const SVG_WIDTH = svg.viewBox.baseVal.width;
+const SVG_HEIGHT = svg.viewBox.baseVal.height;
+const SVG_PADDING = 20; // pixels
 
+// Populate "Choose Template" selection panel
 await APIClient.getMaps( 'map_id' ).then( maps => {
     maps.forEach( map => {
         const option = document.createElement('OPTION');
         option.textContent = map.map_name;
         option.value = map.map_id;
-        selectTemplate.appendChild( option );
+        mapTemplate.appendChild( option );
     });
 }).catch( err => {
     console.error( err );
@@ -25,13 +30,15 @@ await APIClient.getMaps( 'map_id' ).then( maps => {
 
 let dragging = false;
 let selectedShapes = new Set();
-selectTemplate.addEventListener('change', async e => {
+let map;
+mapTemplate.addEventListener('change', async e => {
     svg.innerHTML = "";
     selectedList.style.display = "none";
     dragging = false;
     selectedShapes = new Set();
-    await APIClient.getMapById( selectTemplate.value ).then( async map => {
-        await populateSVG( map, svg ).then( shapeNames => {
+    await APIClient.getMapById( mapTemplate.value ).then( async returnedMap => {
+        map = returnedMap;
+        await populateSVG( returnedMap, svg ).then( shapeNames => {
             svg.querySelectorAll('POLYGON').forEach( polygon => {
                 polygon.addEventListener('mouseover', e => {
                     if ( e.button === 0 && dragging ) {
@@ -140,26 +147,80 @@ function unzoom( e ) {
     document.removeEventListener( 'keydown', unzoom );
 }
 
-const mapName = document.getElementById('map-name');
-const mapColor = document.getElementById('map-color');
 createButton.addEventListener('click', async e => {
-    let mapId;
-    await APIClient.getMaps( 'map_id DESC' ).then( maps => {
-        mapId = maps[0].map_id + 1;
-    });
-    let mapData = {
-        map_id : mapId,
+    e.preventDefault();
+    if ( mapName.value && mapTemplate.value ) {
+        await createCustomMap();
+        document.location = "../";
+    }
+});
+
+async function createCustomMap() {
+    const mapData = {
+        map_id : (await APIClient.getMaps( 'map_id DESC' ))[0].map_id + 1,
         map_scale : 1.0,
         map_name : mapName.value,
         map_thumbnail : `${mapName.value.split(' ').join('_')}_Thumbnail.png`,
         map_primary_color : hexToRGB( mapColor.value )
     };
-    APIClient.createMap( mapData ).then( map => {
-        console.log( map );
-    }).catch( err => {
+    APIClient.createMap( mapData ).catch( err => {
         console.error( err );
     });
-});
+
+    let mapMinX = Infinity, mapMaxX = 0, mapMinY = Infinity, mapMaxY = 0;
+    // Find the minium X & Y values for
+    for ( const shape of selectedShapes ) {
+        let regionMinX = Infinity, regionMinY = Infinity;
+        document.getElementById( shape ).querySelectorAll('POLYGON').forEach( polygon => {
+            for ( const point of polygon.points ) {
+                if ( point.x < regionMinX ) regionMinX = point.x;
+                if ( point.y < regionMinY ) regionMinY = point.y;
+
+                if ( point.x > mapMaxX ) mapMaxX = point.x;
+                if ( point.y > mapMaxY ) mapMaxY = point.y;
+            }
+        });
+        if ( regionMinX < mapMinX ) mapMinX = regionMinX;
+        if ( regionMinY < mapMinY ) mapMinY = regionMinY;
+    }
+    for ( const shape of selectedShapes ) {
+        const split = shape.split('__');
+        const shapeName = util.capitalizeFirst( split[1].split('_').join(' ') ).split(' ').join('_');
+        const shape_id = (await APIClient.getShapeByMapIdParentName( mapTemplate.value, split[0], shapeName )).shape_id;
+
+        let regionMinX = Infinity, regionMinY = Infinity;
+        document.getElementById( shape ).querySelectorAll('POLYGON').forEach( polygon => {
+            for ( const point of polygon.points ) {
+                if ( point.x < regionMinX ) regionMinX = point.x;
+                if ( point.y < regionMinY ) regionMinY = point.y;
+            }
+        });
+
+        const mapShapeData = {
+            mapShape_map_id : mapData.map_id,
+            mapShape_shape_id : shape_id,
+            mapShape_parent : shape.split('__')[0],
+            mapShape_offsetX : ( regionMinX - mapMinX ) / map.map_scale,
+            mapShape_offsetY : ( regionMinY - mapMinY ) / map.map_scale,
+            mapShape_scaleX : 1.0,
+            mapShape_scaleY : 1.0
+        };
+        
+        await APIClient.createMapShape( mapShapeData ).then( mapShape => {
+        }).catch( err => {
+            console.error( err );
+        });
+    }
+
+    const xFraction = ( mapMaxX - mapMinX ) / map.map_scale / ( SVG_WIDTH - SVG_PADDING );
+    const yFraction = ( mapMaxY - mapMinY ) / map.map_scale / ( SVG_HEIGHT - SVG_PADDING );
+
+    mapData.map_scale = ( 1 / Math.max( xFraction, yFraction ) ).toFixed(5);
+
+    await APIClient.updateMap( mapData ).catch( err => {
+        console.error( err );
+    });
+}
 
 function hexToRGB( hex ) {
     const r = parseInt( hex.substr(1,2), 16 )
@@ -167,3 +228,7 @@ function hexToRGB( hex ) {
     const b = parseInt( hex.substr(5,2), 16 )
     return `${r},${g},${b}`;
 }
+
+document.getElementById('btn-1').addEventListener('click', e => {
+    APIClient.custom();
+});

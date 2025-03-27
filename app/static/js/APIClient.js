@@ -46,6 +46,14 @@ const getShapeById = async ( shape_id ) => {
     }
 };
 
+const getShapeByMapIdParentName = async ( mapShape_map_id, mapShape_parent, shape_name ) => {
+    try {
+        return await HTTPClient.get(`${BASE_API_PATH}/shapes/${mapShape_map_id}/${mapShape_parent}/${shape_name.split('-').join('%2D')}`);
+    } catch (error) {
+        return handleAuthError(error);
+    }
+}
+
 const getShapeParentsForMap = async ( mapShape_map_id ) => {
     try {
         return await HTTPClient.get(`${BASE_API_PATH}/mapShape/parents/${mapShape_map_id}`);
@@ -62,6 +70,14 @@ const getMapShape = async ( mapShape_map_id, mapShape_shape_id ) => {
     }
 };
 
+const getShapesByMapId = async ( map_id ) => {
+    try {
+        return await HTTPClient.get(`${BASE_API_PATH}/shapes/map/${map_id}`);
+    } catch (error) {
+        return handleAuthError(error);
+    }
+};
+
 const createShape = async ( shapeData ) => {
     try {
         return await HTTPClient.post(`${BASE_API_PATH}/shapes`, shapeData);
@@ -70,9 +86,9 @@ const createShape = async ( shapeData ) => {
     }
 };
 
-const getShapesByMapId = async ( map_id ) => {
+const createMapShape = async ( mapShapeData ) => {
     try {
-        return await HTTPClient.get(`${BASE_API_PATH}/shapes/map/${map_id}`);
+        return await HTTPClient.post(`${BASE_API_PATH}/mapShape`, mapShapeData);
     } catch (error) {
         return handleAuthError(error);
     }
@@ -110,7 +126,15 @@ const createMap = async ( mapData ) => {
     } catch (error) {
         return handleAuthError(error);
     }
-}
+};
+
+const updateMap = async ( mapData ) => {
+    try {
+        return await HTTPClient.put(`${BASE_API_PATH}/maps`, mapData);
+    } catch (error) {
+        return handleAuthError(error);
+    }
+};
 
 export default {
     custom,
@@ -118,13 +142,16 @@ export default {
     
     getShapes,
     getShapeById,
+    getShapeByMapIdParentName,
+    getShapesByMapId,
     getMapShape,
     getShapeParentsForMap,
     createShape,
-    getShapesByMapId,
+    createMapShape,
     deleteShapesFromMap,
 
     getMaps,
     getMapById,
-    createMap
+    createMap,
+    updateMap
 }

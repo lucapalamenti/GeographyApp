@@ -44,7 +44,30 @@ APIRouter.get('/shapes/:shapeId', (req, res) => {
         res.json( shape );
     })
     .catch( err => {
-        res.status(500).json({error:err, message: 'Error with POST request to /shapes'});
+        res.status(500).json({error:err, message: 'Error with GET request to /shapes/:shapeId'});
+    });
+});
+
+APIRouter.get('/shapes/:mapId/:parent/:name', (req, res) => {
+    const shapeData = {
+        mapShape_map_id : req.params.mapId,
+        mapShape_parent : req.params.parent,
+        shape_name : req.params.name.split('_').join(' ')
+    };
+    ShapeDAO.getShapeByMapIdParentName( shapeData ).then( shape => {
+        res.json( shape );
+    })
+    .catch( err => {
+        res.status(500).json({error:err, message: 'Error with GET request to /shapes/:mapId/:parent/:name'});
+    });
+});
+
+APIRouter.get('/shapes/map/:mapId', (req, res) => {
+    ShapeDAO.getShapesByMapId( req.params.mapId ).then( shapes => {
+        res.json( shapes );
+    })
+    .catch( err => {
+        res.status(500).json({error:err, message: 'Error with DELETE request to /shapes/map/:mapId'});
     });
 });
 
@@ -75,12 +98,12 @@ APIRouter.post('/shapes', (req, res) => {
     });
 });
 
-APIRouter.get('/shapes/map/:mapId', (req, res) => {
-    ShapeDAO.getShapesByMapId( req.params.mapId ).then( shapes => {
-        res.json( shapes );
+APIRouter.post('/mapShape', (req, res) => {
+    ShapeDAO.createMapShape( req.body ).then( mapShape => {
+        res.json( mapShape );
     })
     .catch( err => {
-        res.status(500).json({error:err, message: 'Error with DELETE request to /shapes/map/:mapId'});
+        res.status(500).json({error:err, message: 'Error with POST request to /mapShape'});
     });
 });
 
@@ -119,6 +142,15 @@ APIRouter.post('/maps', (req, res) => {
     })
     .catch( err => {
         res.status(500).json({error:err, message: 'Error with POST request to /maps'});
+    });
+});
+
+APIRouter.put('/maps', (req, res) => {
+    MapDAO.updateMap( req.body ).then( map => {
+        res.json( map );
+    })
+    .catch( err => {
+        res.status(500).json({error:err, message: 'Error with PUT request to /maps'});
     });
 });
 

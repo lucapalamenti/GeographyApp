@@ -16,6 +16,7 @@
     <header>
         <div class="flex-row">
             <h1>Geography App</h1>
+            <button class="a-button" id="btn-1">DELETE CUSTOM MAPS</button>
         </div>
         <nav>
             <a href="../">Home</a>
@@ -27,12 +28,12 @@
             <h3>Create Custom Map</h3>
             <div class="input-label">
                 <label for="map-name">Map Name</label>
-                <input type="text" name="map-name" id="map-name">
+                <input type="text" name="map-name" id="map-name" required>
             </div>
             <div class="input-label">
                 <label for="select-template">Choose Template</label>
-                <select name="select-template" id="select-template">
-                    <option value="-1">Select</option>
+                <select name="select-template" id="select-template" required>
+                    <option value="">Select</option>
                 </select>
             </div>
             <div class="input-label">
@@ -41,7 +42,7 @@
             </div>
             
             <nav class="flex-row">
-                <button type="button" class="btn-green" id="create-button">Create</button>
+                <button type="submit" class="btn-green" id="create-button">Create</button>
                 <a href="../" class="btn-grey">Cancel</a>
             </nav>
         </form>
