@@ -150,8 +150,6 @@ function showLabel( group, e, center ) {
 function typeGamemodes( shapeNames ) {
     numPrompts = shapeNames.length;
     tally.textContent = `Correct: ${numCorrect}/${numPrompts}`;
-    arr = shuffleArray( shapeNames );
-    current = arr.pop();
     promptBar.style.display = "flex";
     input.focus();
 }
@@ -164,9 +162,13 @@ function type( shapeNames, parents ) {
         if ( e.key !== 'Enter' ) return;
         // Only check the value if it isn't blank
         if ( input.value !== '' ) {
-            const regex = new RegExp();
             shapeNames.forEach( name => {
-                if ( name === `${selectParent.value}__${util.inputToId( input.value )}` ) {
+                // If there is only one "parent"
+                console.log( selectParent.childElementCount === 1 );
+                console.log( name === `${parents[0]}__${util.inputToId( input.value )}` );
+                console.log( name === `${selectParent.value}__${util.inputToId( input.value )}` );
+                if ( selectParent.childElementCount === 1 && name === `${parents[0]}__${util.inputToId( input.value )}`
+                || name === `${selectParent.value}__${util.inputToId( input.value )}`) {
                     const group = svg.querySelector(`#${name}`);
                     if ( group && !group.classList.contains('typed') ) {
                         group.classList.add('typed');
@@ -183,6 +185,8 @@ function type( shapeNames, parents ) {
 function typeHard( shapeNames ) {
     promptLabel.textContent = "Name the highlighted region";
     typeGamemodes( shapeNames );
+    arr = shuffleArray( shapeNames );
+    current = arr.pop();
 
     let currentGroup = svg.querySelector(`#${current}`);
     currentGroup.classList.add('typeCurrent');
@@ -319,7 +323,7 @@ function shuffleArray( arr ) {
  * @param {Array<String>} parents 
  */
 function populateSelect( parents ) {
-    if ( parents[0] === '' ) return;
+    if ( parents.length === 1 ) return;
     parents.forEach( name => {
         const option = document.createElement('OPTION');
         option.value = name;
