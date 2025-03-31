@@ -156,10 +156,10 @@ function type( shapeNames, parents ) {
         // Only check the value if it isn't blank
         if ( input.value !== '' ) {
             shapeNames.forEach( name => {
-                // If there is only one "parent"
+                // If there is only one "parent" then dont get selectParent.value
                 if ( selectParent.childElementCount === 1 && name === `${parents[0]}__${util.inputToId( input.value )}`
                 || name === `${selectParent.value}__${util.inputToId( input.value )}`) {
-                    const group = svg.querySelector(`#${name}`);
+                    const group = svg.querySelector(`#${CSS.escape( util.inputToQuery( name ) )}`);
                     if ( group && !group.classList.contains('typed') ) {
                         group.classList.add('typed');
                         input.value = "";

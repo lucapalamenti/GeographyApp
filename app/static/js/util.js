@@ -1,3 +1,6 @@
+const apostropheReplacement = ".";
+const spaceReplacement = "_";
+
 /**
  * Capitalizes the firt letter of each word (separated by a space) in a string
  * @param {String} string 
@@ -14,23 +17,28 @@ const idToListItem = ( id ) => {
     const split = id.split('__');
     // if there is no parent name
     if ( split[0] === '' ) {
-        return capitalizeFirst( split[1].split('_').join(' ') );
+        return capitalizeFirst( split[1].split(spaceReplacement).join(' ') );
     } else {
-        return `${capitalizeFirst( split[1].split('_').join(' ') )} (${split[0].split('_').join(' ')})`;
+        return `${capitalizeFirst( split[1].split(spaceReplacement).join(' ') )} (${split[0].split(spaceReplacement).join(' ')})`;
     }
 }
 
 const inputToId = ( input ) => {
-    return input.split(' ').join('_').split("'").join('-').toLowerCase();
+    return input.split(' ').join(spaceReplacement).split("'").join(apostropheReplacement).toLowerCase();
 }
 
 const idToInput = ( id ) => {
-    return capitalizeFirst( id.split('__')[1].split('_').join(' ').split('-').join("'") );
+    return capitalizeFirst( id.split('__')[1].split(spaceReplacement).join(' ').split(apostropheReplacement).join("'") );
+}
+
+const inputToQuery = ( input ) => {
+    return capitalizeFirst( input.split(' ').join(spaceReplacement).split("'").join(`${apostropheReplacement}`).toLowerCase() );
 }
 
 export default {
     capitalizeFirst,
     idToListItem,
     inputToId,
-    idToInput
+    idToInput,
+    inputToQuery
 }

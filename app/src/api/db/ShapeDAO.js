@@ -15,7 +15,7 @@ const getShapeById = async ( shape_id ) => {
         WHERE shape_id = ?
         `, [shape_id]).then( rows => {
             if ( rows.length === 1 ) {
-                return new Shape( rows[0] );
+                return rows[0];
             }
             throw new Error('Shape not found!');
     });
@@ -27,13 +27,13 @@ const getShapeByMapIdParentName = async ( shapeData ) => {
         SELECT * FROM mapShape JOIN shape
         ON mapShape_shape_id = shape_id
         WHERE mapShape_map_id = ? AND mapShape_parent = ? AND shape_name = ?
-        `, [mapShape_map_id, mapShape_parent, shape_name.split('-').join("'")]).then( rows => {
+        `, [mapShape_map_id, mapShape_parent, shape_name]).then( rows => {
             if ( rows.length === 1 ) {
-                return new Shape( rows[0] );
+                return rows[0];
             }
             throw new Error('Shape not found!');
     });
-}
+};
 
 const getShapesByMapId = async ( mapShape_map_id ) => {
     return await database.query(`
