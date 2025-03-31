@@ -56,13 +56,11 @@ function click ( shapeNames ) {
         if ( group.classList.contains('groupClickable') ) {
             // Correct region clicked
             if ( util.idToInput( group.getAttribute('id') ) === util.idToInput( current ) ) {
-                console.log(1);
                 if ( guesses === 0 ) numCorrect++;
                 next( group );
             }
             // Incorrect region clicked
             else {
-                console.log(2);
                 guesses++;
                 shapeDisappearTrigger( group, clickColors[3], true );
                 // If too many guesses have been taken then highlight the correct answer
@@ -71,26 +69,21 @@ function click ( shapeNames ) {
                     next( svg.getElementById( current ) );
                 }
             }
-            console.log(5);
             showLabel( group, e, false );
         }
     });
     function next( group ) {
-        console.log(3);
         group.classList.remove('groupClickable');
         group.querySelectorAll('POLYGON').forEach( polygon => {
             polygon.style.fill = clickColors[guesses];
         });
         if ( !( current = arr.pop() ) ) {
-            console.log(33);
             endGame();
         } else {
-            console.log(34);
             updateLabels();
             guesses = 0;
         }
         tally.textContent = `Correct: ${numCorrect}/${numPrompts}`;
-        console.log(4);
     }
 }
 function clickDisappear ( shapeNames ) {
@@ -164,9 +157,6 @@ function type( shapeNames, parents ) {
         if ( input.value !== '' ) {
             shapeNames.forEach( name => {
                 // If there is only one "parent"
-                console.log( selectParent.childElementCount === 1 );
-                console.log( name === `${parents[0]}__${util.inputToId( input.value )}` );
-                console.log( name === `${selectParent.value}__${util.inputToId( input.value )}` );
                 if ( selectParent.childElementCount === 1 && name === `${parents[0]}__${util.inputToId( input.value )}`
                 || name === `${selectParent.value}__${util.inputToId( input.value )}`) {
                     const group = svg.querySelector(`#${name}`);

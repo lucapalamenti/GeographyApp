@@ -101,7 +101,7 @@ const createMapShape = async ( mapShapeData ) => {
         VALUES (?, ?, ?, ?, ?, ?, ?)
         `, [mapShape_map_id, mapShape_shape_id, mapShape_parent, mapShape_offsetX, mapShape_offsetY, mapShape_scaleX, mapShape_scaleY]).then( rows => {
             if ( rows.affectedRows === 1 ) {
-                return getMapShape( mapShape_map_id, mapShape_shape_id );
+                return getShapeById( mapShape_shape_id );
             }
             throw new Error('mapShape could not be created!');
     });
