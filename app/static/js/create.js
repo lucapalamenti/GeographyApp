@@ -151,7 +151,7 @@ createButton.addEventListener('click', async e => {
     e.preventDefault();
     if ( mapName.value && mapTemplate.value ) {
         await createCustomMap();
-        document.location = "../";
+        // document.location = "../";
     }
 });
 
@@ -194,7 +194,7 @@ async function createCustomMap() {
                 if ( point.x < regionMinX ) regionMinX = point.x;
                 if ( point.y < regionMinY ) regionMinY = point.y;
             }
-        });
+        }); // FIGURE OUT WHY MIAMI-DADE IS NOT WORKING!!!!!!!!!!
 
         const mapShapeData = {
             mapShape_map_id : mapData.map_id,
@@ -206,8 +206,7 @@ async function createCustomMap() {
             mapShape_scaleY : 1.0
         };
         
-        await APIClient.createMapShape( mapShapeData ).then( mapShape => {
-        }).catch( err => {
+        await APIClient.createMapShape( mapShapeData ).then( mapShape => {}).catch( err => {
             console.error( err );
         });
     }
