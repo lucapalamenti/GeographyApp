@@ -3,10 +3,16 @@ polygon {
     stroke-width: 0.05%;
     stroke: rgb(68, 68, 68);
 }
+polygon:hover {
+    fill: rgb(108, 108, 108);
+}
 
 g.selected polygon {
     fill: rgb(230, 231, 137);
     stroke: black;
+}
+g.selected polygon:hover {
+    fill: rgb(210, 211, 117);
 }
 
 svg.zoom-1 polygon { stroke-width: 0.25px; }

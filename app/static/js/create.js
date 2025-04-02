@@ -194,7 +194,7 @@ async function createCustomMap() {
                 if ( point.x < regionMinX ) regionMinX = point.x;
                 if ( point.y < regionMinY ) regionMinY = point.y;
             }
-        }); // FIGURE OUT WHY MIAMI-DADE IS NOT WORKING!!!!!!!!!!
+        });
 
         const mapShapeData = {
             mapShape_map_id : mapData.map_id,
