@@ -31,31 +31,31 @@ CREATE TABLE IF NOT EXISTS `map` (
 
 -- Data exporting was unselected.
 
--- Dumping structure for table geographyapp.shape
-CREATE TABLE IF NOT EXISTS `shape` (
-  `shape_id` int(10) NOT NULL AUTO_INCREMENT,
-  `shape_name` tinytext NOT NULL,
-  `shape_points` multipolygon NOT NULL,
-  PRIMARY KEY (`shape_id`) USING BTREE
+-- Dumping structure for table geographyapp.region
+CREATE TABLE IF NOT EXISTS `region` (
+  `region_id` int(10) NOT NULL AUTO_INCREMENT,
+  `region_name` tinytext NOT NULL,
+  `region_points` multipolygon NOT NULL,
+  PRIMARY KEY (`region_id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=103 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 -- Data exporting was unselected.
 
--- Dumping structure for table geographyapp.mapShape
-CREATE TABLE IF NOT EXISTS `mapShape` (
-  `mapShape_id` int(10) NOT NULL AUTO_INCREMENT,
-  `mapShape_map_id` int(10) NOT NULL DEFAULT 0,
-  `mapShape_shape_id` int(10) NOT NULL DEFAULT 0,
-  `mapShape_parent` varchar(64) NOT NULL DEFAULT 'Earth',
-  `mapShape_offsetX` decimal(10,6) NOT NULL DEFAULT 0.000000,
-  `mapShape_offsetY` decimal(10,6) NOT NULL DEFAULT 0.000000,
-  `mapShape_scaleX` decimal(10,6) NOT NULL DEFAULT 0.000000,
-  `mapShape_scaleY` decimal(10,6) NOT NULL DEFAULT 0.000000,
-  PRIMARY KEY (`mapShape_id`) USING BTREE,
-  KEY `FK_mapShape_map` (`mapShape_map_id`) USING BTREE,
-  KEY `FK_mapShape_shape` (`mapShape_shape_id`) USING BTREE,
-  CONSTRAINT `FK_mapShape_map` FOREIGN KEY (`mapShape_map_id`) REFERENCES `map` (`map_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `FK_mapShape_shape` FOREIGN KEY (`mapShape_shape_id`) REFERENCES `shape` (`shape_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+-- Dumping structure for table geographyapp.mapRegion
+CREATE TABLE IF NOT EXISTS `mapRegion` (
+  `mapRegion_id` int(10) NOT NULL AUTO_INCREMENT,
+  `mapRegion_map_id` int(10) NOT NULL DEFAULT 0,
+  `mapRegion_region_id` int(10) NOT NULL DEFAULT 0,
+  `mapRegion_parent` varchar(64) NOT NULL DEFAULT 'Earth',
+  `mapRegion_offsetX` decimal(10,6) NOT NULL DEFAULT 0.000000,
+  `mapRegion_offsetY` decimal(10,6) NOT NULL DEFAULT 0.000000,
+  `mapRegion_scaleX` decimal(10,6) NOT NULL DEFAULT 0.000000,
+  `mapRegion_scaleY` decimal(10,6) NOT NULL DEFAULT 0.000000,
+  PRIMARY KEY (`mapRegion_id`) USING BTREE,
+  KEY `FK_mapRegion_map` (`mapRegion_map_id`) USING BTREE,
+  KEY `FK_mapRegion_region` (`mapRegion_region_id`) USING BTREE,
+  CONSTRAINT `FK_mapRegion_map` FOREIGN KEY (`mapRegion_map_id`) REFERENCES `map` (`map_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_mapRegion_region` FOREIGN KEY (`mapRegion_region_id`) REFERENCES `region` (`region_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=103 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 -- Data exporting was unselected.

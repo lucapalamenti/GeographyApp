@@ -29,20 +29,20 @@ await APIClient.getMaps( 'map_id' ).then( maps => {
 });
 
 let dragging = false;
-let selectedShapes = new Set();
+let selectedRegions = new Set();
 let map;
 mapTemplate.addEventListener('change', async e => {
     svg.innerHTML = "";
     selectedList.style.display = "none";
     dragging = false;
-    selectedShapes = new Set();
+    selectedRegions = new Set();
     await APIClient.getMapById( mapTemplate.value ).then( async returnedMap => {
         map = returnedMap;
-        await populateSVG( returnedMap, svg ).then( shapeNames => {
+        await populateSVG( returnedMap, svg ).then( regionNames => {
             svg.querySelectorAll('POLYGON').forEach( polygon => {
                 polygon.addEventListener('mouseover', e => {
                     if ( e.button === 0 && dragging ) {
-                        selectedShapes.add( e.target.parentNode.id );
+                        selectedRegions.add( e.target.parentNode.id );
                         e.target.parentNode.classList.add('selected');
                     }
                 });
@@ -56,11 +56,11 @@ mapTemplate.addEventListener('change', async e => {
 svg.addEventListener('mousedown', e => {
     if ( e.button === 0 && e.target.tagName === "polygon" ) {
         if ( e.target.parentNode.classList.contains('selected') ) {
-            selectedShapes.delete( e.target.parentNode.id );
+            selectedRegions.delete( e.target.parentNode.id );
             e.target.parentNode.classList.remove('selected');
         } else {
             dragging = true;
-            selectedShapes.add( e.target.parentNode.id );
+            selectedRegions.add( e.target.parentNode.id );
             e.target.parentNode.classList.add('selected');
         }
     }
@@ -74,11 +74,11 @@ function displaySelection() {
     selectedList.innerHTML = "";
     selectedList.style.display = "flex";
     const sort = {};
-    if ( selectedShapes.size === 0 ) {
+    if ( selectedRegions.size === 0 ) {
         selectedList.style.display = "none";
         return;
     }
-    selectedShapes.forEach( shapeName => {
+    selectedRegions.forEach( shapeName => {
         const split = shapeName.split('__');
         let parent = split[0];
         // If there is no parent
@@ -169,9 +169,9 @@ async function createCustomMap() {
 
     let mapMinX = Infinity, mapMaxX = 0, mapMinY = Infinity, mapMaxY = 0;
     // Find the minium X & Y values for
-    for ( const shape of selectedShapes ) {
+    for ( const region of selectedRegions ) {
         let regionMinX = Infinity, regionMinY = Infinity;
-        document.getElementById( shape ).querySelectorAll('POLYGON').forEach( polygon => {
+        document.getElementById( region ).querySelectorAll('POLYGON').forEach( polygon => {
             for ( const point of polygon.points ) {
                 if ( point.x < regionMinX ) regionMinX = point.x;
                 if ( point.y < regionMinY ) regionMinY = point.y;
@@ -183,30 +183,30 @@ async function createCustomMap() {
         if ( regionMinX < mapMinX ) mapMinX = regionMinX;
         if ( regionMinY < mapMinY ) mapMinY = regionMinY;
     }
-    for ( const shape of selectedShapes ) {
-        const split = shape.split('__');
-        const shapeName = util.capitalizeFirst( split[1].split('_').join(' ') ).split(' ').join('_');
-        const shape_id = (await APIClient.getShapeByMapIdParentName( mapTemplate.value, split[0], shapeName )).shape_id;
+    for ( const region of selectedRegions ) {
+        const split = region.split('__');
+        const regionName = util.capitalizeFirst( split[1].split('_').join(' ') ).split(' ').join('_');
+        const region_id = (await APIClient.getRegionByMapIdParentName( mapTemplate.value, split[0], regionName )).region_id;
 
         let regionMinX = Infinity, regionMinY = Infinity;
-        document.getElementById( shape ).querySelectorAll('POLYGON').forEach( polygon => {
+        document.getElementById( region ).querySelectorAll('POLYGON').forEach( polygon => {
             for ( const point of polygon.points ) {
                 if ( point.x < regionMinX ) regionMinX = point.x;
                 if ( point.y < regionMinY ) regionMinY = point.y;
             }
         });
 
-        const mapShapeData = {
-            mapShape_map_id : mapData.map_id,
-            mapShape_shape_id : shape_id,
-            mapShape_parent : shape.split('__')[0],
-            mapShape_offsetX : ( regionMinX - mapMinX ) / map.map_scale,
-            mapShape_offsetY : ( regionMinY - mapMinY ) / map.map_scale,
-            mapShape_scaleX : 1.0,
-            mapShape_scaleY : 1.0
+        const mapRegionData = {
+            mapRegion_map_id : mapData.map_id,
+            mapRegion_region_id : region_id,
+            mapRegion_parent : region.split('__')[0],
+            mapRegion_offsetX : ( regionMinX - mapMinX ) / map.map_scale,
+            mapRegion_offsetY : ( regionMinY - mapMinY ) / map.map_scale,
+            mapRegion_scaleX : 1.0,
+            mapRegion_scaleY : 1.0
         };
         
-        await APIClient.createMapShape( mapShapeData ).then( mapShape => {}).catch( err => {
+        await APIClient.createMapRegion( mapRegionData ).then( mapRegion => {}).catch( err => {
             console.error( err );
         });
     }

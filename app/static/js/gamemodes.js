@@ -23,8 +23,8 @@ const clickColors = [ 'rgb(106, 235, 89)', 'rgb(240, 219, 35)', 'rgb(243, 148, 2
 const SVG_WIDTH = 1600;
 const SVG_HEIGHT = 900;
 
-function clickGamemodes( shapeNames ) {
-    numPrompts = shapeNames.length;
+function clickGamemodes( regionNames ) {
+    numPrompts = regionNames.length;
     document.querySelectorAll('G').forEach( group => {
         group.classList.add('groupClickable');
     });
@@ -33,7 +33,7 @@ function clickGamemodes( shapeNames ) {
     input.style.display = 'none';
     tally.textContent = `Correct: ${numCorrect}/${numPrompts}`;
 
-    arr = shuffleArray( shapeNames );
+    arr = shuffleArray( regionNames );
     current = arr.pop();
     updateLabels();
     
@@ -49,8 +49,8 @@ function clickGamemodes( shapeNames ) {
         tooltip.style.display = "block";
     }
 }
-function click ( shapeNames ) {
-    clickGamemodes( shapeNames, false );
+function click ( regionNames ) {
+    clickGamemodes( regionNames, false );
     svg.addEventListener('click', e => {
         const group = e.target.parentNode;
         if ( group.classList.contains('groupClickable') ) {
@@ -62,7 +62,7 @@ function click ( shapeNames ) {
             // Incorrect region clicked
             else {
                 guesses++;
-                shapeDisappearTrigger( group, clickColors[3], true );
+                regionDisappearTrigger( group, clickColors[3], true );
                 // If too many guesses have been taken then highlight the correct answer
                 if ( guesses === clickColors.length - 1 ) {
                     showLabel( svg.getElementById( current ), e, true );
@@ -86,8 +86,8 @@ function click ( shapeNames ) {
         tally.textContent = `Correct: ${numCorrect}/${numPrompts}`;
     }
 }
-function clickDisappear ( shapeNames ) {
-    clickGamemodes( shapeNames );
+function clickDisappear ( regionNames ) {
+    clickGamemodes( regionNames );
     svg.addEventListener('click', e => {
         const group = e.target.parentNode;
         if ( group.classList.contains('groupClickable') ) {
@@ -99,7 +99,7 @@ function clickDisappear ( shapeNames ) {
             // Incorrect region clicked
             else {
                 guesses++;
-                shapeDisappearTrigger( group, clickColors[3], true );
+                regionDisappearTrigger( group, clickColors[3], true );
                 // If too many guesses have been taken then highlight the correct answer
                 if ( guesses === clickColors.length - 1 ) {
                     showLabel( svg.getElementById( current ), e, true );
@@ -110,7 +110,7 @@ function clickDisappear ( shapeNames ) {
         }
     });
     function next( group ) {
-        shapeDisappearTrigger( group, clickColors[guesses], true );
+        regionDisappearTrigger( group, clickColors[guesses], true );
         if ( !( current = arr.pop() ) ) {
             endGame();
         } else {
@@ -140,22 +140,22 @@ function showLabel( group, e, center ) {
     }, 1500 );
 }
 
-function typeGamemodes( shapeNames ) {
-    numPrompts = shapeNames.length;
+function typeGamemodes( regionNames ) {
+    numPrompts = regionNames.length;
     tally.textContent = `Correct: ${numCorrect}/${numPrompts}`;
     promptBar.style.display = "flex";
     input.focus();
 }
-function type( shapeNames, parents ) {
+function type( regionNames, parents ) {
     populateSelect( parents );
-    typeGamemodes( shapeNames, false );
+    typeGamemodes( regionNames, false );
     promptLabel.textContent = "Name all regions";
     input.addEventListener('keypress', e => {
         // Only continute if Enter is pressed
         if ( e.key !== 'Enter' ) return;
         // Only check the value if it isn't blank
         if ( input.value !== '' ) {
-            shapeNames.forEach( name => {
+            regionNames.forEach( name => {
                 // If there is only one "parent" then dont get selectParent.value
                 if ( selectParent.childElementCount === 1 && name === `${parents[0]}__${util.inputToId( input.value )}`
                 || name === `${selectParent.value}__${util.inputToId( input.value )}`) {
@@ -172,10 +172,10 @@ function type( shapeNames, parents ) {
         }
     });
 }
-function typeHard( shapeNames ) {
+function typeHard( regionNames ) {
     promptLabel.textContent = "Name the highlighted region";
-    typeGamemodes( shapeNames );
-    arr = shuffleArray( shapeNames );
+    typeGamemodes( regionNames );
+    arr = shuffleArray( regionNames );
     current = arr.pop();
 
     let currentGroup = svg.querySelector(`#${current}`);
@@ -216,14 +216,14 @@ function typeHard( shapeNames ) {
     }
 }
 
-function noMap( shapeNames, parents ) {
+function noMap( regionNames, parents ) {
     populateSelect( parents );
     const noMapArea = document.getElementById('no-map-area');
-    numPrompts = shapeNames.length;
+    numPrompts = regionNames.length;
 
     let n = 1;
     const array = {};
-    shapeNames.forEach( name => {
+    regionNames.forEach( name => {
         array[ util.inputToId( name ) ] = n++;
     });
 
@@ -259,15 +259,15 @@ function noMap( shapeNames, parents ) {
     });
 }
 
-function noList( shapeNames ) {
+function noList( regionNames ) {
 
 }
 
-function outline( shapeNames ) {
+function outline( regionNames ) {
 
 }
 
-function shapeDisappearTrigger( group, color, clickable ) {
+function regionDisappearTrigger( group, color, clickable ) {
     group.classList.remove('groupClickable');
     group.querySelectorAll('POLYGON').forEach( polygon => {
         polygon.style.fill = color;
@@ -285,7 +285,7 @@ function shapeDisappearTrigger( group, color, clickable ) {
 }
 
 /**
- * Updates all labels with the class 'click-on' to contain the current shape
+ * Updates all labels with the class 'click-on' to contain the current region
  * to click on
  */
 function updateLabels() {
@@ -361,7 +361,6 @@ function unzoom( e ) {
         label.style.display = "none";
     });
     zoomSlider.removeAttribute( 'disabled' );
-
     document.removeEventListener( 'keydown', unzoom );
 }
 

@@ -5,8 +5,8 @@ const US_States_Polygon_Parse = require('./backend/test/US_States_Polygon-parse.
 
 const custom = async () => {
     await database.query(`
-        DELETE FROM mapShape
-        WHERE mapShape_map_id > 3
+        DELETE FROM mapRegion
+        WHERE mapRegion_map_id > 3
         `, []).then( rows => {
             return rows.affectedRows;
     });
@@ -18,12 +18,12 @@ const custom = async () => {
     });
 };
 
-const printShapeInsertQuery = () => {
-    US_Counties_Parse.parse();
-    return database.query(`SELECT * FROM shape WHERE shape_id = 1`);
+const printRegionInsertQuery = () => {
+    US_States_Polygon_Parse.parse();
+    return database.query(`SELECT * FROM region WHERE region_id = 1`);
 };
 
 module.exports = {
     custom,
-    printShapeInsertQuery
+    printRegionInsertQuery
 };

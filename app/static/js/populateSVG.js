@@ -4,19 +4,19 @@ import util from "./util.js";
 const svgPadding = 10;
 
 /**
- * Load shapes for a given map into an SVG element
+ * Load regions for a given map into an SVG element
  * @param {Map} map map object
  * @param {SVGElement} svg reference to an SVG element
- * @returns {Set} a set of shape names
+ * @returns {Set} a set of region names
  */
 export default async function populateSVG( map, svg ) {
-    const shapeNames = new Set();
-    await APIClient.getShapesByMapId( map.map_id ).then( async returnedShapes => {
+    const regionNames = new Set();
+    await APIClient.getRegionsByMapId( map.map_id ).then( async returnedRegions => {
         const polygonTemplate = document.getElementById('polygon-template').content;
-        for ( const region of returnedShapes ) {
-            const regionId = `${region.mapShape_parent}__${util.inputToId( region.shape_name )}`;
+        for ( const region of returnedRegions ) {
+            const regionId = `${region.mapRegion_parent}__${util.inputToId( region.region_name )}`;
             let group = svg.querySelector(`#a`);
-            // If a group doesn't already exist for this shape's name
+            // If a group doesn't already exist for this regions's name
             if ( !group ) {
                 // Create a new group
                 group = polygonTemplate.cloneNode( true ).querySelector('G');
@@ -24,28 +24,28 @@ export default async function populateSVG( map, svg ) {
                 group.innerHTML = "";
                 group.setAttribute('id', regionId);
             }
-            for ( const shape of region.shape_points.coordinates ) {
-                // Create a polygon for the current shape
+            for ( const shape of region.region_points.coordinates ) {
+                // Create a polygon for the current region
                 const p = polygonTemplate.cloneNode( true ).querySelector('POLYGON');
                 const points = shape[0];
                 // Convert each array index from [1,2] to "1,2" and apply scaling & offsets
                 for ( let i = 0; i < points.length; i++ ) {
-                    let X = ( points[i][0] + Number( region.mapShape_offsetX ) ) * map.map_scale * region.mapShape_scaleX + svgPadding;
-                    let Y = ( points[i][1] + Number( region.mapShape_offsetY ) ) * map.map_scale * region.mapShape_scaleY + svgPadding;
+                    let X = ( points[i][0] + Number( region.mapRegion_offsetX ) ) * map.map_scale * region.mapRegion_scaleX + svgPadding;
+                    let Y = ( points[i][1] + Number( region.mapRegion_offsetY ) ) * map.map_scale * region.mapRegion_scaleY + svgPadding;
                     points[i] = `${X.toFixed(6)},${Y.toFixed(6)}`;
                 }
                 p.setAttribute('points', points.join(' ') );
                 group.appendChild( p );
                 svg.appendChild( group );
             };
-            shapeNames.add( regionId );
+            regionNames.add( regionId );
         };
         if ( map.map_id === 3 || map.map_id === 48 ) virginiaFix( svg );
         svg.classList.remove('hide-polygons');
     }).catch( err => {
         console.error( err );
     });
-    return shapeNames;
+    return regionNames;
 }
 
 /**

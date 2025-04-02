@@ -20,7 +20,7 @@ const custom = async () => {
     }
 };
 
-const printShapeInsertQuery = async () => {
+const printRegionInsertQuery = async () => {
     try {
         return await HTTPClient.post(`${BASE_API_PATH}/customPrint`);
     } catch (error) {
@@ -28,75 +28,75 @@ const printShapeInsertQuery = async () => {
     }
 }
 
-// ----- ShapeDAO CALLS -----
+// ----- RegionDAO CALLS -----
 
-const getShapes = async () => {
+const getRegions = async () => {
     try {
-        return await HTTPClient.get(`${BASE_API_PATH}/shapes`);
+        return await HTTPClient.get(`${BASE_API_PATH}/regions`);
     } catch (error) {
         return handleAuthError(error);
     }
 };
 
-const getShapeById = async ( shape_id ) => {
+const getRegionById = async ( region_id ) => {
     try {
-        return await HTTPClient.get(`${BASE_API_PATH}/shapes/${shape_id}`);
+        return await HTTPClient.get(`${BASE_API_PATH}/regions/${region_id}`);
     } catch (error) {
         return handleAuthError(error);
     }
 };
 
-const getShapeByMapIdParentName = async ( mapShape_map_id, mapShape_parent, shape_name ) => {
+const getRegionByMapIdParentName = async ( mapRegion_map_id, mapRegion_parent, region_name ) => {
     try {
-        return await HTTPClient.get(`${BASE_API_PATH}/shapes/${mapShape_map_id}/${mapShape_parent}/${shape_name.split('-').join('%2D')}`);
+        return await HTTPClient.get(`${BASE_API_PATH}/regions/${mapRegion_map_id}/${mapRegion_parent}/${region_name.split('-').join('%2D')}`);
     } catch (error) {
         return handleAuthError(error);
     }
 }
 
-const getShapeParentsForMap = async ( mapShape_map_id ) => {
+const getRegionParentsForMap = async ( mapRegion_map_id ) => {
     try {
-        return await HTTPClient.get(`${BASE_API_PATH}/mapShape/parents/${mapShape_map_id}`);
+        return await HTTPClient.get(`${BASE_API_PATH}/mapRegion/parents/${mapRegion_map_id}`);
     } catch (error) {
         return handleAuthError(error);
     }
 };
 
-const getMapShape = async ( mapShape_map_id, mapShape_shape_id ) => {
+const getMapRegion = async ( mapRegion_map_id, mapRegion_region_id ) => {
     try {
-        return await HTTPClient.get(`${BASE_API_PATH}/mapShape/${mapShape_map_id}/${mapShape_shape_id}`);
+        return await HTTPClient.get(`${BASE_API_PATH}/mapRegion/${mapRegion_map_id}/${mapRegion_region_id}`);
     } catch (error) {
         return handleAuthError(error);
     }
 };
 
-const getShapesByMapId = async ( map_id ) => {
+const getRegionsByMapId = async ( map_id ) => {
     try {
-        return await HTTPClient.get(`${BASE_API_PATH}/shapes/map/${map_id}`);
+        return await HTTPClient.get(`${BASE_API_PATH}/regions/map/${map_id}`);
     } catch (error) {
         return handleAuthError(error);
     }
 };
 
-const createShape = async ( shapeData ) => {
+const createRegion = async ( regionData ) => {
     try {
-        return await HTTPClient.post(`${BASE_API_PATH}/shapes`, shapeData);
+        return await HTTPClient.post(`${BASE_API_PATH}/regions`, regionData);
     } catch (error) {
         return handleAuthError(error);
     }
 };
 
-const createMapShape = async ( mapShapeData ) => {
+const createMapRegion = async ( mapRegionData ) => {
     try {
-        return await HTTPClient.post(`${BASE_API_PATH}/mapShape`, mapShapeData);
+        return await HTTPClient.post(`${BASE_API_PATH}/mapRegion`, mapRegionData);
     } catch (error) {
         return handleAuthError(error);
     }
 };
 
-const deleteShapesFromMap = async ( map_id ) => {
+const deleteRegionsFromMap = async ( map_id ) => {
     try {
-        return await HTTPClient.delete(`${BASE_API_PATH}/shapes/map/${map_id}`);
+        return await HTTPClient.delete(`${BASE_API_PATH}/regions/map/${map_id}`);
     } catch (error) {
         return handleAuthError(error);
     }
@@ -138,17 +138,17 @@ const updateMap = async ( mapData ) => {
 
 export default {
     custom,
-    printShapeInsertQuery,
+    printRegionInsertQuery,
     
-    getShapes,
-    getShapeById,
-    getShapeByMapIdParentName,
-    getShapesByMapId,
-    getMapShape,
-    getShapeParentsForMap,
-    createShape,
-    createMapShape,
-    deleteShapesFromMap,
+    getRegions,
+    getRegionById,
+    getRegionByMapIdParentName,
+    getRegionsByMapId,
+    getMapRegion,
+    getRegionParentsForMap,
+    createRegion,
+    createMapRegion,
+    deleteRegionsFromMap,
 
     getMaps,
     getMapById,

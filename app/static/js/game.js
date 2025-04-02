@@ -16,7 +16,7 @@ const covering = document.getElementById('covering');
 
 document.getElementById('b1').addEventListener('click', () => {
     //APIClient.custom();
-    APIClient.printShapeInsertQuery().then( r => {
+    APIClient.printRegionInsertQuery().then( r => {
     }).catch( err => {
         console.error( err );
     });
@@ -39,9 +39,9 @@ await APIClient.getMapById( map_id ).then( returnedMap => {
     console.error( err );
 });
 
-// Store the names of all shapes for the current map and show them on the map
+// Store the names of all regions for the current map and show them on the map
 // ( await is necessary here even though vscode says otherwise )
-const shapeNames = await populateSVG( map, svg );
+const regionNames = await populateSVG( map, svg );
 
 let currentGamemode = null;
 
@@ -53,8 +53,8 @@ selectButton.addEventListener('click', () => {
         covering.style.visibility = "hidden";
         gamemodePanel.style.visibility = "hidden";
         gamemodePanel.style.cursor = "default";
-        APIClient.getShapeParentsForMap( map_id ).then( parents => {
-            gamemodeMap[currentGamemode]( Array.from( shapeNames ), parents );
+        APIClient.getRegionParentsForMap( map_id ).then( parents => {
+            gamemodeMap[currentGamemode]( Array.from( regionNames ), parents );
         });
     }
 });
