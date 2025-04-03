@@ -159,7 +159,7 @@ function type( regionNames, parents ) {
                 // If there is only one "parent" then dont get selectParent.value
                 if ( selectParent.childElementCount === 1 && name === `${parents[0]}__${util.inputToId( input.value )}`
                 || name === `${selectParent.value}__${util.inputToId( input.value )}`) {
-                    const group = svg.querySelector(`#${CSS.escape( util.inputToQuery( name ) )}`);
+                    const group = svg.querySelector(`#${CSS.escape( name )}`);
                     if ( group && !group.classList.contains('typed') ) {
                         group.classList.add('typed');
                         input.value = "";
