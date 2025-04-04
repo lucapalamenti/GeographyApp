@@ -30,8 +30,8 @@ APIRouter.post('/customPrint', (req, res) => {
 
 // ----- RegionDAO ROUTES -----
 
-APIRouter.get('/region', (req, res) => {
-    RegionDAO.getRegion().then( regions => {
+APIRouter.get('/regions', (req, res) => {
+    RegionDAO.getRegions().then( regions => {
         res.json( regions );
     })
     .catch( err => {
@@ -48,7 +48,7 @@ APIRouter.get('/regions/:regionId', (req, res) => {
     });
 });
 
-APIRouter.get('/region/:mapId/:parent/:name', (req, res) => {
+APIRouter.get('/regions/:mapId/:parent/:name', (req, res) => {
     const regionData = {
         mapRegion_map_id : req.params.mapId,
         mapRegion_parent : req.params.parent,
