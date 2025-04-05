@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS `map` (
   `map_name` varchar(100) NOT NULL DEFAULT '',
   `map_thumbnail` tinytext DEFAULT '',
   `map_primary_color` varchar(31) NOT NULL DEFAULT '255,255,255',
+  `map_is_custom` bit(1) DEFAULT 0,
   PRIMARY KEY (`map_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 

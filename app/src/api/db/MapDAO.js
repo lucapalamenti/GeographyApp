@@ -23,11 +23,11 @@ const getMapById = async ( map_id ) => {
 };
 
 const createMap = async ( mapData ) => {
-    const { map_id, map_scale, map_name, map_thumbnail, map_primary_color } = mapData;
+    const { map_id, map_scale, map_name, map_thumbnail, map_primary_color, map_is_custom } = mapData;
     return await database.query(`
-        INSERT INTO map (map_id, map_scale, map_name, map_thumbnail, map_primary_color)
-        VALUES (?, ?, ?, ?, ?)
-        `, [map_id, map_scale, map_name, map_thumbnail, map_primary_color]).then( rows => {
+        INSERT INTO map (map_id, map_scale, map_name, map_thumbnail, map_primary_color, map_is_custom)
+        VALUES (?, ?, ?, ?, ?, ?)
+        `, [map_id, map_scale, map_name, map_thumbnail, map_primary_color, map_is_custom]).then( rows => {
             if ( rows.affectedRows === 1 ) {
                 return getMapById( map_id );
             }
@@ -46,6 +46,23 @@ const updateMap = async ( mapData ) => {
                 return getMapById( map_id );
             }
             throw new Error('Map could not be updated!');
+    });
+};
+
+const deleteMap = async ( mapId ) => {
+    await database.query(`
+        DELETE FROM mapRegion
+        WHERE mapRegion_map_id = ?
+        `, [mapId])
+        .then( rows => {
+            return rows.affectedRows;
+        });
+    return await database.query(`
+        DELETE FROM map
+        WHERE map_id = ?
+        `, [mapId])
+        .then( rows => {
+            return rows.affectedRows;
     });
 };
 

@@ -161,7 +161,8 @@ async function createCustomMap() {
         map_scale : 1.0,
         map_name : mapName.value,
         map_thumbnail : `${mapName.value.split(' ').join('_')}_Thumbnail.png`,
-        map_primary_color : hexToRGB( mapColor.value )
+        map_primary_color : hexToRGB( mapColor.value ),
+        map_is_custom : 1
     };
     APIClient.createMap( mapData ).catch( err => {
         console.error( err );
@@ -227,7 +228,3 @@ function hexToRGB( hex ) {
     const b = parseInt( hex.substr(5,2), 16 )
     return `${r},${g},${b}`;
 }
-
-document.getElementById('btn-1').addEventListener('click', e => {
-    APIClient.custom();
-});
