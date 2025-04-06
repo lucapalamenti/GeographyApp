@@ -23,23 +23,27 @@
         </nav>
     </header>
     <main>
-        <nav class="flex-row">
-            <a href="create" class="btn-1 btn-hover-effect">Create Custom Map</a>
-            <a href="" class="btn-1 btn-hover-effect">Create Custom Map</a>
-            <a href="" class="btn-1 btn-hover-effect">Create Custom Map</a>
-        </nav>
-        <nav id="map-navigation"></nav>
+        <section class="flex-col" id="map-section">
+            <nav class="flex-row">
+                <a href="create" class="btn-1 btn-hover-effect">Create Custom Map</a>
+                <button class="btn-1 btn-hover-effect" id="delete-map-btn">Delete Custom Map</button>
+            </nav>
+            <nav class="flex-row" id="map-navigation">
+                <h5 class="page-center flex-col" id="delete-popup">Click on Custom Map to Delete</h5>
+            </nav>
+        </section>
     </main>
+
 
     <!-- Templates -->
     <template id="map-button-template">
         <a href="" class="map-button-container btn-hover-effect">
-            <div class="map-button-top">
+            <img src="images/x.svg" alt="Couldn't load x.svg" class="x-bg">
+            <div class="map-button-top flex-col">
                 <h4 class="map-button-label"></h4>
             </div>
             <div class="map-button-bottom"></div>
         </a>
     </template>
-
 </body>
 </html>
