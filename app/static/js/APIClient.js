@@ -136,6 +136,14 @@ const updateMap = async ( mapData ) => {
     }
 };
 
+const deleteMap = async ( map_id ) => {
+    try {
+        return await HTTPClient.put(`${BASE_API_PATH}/maps/${map_id}`);
+    } catch (error) {
+        return handleAuthError(error);
+    }
+};
+
 export default {
     custom,
     printRegionInsertQuery,
@@ -153,5 +161,6 @@ export default {
     getMaps,
     getMapById,
     createMap,
-    updateMap
+    updateMap,
+    deleteMap
 }

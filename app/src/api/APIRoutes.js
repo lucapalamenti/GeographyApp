@@ -154,4 +154,13 @@ APIRouter.put('/maps', (req, res) => {
     });
 });
 
+APIRouter.delete('/maps/:mapId', (req,res) => {
+    MapDAO.deleteMap( req.params.mapId ).then( deletedMaps => {
+        res.json({deletedMaps:deletedMaps});
+    })
+    .catch( err => {
+        res.status(500).json({error:err, message: 'Error with DELETE request to /maps/:mapId'});
+    });
+});
+
 module.exports = APIRouter;

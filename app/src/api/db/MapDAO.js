@@ -70,5 +70,6 @@ module.exports = {
     getMaps,
     getMapById,
     createMap,
-    updateMap
+    updateMap,
+    deleteMap
 };
