@@ -63,6 +63,11 @@
 #delete-popup {
     display: none;
     text-wrap: nowrap;
+    z-index: 1;
+    position: fixed;
+    bottom: 5%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 #map-section.delete-toggle #delete-popup {
     display: block;

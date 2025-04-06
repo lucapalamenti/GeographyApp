@@ -150,8 +150,11 @@ function unzoom( e ) {
 createButton.addEventListener('click', async e => {
     e.preventDefault();
     if ( mapName.value && mapTemplate.value ) {
-        await createCustomMap();
-        // document.location = "../";
+        await createCustomMap().then( map => {
+            document.location = "../";
+        }).catch( err => {
+            console.error( err );
+        });
     }
 });
 
