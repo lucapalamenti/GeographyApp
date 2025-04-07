@@ -24,6 +24,7 @@ svg.zoom-5 polygon { stroke-width: 0.10px; }
 #hidden-area {
     align-items: center;
     width: 90%;
+    max-width: 1200px;
 }
 
 #hidden-area input[type="range"] {
