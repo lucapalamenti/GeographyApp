@@ -64,6 +64,19 @@ g.grey-out {
     stroke: rgb(88, 88, 88);
 }
 
+svg.showGuesses g.guesses0 polygon {
+    fill: rgb(106, 235, 89);
+}
+svg.showGuesses g.guesses1 polygon {
+    fill: rgb(240, 219, 35);
+}
+svg.showGuesses g.guesses2 polygon {
+    fill: rgb(243, 148, 24);
+}
+svg.showGuesses g.guesses3 polygon {
+    fill: rgb(235, 89, 89);
+}
+
 polygon {
     fill: rgb(230, 231, 137);
     stroke-width: 0.05%;

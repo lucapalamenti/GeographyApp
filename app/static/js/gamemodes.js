@@ -22,6 +22,7 @@ const clickColors = [ 'rgb(106, 235, 89)', 'rgb(240, 219, 35)', 'rgb(243, 148, 2
 
 const SVG_WIDTH = 1600;
 const SVG_HEIGHT = 900;
+const MAX_GUESSES = 3;
 
 function clickGamemodes( regionNames ) {
     numPrompts = regionNames.length;
@@ -64,7 +65,7 @@ function click ( regionNames ) {
                 guesses++;
                 regionDisappearTrigger( group, clickColors[3], true );
                 // If too many guesses have been taken then highlight the correct answer
-                if ( guesses === clickColors.length - 1 ) {
+                if ( guesses === MAX_GUESSES ) {
                     showLabel( svg.getElementById( current ), e, true );
                     next( svg.getElementById( current ) );
                 }
@@ -74,9 +75,7 @@ function click ( regionNames ) {
     });
     function next( group ) {
         group.classList.remove('groupClickable');
-        group.querySelectorAll('POLYGON').forEach( polygon => {
-            polygon.style.fill = clickColors[guesses];
-        });
+        group.classList.add(`guesses${guesses}`);
         if ( !( current = arr.pop() ) ) {
             endGame();
         } else {
@@ -88,6 +87,7 @@ function click ( regionNames ) {
 }
 function clickDisappear ( regionNames ) {
     clickGamemodes( regionNames );
+    svg.classList.remove("showGuesses");
     svg.addEventListener('click', e => {
         const group = e.target.parentNode;
         if ( group.classList.contains('groupClickable') ) {
@@ -101,7 +101,7 @@ function clickDisappear ( regionNames ) {
                 guesses++;
                 regionDisappearTrigger( group, clickColors[3], true );
                 // If too many guesses have been taken then highlight the correct answer
-                if ( guesses === clickColors.length - 1 ) {
+                if ( guesses === MAX_GUESSES ) {
                     showLabel( svg.getElementById( current ), e, true );
                     next( svg.getElementById( current ) );
                 }
@@ -111,7 +111,10 @@ function clickDisappear ( regionNames ) {
     });
     function next( group ) {
         regionDisappearTrigger( group, clickColors[guesses], true );
+        group.classList.add(`guesses${guesses}`);
         if ( !( current = arr.pop() ) ) {
+            // Reappear colors at the end
+            svg.classList.add("showGuesses");
             endGame();
         } else {
             updateLabels();
@@ -191,7 +194,7 @@ function typeHard( regionNames ) {
             else {
                 guesses++;
                 // If too many guesses have been given
-                if ( guesses === clickColors.length - 1 ) {
+                if ( guesses === MAX_GUESSES ) {
                     showLabel( svg.getElementById( current ), null, true );
                     next();
                 }
@@ -201,9 +204,7 @@ function typeHard( regionNames ) {
     });
     function next() {
         currentGroup.classList.remove('typeCurrent');
-        currentGroup.querySelectorAll('POLYGON').forEach( polygon => {
-            polygon.style.fill = clickColors[guesses];
-        });
+        currentGroup.classList.add(`guesses${guesses}`);
         if ( guesses === 0 ) numCorrect++;
         input.value = "";
         if ( !( current = arr.pop() ) ) {
