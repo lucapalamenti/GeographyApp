@@ -92,7 +92,7 @@ function displaySelection() {
     });
     Object.entries( sort ).forEach( ([parent, list]) => {
         const h5 = document.createElement('H5');
-        h5.textContent = parent.split('_').join(' ');
+        h5.textContent = `${parent.split('_').join(' ')} (${list.length})`;
         selectedList.appendChild( h5 );
 
         const div = document.createElement('DIV');
@@ -189,7 +189,7 @@ async function createCustomMap() {
     }
     for ( const region of selectedRegions ) {
         const split = region.split('__');
-        const regionName = util.capitalizeFirst( split[1].split('_').join(' ') ).split(' ').join('_');
+        const regionName = util.idToInput( region );
         const region_id = (await APIClient.getRegionByMapIdParentName( mapTemplate.value, split[0], regionName )).region_id;
 
         let regionMinX = Infinity, regionMinY = Infinity;
@@ -218,7 +218,7 @@ async function createCustomMap() {
     const xFraction = ( mapMaxX - mapMinX ) / map.map_scale / ( SVG_WIDTH - SVG_PADDING );
     const yFraction = ( mapMaxY - mapMinY ) / map.map_scale / ( SVG_HEIGHT - SVG_PADDING );
 
-    mapData.map_scale = ( 1 / Math.max( xFraction, yFraction ) ).toFixed(5);
+    mapData.map_scale = ( 1 / Math.max( xFraction, yFraction ) ).toFixed(6);
 
     await APIClient.updateMap( mapData ).catch( err => {
         console.error( err );
