@@ -81,8 +81,6 @@ function displaySelection() {
     selectedRegions.forEach( shapeName => {
         const split = shapeName.split('__');
         let parent = split[0];
-        // If there is no parent
-        if ( parent === "" ) parent = "Regions";
         // If there isn't already a section for this parent
         if ( !sort[parent] ) {
             sort[parent] = [`__${split[1]}`];
