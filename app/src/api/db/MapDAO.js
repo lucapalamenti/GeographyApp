@@ -1,5 +1,6 @@
 const database = require('./databaseConnections.js');
 const Map = require('./models/Map.js');
+// const fs = require('fs');
 
 const getMaps = async ( ORDER_BY ) => {
     return await database.query(`
@@ -36,13 +37,15 @@ const createMap = async ( mapData ) => {
 };
 
 const updateMap = async ( mapData ) => {
-    const { map_id, map_scale, map_name, map_thumbnail, map_primary_color } = mapData;
+    const { map_id, map_scale, map_name, map_thumbnail, map_primary_color, map_is_custom } = mapData;
     return await database.query(`
         UPDATE Map
-        SET map_scale = ?, map_name = ?, map_thumbnail = ?, map_primary_color = ?
+        SET map_scale = ?, map_name = ?, map_thumbnail = ?, map_primary_color = ?, map_is_custom = ?
         WHERE map_id = ?
-        `, [map_scale, map_name, map_thumbnail, map_primary_color, map_id]).then( rows => {
+        `, [map_scale, map_name, map_thumbnail, map_primary_color, map_is_custom, map_id]).then( rows => {
             if ( rows.affectedRows === 1 ) {
+                // const content = `INSERT INTO \`map\` (\`map_id\`, \`map_scale\`, \`map_name\`, \`map_thumbnail\`, \`map_primary_color\`, \`map_is_custom\`) VALUES (${map_id}, ${map_scale}, '${map_name}', '${map_thumbnail}', '${map_primary_color}', ${map_is_custom});\n`;
+                // fs.appendFileSync(`./src/api/db/backend/test/04-Map-${map_name.split(' ').join('_')}.sql`, content);
                 return getMapById( map_id );
             }
             throw new Error('Map could not be updated!');

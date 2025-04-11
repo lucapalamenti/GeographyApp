@@ -1,5 +1,6 @@
 const database = require('./databaseConnections.js');
 const Region = require('./models/Region.js');
+// const fs = require('fs');
 
 const getRegions = async () => {
     return await database.query(`
@@ -101,6 +102,8 @@ const createMapRegion = async ( mapRegionData ) => {
         VALUES (?, ?, ?, ?, ?, ?, ?)
         `, [mapRegion_map_id, mapRegion_region_id, mapRegion_parent, mapRegion_offsetX, mapRegion_offsetY, mapRegion_scaleX, mapRegion_scaleY]).then( rows => {
             if ( rows.affectedRows === 1 ) {
+                // const content2 = `INSERT INTO \`mapRegion\` (\`mapRegion_map_id\`, \`mapRegion_region_id\`, \`mapRegion_parent\`, \`mapRegion_offsetX\`, \`mapRegion_offsetY\`, \`mapRegion_scaleX\`, \`mapRegion_scaleY\`) VALUES (${mapRegion_map_id}, ${mapRegion_region_id}, "${mapRegion_parent}", ${mapRegion_offsetX.toFixed(6)}, ${mapRegion_offsetY.toFixed(6)}, ${mapRegion_scaleX.toFixed(6)}, ${mapRegion_scaleY.toFixed(6)});\n`;
+                // fs.appendFileSync(`./src/api/db/backend/test/04-Map-${mapRegion_parent}_Counties.sql`, content2);
                 return getRegionById( mapRegion_region_id );
             }
             throw new Error('mapRegion could not be created!');
