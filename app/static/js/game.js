@@ -1,12 +1,14 @@
 import APIClient from "./APIClient.js";
 import { gamemodeMap } from "./gamemodes.js";
 import populateSVG from "./populateSVG.js";
+import util from "./util.js";
 
 const query = window.location.search;
 let parameters = new URLSearchParams( query );
 const map_id = Number( parameters.get('mapId') );
 
 const svg = document.querySelector('SVG');
+const navBar = document.getElementById('nav-bar');
 const gamemodePanel = document.getElementById('gamemode-panel');
 const selectButton = gamemodePanel.querySelector('NAV .btn-green');
 const gameEndPanel = document.getElementById('game-end-panel');
@@ -27,7 +29,6 @@ let map;
 await APIClient.getMapById( map_id ).then( returnedMap => {
     map = returnedMap;
     document.querySelector('TITLE').textContent = returnedMap.map_name;
-    const navBar = document.getElementById('nav-bar');
     const nextLink = document.createElement('A');
     nextLink.href = '/game?mapId=' + map_id;
     nextLink.textContent = returnedMap.map_name;
@@ -46,7 +47,7 @@ const regionNames = await populateSVG( map, svg );
 let currentGamemode = null;
 
 selectButton.addEventListener('click', () => {
-    const gmInput = document.querySelector('input[name="gamemode"]:checked');
+    const gmInput = document.querySelector('INPUT[name="gamemode"]:checked');
     // If a gamemode radio button has been selected
     if ( gmInput ) {
         currentGamemode = gmInput.value;
@@ -55,6 +56,9 @@ selectButton.addEventListener('click', () => {
         gamemodePanel.style.cursor = "default";
         APIClient.getRegionParentsForMap( map_id ).then( parents => {
             gamemodeMap[currentGamemode]( Array.from( regionNames ), parents );
+            const gamemodeLabel = document.createElement('P');
+            gamemodeLabel.textContent = document.querySelector(`LABEL[for="${currentGamemode}"]`).textContent;
+            navBar.appendChild( gamemodeLabel );
         });
     }
 });
