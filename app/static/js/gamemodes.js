@@ -34,7 +34,7 @@ function learn() {
     });
     svg.addEventListener('click', e => {
         const group = e.target.parentNode;
-        showLabel( group, e, true );
+        showLabel( group, e, true, true );
     });
 }
 
@@ -80,11 +80,11 @@ function click ( regionNames ) {
                 regionDisappearTrigger( group, clickColors[3], true );
                 // If too many guesses have been taken then highlight the correct answer
                 if ( guesses === MAX_GUESSES ) {
-                    showLabel( svg.getElementById( current ), e, true );
+                    showLabel( svg.getElementById( current ), e, true, true );
                     next( svg.getElementById( current ) );
                 }
             }
-            showLabel( group, e, false );
+            showLabel( group, e, false, true );
         }
     });
     function next( group ) {
@@ -116,11 +116,11 @@ function clickDisappear ( regionNames ) {
                 regionDisappearTrigger( group, clickColors[3], true );
                 // If too many guesses have been taken then highlight the correct answer
                 if ( guesses === MAX_GUESSES ) {
-                    showLabel( svg.getElementById( current ), e, true );
+                    showLabel( svg.getElementById( current ), e, true, true );
                     next( svg.getElementById( current ) );
                 }
             }
-            showLabel( group, e, false );
+            showLabel( group, e, false, true );
         }
     });
     function next( group ) {
@@ -138,7 +138,7 @@ function clickDisappear ( regionNames ) {
     }
 }
 
-function showLabel( group, e, center ) {
+function showLabel( group, e, center, timeout ) {
     const p = document.createElement('P');
     p.classList.add('clickLabel');
     p.textContent = util.idToInput( group.id );
@@ -151,10 +151,12 @@ function showLabel( group, e, center ) {
     p.addEventListener('contextmenu', e => { e.preventDefault() });
     tooltip.before( p );
 
-    // Show for 1.5 seconds
-    setTimeout( function() {
-        tooltip.parentNode.removeChild( p );
-    }, 1500 );
+    if ( timeout ) {
+        // Show for 1.5 seconds
+        setTimeout( function() {
+            tooltip.parentNode.removeChild( p );
+        }, 1500 );
+    }
 }
 
 function typeGamemodes( regionNames ) {
@@ -209,7 +211,7 @@ function typeHard( regionNames ) {
                 guesses++;
                 // If too many guesses have been given
                 if ( guesses === MAX_GUESSES ) {
-                    showLabel( svg.getElementById( current ), null, true );
+                    showLabel( svg.getElementById( current ), null, true, true );
                     next();
                 }
             }
@@ -367,8 +369,6 @@ function zoom( e ) {
     // Escape key to unzoom
     document.addEventListener( 'keydown', unzoom );
 }
-
-
 function unzoom( e ) {
     if ( e.key !== 'Escape' ) return;
     svg.classList.remove(`zoom-${zoomSlider.value}`);
@@ -396,15 +396,7 @@ showNames.addEventListener('change', e => {
     if ( e.target.checked ) {
         document.querySelectorAll('G').forEach( group => {
             if ( group.classList.contains('grey-out') ) return;
-            const p = document.createElement('P');
-            p.classList.add('clickLabel');
-            p.textContent = util.idToInput( group.id );
-
-            const rect = group.getBoundingClientRect();
-            p.style.transform = `translate( calc( -50% + ${rect.left + rect.width / 2 + scrollX}px ), calc( -50% + ${rect.top + rect.height / 2 + scrollY}px ) )`;
-            
-            p.addEventListener('contextmenu', e => { e.preventDefault() });
-            tooltip.before( p );
+            showLabel( group, e, true, false );
         });
     }
     // Hide all names
