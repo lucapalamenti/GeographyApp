@@ -12,13 +12,13 @@
 
     <script src="js/game.js" type="module"></script>
 
-    <title></title>
+    <title>Map Quiz</title>
 </head>
 <body>
     <div id="tooltip">Click on <strong class="click-on"></strong></div>
     <header>
         <div class="flex-row">
-            <h1>Geography App</h1>
+            <h1>Map Quiz</h1>
         </div>
         <nav id="nav-bar">
             <a href="../">Home</a>
@@ -31,6 +31,10 @@
         <form id="gamemode-panel" class="page-center flex-col">
             <h3>Select Gamemode</h3>
             <div class="input-label">
+                <input type="radio" name="gamemode" id="learn" value="learn">
+                <label for="learn">Learn</label>
+            </div>
+            <div class="input-label">
                 <input type="radio" name="gamemode" id="click" value="click">
                 <label for="click">Click</label>
             </div>
@@ -38,6 +42,7 @@
                 <input type="radio" name="gamemode" id="clickDisappear" value="clickDisappear">
                 <label for="clickDisappear">Click (Disappear)</label>
             </div>
+            <div class="dotted-line"></div>
             <div class="input-label">
                 <input type="radio" name="gamemode" id="type" value="type">
                 <label for="type">Type</label>
@@ -47,16 +52,17 @@
                 <label for="typeHard">Type (Hard)</label>
             </div>
             <div class="input-label">
+                <input type="radio" name="gamemode" id="outline" value="outline">
+                <label for="outline">Outline</label>
+            </div>
+            <div class="dotted-line"></div>
+            <div class="input-label">
                 <input type="radio" name="gamemode" id="noMap" value="noMap">
                 <label for="noMap">No Map</label>
             </div>
             <div class="input-label">
                 <input type="radio" name="gamemode" id="noList" value="noList">
                 <label for="noList">No List</label>
-            </div>
-            <div class="input-label">
-                <input type="radio" name="gamemode" id="outline" value="outline">
-                <label for="outline">Outline</label>
             </div>
             <nav class="flex-row">
                 <button class="btn-green" type="button">Select</button>
@@ -74,7 +80,7 @@
         </form>
 
         <div id="game-area">
-            <div id="prompt-bar">
+            <div class="game-bar" id="prompt-bar">
                 <div class="flex-row">
                     <p></p>
                     <strong class="click-on"></strong>
@@ -99,8 +105,19 @@
             <div id="no-map-area">
                 
             </div>
+            <div class="game-bar flex-row">
+                <div class="input-label" id="showNames-container">
+                    <input type="checkbox" id="showNames">
+                    <label for="showNames">Show all names</label>
+                </div>
+                <div class="dotted-line"></div>
+                <div class="input-label">
+                    <label for="zoom-slider">Change zoom level</label>
+                    <input type="range" name="zoom" min="1" max="5" value="1" id="zoom-slider">
+                </div>
+                <div class="dotted-line"></div>
+            </div>
         </div>
-        <input type="range" name="zoom" min="1" max="5" value="1" id="zoom-slider">
         <button id="b1">Populate svg with Polygons</button>
     </main>
     <!-- Polygon template ( it is necessary to copy polygons from inside an svg instead of creating new

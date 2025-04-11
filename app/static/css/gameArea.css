@@ -4,13 +4,16 @@
     background-color: rgb(31, 151, 71);
 }
 
-#prompt-bar {
-    display: none;
-    justify-content: space-between;
+.game-bar {
     border: 3px solid rgb(28, 134, 64);
-    border-bottom: none;
     padding: 5px;
     background-color: rgb(31, 151, 71);
+}
+
+#prompt-bar {
+    justify-content: space-between;
+    border-bottom: none;
+    display: none;
 }
 
 #prompt-bar * {

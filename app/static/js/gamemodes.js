@@ -11,6 +11,7 @@ const tooltip = document.getElementById('tooltip');
 const gameEndPanel = document.getElementById('game-end-panel');
 const covering = document.getElementById('covering');
 const selectParent = document.getElementById('select-parent');
+const showNames = document.getElementById('showNames');
 
 let arr;
 let current;
@@ -23,6 +24,19 @@ const clickColors = [ 'rgb(106, 235, 89)', 'rgb(240, 219, 35)', 'rgb(243, 148, 2
 const SVG_WIDTH = 1600;
 const SVG_HEIGHT = 900;
 const MAX_GUESSES = 3;
+
+function learn() {
+    promptLabel.textContent = "Click on a region to see its name";
+    input.style.display = 'none';
+    promptBar.style.display = "flex";
+    document.querySelectorAll('G').forEach( group => {
+        group.classList.add('groupClickable');
+    });
+    svg.addEventListener('click', e => {
+        const group = e.target.parentNode;
+        showLabel( group, e, true );
+    });
+}
 
 function clickGamemodes( regionNames ) {
     numPrompts = regionNames.length;
@@ -217,6 +231,10 @@ function typeHard( regionNames ) {
     }
 }
 
+function outline( regionNames ) {
+
+}
+
 function noMap( regionNames, parents ) {
     populateSelect( parents );
     const noMapArea = document.getElementById('no-map-area');
@@ -261,10 +279,6 @@ function noMap( regionNames, parents ) {
 }
 
 function noList( regionNames ) {
-
-}
-
-function outline( regionNames ) {
 
 }
 
@@ -347,6 +361,8 @@ function zoom( e ) {
     svg.classList.add(`zoom-${zoomSlider.value}`);
     svg.removeEventListener( 'contextmenu', zoom );
     zoomSlider.setAttribute( 'disabled', true );
+    showNames.setAttribute( 'disabled', true );
+    showNames.checked = false;
 
     // Escape key to unzoom
     document.addEventListener( 'keydown', unzoom );
@@ -362,6 +378,7 @@ function unzoom( e ) {
         label.style.display = "none";
     });
     zoomSlider.removeAttribute( 'disabled' );
+    showNames.removeAttribute( 'disabled' );
     document.removeEventListener( 'keydown', unzoom );
 }
 
@@ -374,12 +391,37 @@ function endGame() {
     console.log( "YOU WIN!" );
 }
 
+showNames.addEventListener('change', e => {
+    // Show all names
+    if ( e.target.checked ) {
+        document.querySelectorAll('G').forEach( group => {
+            if ( group.classList.contains('grey-out') ) return;
+            const p = document.createElement('P');
+            p.classList.add('clickLabel');
+            p.textContent = util.idToInput( group.id );
+
+            const rect = group.getBoundingClientRect();
+            p.style.transform = `translate( calc( -50% + ${rect.left + rect.width / 2 + scrollX}px ), calc( -50% + ${rect.top + rect.height / 2 + scrollY}px ) )`;
+            
+            p.addEventListener('contextmenu', e => { e.preventDefault() });
+            tooltip.before( p );
+        });
+    }
+    // Hide all names
+    else {
+        document.querySelectorAll('.clickLabel').forEach( label => {
+            label.parentNode.removeChild( label );
+        });
+    }
+});
+
 export const gamemodeMap = {
+    'learn': learn,
     'click': click,
     'clickDisappear': clickDisappear,
     'type': type,
     'typeHard': typeHard,
+    'outline': outline,
     'noMap': noMap,
     'noList': noList,
-    'outline': outline
 };

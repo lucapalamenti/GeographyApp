@@ -78,6 +78,10 @@ option {
     gap: 5px;
 }
 
+.dotted-line {
+    border: 1px dashed rgb(28, 134, 64);
+}
+
 /* FORM */
 
 form {
@@ -106,6 +110,21 @@ form nav button, form nav a {
 form .input-label  input[type="text"] {
     padding: 2px;
     padding-left: 5px;
+}
+
+input[type="range"] {
+    appearance: none;
+    height: 15px;
+    background: rgb(96, 204, 69);
+    border: 2px solid rgb(28, 134, 64);
+}
+input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgb(19, 92, 44);
+    cursor: pointer;
 }
 
 /* ----- <<<<< BUTTONS >>>>> ----- */
