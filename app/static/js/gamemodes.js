@@ -34,7 +34,7 @@ function learn() {
     });
     svg.addEventListener('click', e => {
         const group = e.target.parentNode;
-        showLabel( group, e, true, true );
+        if ( group.nodeName === "g" ) showLabel( group, e, true, true );
     });
 }
 
