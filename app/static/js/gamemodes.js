@@ -202,7 +202,7 @@ function typeHard( regionNames ) {
     input.addEventListener('keypress', e => {
         if ( e.key !== 'Enter' ) return;
         // Only check if the value & parent arent blank
-        if ( input.value !== '' && selectParent.value !== '' ) {
+        if ( input.value !== '' ) {
             // If input is correct
             if ( input.value.toLowerCase() === util.idToInput( current ).toLowerCase() ) next(); 
             // If input is incorrect

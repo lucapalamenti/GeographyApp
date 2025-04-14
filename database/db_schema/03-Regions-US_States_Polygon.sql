@@ -1,6 +1,6 @@
 INSERT INTO `region` (`region_id`, `region_name`, `region_points`) VALUES (5, 'Washington', ST_GEOMFROMTEXT('MULTIPOLYGON(((41 0,210 0,213 120,20 110,0 21,41 0)))'));
 INSERT INTO `region` (`region_id`, `region_name`, `region_points`) VALUES (6, 'Oregon', ST_GEOMFROMTEXT('MULTIPOLYGON(((9 0,202 10,199 161,0 161,9 0)))'));
-INSERT INTO `region` (`region_id`, `region_name`, `region_points`) VALUES (7, 'Idaho', ST_GEOMFROMTEXT('MULTIPOLYGON(((199 0,226 0,361 179,361 271,0 271,199 271,202 120,199 0)))'));
+INSERT INTO `region` (`region_id`, `region_name`, `region_points`) VALUES (7, 'Idaho', ST_GEOMFROMTEXT('MULTIPOLYGON(((199 0,226 0,361 179,361 271,199 271,202 120,199 0)))'));
 INSERT INTO `region` (`region_id`, `region_name`, `region_points`) VALUES (8, 'Montana', ST_GEOMFROMTEXT('MULTIPOLYGON(((0 0,324 0,324 159,135 179,0 0)))'));
 INSERT INTO `region` (`region_id`, `region_name`, `region_points`) VALUES (9, 'California', ST_GEOMFROMTEXT('MULTIPOLYGON(((0 0,118 0,262 243,261 317,196 322,0 0)))'));
 INSERT INTO `region` (`region_id`, `region_name`, `region_points`) VALUES (10, 'Nevada', ST_GEOMFROMTEXT('MULTIPOLYGON(((0 0,162 0,162 175,144 243,0 0)))'));
