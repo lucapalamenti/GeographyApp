@@ -8,8 +8,6 @@ header div {
 }
 
 header nav {
-    display: flex;
-    gap: 5px;
     padding: 2px;
     background-color: rgb(28, 134, 64);
 }

@@ -94,6 +94,7 @@ function displaySelection() {
         selectedList.appendChild( h5 );
 
         const div = document.createElement('DIV');
+        div.classList.add("list-1");
         selectedList.appendChild( div );
 
         list.forEach( item => {

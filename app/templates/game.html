@@ -20,13 +20,13 @@
         <div class="flex-row">
             <h1>Map Quiz</h1>
         </div>
-        <nav id="nav-bar">
+        <nav class="flex-row" id="nav-bar">
             <a href="../">Home</a>
             <strong>></strong>
         </nav>
         <div id="covering"></div>
     </header>
-    <main>
+    <main class="flex-col-center">
         <!-- Shows on load and when switching gamemodes -->
         <form id="gamemode-panel" class="page-center flex-col">
             <h3>Select Gamemode</h3>
@@ -84,6 +84,7 @@
         </form>
 
         <div id="game-area">
+            <!-- Top game bar -->
             <div class="game-bar" id="prompt-bar">
                 <div class="flex-row">
                     <p></p>
@@ -97,7 +98,7 @@
                 <p id="tally"></p>
             </div>
             <!-- Used for all gamemodes with a map -->
-            <div id="svg-container">
+            <div class="container-1" id="svg-container">
                 <svg class="hide-polygons showGuesses" viewBox="0 0 1600 900" preserveAspectRatio="none">
                     <!-- Surrounding regions will go here -->
                     <g class="grey-out">
@@ -106,8 +107,26 @@
                 </svg>
             </div>
             <!-- Used for No Map gamemode -->
-            <div id="no-map-area">
+            <div class="container-1" id="no-map-area">
                 
+            </div>
+            <!-- Used for No List gamemode -->
+            <div class="flex-col-center container-1" id="no-list-area">
+                <div class="flex-col-center" id="endGame-area">
+                    <div class="flex-col-center" id="correct-regions">
+                        <h3>Correct Regions</h3>
+                    </div>
+                    <div class="flex-col-center" id="missed-regions">
+                        <h3>Missed Regions</h3>
+                    </div>
+                    <div class="flex-col-center" id="unknown-regions">
+                        <h3>Unknown Regions</h3>
+                    </div>
+                    <div class="flex-col-center" id="duplicate-regions">
+                        <h3>Duplicate Regions</h3>
+                    </div>
+                </div>
+                <button id="noList-end-button">End Game</button>
             </div>
             <div class="game-bar flex-row">
                 <div class="input-label" id="showNames-container">
@@ -128,6 +147,16 @@
          polygons in a js file, since a standard <polygon> element will be unrecognized ) -->
     <template id="polygon-template">
         <svg><g><polygon/></g></svg>
+    </template>
+
+    <!-- For displaying typed regions in No List gamemode -->
+    <template id="endGame-regions-template">
+        <div class="flex-col-center">
+            <h5></h5>
+            <div class="flex-row-center list-1">
+
+            </div>
+        </div>
     </template>
 </body>
 </html>

@@ -46,14 +46,6 @@ svg.zoom-5 polygon { stroke-width: 0.10px; }
 #selected-list div {
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
     justify-content: center;
-}
-
-#selected-list div p {
-    padding: 3px;
-}
-#selected-list div p:nth-child(even) {
-    font-weight: bold;
 }
 

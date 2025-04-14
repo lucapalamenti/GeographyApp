@@ -172,12 +172,11 @@ function type( regionNames, parents ) {
     input.addEventListener('keypress', e => {
         // Only continute if Enter is pressed
         if ( e.key !== 'Enter' ) return;
-        // Only check the value if it isn't blank
-        if ( input.value !== '' ) {
+        // Only check if the value & parent arent blank
+        if ( input.value !== '' && selectParent.value !== '' ) {
             regionNames.forEach( name => {
                 // If there is only one "parent" then dont get selectParent.value
-                if ( selectParent.childElementCount === 1 && name === `${parents[0]}__${util.inputToId( input.value )}`
-                || name === `${selectParent.value}__${util.inputToId( input.value )}`) {
+                if ( name === `${selectParent.value}__${util.inputToId( input.value )}`) {
                     const group = svg.querySelector(`#${CSS.escape( name )}`);
                     if ( group && !group.classList.contains('typed') ) {
                         group.classList.add('typed');
@@ -202,8 +201,8 @@ function typeHard( regionNames ) {
 
     input.addEventListener('keypress', e => {
         if ( e.key !== 'Enter' ) return;
-        // Only check the value if it isn't blank
-        if ( input.value !== '' ) {
+        // Only check if the value & parent arent blank
+        if ( input.value !== '' && selectParent.value !== '' ) {
             // If input is correct
             if ( input.value.toLowerCase() === util.idToInput( current ).toLowerCase() ) next(); 
             // If input is incorrect
@@ -255,15 +254,14 @@ function noMap( regionNames, parents ) {
     promptLabel.textContent = "Name all regions";
     tally.textContent = `Correct: ${numCorrect}/${numPrompts}`;
     noMapArea.style.display = "flex";
-    
-    document.getElementById('game-area').removeChild( document.getElementById('svg-container') );
     promptBar.style.display = "flex";
+    document.getElementById('game-area').removeChild( svg.parentNode );
 
     input.addEventListener('keypress', e => {
         if ( e.key === 'Enter' ) {
-            // Only check the value if it isn't blank
-            if ( input.value !== '' ) {
-                const myInput = `__${util.inputToId( input.value )}`;
+            // Only check if the value & parent arent blank
+            if ( input.value !== '' && selectParent.value !== '' ) {
+                const myInput = `${selectParent.value.toLowerCase()}__${util.inputToId( input.value )}`;
                 if ( array[ myInput ] ) {
                     const correctNode = noMapArea.childNodes[ array[ myInput ] ];
                     correctNode.textContent = util.idToInput( myInput );
@@ -280,8 +278,99 @@ function noMap( regionNames, parents ) {
     });
 }
 
-function noList( regionNames ) {
+function noList( regionNames, parents ) {
+    populateSelect( parents );
+    const noListArea = document.getElementById('no-list-area');
+    promptLabel.textContent = "Name all regions";
+    tally.textContent = "Correct: ?";
+    promptBar.style.display = "flex";
+    noListArea.style.display = "flex";
+    document.getElementById('game-area').removeChild( svg.parentNode );
+    showNames.setAttribute('disabled', true);
+    zoomSlider.setAttribute('disabled', true);
 
+    const validList = new Map();
+    const invalidList = new Map();
+    parents.forEach( p => {
+        validList[p] = new Map();
+        invalidList[p] = new Map();
+    });
+    regionNames.forEach( name => {
+        const parentName = name.split('__')[0];
+        const regionName = util.idToInput( name );
+        validList[parentName][regionName.toLowerCase()] = 0;
+    });
+
+    input.addEventListener('keypress', e => {
+        if ( e.key === 'Enter' ) {
+            // Only check the value if it isn't blank
+            const parentValue = selectParent.childElementCount === 1 ? parents[0] : selectParent.value
+            if ( input.value !== '' && parentValue !== '' ) {
+                const myInput = input.value.toLowerCase();
+                // Input is a valid region
+                if ( validList[parentValue][myInput] !== undefined ) {
+                    validList[parentValue][myInput]++;
+                }
+                // Input is not a valid region
+                else {
+                    invalidList[parentValue][myInput] = 1;
+                }
+                input.value = "";
+            }
+        }
+    });
+    const endGameButton = document.getElementById('noList-end-button');
+    const endGameArea = document.getElementById('endGame-area');
+    const regionAreas = [
+        document.getElementById('correct-regions'),
+        document.getElementById('missed-regions'),
+        document.getElementById('unknown-regions'),
+        document.getElementById('duplicate-regions'),
+    ];
+    endGameButton.addEventListener('click', e => {
+        noListArea.removeChild( endGameButton );
+        input.setAttribute('disabled', true);
+        selectParent.setAttribute('disabled', true);
+        const numParents = Object.entries( validList ).length;
+        const endGameRegionsTemplate = document.getElementById('endGame-regions-template');
+        Object.entries( validList ).forEach( ([parent, map]) => {
+            const arrays = [[],[],[],[]];
+            Object.entries( map ).forEach( ([name, value]) => {
+                if ( value === 1 ) {
+                    arrays[0].push( name );
+                } else if ( value === 0 ) {
+                    arrays[1].push( name );
+                } else {
+                    arrays[0].push( name );
+                    arrays[3].push( name );
+                }
+            });
+            Object.entries( invalidList[parent] ).forEach( ([name, value]) => {
+                arrays[2].push( name );
+            });
+
+            for ( let i = 0; i < 4; i++ ) {
+                if ( arrays[i].length !== 0 ) {
+                    const containerInstance = endGameRegionsTemplate.content.cloneNode(true);
+                    const containerElement = containerInstance.querySelector('DIV');
+                    console.log(  );
+                    if ( numParents > 1 ) {
+                        const parentLabel = containerElement.querySelector('H5');
+                        parentLabel.textContent = parent.split('_').join(' ');
+                    }
+                    const nameContainer = containerElement.querySelector('DIV');
+                    arrays[i].forEach( name => {
+                        const p = document.createElement('P');
+                        p.textContent = util.capitalizeFirst( name );
+                        nameContainer.appendChild( p );
+                    });
+                    regionAreas[i].appendChild( containerElement );
+                }
+            }
+
+        });
+        endGameArea.style.display = "block";
+    });
 }
 
 function regionDisappearTrigger( group, color, clickable ) {
@@ -330,13 +419,16 @@ function shuffleArray( arr ) {
  * @param {Array<String>} parents 
  */
 function populateSelect( parents ) {
-    if ( parents.length === 1 ) return;
     parents.forEach( name => {
         const option = document.createElement('OPTION');
         option.value = name;
         option.innerText = name.split('_').join(' ');
         selectParent.appendChild( option );
     });
+    if ( parents.length === 1 ) {
+        selectParent.selectedIndex = 1;
+        selectParent.setAttribute('disabled', true);
+    }
     selectParent.style.display = "block";
 }
 
