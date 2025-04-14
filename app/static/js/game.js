@@ -1,7 +1,6 @@
 import APIClient from "./APIClient.js";
 import { gamemodeMap } from "./gamemodes.js";
 import populateSVG from "./populateSVG.js";
-import util from "./util.js";
 
 const query = window.location.search;
 let parameters = new URLSearchParams( query );
@@ -16,13 +15,13 @@ const playAgainButton = gameEndPanel.querySelector('NAV .btn-green');
 const homeButton = gameEndPanel.querySelector('NAV .btn-grey');
 const covering = document.getElementById('covering');
 
-document.getElementById('b1').addEventListener('click', () => {
-    //APIClient.custom();
-    APIClient.printRegionInsertQuery().then( r => {
-    }).catch( err => {
-        console.error( err );
-    });
-});
+// document.getElementById('b1').addEventListener('click', () => {
+//     //APIClient.custom();
+//     APIClient.printRegionInsertQuery().then( r => {
+//     }).catch( err => {
+//         console.error( err );
+//     });
+// });
 
 let map;
 // Update header bar
