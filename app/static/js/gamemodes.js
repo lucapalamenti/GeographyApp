@@ -460,6 +460,7 @@ function zoom( e ) {
 
     // Escape key to unzoom
     document.addEventListener( 'keydown', unzoom );
+    input.focus();
 }
 function unzoom( e ) {
     if ( e.key !== 'Escape' ) return;
@@ -472,6 +473,7 @@ function unzoom( e ) {
     zoomSlider.removeAttribute( 'disabled' );
     showNames.removeAttribute( 'disabled' );
     document.removeEventListener( 'keydown', unzoom );
+    input.focus();
 }
 
 function endGame() {

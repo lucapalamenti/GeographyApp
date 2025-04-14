@@ -55,7 +55,7 @@ selectButton.addEventListener('click', () => {
         gamemodePanel.style.visibility = "hidden";
         gamemodePanel.style.cursor = "default";
         APIClient.getRegionParentsForMap( map_id ).then( parents => {
-            gamemodeMap[currentGamemode]( Array.from( regionNames ), parents );
+            gamemodeMap[currentGamemode]( Array.from( regionNames ), parents.map( index => { return index.split(' ').join('_') } ) );
             const gamemodeLabel = document.createElement('P');
             gamemodeLabel.textContent = document.querySelector(`LABEL[for="${currentGamemode}"]`).textContent;
             navBar.appendChild( gamemodeLabel );
