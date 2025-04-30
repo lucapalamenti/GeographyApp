@@ -1,4 +1,4 @@
-const apostropheReplacement = ".";
+const apostropheReplacement = "-";
 const spaceReplacement = "_";
 
 /**

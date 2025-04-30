@@ -50,7 +50,6 @@ mapNavigation.addEventListener('click', async e => {
     }
     if ( !node.classList.contains("custom-map") ) return;
     const map_id = Number( node.id.split("-")[1] );
-    console.log( map_id );
     await APIClient.deleteMap( map_id ).then( mapsDeleted => {
 
     });
