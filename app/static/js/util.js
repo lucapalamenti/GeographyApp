@@ -15,12 +15,8 @@ const capitalizeFirst = ( string ) => {
 
 const idToListItem = ( id ) => {
     const split = id.split('__');
-    // if there is no parent name
-    if ( split[0] === '' ) {
-        return capitalizeFirst( split[1].split(spaceReplacement).join(' ') );
-    } else {
-        return `${capitalizeFirst( split[1].split(spaceReplacement).join(' ') )} (${split[0].split(spaceReplacement).join(' ')})`;
-    }
+    // Only add parent name if it exists
+    return `${capitalizeFirst( split[1].split(spaceReplacement).join(' ') )}${ split[0] === '' ? '' : `(${split[0].split(spaceReplacement).join(' ')})` }`;
 }
 
 const inputToId = ( input ) => {
