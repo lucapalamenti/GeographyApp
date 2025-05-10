@@ -187,9 +187,9 @@ async function createCustomMap() {
         if ( regionMinY < mapMinY ) mapMinY = regionMinY;
     }
     for ( const region of selectedRegions ) {
-        const split = region.split('__');
+        const parentName = region.split('__')[0];
         const regionName = util.idToInput( region );
-        const region_id = (await APIClient.getRegionByMapIdParentName( mapTemplate.value, split[0], regionName )).region_id;
+        const region_id = (await APIClient.getRegionByMapIdParentName( mapTemplate.value, parentName, regionName )).region_id;
 
         let regionMinX = Infinity, regionMinY = Infinity;
         document.getElementById( region ).querySelectorAll('POLYGON').forEach( polygon => {
@@ -202,7 +202,7 @@ async function createCustomMap() {
         const mapRegionData = {
             mapRegion_map_id : mapData.map_id,
             mapRegion_region_id : region_id,
-            mapRegion_parent : region.split('__')[0],
+            mapRegion_parent : parentName,
             mapRegion_offsetX : ( regionMinX - mapMinX ) / map.map_scale,
             mapRegion_offsetY : ( regionMinY - mapMinY ) / map.map_scale,
             mapRegion_scaleX : 1.0,
