@@ -19,7 +19,7 @@ let current;
 let numPrompts;
 let numCorrect = 0;
 let guesses = 0;
-const clickColors = [ 'rgb(106, 235, 89)', 'rgb(240, 219, 35)', 'rgb(243, 148, 24)', 'rgb(235, 89, 89)' ];
+const attemptColors = [ 'rgb(106, 235, 89)', 'rgb(240, 219, 35)', 'rgb(243, 148, 24)', 'rgb(235, 89, 89)' ];
 
 const SVG_WIDTH = 1600;
 const SVG_HEIGHT = 900;
@@ -77,7 +77,7 @@ function click ( regionNames ) {
             // Incorrect region clicked
             else {
                 guesses++;
-                regionDisappearTrigger( group, clickColors[3], true );
+                regionDisappearTrigger( group, attemptColors[3], true );
                 // If too many guesses have been taken then highlight the correct answer
                 if ( guesses === MAX_GUESSES ) {
                     showLabel( svg.getElementById( current ), e, true, true );
@@ -113,7 +113,7 @@ function clickDisappear ( regionNames ) {
             // Incorrect region clicked
             else {
                 guesses++;
-                regionDisappearTrigger( group, clickColors[3], true );
+                regionDisappearTrigger( group, attemptColors[3], true );
                 // If too many guesses have been taken then highlight the correct answer
                 if ( guesses === MAX_GUESSES ) {
                     showLabel( svg.getElementById( current ), e, true, true );
@@ -124,7 +124,7 @@ function clickDisappear ( regionNames ) {
         }
     });
     function next( group ) {
-        regionDisappearTrigger( group, clickColors[guesses], true );
+        regionDisappearTrigger( group, attemptColors[guesses], true );
         group.classList.add(`guesses${guesses}`);
         if ( !( current = arr.pop() ) ) {
             // Reappear colors at the end
@@ -135,27 +135,6 @@ function clickDisappear ( regionNames ) {
             guesses = 0;
         }
         tally.textContent = `Correct: ${numCorrect}/${numPrompts}`;
-    }
-}
-
-function showLabel( group, e, center, timeout ) {
-    const p = document.createElement('P');
-    p.classList.add('clickLabel');
-    p.textContent = util.idToInput( group.id );
-    if ( center ) {
-        const rect = group.getBoundingClientRect();
-        p.style.transform = `translate( calc( -50% + ${rect.left + rect.width / 2 + scrollX}px ), calc( -50% + ${rect.top + rect.height / 2 + scrollY}px ) )`;
-    } else {
-        p.style.transform = `translate( calc( -50% + ${e.clientX}px ), calc( -120% + ${e.clientY + window.scrollY}px ) )`;
-    }
-    p.addEventListener('contextmenu', e => { e.preventDefault() });
-    tooltip.before( p );
-
-    if ( timeout ) {
-        // Show for 1.5 seconds
-        setTimeout( function() {
-            tooltip.parentNode.removeChild( p );
-        }, 1500 );
     }
 }
 
@@ -170,23 +149,30 @@ function type( regionNames, parents ) {
     typeGamemodes( regionNames, false );
     promptLabel.textContent = "Name all regions";
     input.addEventListener('keypress', e => {
-        // Only continute if Enter is pressed
-        if ( e.key !== 'Enter' ) return;
-        // Only check if the value & parent arent blank
-        if ( input.value !== '' && selectParent.value !== '' ) {
-            regionNames.forEach( name => {
-                // If there is only one "parent" then dont get selectParent.value
-                if ( name === `${selectParent.value}__${util.inputToId( input.value )}`) {
-                    const group = svg.querySelector(`#${CSS.escape( name )}`);
-                    if ( group && !group.classList.contains('typed') ) {
-                        group.classList.add('typed');
-                        input.value = "";
-                        numCorrect++;
+        // If enter key is pressed
+        if ( e.key === 'Enter' ) {
+            // Dont check if the value & parent are blank
+            if ( input.value !== '' && selectParent.value !== '' ) {
+                // Initially set to 'incorrect' color
+                let color = attemptColors[3];
+                for ( const name of regionNames ) {
+                    // If the user input matches this region name
+                    if ( name === `${selectParent.value}__${util.inputToId( input.value )}`) {
+                        color = attemptColors[1];
+                        const group = svg.querySelector(`#${CSS.escape( name )}`);
+                        if ( !group.classList.contains('typed') ) {
+                            group.classList.add('typed');
+                            input.value = "";
+                            numCorrect++;
+                            color = attemptColors[0];
+                            break;
+                        }
                     }
                 }
-            });
-            tally.textContent = `Correct: ${numCorrect}/${numPrompts}`;
-            if ( numCorrect === numPrompts ) endGame();
+                inputColor( color );
+                tally.textContent = `Correct: ${numCorrect}/${numPrompts}`;
+                if ( numCorrect === numPrompts ) endGame();
+            }
         }
     });
 }
@@ -200,21 +186,26 @@ function typeHard( regionNames ) {
     currentGroup.classList.add('typeCurrent');
 
     input.addEventListener('keypress', e => {
-        if ( e.key !== 'Enter' ) return;
-        // Only check if the value & parent arent blank
-        if ( input.value !== '' ) {
-            // If input is correct
-            if ( input.value.toLowerCase() === util.idToInput( current ).toLowerCase() ) next(); 
-            // If input is incorrect
-            else {
-                guesses++;
-                // If too many guesses have been given
-                if ( guesses === MAX_GUESSES ) {
-                    showLabel( svg.getElementById( current ), null, true, true );
+        // If enter key is pressed
+        if ( e.key === 'Enter' ) {
+            // Only check if the value & parent arent blank
+            if ( input.value !== '' ) {
+                // If input is correct
+                if ( input.value.toLowerCase() === util.idToInput( current ).toLowerCase() ) {
+                    inputColor( attemptColors[0] );
                     next();
+                // If input is incorrect
+                } else {
+                    inputColor( attemptColors[3] );
+                    guesses++;
+                    // If too many guesses have been given
+                    if ( guesses === MAX_GUESSES ) {
+                        showLabel( svg.getElementById( current ), null, true, true );
+                        next();
+                    }
                 }
+                tally.textContent = `Correct: ${numCorrect}/${numPrompts}`;
             }
-            tally.textContent = `Correct: ${numCorrect}/${numPrompts}`;
         }
     });
     function next() {
@@ -256,6 +247,7 @@ function noMap( regionNames, parents ) {
     noMapArea.style.display = "flex";
     promptBar.style.display = "flex";
     document.getElementById('game-area').removeChild( svg.parentNode );
+    input.focus();
 
     input.addEventListener('keypress', e => {
         if ( e.key === 'Enter' ) {
@@ -288,6 +280,7 @@ function noList( regionNames, parents ) {
     document.getElementById('game-area').removeChild( svg.parentNode );
     showNames.setAttribute('disabled', true);
     zoomSlider.setAttribute('disabled', true);
+    input.focus();
 
     const validList = new Map();
     const invalidList = new Map();
@@ -388,6 +381,35 @@ function regionDisappearTrigger( group, color, clickable ) {
             }, 1000 );
         }, 1000 );
     });
+}
+function inputColor( color ) {
+    input.style.transition = '';
+    input.style.backgroundColor = color;
+    setTimeout(() => {
+        input.style.transition = 'background-color 1s ease';
+        input.style.backgroundColor = "white";
+    }, 10 );
+}
+
+function showLabel( group, e, center, timeout ) {
+    const p = document.createElement('P');
+    p.classList.add('clickLabel');
+    p.textContent = util.idToInput( group.id );
+    if ( center ) {
+        const rect = group.getBoundingClientRect();
+        p.style.transform = `translate( calc( -50% + ${rect.left + rect.width / 2 + scrollX}px ), calc( -50% + ${rect.top + rect.height / 2 + scrollY}px ) )`;
+    } else {
+        p.style.transform = `translate( calc( -50% + ${e.clientX}px ), calc( -120% + ${e.clientY + window.scrollY}px ) )`;
+    }
+    p.addEventListener('contextmenu', e => { e.preventDefault() });
+    tooltip.before( p );
+
+    if ( timeout ) {
+        // Show for 1.5 seconds
+        setTimeout( function() {
+            tooltip.parentNode.removeChild( p );
+        }, 1500 );
+    }
 }
 
 /**
