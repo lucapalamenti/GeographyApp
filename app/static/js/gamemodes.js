@@ -192,7 +192,7 @@ function typeHard( regionNames ) {
             if ( input.value !== '' ) {
                 // If input is correct
                 if ( input.value.toLowerCase() === util.idToInput( current ).toLowerCase() ) {
-                    inputColor( attemptColors[0] );
+                    inputColor( attemptColors[guesses] );
                     next();
                 // If input is incorrect
                 } else {
