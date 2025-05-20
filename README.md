@@ -21,6 +21,11 @@
     - Toggle input flashing
     - Change level of detail in outlines (requires multiple datasets)
 - Show number of Correct regions separate from the counter in the top right (change that to something like "question number")
+- When taking more than 3 attempts in type (hard) gamemode, instead of just displaying the label is skipping it, make the user type the correct 
+- Gamemodes
+    - Name all surrounding regions
+    - Name region based on outline and surrounding regions
+    - Name region based only on outline
 
 ### Added
 - Input box flashes a color depending on correctness of input
