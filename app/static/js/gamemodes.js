@@ -12,6 +12,7 @@ const gameEndPanel = document.getElementById('game-end-panel');
 const covering = document.getElementById('covering');
 const selectParent = document.getElementById('select-parent');
 const showNames = document.getElementById('showNames');
+const noMapArea = document.getElementById('no-map-area');
 
 let arr;
 let current;
@@ -147,6 +148,17 @@ function typeGamemodes( regionNames ) {
 function type( regionNames, parents ) {
     populateSelect( parents );
     typeGamemodes( regionNames, false );
+
+    const object = new Object();
+    let n = 1;
+    regionNames.forEach( name => {
+        object[ util.inputToId( name ) ] = n++;
+    });
+    for ( let i = 0; i < numPrompts; i++ ) {
+        noMapArea.appendChild( document.createElement('P') );
+    }
+    noMapArea.style.display = "flex";
+    
     promptLabel.textContent = "Name all regions";
     input.addEventListener('keypress', e => {
         // If enter key is pressed
@@ -155,20 +167,23 @@ function type( regionNames, parents ) {
             if ( input.value !== '' && selectParent.value !== '' ) {
                 // Initially set to 'incorrect' color
                 let color = attemptColors[3];
-                for ( const name of regionNames ) {
                     // If the user input matches this region name
-                    if ( name === `${selectParent.value}__${util.inputToId( input.value )}`) {
+                    const myInput = `${selectParent.value}__${util.inputToId( input.value )}`;
+                    if ( object[myInput] ) {
                         color = attemptColors[1];
-                        const group = svg.querySelector(`#${CSS.escape( name )}`);
+                        const group = svg.querySelector(`#${CSS.escape( myInput )}`);
                         if ( !group.classList.contains('typed') ) {
                             group.classList.add('typed');
+                            const correctNode = noMapArea.childNodes[ object[ myInput ] ];
+                            correctNode.textContent = util.idToInput( myInput );
+                            correctNode.style["background-color"] = "rgb(75, 255, 75)";
+                            correctNode.style["border"] = "1px solid green";
+                            object[ myInput ] = null;
                             input.value = "";
                             numCorrect++;
                             color = attemptColors[0];
-                            break;
                         }
                     }
-                }
                 inputColor( color );
                 tally.textContent = `Correct: ${numCorrect}/${numPrompts}`;
                 if ( numCorrect === numPrompts ) endGame();
@@ -228,46 +243,8 @@ function outline( regionNames ) {
 }
 
 function noMap( regionNames, parents ) {
-    populateSelect( parents );
-    const noMapArea = document.getElementById('no-map-area');
-    numPrompts = regionNames.length;
-
-    let n = 1;
-    const array = {};
-    regionNames.forEach( name => {
-        array[ util.inputToId( name ) ] = n++;
-    });
-
-    for ( let i = 0; i < numPrompts; i++ ) {
-        noMapArea.appendChild( document.createElement('P') );
-    }
-
-    promptLabel.textContent = "Name all regions";
-    tally.textContent = `Correct: ${numCorrect}/${numPrompts}`;
-    noMapArea.style.display = "flex";
-    promptBar.style.display = "flex";
-    document.getElementById('game-area').removeChild( svg.parentNode );
-    input.focus();
-
-    input.addEventListener('keypress', e => {
-        if ( e.key === 'Enter' ) {
-            // Only check if the value & parent arent blank
-            if ( input.value !== '' && selectParent.value !== '' ) {
-                const myInput = `${selectParent.value.toLowerCase()}__${util.inputToId( input.value )}`;
-                if ( array[ myInput ] ) {
-                    const correctNode = noMapArea.childNodes[ array[ myInput ] ];
-                    correctNode.textContent = util.idToInput( myInput );
-                    correctNode.style["background-color"] = "rgb(75, 255, 75)";
-                    correctNode.style["border"] = "1px solid green";
-                    array[ myInput ] = null;
-                    input.value = "";
-                    numCorrect++;
-                }
-            }
-        }
-        tally.textContent = `Correct: ${numCorrect}/${numPrompts}`;
-        if ( numCorrect === numPrompts ) endGame();
-    });
+    type( regionNames, parents );
+    svg.parentNode.style.display = "none";
 }
 
 function noList( regionNames, parents ) {
@@ -285,8 +262,8 @@ function noList( regionNames, parents ) {
     const validList = new Map();
     const invalidList = new Map();
     parents.forEach( p => {
-        validList[p] = new Map();
-        invalidList[p] = new Map();
+        validList[p.toLowerCase()] = new Map();
+        invalidList[p.toLowerCase()] = new Map();
     });
     regionNames.forEach( name => {
         const parentName = name.split('__')[0];
@@ -346,7 +323,6 @@ function noList( regionNames, parents ) {
                 if ( arrays[i].length !== 0 ) {
                     const containerInstance = endGameRegionsTemplate.content.cloneNode(true);
                     const containerElement = containerInstance.querySelector('DIV');
-                    console.log(  );
                     if ( numParents > 1 ) {
                         const parentLabel = containerElement.querySelector('H5');
                         parentLabel.textContent = parent.split('_').join(' ');
@@ -382,6 +358,7 @@ function regionDisappearTrigger( group, color, clickable ) {
         }, 1000 );
     });
 }
+
 function inputColor( color ) {
     input.style.transition = '';
     input.style.backgroundColor = color;
@@ -443,7 +420,7 @@ function shuffleArray( arr ) {
 function populateSelect( parents ) {
     parents.forEach( name => {
         const option = document.createElement('OPTION');
-        option.value = name;
+        option.value = name.toLowerCase();
         option.innerText = name.split('_').join(' ');
         selectParent.appendChild( option );
     });
