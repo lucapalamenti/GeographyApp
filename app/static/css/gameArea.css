@@ -113,6 +113,7 @@ polygon {
     display: none;
     flex-wrap: wrap;
     justify-content: center;
+    padding: 10px;
 }
 
 #no-map-area p {
