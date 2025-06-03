@@ -80,7 +80,7 @@ function displaySelection() {
     }
     selectedRegions.forEach( shapeName => {
         const split = shapeName.split('__');
-        let parent = split[0];
+        let parent = util.idToParent( shapeName );
         // If there isn't already a section for this parent
         if ( !sort[parent] ) {
             sort[parent] = [`__${split[1]}`];
@@ -90,7 +90,7 @@ function displaySelection() {
     });
     Object.entries( sort ).forEach( ([parent, list]) => {
         const h5 = document.createElement('H5');
-        h5.textContent = `${parent.split('_').join(' ')} (${list.length})`;
+        h5.textContent = `${parent} (${list.length})`;
         selectedList.appendChild( h5 );
 
         const div = document.createElement('DIV');
@@ -187,7 +187,7 @@ async function createCustomMap() {
         if ( regionMinY < mapMinY ) mapMinY = regionMinY;
     }
     for ( const region of selectedRegions ) {
-        const parentName = region.split('__')[0];
+        const parentName = util.idToParent( region );
         const regionName = util.idToInput( region );
         const region_id = (await APIClient.getRegionByMapIdParentName( mapTemplate.value, parentName, regionName )).region_id;
 
