@@ -164,26 +164,26 @@ function type( regionNames, parents ) {
         // If enter key is pressed
         if ( e.key === 'Enter' ) {
             // Dont check if the value & parent are blank
-            if ( input.value !== '' && selectParent.value !== '' ) {
+            if ( input.value !== "" && selectParent.value !== '' ) {
                 // Initially set to 'incorrect' color
                 let color = attemptColors[3];
-                    // If the user input matches this region name
-                    const myInput = `${selectParent.value}__${util.inputToId( input.value )}`;
-                    if ( object[myInput] ) {
-                        color = attemptColors[1];
-                        const group = svg.querySelector(`#${CSS.escape( myInput )}`);
-                        if ( !group.classList.contains('typed') ) {
-                            group.classList.add('typed');
-                            const correctNode = noMapArea.childNodes[ object[ myInput ] ];
-                            correctNode.textContent = util.idToInput( myInput );
-                            correctNode.style["background-color"] = "rgb(75, 255, 75)";
-                            correctNode.style["border"] = "1px solid green";
-                            object[ myInput ] = null;
-                            input.value = "";
-                            numCorrect++;
-                            color = attemptColors[0];
-                        }
+                const myInput = `${selectParent.value}__${util.inputToId( input.value )}`;
+                // If the user input matches a region's name
+                if ( object[myInput] ) {
+                    color = attemptColors[1];
+                    const group = svg.querySelector(`#${CSS.escape( myInput )}`);
+                    if ( !group.classList.contains('typed')) {
+                        group.classList.add('typed');
+                        const correctNode = noMapArea.childNodes[object[myInput]];
+                        correctNode.textContent = util.idToInput( myInput );
+                        correctNode.style["background-color"] = "rgb(75, 255, 75)";
+                        correctNode.style["border"] = "1px solid green";
+                        object[myInput] = null;
+                        input.value = "";
+                        numCorrect++;
+                        color = attemptColors[0];
                     }
+                }
                 inputColor( color );
                 tally.textContent = `Correct: ${numCorrect}/${numPrompts}`;
                 if ( numCorrect === numPrompts ) endGame();
