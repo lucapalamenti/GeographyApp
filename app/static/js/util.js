@@ -1,4 +1,4 @@
-const apostropheReplacement = "-";
+const apostropheReplacement = "--";
 const spaceReplacement = "_";
 
 /**
@@ -19,12 +19,16 @@ const idToListItem = ( id ) => {
     return `${capitalizeFirst( split[1].split(spaceReplacement).join(' ') )}${ split[0] === '' ? '' : `(${split[0].split(spaceReplacement).join(' ')})` }`;
 }
 
-const inputToId = ( input ) => {
-    return input.split(' ').join(spaceReplacement).split("'").join(apostropheReplacement).toLowerCase();
+const idToParent = ( id ) => {
+    return capitalizeFirst( id.split('__')[0].split(spaceReplacement).join(' ') );
 }
 
 const idToInput = ( id ) => {
-    return capitalizeFirst( id.split('__')[1].split(spaceReplacement).join(' ').split(apostropheReplacement).join("'") );
+    return capitalizeFirst( id.split('__')[1].split(spaceReplacement).join(' ') ).split(apostropheReplacement).join("'");
+}
+
+const inputToId = ( input ) => {
+    return input.split(' ').join(spaceReplacement).split("'").join(apostropheReplacement).toLowerCase();
 }
 
 const inputToQuery = ( input ) => {
@@ -34,7 +38,8 @@ const inputToQuery = ( input ) => {
 export default {
     capitalizeFirst,
     idToListItem,
-    inputToId,
+    idToParent,
     idToInput,
+    inputToId,
     inputToQuery
 }
