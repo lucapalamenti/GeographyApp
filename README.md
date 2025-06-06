@@ -9,7 +9,6 @@
 - Ability to add disabled regions to a map
 - Incorrect inputs shown at end
 - No map gamemode has no end
-- Hit ESC to cancel delete map
 - Something to do with having to scroll up and down when deleting multiple maps at bottom
 - Combine "no map" into all gamemodes so all gamemodes have an alphabetical list (make it toggleable)
 - Add to database alternative spellings
@@ -31,6 +30,7 @@
 ### Added
 - Input box flashes a color depending on correctness of input
 - Backup background image if the first one cant be found
+- Hit ESC to cancel delete map
 
 ### Bugs Fixed
 - When hovering over a county in create mode only that polygon is shaded

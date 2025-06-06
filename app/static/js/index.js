@@ -41,6 +41,17 @@ deleteMapButton.addEventListener('click', e => {
         deleteMapButton.textContent = "Delete Custom Map";
     }
 });
+document.addEventListener('keydown', key => {
+    if ( key.key === 'Escape' ) {
+        if ( toggle ) {
+            toggle = false;
+            mapSection.classList.remove("delete-toggle");
+            deleteMapButton.textContent = "Delete Custom Map";
+            // Unfocuses the button
+            deleteMapButton.blur();
+        }
+    }
+});
 mapNavigation.addEventListener('click', async e => {
     if ( !toggle ) return;
     e.preventDefault();
