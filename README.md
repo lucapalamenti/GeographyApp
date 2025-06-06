@@ -30,6 +30,7 @@
 
 ### Added
 - Input box flashes a color depending on correctness of input
+- Backup background image if the first one cant be found
 
 ### Bugs Fixed
 - When hovering over a county in create mode only that polygon is shaded
