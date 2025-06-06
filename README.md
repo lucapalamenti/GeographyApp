@@ -12,7 +12,6 @@
 - Hit ESC to cancel delete map
 - Something to do with having to scroll up and down when deleting multiple maps at bottom
 - Combine "no map" into all gamemodes so all gamemodes have an alphabetical list (make it toggleable)
-- When hovering over a county in create mode only that polygon is shaded
 - Add to database alternative spellings
 - Drag map to move it
 - Labels show off screen when clicking in Learn gamemode
@@ -31,6 +30,9 @@
 
 ### Added
 - Input box flashes a color depending on correctness of input
+
+### Bugs Fixed
+- When hovering over a county in create mode only that polygon is shaded
 
 ## Things I need to remember
 
