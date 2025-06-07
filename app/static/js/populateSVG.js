@@ -1,11 +1,11 @@
 import APIClient from "./APIClient.js";
 import util from "./util.js";
 
-const svgPadding = 10;
+const svgPadding = 10; // Pixels
 
 /**
  * Load regions for a given map into an SVG element
- * @param {Map} map map object
+ * @param {} map map object
  * @param {SVGElement} svg reference to an SVG element
  * @returns {Set} a set of region names
  */
@@ -14,7 +14,7 @@ export default async function populateSVG( map, svg ) {
     await APIClient.getRegionsByMapId( map.map_id ).then( async returnedRegions => {
         const polygonTemplate = document.getElementById('polygon-template').content;
         for ( const region of returnedRegions ) {
-            const regionId = `${region.mapRegion_parent.split(' ').join('_').toLowerCase()}__${util.inputToId( region.region_name )}`;
+            const regionId = `${util.inputToId( region.mapRegion_parent )}__${util.inputToId( region.region_name )}`;
             let group = svg.querySelector(`#a`);
             // If a group doesn't already exist for this regions's name
             if ( !group ) {

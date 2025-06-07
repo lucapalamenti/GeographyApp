@@ -34,16 +34,16 @@ let map;
 mapTemplate.addEventListener('change', async e => {
     svg.innerHTML = "";
     selectedList.style.display = "none";
-    dragging = false;
     selectedRegions = new Set();
+    // Get the chosen map and display it
     await APIClient.getMapById( mapTemplate.value ).then( async returnedMap => {
         map = returnedMap;
-        await populateSVG( returnedMap, svg ).then( regionNames => {
+        await populateSVG( map, svg ).then( regionNames => {
             svg.querySelectorAll('POLYGON').forEach( polygon => {
-                polygon.addEventListener('mouseover', e => {
-                    if ( e.button === 0 && dragging ) {
-                        selectedRegions.add( e.target.parentNode.id );
-                        e.target.parentNode.classList.add('selected');
+                polygon.addEventListener('mouseover', mouse => {
+                    if ( mouse.button === 0 && dragging ) {
+                        selectedRegions.add( mouse.target.parentNode.id );
+                        mouse.target.parentNode.classList.add('selected');
                     }
                 });
             });
@@ -53,21 +53,24 @@ mapTemplate.addEventListener('change', async e => {
     hiddenArea.classList.add("flex-col");
 });
 
-svg.addEventListener('mousedown', e => {
-    if ( e.button === 0 && e.target.tagName === "polygon" ) {
-        if ( e.target.parentNode.classList.contains('selected') ) {
-            selectedRegions.delete( e.target.parentNode.id );
-            e.target.parentNode.classList.remove('selected');
+svg.addEventListener('mousedown', mouse => {
+    if ( mouse.button === 0 && mouse.target.tagName === "polygon" ) {
+        if ( mouse.target.parentNode.classList.contains('selected') ) {
+            selectedRegions.delete( mouse.target.parentNode.id );
+            mouse.target.parentNode.classList.remove('selected');
         } else {
             dragging = true;
-            selectedRegions.add( e.target.parentNode.id );
-            e.target.parentNode.classList.add('selected');
+            selectedRegions.add( mouse.target.parentNode.id );
+            mouse.target.parentNode.classList.add('selected');
         }
     }
 });
-svg.addEventListener('mouseup', e => {
+document.addEventListener('mouseup', e => {
     dragging = false;
     displaySelection();
+});
+document.addEventListener('drag', e => {
+    dragging = false;
 });
 
 function displaySelection() {

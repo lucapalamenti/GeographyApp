@@ -26,6 +26,7 @@
     - Name region based only on outline
 - Change Zoom levels
 - In click (disappear) gamemode, when you get a region that there are multiple of (meaning there are at least 2 parents) disable the regions with the same name that you've already clicked on
+- Sort Maps by different filters
 
 ### Added
 - Input box flashes a color depending on correctness of input
