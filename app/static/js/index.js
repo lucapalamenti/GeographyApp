@@ -19,7 +19,7 @@ await APIClient.getMaps("map_id").then( returnedMaps => {
 
         mapButtonElement.id = map.map_id;
         mapButtonElement.href = '/game?mapId=' + map.map_id;
-        mapButtonElement.style["background-image"] = `url('../images/${map.map_thumbnail}'), url('../images/Test_Map_Thumbnail.png')`;
+        mapButtonElement.style["background-image"] = `url('../images/thumbnails/${map.map_thumbnail}'), url('../images/Test_Map_Thumbnail.png')`;
         mapButtonLabel.textContent = map.map_name;
         mapButtonTop.style["background-image"] = `linear-gradient( to top, rgba(${map.map_primary_color},0.5), rgba(${map.map_primary_color},0))`;
         mapButtonBottom.style["background-color"] = `rgba(${map.map_primary_color},0.5)`;
