@@ -7,10 +7,11 @@ const mapTemplate = document.getElementById('select-template');
 const mapColor = document.getElementById('map-color');
 
 const svg = document.getElementById('templateMap');
-const hiddenArea = document.getElementById('hidden-area');
+const mapContainer = document.getElementById('map-container');
 const zoomSlider = document.getElementById('zoom-slider');
 const selectedList = document.getElementById('selected-list');
 const createButton = document.getElementById('create-button');
+const selectButtonsPanel = document.getElementById('select-buttons-panel');
 
 const SVG_WIDTH = svg.viewBox.baseVal.width;
 const SVG_HEIGHT = svg.viewBox.baseVal.height;
@@ -28,6 +29,23 @@ await APIClient.getMaps( 'map_id' ).then( maps => {
     console.error( err );
 });
 
+const states = Object.freeze({
+    SELECTING : document.getElementById('select-button'),
+    DESELECTING : document.getElementById('deselect-button'),
+});
+let state = states.SELECTING;
+selectButtonsPanel.addEventListener('click', e => {
+    if ( e.target.tagName === "BUTTON" ) {
+        // If the user selects a new button
+        if ( e.target !== state ) {
+            state.classList.remove('btn-selected');
+            state = e.target;
+            console.log( state );
+            state.classList.add('btn-selected');
+        }
+    }
+});
+
 let dragging = false;
 let selectedRegions = new Set();
 let map;
@@ -39,38 +57,40 @@ mapTemplate.addEventListener('change', async e => {
     await APIClient.getMapById( mapTemplate.value ).then( async returnedMap => {
         map = returnedMap;
         await populateSVG( map, svg ).then( regionNames => {
-            svg.querySelectorAll('POLYGON').forEach( polygon => {
+            svg.querySelectorAll('G').forEach( polygon => {
                 polygon.addEventListener('mouseover', mouse => {
                     if ( mouse.button === 0 && dragging ) {
-                        selectedRegions.add( mouse.target.parentNode.id );
-                        mouse.target.parentNode.classList.add('selected');
+                        if ( state === states.SELECTING ) {
+                            selectedRegions.add( mouse.target.parentNode.id );
+                            mouse.target.parentNode.classList.add('selected');
+                        } else if ( state === states.DESELECTING ) {
+                            selectedRegions.delete( mouse.target.parentNode.id );
+                            mouse.target.parentNode.classList.remove('selected');
+                        }
                     }
                 });
             });
         });
     });
-    hiddenArea.removeAttribute('hidden');
-    hiddenArea.classList.add("flex-col");
+    mapContainer.removeAttribute('hidden');
+    mapContainer.classList.add('flex-col');
 });
 
 svg.addEventListener('mousedown', mouse => {
+    dragging = true;
     if ( mouse.button === 0 && mouse.target.tagName === "polygon" ) {
-        if ( mouse.target.parentNode.classList.contains('selected') ) {
-            selectedRegions.delete( mouse.target.parentNode.id );
-            mouse.target.parentNode.classList.remove('selected');
-        } else {
-            dragging = true;
+        if ( state === states.SELECTING ) {
             selectedRegions.add( mouse.target.parentNode.id );
             mouse.target.parentNode.classList.add('selected');
+        } else if ( state === states.DESELECTING ) {
+            selectedRegions.delete( mouse.target.parentNode.id );
+            mouse.target.parentNode.classList.remove('selected');
         }
     }
 });
 document.addEventListener('mouseup', e => {
     dragging = false;
     displaySelection();
-});
-document.addEventListener('drag', e => {
-    dragging = false;
 });
 
 function displaySelection() {

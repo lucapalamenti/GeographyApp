@@ -44,15 +44,21 @@
                 <button type="submit" class="btn-green" id="create-button">Create</button>
                 <a href="../" class="btn-grey">Cancel</a>
             </nav>
+
+            <aside id="select-buttons-panel" class="container-1 flex-col">
+                <button class="btn-icon btn-selected" id="select-button" type="button"></button>
+                <button class="btn-icon" id="deselect-button" type="button"></button>
+            </aside>
         </form>
-        <div id="hidden-area" hidden>
+
+        <div class="container-1" id="map-container" hidden>
             <input type="range" name="zoom" min="1" max="5" value="1" id="zoom-slider">
             <svg viewBox="0 0 1600 900" preserveAspectRatio="none" id="templateMap">
             
             </svg>
-            <form id="selected-list"></form>
         </div>
         
+        <form id="selected-list"></form>
     </main>
 
     <!-- Templates -->
