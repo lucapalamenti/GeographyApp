@@ -40,7 +40,6 @@ selectButtonsPanel.addEventListener('click', e => {
         if ( e.target !== state ) {
             state.classList.remove('btn-selected');
             state = e.target;
-            console.log( state );
             state.classList.add('btn-selected');
         }
     }

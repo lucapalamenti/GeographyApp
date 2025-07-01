@@ -5,7 +5,6 @@
 ### To Add
 - When finishing a game, display regions that you struggled with
 - Add "Borders" table to database that tells you what regions a region borders
-- Add "region_disabled" attribute to region
 - Ability to add disabled regions to a map
 - Incorrect inputs shown at end
 - No map gamemode has no end
@@ -27,12 +26,14 @@
 - Change Zoom levels
 - In click (disappear) gamemode, when you get a region that there are multiple of (meaning there are at least 2 parents) disable the regions with the same name that you've already clicked on
 - Sort Maps by different filters
+- Interactive map (type a name and all counties with name show up), option for similar sounding names with different spellings
 
 ### Added
 - Input box flashes a color depending on correctness of input
 - Backup background image if the first one cant be found
 - Hit ESC to cancel delete map
 - rework how user interaction works for creating a map
+- Add "region_type" attribute to mapRegion
 
 ### Bugs Fixed
 - When hovering over a county in create mode only that polygon is shaded
