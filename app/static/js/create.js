@@ -193,7 +193,7 @@ createButton.addEventListener('click', async e => {
     e.preventDefault();
     if ( mapName.value && mapTemplate.value && selectedRegions.size > 1 ) {
         await createCustomMap().then( map => {
-            // document.location = "../";
+            document.location = "../";
         }).catch( err => {
             console.error( err );
         });
