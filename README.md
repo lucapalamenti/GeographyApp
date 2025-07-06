@@ -6,7 +6,6 @@
 - Display maps in center of screen instead of top left
 - When finishing a game, display regions that you struggled with
 - Add "Borders" table to database that tells you what regions a region borders
-- Ability to add disabled regions to a map
 - Incorrect inputs shown at end
 - No map gamemode has no end
 - Something to do with having to scroll up and down when deleting multiple maps at bottom
@@ -36,6 +35,7 @@
 - Hit ESC to cancel delete map
 - rework how user interaction works for creating a map
 - Add "region_type" attribute to mapRegion
+- Ability to add "disabled/greyed out" regions to a map
 
 ### Bugs Fixed
 - When hovering over a county in create mode only that polygon is shaded
