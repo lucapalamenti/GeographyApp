@@ -1,7 +1,9 @@
 import APIClient from "./APIClient.js";
 import util from "./util.js";
 
-const svgPadding = 10; // Pixels
+const SVG_WIDTH = 1600;
+const SVG_HEIGHT = 900;
+const SVG_PADDING = 10; // Pixels
 
 /**
  * Load regions for a given map into an SVG element
@@ -13,6 +15,29 @@ export default async function populateSVG( map, svg ) {
     const regionNames = new Set();
     await APIClient.getRegionsByMapId( map.map_id ).then( async returnedRegions => {
         const polygonTemplate = document.getElementById('polygon-template').content;
+
+        // Get width and height of map for centering on the page
+        let minX = Infinity, maxX = 0, minY = Infinity, maxY = 0;
+        for ( const region of returnedRegions ) {
+            if ( region.mapRegion_state === "enabled") {
+                for ( const shape of region.region_points.coordinates ) {
+                    const points = shape[0];
+                    // Convert each array index from [1,2] to "1,2" and apply scaling & offsets
+                    for ( let i = 0; i < points.length; i++ ) {
+                        let X = ( points[i][0] + Number( region.mapRegion_offsetX ) ) * map.map_scale * region.mapRegion_scaleX;
+                        let Y = ( points[i][1] + Number( region.mapRegion_offsetY ) ) * map.map_scale * region.mapRegion_scaleY;
+                        if ( X < minX ) minX = X;
+                        if ( X > maxX ) maxX = X;
+                        if ( Y < minY ) minY = Y;
+                        if ( Y > maxY ) maxY = Y;
+                    }
+                }
+            }
+        }
+        const width = maxX - minX, height = maxY - minY;
+        const xCenter = ( width / SVG_WIDTH < height / SVG_HEIGHT ) ? ( SVG_WIDTH - width - 2 * SVG_PADDING ) / 2 : 0;
+        const yCenter = ( height / SVG_HEIGHT < width / SVG_WIDTH ) ? ( SVG_HEIGHT - height - 2 * SVG_PADDING ) / 2 : 0;
+
         for ( const region of returnedRegions ) {
             const regionId = `${util.inputToId( region.mapRegion_parent )}__${util.inputToId( region.region_name )}`;
             let group = svg.querySelector(`#a`);
@@ -35,8 +60,8 @@ export default async function populateSVG( map, svg ) {
                 const points = shape[0];
                 // Convert each array index from [1,2] to "1,2" and apply scaling & offsets
                 for ( let i = 0; i < points.length; i++ ) {
-                    let X = ( points[i][0] + Number( region.mapRegion_offsetX ) ) * map.map_scale * region.mapRegion_scaleX + svgPadding;
-                    let Y = ( points[i][1] + Number( region.mapRegion_offsetY ) ) * map.map_scale * region.mapRegion_scaleY + svgPadding;
+                    let X = ( points[i][0] + Number( region.mapRegion_offsetX ) ) * map.map_scale * region.mapRegion_scaleX + SVG_PADDING + xCenter;
+                    let Y = ( points[i][1] + Number( region.mapRegion_offsetY ) ) * map.map_scale * region.mapRegion_scaleY + SVG_PADDING + yCenter;
                     points[i] = `${X.toFixed(6)},${Y.toFixed(6)}`;
                 }
                 p.setAttribute('points', points.join(' ') );

@@ -3,7 +3,6 @@
 ## Recent Changes
 
 ### To Add
-- Display maps in center of screen instead of top left
 - When finishing a game, display regions that you struggled with
 - Add "Borders" table to database that tells you what regions a region borders
 - Incorrect inputs shown at end
@@ -36,6 +35,7 @@
 - rework how user interaction works for creating a map
 - Add "region_type" attribute to mapRegion
 - Ability to add "disabled/greyed out" regions to a map
+- Display maps in center of screen instead of top left
 
 ### Bugs Fixed
 - When hovering over a county in create mode only that polygon is shaded
