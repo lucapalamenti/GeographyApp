@@ -23,6 +23,11 @@ export default async function populateSVG( map, svg ) {
                 // Remove empty polygon element
                 group.innerHTML = "";
                 group.setAttribute('id', regionId);
+                if ( region.mapRegion_state === "enabled" ) {
+                    regionNames.add( regionId );
+                } else {
+                    group.classList.add("disabled");
+                }
             }
             for ( const shape of region.region_points.coordinates ) {
                 // Create a polygon for the current region
@@ -38,7 +43,6 @@ export default async function populateSVG( map, svg ) {
                 group.appendChild( p );
                 svg.appendChild( group );
             };
-            regionNames.add( regionId );
         };
         if ( map.map_id === 3 || map.map_id === 48 ) virginiaFix( svg );
         svg.classList.remove('hide-polygons');

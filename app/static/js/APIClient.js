@@ -1,5 +1,7 @@
 import HTTPClient from "./HTTPClient.js";
 
+import MapRegion from "./models/MapRegion.js";
+
 const BASE_API_PATH = "./api";
 
 const handleAuthError = ( error ) => {
@@ -70,6 +72,10 @@ const getMapRegion = async ( mapRegion_map_id, mapRegion_region_id ) => {
     }
 };
 
+/**
+ * @param {Number} map_id 
+ * @returns {Array<MapRegion>}
+ */
 const getRegionsByMapId = async ( map_id ) => {
     try {
         return await HTTPClient.get(`${BASE_API_PATH}/regions/map/${map_id}`);

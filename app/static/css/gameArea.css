@@ -52,6 +52,12 @@ g.groupClickable:active polygon {
     fill: rgb(190, 191, 97);
 }
 
+g.disabled polygon {
+    fill: grey;
+    stroke-width: 0.05%;
+    stroke: rgb(68, 68, 68);
+}
+
 g.typed polygon {
     fill: rgb(106, 235, 89);
 }

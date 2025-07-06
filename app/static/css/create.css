@@ -1,18 +1,27 @@
 polygon {
-    fill: grey;
+    fill: rgb(230, 231, 137);
     stroke-width: 0.05%;
     stroke: rgb(68, 68, 68);
 }
 g:has( polygon:hover ) polygon {
-    fill: rgb(108, 108, 108);
+    fill: rgb(210, 211, 117);
 }
 
 g.selected polygon {
-    fill: rgb(230, 231, 137);
+    fill: rgb(106, 235, 89);
     stroke: black;
 }
 g.selected:has( polygon:hover ) polygon {
-    fill: rgb(210, 211, 117);
+    fill: rgb(86, 215, 69);
+}
+
+g.disabled polygon {
+    fill: grey;
+    stroke-width: 0.05%;
+    stroke: rgb(68, 68, 68);
+}
+g.disabled:has( polygon:hover ) polygon {
+    fill: rgb(108, 108, 108);
 }
 
 svg.zoom-1 polygon { stroke-width: 0.25px; }
@@ -54,21 +63,28 @@ svg.zoom-5 polygon { stroke-width: 0.10px; }
     justify-content: center;
 }
 
-#select-buttons-panel {
+#state-buttons-panel {
     position: absolute;
     transform: translate( calc(-50% - 50px) );
 }
 
 #select-button {
-    background-color: rgb(230, 231, 137);
+    background-color: rgb(106, 235, 89);
 }
 #select-button:hover {
-    background-color: rgb(210, 211, 117);
+    background-color: rgb(86, 215, 69);
 }
 
 #deselect-button {
-    background-color: grey;
+    background-color: rgb(230, 231, 137);
 }
 #deselect-button:hover {
+    background-color: rgb(210, 211, 117);
+}
+
+#disabled-button {
+    background-color: grey;
+}
+#disabled-button:hover {
     background-color: rgb(108, 108, 108);
 }

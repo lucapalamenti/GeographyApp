@@ -96,11 +96,11 @@ const createRegion = async ( regionData ) => {
 };
 
 const createMapRegion = async ( mapRegionData ) => {
-    const { mapRegion_map_id, mapRegion_region_id, mapRegion_parent, mapRegion_offsetX, mapRegion_offsetY, mapRegion_scaleX, mapRegion_scaleY } = mapRegionData;
+    const { mapRegion_map_id, mapRegion_region_id, mapRegion_parent, mapRegion_offsetX, mapRegion_offsetY, mapRegion_scaleX, mapRegion_scaleY, mapRegion_state } = mapRegionData;
     return await database.query(`
-        INSERT INTO mapRegion (mapRegion_map_id, mapRegion_region_id, mapRegion_parent, mapRegion_offsetX, mapRegion_offsetY, mapRegion_scaleX, mapRegion_scaleY)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
-        `, [mapRegion_map_id, mapRegion_region_id, mapRegion_parent, mapRegion_offsetX, mapRegion_offsetY, mapRegion_scaleX, mapRegion_scaleY]).then( rows => {
+        INSERT INTO mapRegion (mapRegion_map_id, mapRegion_region_id, mapRegion_parent, mapRegion_offsetX, mapRegion_offsetY, mapRegion_scaleX, mapRegion_scaleY, mapRegion_state)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        `, [mapRegion_map_id, mapRegion_region_id, mapRegion_parent, mapRegion_offsetX, mapRegion_offsetY, mapRegion_scaleX, mapRegion_scaleY, mapRegion_state]).then( rows => {
             if ( rows.affectedRows === 1 ) {
                 // const content2 = `INSERT INTO \`mapRegion\` (\`mapRegion_map_id\`, \`mapRegion_region_id\`, \`mapRegion_parent\`, \`mapRegion_offsetX\`, \`mapRegion_offsetY\`, \`mapRegion_scaleX\`, \`mapRegion_scaleY\`) VALUES (${mapRegion_map_id}, ${mapRegion_region_id}, "${mapRegion_parent}", ${mapRegion_offsetX.toFixed(6)}, ${mapRegion_offsetY.toFixed(6)}, ${mapRegion_scaleX.toFixed(6)}, ${mapRegion_scaleY.toFixed(6)});\n`;
                 // fs.appendFileSync(`./src/api/db/backend/test/04-Map-${mapRegion_parent}_Counties.sql`, content2);

@@ -2,6 +2,8 @@ import APIClient from "./APIClient.js";
 import populateSVG from "./populateSVG.js";
 import util from "./util.js";
 
+import MapRegion from "./models/MapRegion.js";
+
 const mapName = document.getElementById('map-name');
 const mapTemplate = document.getElementById('select-template');
 const mapColor = document.getElementById('map-color');
@@ -11,7 +13,7 @@ const mapContainer = document.getElementById('map-container');
 const zoomSlider = document.getElementById('zoom-slider');
 const selectedList = document.getElementById('selected-list');
 const createButton = document.getElementById('create-button');
-const selectButtonsPanel = document.getElementById('select-buttons-panel');
+const stateButtonsPanel = document.getElementById('state-buttons-panel');
 
 const SVG_WIDTH = svg.viewBox.baseVal.width;
 const SVG_HEIGHT = svg.viewBox.baseVal.height;
@@ -29,12 +31,14 @@ await APIClient.getMaps( 'map_id' ).then( maps => {
     console.error( err );
 });
 
+// A state for each side button
 const states = Object.freeze({
     SELECTING : document.getElementById('select-button'),
     DESELECTING : document.getElementById('deselect-button'),
+    DISABLING : document.getElementById('disabled-button'),
 });
 let state = states.SELECTING;
-selectButtonsPanel.addEventListener('click', e => {
+stateButtonsPanel.addEventListener('click', e => {
     if ( e.target.tagName === "BUTTON" ) {
         // If the user selects a new button
         if ( e.target !== state ) {
@@ -47,6 +51,7 @@ selectButtonsPanel.addEventListener('click', e => {
 
 let dragging = false;
 let selectedRegions = new Set();
+let disabledRegions = new Set();
 let map;
 mapTemplate.addEventListener('change', async e => {
     svg.innerHTML = "";
@@ -59,13 +64,7 @@ mapTemplate.addEventListener('change', async e => {
             svg.querySelectorAll('G').forEach( polygon => {
                 polygon.addEventListener('mouseover', mouse => {
                     if ( mouse.button === 0 && dragging ) {
-                        if ( state === states.SELECTING ) {
-                            selectedRegions.add( mouse.target.parentNode.id );
-                            mouse.target.parentNode.classList.add('selected');
-                        } else if ( state === states.DESELECTING ) {
-                            selectedRegions.delete( mouse.target.parentNode.id );
-                            mouse.target.parentNode.classList.remove('selected');
-                        }
+                        changeRegionState( mouse );
                     }
                 });
             });
@@ -78,19 +77,42 @@ mapTemplate.addEventListener('change', async e => {
 svg.addEventListener('mousedown', mouse => {
     dragging = true;
     if ( mouse.button === 0 && mouse.target.tagName === "polygon" ) {
-        if ( state === states.SELECTING ) {
-            selectedRegions.add( mouse.target.parentNode.id );
-            mouse.target.parentNode.classList.add('selected');
-        } else if ( state === states.DESELECTING ) {
-            selectedRegions.delete( mouse.target.parentNode.id );
-            mouse.target.parentNode.classList.remove('selected');
-        }
+        changeRegionState( mouse );
     }
 });
 document.addEventListener('mouseup', e => {
     dragging = false;
     displaySelection();
 });
+
+/**
+ * Handles changing the state of a region after a user mouses over it
+ * @param {MouseEvent} mouse 
+ */
+function changeRegionState( mouse ) {
+    const targetParent = mouse.target.parentNode;
+    const targetParentId = targetParent.id;
+    switch ( state ) {
+        case states.SELECTING:
+            selectedRegions.add( targetParentId );
+            targetParent.classList.add('selected');
+            disabledRegions.delete( targetParentId );
+            targetParent.classList.remove('disabled');
+            break;
+        case states.DESELECTING:
+            selectedRegions.delete( targetParentId );
+            targetParent.classList.remove('selected');
+            disabledRegions.delete( targetParentId );
+            targetParent.classList.remove('disabled');
+            break;
+        case states.DISABLING:
+            selectedRegions.delete( targetParentId );
+            targetParent.classList.remove('selected');
+            disabledRegions.add( targetParentId );
+            targetParent.classList.add('disabled');
+            break;
+    }
+}
 
 function displaySelection() {
     selectedList.innerHTML = "";
@@ -154,7 +176,6 @@ function zoom( e ) {
     // Escape key to unzoom
     document.addEventListener( 'keydown', unzoom );
 }
-
 function unzoom( e ) {
     if ( e.key !== 'Escape' ) return;
     svg.classList.remove(`zoom-${zoomSlider.value}`);
@@ -170,9 +191,9 @@ function unzoom( e ) {
 
 createButton.addEventListener('click', async e => {
     e.preventDefault();
-    if ( mapName.value && mapTemplate.value ) {
+    if ( mapName.value && mapTemplate.value && selectedRegions.size > 1 ) {
         await createCustomMap().then( map => {
-            document.location = "../";
+            // document.location = "../";
         }).catch( err => {
             console.error( err );
         });
@@ -208,7 +229,9 @@ async function createCustomMap() {
         if ( regionMinX < mapMinX ) mapMinX = regionMinX;
         if ( regionMinY < mapMinY ) mapMinY = regionMinY;
     }
-    for ( const region of selectedRegions ) {
+
+    // Selected Regions
+    for ( const region of new Set([ ...selectedRegions, ...disabledRegions ]) ) {
         const parentName = util.idToParent( region );
         const regionName = util.idToInput( region );
         const region_id = (await APIClient.getRegionByMapIdParentName( mapTemplate.value, parentName, regionName )).region_id;
@@ -221,17 +244,18 @@ async function createCustomMap() {
             }
         });
 
-        const mapRegionData = {
+        const mapRegion = new MapRegion({
             mapRegion_map_id : mapData.map_id,
             mapRegion_region_id : region_id,
             mapRegion_parent : parentName,
             mapRegion_offsetX : ( regionMinX - mapMinX ) / map.map_scale,
             mapRegion_offsetY : ( regionMinY - mapMinY ) / map.map_scale,
             mapRegion_scaleX : 1.0,
-            mapRegion_scaleY : 1.0
-        };
+            mapRegion_scaleY : 1.0,
+            mapRegion_state : selectedRegions.has( region ) ? "enabled" : "disabled",
+        });
         
-        await APIClient.createMapRegion( mapRegionData ).then( mapRegion => {}).catch( err => {
+        await APIClient.createMapRegion( mapRegion ).then( mapRegion => {}).catch( err => {
             console.error( err );
         });
     }

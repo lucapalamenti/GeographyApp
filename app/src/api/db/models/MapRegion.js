@@ -10,7 +10,7 @@ module.exports = class MapRegion {
     mapRegion_state = null;
 
     /**
-     * Constructor given a MapRegion object
+     * Constructor given MapRegion object data
      * @param {MapRegion} data 
      */
     constructor ( data ) {
@@ -23,30 +23,5 @@ module.exports = class MapRegion {
         this.mapRegion_scaleX = data.mapRegion_scaleX;
         this.mapRegion_scaleY = data.mapRegion_scaleY;
         this.mapRegion_state = data.mapRegion_state;
-    }
-
-    /**
-     * Constructor given all parameters
-     * @param {Number} mapRegion_id 
-     * @param {Number} mapRegion_map_id 
-     * @param {Number} mapRegion_region_id 
-     * @param {String} mapRegion_parent 
-     * @param {Number} mapRegion_offsetX 
-     * @param {Number} mapRegion_offsetY 
-     * @param {Number} mapRegion_scaleX 
-     * @param {Number} mapRegion_scaleY 
-     * @param {String} mapRegion_state 
-     */
-    constructor ( mapRegion_id, mapRegion_map_id, mapRegion_region_id, mapRegion_parent, mapRegion_offsetX,
-        mapRegion_offsetY, mapRegion_scaleX, mapRegion_scaleY, mapRegion_state ) {
-        this.mapRegion_id = mapRegion_id;
-        this.mapRegion_map_id = mapRegion_map_id;
-        this.mapRegion_region_id = mapRegion_region_id;
-        this.mapRegion_parent = mapRegion_parent;
-        this.mapRegion_offsetX = mapRegion_offsetX;
-        this.mapRegion_offsetY = mapRegion_offsetY;
-        this.mapRegion_scaleX = mapRegion_scaleX;
-        this.mapRegion_scaleY = mapRegion_scaleY;
-        this.mapRegion_state = mapRegion_state;
     }
 }

@@ -3,6 +3,7 @@
 ## Recent Changes
 
 ### To Add
+- Display maps in center of screen instead of top left
 - When finishing a game, display regions that you struggled with
 - Add "Borders" table to database that tells you what regions a region borders
 - Ability to add disabled regions to a map
@@ -27,6 +28,7 @@
 - In click (disappear) gamemode, when you get a region that there are multiple of (meaning there are at least 2 parents) disable the regions with the same name that you've already clicked on
 - Sort Maps by different filters
 - Interactive map (type a name and all counties with name show up), option for similar sounding names with different spellings
+- Change storage of map_primary_color from a string to 3 integer values for R, G, and B
 
 ### Added
 - Input box flashes a color depending on correctness of input

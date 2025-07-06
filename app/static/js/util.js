@@ -23,6 +23,7 @@ const idToParent = ( id ) => {
     return capitalizeFirst( id.split('__')[0].split(spaceReplacement).join(' ') );
 }
 
+// CAUSING PROBLEMS RIGHT NOW "cant do .split"
 const idToInput = ( id ) => {
     return capitalizeFirst( id.split('__')[1].split(spaceReplacement).join(' ') ).split(apostropheReplacement).join("'");
 }
