@@ -24,11 +24,11 @@ const getMapById = async ( map_id ) => {
 };
 
 const createMap = async ( mapData ) => {
-    const { map_id, map_scale, map_name, map_thumbnail, map_primary_color, map_is_custom } = mapData;
+    const { map_id, map_scale, map_name, map_thumbnail, map_primary_color_R, map_primary_color_G, map_primary_color_B, map_is_custom } = mapData;
     return await database.query(`
-        INSERT INTO map (map_id, map_scale, map_name, map_thumbnail, map_primary_color, map_is_custom)
+        INSERT INTO map (map_id, map_scale, map_name, map_thumbnail, map_primary_color_R, map_primary_color_G, map_primary_color_B, map_is_custom)
         VALUES (?, ?, ?, ?, ?, ?)
-        `, [map_id, map_scale, map_name, map_thumbnail, map_primary_color, map_is_custom]).then( rows => {
+        `, [map_id, map_scale, map_name, map_thumbnail, map_primary_color_R, map_primary_color_G, map_primary_color_B, map_is_custom]).then( rows => {
             if ( rows.affectedRows === 1 ) {
                 return getMapById( map_id );
             }
@@ -37,12 +37,12 @@ const createMap = async ( mapData ) => {
 };
 
 const updateMap = async ( mapData ) => {
-    const { map_id, map_scale, map_name, map_thumbnail, map_primary_color, map_is_custom } = mapData;
+    const { map_id, map_scale, map_name, map_thumbnail, map_primary_color_R, map_primary_color_G, map_primary_color_B, map_is_custom } = mapData;
     return await database.query(`
         UPDATE Map
-        SET map_scale = ?, map_name = ?, map_thumbnail = ?, map_primary_color = ?, map_is_custom = ?
+        SET map_scale = ?, map_name = ?, map_thumbnail = ?, map_primary_color_R = ?, map_primary_color_G = ?, map_primary_color_B = ?, map_is_custom = ?
         WHERE map_id = ?
-        `, [map_scale, map_name, map_thumbnail, map_primary_color, map_is_custom, map_id]).then( rows => {
+        `, [map_scale, map_name, map_thumbnail, map_primary_color_R, map_primary_color_G, map_primary_color_B, map_is_custom, map_id]).then( rows => {
             if ( rows.affectedRows === 1 ) {
                 // const content = `INSERT INTO \`map\` (\`map_id\`, \`map_scale\`, \`map_name\`, \`map_thumbnail\`, \`map_primary_color\`, \`map_is_custom\`) VALUES (${map_id}, ${map_scale}, '${map_name}', '${map_thumbnail}', '${map_primary_color}', ${map_is_custom});\n`;
                 // fs.appendFileSync(`./src/api/db/backend/test/04-Map-${map_name.split(' ').join('_')}.sql`, content);

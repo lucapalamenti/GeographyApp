@@ -1,13 +1,15 @@
 import APIClient from "./APIClient.js";
 import util from "./util.js";
 
+import Map from "./models/Map.js";
+
 const SVG_WIDTH = 1600;
 const SVG_HEIGHT = 900;
 const SVG_PADDING = 10; // Pixels
 
 /**
  * Load regions for a given map into an SVG element
- * @param {} map map object
+ * @param {Map} map map object
  * @param {SVGElement} svg reference to an SVG element
  * @returns {Set} a set of region names
  */
