@@ -1,5 +1,6 @@
 import HTTPClient from "./HTTPClient.js";
 
+import Map from "./models/Map.js";
 import MapRegion from "./models/MapRegion.js";
 
 const BASE_API_PATH = "./api";
@@ -126,17 +127,25 @@ const getMapById = async ( map_id ) => {
     }
 };
 
-const createMap = async ( mapData ) => {
+/**
+ * @param {Map} map 
+ * @returns 
+ */
+const createMap = async ( map ) => {
     try {
-        return await HTTPClient.post(`${BASE_API_PATH}/maps`, mapData);
+        return await HTTPClient.post(`${BASE_API_PATH}/maps`, map);
     } catch (error) {
         return handleAuthError(error);
     }
 };
 
-const updateMap = async ( mapData ) => {
+/**
+ * @param {Map} map 
+ * @returns 
+ */
+const updateMap = async ( map ) => {
     try {
-        return await HTTPClient.put(`${BASE_API_PATH}/maps`, mapData);
+        return await HTTPClient.put(`${BASE_API_PATH}/maps`, map);
     } catch (error) {
         return handleAuthError(error);
     }

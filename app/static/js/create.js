@@ -3,6 +3,7 @@ import populateSVG from "./populateSVG.js";
 import util from "./util.js";
 
 import MapRegion from "./models/MapRegion.js";
+import Map from "./models/Map.js";
 
 const mapName = document.getElementById('map-name');
 const mapTemplate = document.getElementById('select-template');
@@ -193,22 +194,25 @@ createButton.addEventListener('click', async e => {
     e.preventDefault();
     if ( mapName.value && mapTemplate.value && selectedRegions.size > 1 ) {
         await createCustomMap().then( map => {
-            document.location = "../";
+            // document.location = "../";
         }).catch( err => {
             console.error( err );
         });
     }
 });
 
+const mapDataColor = hexToRGB( mapColor.value );
 async function createCustomMap() {
-    const mapData = {
+    const mapData = new Map({
         map_id : (await APIClient.getMaps( 'map_id DESC' ))[0].map_id + 1,
         map_scale : 1.0,
         map_name : mapName.value,
         map_thumbnail : `${mapName.value.split(' ').join('_')}_Thumbnail.png`,
-        map_primary_color : hexToRGB( mapColor.value ),
+        map_primary_color_R : mapDataColor[0],
+        map_primary_color_G : mapDataColor[1],
+        map_primary_color_B : mapDataColor[2],
         map_is_custom : 1
-    };
+    });
     APIClient.createMap( mapData ).catch( err => {
         console.error( err );
     });
@@ -274,5 +278,5 @@ function hexToRGB( hex ) {
     const r = parseInt( hex.substr(1,2), 16 )
     const g = parseInt( hex.substr(3,2), 16 )
     const b = parseInt( hex.substr(5,2), 16 )
-    return `${r},${g},${b}`;
+    return [r,g,b];
 }

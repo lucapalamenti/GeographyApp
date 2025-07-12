@@ -9,6 +9,8 @@ const RegionDAO = require('./db/RegionDAO.js');
 const MapDAO = require('./db/MapDAO.js');
 const CustomDAO = require('./db/CustomDAO.js');
 
+const Map = require('./db/models/Map.js');
+
 // ----- CustomDAO ROUTES -----
 
 APIRouter.get('/custom', (req, res) => {
@@ -137,7 +139,8 @@ APIRouter.get('/maps/:mapId', (req, res) => {
 });
 
 APIRouter.post('/maps', (req, res) => {
-    MapDAO.createMap( req.body ).then( map => {
+    const map = new Map( req.body );
+    MapDAO.createMap( map ).then( map => {
         res.json( map );
     })
     .catch( err => {
@@ -146,7 +149,8 @@ APIRouter.post('/maps', (req, res) => {
 });
 
 APIRouter.put('/maps', (req, res) => {
-    MapDAO.updateMap( req.body ).then( map => {
+    const map = new Map( req.body );
+    MapDAO.updateMap( map ).then( map => {
         res.json( map );
     })
     .catch( err => {

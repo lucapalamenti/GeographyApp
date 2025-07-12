@@ -9,7 +9,7 @@
 - Incorrect inputs shown at end for type and noMap gamemodes
 - No map gamemode has no end
 - Something to do with having to scroll up and down when deleting multiple maps at bottom
-- Combine "no map" into all gamemodes so all gamemodes have an alphabetical list (make it toggleable)
+- make the type gamemode list toggleable
 - Add to database alternative spellings
 - Drag map to move it
 - Labels show off screen when clicking in Learn gamemode
@@ -26,10 +26,12 @@
     - Name region based only on outline
 - Change Zoom levels
 - In click (disappear) gamemode, when you get a region that there are multiple of (meaning there are at least 2 parents) disable the regions with the same name that you've already clicked on
-- Sort Maps by different filters
 - Interactive map (type a name and all counties with name show up), option for similar sounding names with different spellings
 - Ability to edit existing maps to add/remove regions
-- "mark as correct" option for type (hard) if you mistype 
+- "mark as correct" option for type (hard) if you mistype
+- Select a thumbnail for a created map
+
+- SQL INJECTION IS POSSIBLE WITH GET MAPS
 
 ### Added
 - Input box flashes a color depending on correctness of input
@@ -40,6 +42,8 @@
 - Ability to add "disabled/greyed out" regions to a map
 - Display maps in center of screen instead of top left
 - Changed storage of map_primary_color from a string 'R,G,B' to 3 separate integer values
+- Type gamemode has the no map list
+- Sort maps on home screen
 
 ### Bugs Fixed
 - When hovering over a county in create mode only that polygon is shaded

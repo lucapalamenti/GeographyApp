@@ -22,4 +22,12 @@ module.exports = class Map {
         this.map_primary_color_B = data.map_primary_color_B;
         this.map_is_custom = data.map_is_custom;
     }
+
+    /**
+     * Returns an Array of all the Map's variables
+     * @returns {Array<>}
+     */
+    getAllVariables() {
+        return [this.map_id, this.map_scale, this.map_name, this.map_thumbnail, this.map_primary_color_R, this.map_primary_color_G, this.map_primary_color_B, this.map_is_custom];
+    }
 };

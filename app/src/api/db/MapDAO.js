@@ -2,6 +2,7 @@ const database = require('./databaseConnections.js');
 const Map = require('./models/Map.js');
 // const fs = require('fs');
 
+// NEEDS TO BE FIXED FOR SQL INJECTION
 const getMaps = async ( ORDER_BY ) => {
     return await database.query(`
         SELECT * FROM map
@@ -23,30 +24,37 @@ const getMapById = async ( map_id ) => {
     });
 };
 
-const createMap = async ( mapData ) => {
-    const { map_id, map_scale, map_name, map_thumbnail, map_primary_color_R, map_primary_color_G, map_primary_color_B, map_is_custom } = mapData;
+/**
+ * @param {Map} map 
+ * @returns 
+ */
+const createMap = async ( map ) => {
     return await database.query(`
         INSERT INTO map (map_id, map_scale, map_name, map_thumbnail, map_primary_color_R, map_primary_color_G, map_primary_color_B, map_is_custom)
-        VALUES (?, ?, ?, ?, ?, ?)
-        `, [map_id, map_scale, map_name, map_thumbnail, map_primary_color_R, map_primary_color_G, map_primary_color_B, map_is_custom]).then( rows => {
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        `, map.getAllVariables()).then( async rows => {
             if ( rows.affectedRows === 1 ) {
-                return getMapById( map_id );
+                return getMapById( map.map_id );
             }
             throw new Error('Map could not be created!');
     });
 };
 
-const updateMap = async ( mapData ) => {
-    const { map_id, map_scale, map_name, map_thumbnail, map_primary_color_R, map_primary_color_G, map_primary_color_B, map_is_custom } = mapData;
+/**
+ * @param {Map} map 
+ * @returns 
+ */
+const updateMap = async ( map ) => {
+    console.log( [...map.getAllVariables().slice(1), map.map_id] );
     return await database.query(`
         UPDATE Map
         SET map_scale = ?, map_name = ?, map_thumbnail = ?, map_primary_color_R = ?, map_primary_color_G = ?, map_primary_color_B = ?, map_is_custom = ?
         WHERE map_id = ?
-        `, [map_scale, map_name, map_thumbnail, map_primary_color_R, map_primary_color_G, map_primary_color_B, map_is_custom, map_id]).then( rows => {
+        `, [...map.getAllVariables().slice(1), map.map_id]).then( rows => {
             if ( rows.affectedRows === 1 ) {
                 // const content = `INSERT INTO \`map\` (\`map_id\`, \`map_scale\`, \`map_name\`, \`map_thumbnail\`, \`map_primary_color\`, \`map_is_custom\`) VALUES (${map_id}, ${map_scale}, '${map_name}', '${map_thumbnail}', '${map_primary_color}', ${map_is_custom});\n`;
                 // fs.appendFileSync(`./src/api/db/backend/test/04-Map-${map_name.split(' ').join('_')}.sql`, content);
-                return getMapById( map_id );
+                return getMapById( map.map_id );
             }
             throw new Error('Map could not be updated!');
     });
