@@ -30,6 +30,7 @@
 - Ability to edit existing maps to add/remove regions
 - "mark as correct" option for type (hard) if you mistype
 - Select a thumbnail for a created map
+- Add an admin page for things like editing non custom maps
 
 - SQL INJECTION IS POSSIBLE WITH GET MAPS
 

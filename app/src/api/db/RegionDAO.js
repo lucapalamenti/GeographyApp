@@ -18,7 +18,7 @@ const getRegionById = async ( region_id ) => {
             if ( rows.length === 1 ) {
                 return new Region( rows[0] );
             }
-            throw new Error('Region not found!');
+            throw new Error("Region not found!");
     });
 };
 
@@ -32,7 +32,7 @@ const getRegionByMapIdParentName = async ( regionData ) => {
             if ( rows.length === 1 ) {
                 return rows[0];
             }
-            throw new Error('Region not found!');
+            throw new Error("Region not found!");
     });
 };
 
@@ -91,7 +91,7 @@ const createRegion = async ( regionData ) => {
             if ( rows.affectedRows === 1 ) {
                 return getRegionById( rows.insertId );
             }
-            throw new Error('Region could not be created!');
+            throw new Error("Region could not be created!");
     });
 };
 
@@ -106,7 +106,7 @@ const createMapRegion = async ( mapRegionData ) => {
                 // fs.appendFileSync(`./src/api/db/backend/test/04-Map-${mapRegion_parent}_Counties.sql`, content2);
                 return getRegionById( mapRegion_region_id );
             }
-            throw new Error('mapRegion could not be created!');
+            throw new Error("mapRegion could not be created!");
     });
 };
 

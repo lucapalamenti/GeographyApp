@@ -10,12 +10,12 @@ populateMaps( "map_id" );
 
 /**
  * Retrieves maps from the database given given a table header to sort by
- * @param {String} sortBy The name of a Map table header
+ * @param {String} orderBy SQL query to ORDER BY
  */
-async function populateMaps( sortBy ) {
+async function populateMaps( orderBy ) {
     // First empty the map navigation container
     mapNavigation.innerHTML = "";
-    await APIClient.getMaps( sortBy ).then( returnedMaps => {
+    await APIClient.getMaps( orderBy ).then( returnedMaps => {
         const mapButtonTemplate = document.getElementById('map-button-template');
         for ( const map of returnedMaps ) {
             const mapButtonInstance = mapButtonTemplate.content.cloneNode(true);

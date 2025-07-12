@@ -21,7 +21,7 @@ const SVG_HEIGHT = svg.viewBox.baseVal.height;
 const SVG_PADDING = 20; // pixels
 
 // Populate "Choose Template" selection panel
-await APIClient.getMaps( 'map_id' ).then( maps => {
+await APIClient.getMaps( "map_id" ).then( maps => {
     maps.forEach( map => {
         const option = document.createElement('OPTION');
         option.textContent = map.map_name;
