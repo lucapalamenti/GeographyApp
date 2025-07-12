@@ -21,9 +21,9 @@
 - Show number of Correct regions separate from the counter in the top right (change that to something like "question number")
 - When taking more than 3 attempts in type (hard) gamemode, instead of just displaying the label is skipping it, make the user type the correct 
 - Gamemodes
-    - Name all surrounding regions
-    - Name region based on outline and surrounding regions
-    - Name region based only on outline
+    - "Borders": Name all surrounding regions
+    - "Outline": Name region based on outline and surrounding regions
+    - "Outline (Hard)": Name region based only on outline
 - Change Zoom levels
 - In click (disappear) gamemode, when you get a region that there are multiple of (meaning there are at least 2 parents) disable the regions with the same name that you've already clicked on
 - Interactive map (type a name and all counties with name show up), option for similar sounding names with different spellings
