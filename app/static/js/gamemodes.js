@@ -21,6 +21,7 @@ let numPrompts;
 let numCorrect = 0;
 let guesses = 0;
 const attemptColors = [ 'rgb(106, 235, 89)', 'rgb(240, 219, 35)', 'rgb(243, 148, 24)', 'rgb(235, 89, 89)' ];
+const repeatColor = "rgba(172, 233, 164, 1)";
 
 const SVG_WIDTH = 1600;
 const SVG_HEIGHT = 900;
@@ -28,7 +29,7 @@ const MAX_GUESSES = 3;
 
 function learn() {
     promptLabel.textContent = "Click on a region to see its name";
-    input.style.display = 'none';
+    input.style.display = "none";
     promptBar.style.display = "flex";
     document.querySelectorAll('G:not(.disabled)').forEach( group => {
         group.classList.add('groupClickable');
@@ -46,7 +47,7 @@ function clickGamemodes( regionNames ) {
     });
 
     promptLabel.textContent = "Click on";
-    input.style.display = 'none';
+    input.style.display = "none";
     tally.textContent = `Correct: ${numCorrect}/${numPrompts}`;
 
     arr = shuffleArray( regionNames );
@@ -150,9 +151,9 @@ function type( regionNames, parents ) {
     typeGamemodes( regionNames, false );
 
     const object = new Object();
-    let n = 1;
+    let arrPos = 1;
     regionNames.forEach( name => {
-        object[ util.inputToId( name ) ] = n++;
+        object[ util.inputToId( name ) ] = arrPos++;
     });
     for ( let i = 0; i < numPrompts; i++ ) {
         noMapArea.appendChild( document.createElement('P') );
@@ -169,16 +170,20 @@ function type( regionNames, parents ) {
                 let color = attemptColors[3];
                 const myInput = `${selectParent.value}__${util.inputToId( input.value )}`;
                 // If the user input matches a region's name
-                if ( object[myInput] ) {
-                    color = attemptColors[1];
+                if ( object[myInput] !== null ) {
+                    color = repeatColor;
                     const group = svg.querySelector(`#${CSS.escape( myInput )}`);
-                    if ( !group.classList.contains('typed')) {
+                    // The user has already typed this region
+                    if ( group.classList.contains('typed') ) {
+                        regionDisappearTrigger( group, repeatColor, false, 0 );
+                    // The user has not yet typed this region
+                    } else {
                         group.classList.add('typed');
                         const correctNode = noMapArea.childNodes[object[myInput]];
                         correctNode.textContent = util.idToInput( myInput );
                         correctNode.style["background-color"] = "rgb(75, 255, 75)";
                         correctNode.style["border"] = "1px solid green";
-                        object[myInput] = null;
+                        object[myInput] = 0;
                         input.value = "";
                         numCorrect++;
                         color = attemptColors[0];
@@ -342,20 +347,27 @@ function noList( regionNames, parents ) {
     });
 }
 
-function regionDisappearTrigger( group, color, clickable ) {
+/**
+ * 
+ * @param {SVGGElement} group 
+ * @param {String} color 
+ * @param {Boolean} clickable 
+ * @param {Number} hold
+ */
+function regionDisappearTrigger( group, color, clickable, hold = 1000, fade = 1000 ) {
     group.classList.remove('groupClickable');
     group.querySelectorAll('POLYGON').forEach( polygon => {
         polygon.style.fill = color;
-        // Hold for 1 second
+        // Hold for 'hold' milliseconds
         setTimeout( function() {
             polygon.style.transition = 'fill 1s ease';
             polygon.style.fill = '';
-            // Fade out for 1 second
+            // Fade out for 'fade' milliseconds
             setTimeout( function() {
                 polygon.style.transition = '';
                 if ( clickable ) group.classList.add('groupClickable');
-            }, 1000 );
-        }, 1000 );
+            }, fade );
+        }, hold );
     });
 }
 
