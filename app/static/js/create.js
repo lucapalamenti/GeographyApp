@@ -8,6 +8,30 @@ import Map from "./models/Map.js";
 const mapName = document.getElementById('map-name');
 const mapTemplate = document.getElementById('select-template');
 const mapColor = document.getElementById('map-color');
+const mapThumbnail = document.getElementById('map-thumbnail');
+
+mapThumbnail.addEventListener('change', async e => {
+    const file = e.target.files[0];
+    if ( file ) {
+        // file.name = ; Change when ready
+        const formData = new FormData();
+        formData.append('uploadedFile', file); // uploadedFile is a key
+        await APIClient.uploadFile( formData ).then( res => {
+            console.log( "File successfully uploaded." );
+        }).catch( err => {
+            console.error( err );
+        });
+    }
+});
+
+const retrieveBtn = document.getElementById('retrieve');
+retrieveBtn.addEventListener('click', async e => {
+    await APIClient.retrieveFile("photo1.png").then( res => {
+        console.log( res );
+    }).catch( err => {
+        console.error({message: "ERROR!", error: err});
+    });
+});
 
 const svg = document.getElementById('templateMap');
 const mapContainer = document.getElementById('map-container');
@@ -259,7 +283,11 @@ async function createCustomMap() {
             mapRegion_state : selectedRegions.has( region ) ? "enabled" : "disabled",
         });
         
-        await APIClient.createMapRegion( mapRegion ).then( mapRegion => {}).catch( err => {
+        await APIClient.createMapRegion( mapRegion ).then( mapRegion => {}).catch( async err => {
+            await APIClient.deleteMap( mapData.map_id ).then( res => {
+                console.log( "Map creation aborted, deleting all data." );
+                return;
+            });
             console.error( err );
         });
     }

@@ -1,4 +1,5 @@
 const express = require('express');
+const multer = require('multer');
 
 const APIRouter = express.Router();
 
@@ -158,13 +159,24 @@ APIRouter.put('/maps', (req, res) => {
     });
 });
 
-APIRouter.delete('/maps/:mapId', (req,res) => {
+APIRouter.delete('/maps/:mapId', (req, res) => {
     MapDAO.deleteMap( req.params.mapId ).then( deletedMaps => {
         res.json({deletedMaps:deletedMaps});
     })
     .catch( err => {
         res.status(500).json({error:err, message: 'Error with DELETE request to /maps/:mapId'});
     });
+});
+
+// ----- OTHER ROUTES -----
+
+const upload = multer({ dest: 'uploads/' });
+APIRouter.post('/uploadFile', upload.single('uploadedFile'), (req, res) => {
+    if (req.file) {
+        res.json({ message: 'File uploaded successfully', filename: req.file.filename });
+    } else {
+        res.status(400).json({ message: 'No file uploaded' });
+    }
 });
 
 module.exports = APIRouter;

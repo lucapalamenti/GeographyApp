@@ -159,6 +159,27 @@ const deleteMap = async ( map_id ) => {
     }
 };
 
+// ----- OTHER -----
+
+const uploadFile = async ( data ) => {
+    try {
+        return await fetch(`${BASE_API_PATH}/uploadFile`, {
+            method: 'POST',
+            body: data
+        });
+    } catch (error) {
+        return handleAuthError(error);
+    }
+};
+
+const retrieveFile = async ( fileName ) => {
+    try {
+        return await HTTPClient.get(`/uploads/${fileName}`);
+    } catch (error) {
+        return handleAuthError(error);
+    }
+};
+
 export default {
     custom,
     printRegionInsertQuery,
@@ -177,5 +198,8 @@ export default {
     getMapById,
     createMap,
     updateMap,
-    deleteMap
+    deleteMap,
+
+    uploadFile,
+    retrieveFile
 }
