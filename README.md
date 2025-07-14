@@ -9,14 +9,16 @@
 - Incorrect inputs shown at end for type and noMap gamemodes
 - No map gamemode has no end
 - Something to do with having to scroll up and down when deleting multiple maps at bottom
-- make the type gamemode list toggleable
+- Make the type gamemode list toggleable
 - Add to database alternative spellings
 - Drag map to move it
 - Labels show off screen when clicking in Learn gamemode
 - Add main menu button
 - Settings to add
+    - Toggle "auto enter" after every keystroke
     - Toggle input flashing
     - Change level of detail in outlines (requires multiple datasets)
+    - Toggle allowing alternate spellings
     - Disabled sounds
 - Show number of Correct regions separate from the counter in the top right (change that to something like "question number")
 - When taking more than 3 attempts in type (hard) gamemode, instead of just displaying the label is skipping it, make the user type the correct answer
