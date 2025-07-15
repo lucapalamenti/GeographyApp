@@ -52,6 +52,7 @@
 - Changed storage of map_primary_color from a string 'R,G,B' to 3 separate integer values
 - Type gamemode has the no map list
 - Sort maps on home screen
+- Delete ALL custom maps button
 
 - Admin can choose to print query statements to a file in the backend (really just for creating new default maps)
 
