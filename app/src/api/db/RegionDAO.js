@@ -116,7 +116,7 @@ const createMapRegion = async ( mapRegion ) => {
     const query = `
         INSERT INTO \`mapRegion\` (\`mapRegion_map_id\`, \`mapRegion_region_id\`, \`mapRegion_parent\`, \`mapRegion_offsetX\`, \`mapRegion_offsetY\`, \`mapRegion_scaleX\`, \`mapRegion_scaleY\`, \`mapRegion_state\`)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?);
-    `;
+        `;
     const params = [...mapRegion.getAllVariables()];
     return await database.query( query, params ).then( async rows => {
             if ( rows.affectedRows === 1 ) {
@@ -130,15 +130,6 @@ const createMapRegion = async ( mapRegion ) => {
     });
 };
 
-const deleteRegionsFromMap = async ( mapId ) => {
-    return await database.query(`
-        DELETE FROM region
-        WHERE map_id = ?;
-        `, [mapId]).then( rows => {
-            return rows.affectedRows;
-    });
-};
-
 module.exports = {
     getRegions,
     getRegionById,
@@ -147,6 +138,5 @@ module.exports = {
     getMapRegion,
     getRegionParentsForMap,
     createRegion,
-    createMapRegion,
-    deleteRegionsFromMap
+    createMapRegion
 };

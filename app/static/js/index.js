@@ -3,6 +3,7 @@ import APIClient from "./APIClient.js";
 const mapSection = document.getElementById('map-section');
 const mapNavigation = document.getElementById('map-navigation');
 const deleteMapButton = document.getElementById('delete-map-btn');
+const deleteAllMapsButton = document.getElementById('delete-all-maps-btn');
 const sortMapsSelect = document.getElementById('sort-maps');
 
 // Populate screen with map buttons
@@ -89,10 +90,17 @@ mapNavigation.addEventListener('click', async e => {
         // Only if you click a custom map
         if ( node.classList.contains("custom-map") ) {
             // Delete the map
-            await APIClient.deleteMap( Number( node.id ) ).then( mapsDeleted => {});
-            window.location.reload();
+            await APIClient.deleteMap( Number( node.id ) ).then( mapsDeleted => {
+                window.location.reload();
+            });
         }
     }
+});
+
+deleteAllMapsButton.addEventListener('click', async e => {
+    await APIClient.deleteAllCustomMaps().then( deletedMaps => {
+        window.location.reload();
+    });
 });
 
 const btn = document.getElementById('b1');

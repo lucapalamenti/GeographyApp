@@ -151,6 +151,23 @@ const updateMap = async ( map ) => {
     }
 };
 
+/**
+ * Deletes all custom maps
+ * @returns 
+ */
+const deleteAllCustomMaps = async () => {
+    try {
+        return await HTTPClient.delete(`${BASE_API_PATH}/maps`);
+    } catch (error) {
+        return handleAuthError(error);
+    }
+};
+
+/**
+ * Deletes the map with the given map_id
+ * @param {Number} map_id
+ * @returns
+ */
 const deleteMap = async ( map_id ) => {
     try {
         return await HTTPClient.delete(`${BASE_API_PATH}/maps/${map_id}`);
@@ -192,12 +209,12 @@ export default {
     getRegionParentsForMap,
     createRegion,
     createMapRegion,
-    deleteRegionsFromMap,
 
     getMaps,
     getMapById,
     createMap,
     updateMap,
+    deleteAllCustomMaps,
     deleteMap,
 
     uploadFile,
