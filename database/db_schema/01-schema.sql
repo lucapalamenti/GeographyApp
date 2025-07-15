@@ -64,17 +64,12 @@ CREATE TABLE IF NOT EXISTS `mapRegion` (
 
 -- Data exporting was unselected.
 
--- Dumping structure for table geographyapp.surroundings
--- CREATE TABLE IF NOT EXISTS `surroundings` (
---   `surroundings_id` int(10) NOT NULL AUTO_INCREMENT,
---   `surroundings_map_id` int(10) NOT NULL DEFAULT 0,
---   `surroundings_other_id` int(10) NOT NULL DEFAULT 0,
---   PRIMARY KEY (`surroundings_id`),
---   KEY `FK_surroundings_map` (`surroundings_map_id`),
---   KEY `FK_surroundings_map_2` (`surroundings_other_id`),
---   CONSTRAINT `FK_surroundings_map` FOREIGN KEY (`surroundings_map_id`) REFERENCES `map` (`map_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
---   CONSTRAINT `FK_surroundings_map_2` FOREIGN KEY (`surroundings_other_id`) REFERENCES `map` (`map_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
--- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+-- Dumping structure for table geographyapp.mapName
+CREATE TABLE IF NO EXISTS `regionName` (
+  `regionName_id` int(10) NOT NULL AUTO_INCREMENT,
+  `regionName_name` varchar(64) NOT NULL,
+  PRIMARY KEY (`regionName_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=103 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 -- Data exporting was unselected.
 
