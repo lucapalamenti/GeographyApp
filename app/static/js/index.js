@@ -94,3 +94,10 @@ mapNavigation.addEventListener('click', async e => {
         }
     }
 });
+
+const btn = document.getElementById('b1');
+
+btn.addEventListener('click', async e => {
+    const allRegions = await APIClient.getRegions();
+    console.log( allRegions );
+});

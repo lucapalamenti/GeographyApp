@@ -17,9 +17,9 @@ module.exports = class Map {
         this.map_scale = data.map_scale;
         this.map_name = data.map_name;
         this.map_thumbnail = data.map_thumbnail;
-        this.map_primary_color_R = data.map_primary_color_R;
-        this.map_primary_color_G = data.map_primary_color_G;
-        this.map_primary_color_B = data.map_primary_color_B;
+        this.map_primary_color_R = Number( data.map_primary_color_R );
+        this.map_primary_color_G = Number( data.map_primary_color_G );
+        this.map_primary_color_B = Number( data.map_primary_color_B );
         this.map_is_custom = data.map_is_custom;
     }
 
@@ -28,6 +28,6 @@ module.exports = class Map {
      * @returns {Array<>}
      */
     getAllVariables() {
-        return [this.map_id, this.map_scale, this.map_name, this.map_thumbnail, this.map_primary_color_R, this.map_primary_color_G, this.map_primary_color_B, this.map_is_custom];
+        return [this.map_scale, this.map_name, this.map_thumbnail, this.map_primary_color_R, this.map_primary_color_G, this.map_primary_color_B, this.map_is_custom];
     }
 };

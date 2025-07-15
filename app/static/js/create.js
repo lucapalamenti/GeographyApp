@@ -225,10 +225,10 @@ createButton.addEventListener('click', async e => {
     }
 });
 
-const mapDataColor = hexToRGB( mapColor.value );
 async function createCustomMap() {
+    const mapDataColor = hexToRGB( mapColor.value );
     const mapData = new Map({
-        map_id : (await APIClient.getMaps( 'map_id DESC' ))[0].map_id + 1,
+        map_id : ( await APIClient.getMaps( 'map_id DESC' ) )[0].map_id + 1,
         map_scale : 1.0,
         map_name : mapName.value,
         map_thumbnail : `${mapName.value.split(' ').join('_')}_Thumbnail.png`,

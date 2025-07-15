@@ -14,4 +14,12 @@ module.exports = class Region {
         this.region_name = data.region_name;
         this.region_points = data.region_points;
     }
+
+    /**
+     * Returns an Array of all the Region's variables
+     * @returns {Array<>}
+     */
+    getAllVariables() {
+        return [this.region_map_id, this.region_name, this.region_points];
+    }
 };

@@ -1,3 +1,5 @@
+const ROUND_PLACES = 6;
+
 module.exports = class MapRegion {
     mapRegion_id = null;
     mapRegion_map_id = null;
@@ -8,7 +10,7 @@ module.exports = class MapRegion {
     mapRegion_scaleX = null;
     mapRegion_scaleY = null;
     mapRegion_state = null;
-
+    
     /**
      * Constructor given MapRegion object data
      * @param {MapRegion} data 
@@ -18,10 +20,18 @@ module.exports = class MapRegion {
         this.mapRegion_map_id = data.mapRegion_map_id;
         this.mapRegion_region_id = data.mapRegion_region_id;
         this.mapRegion_parent = data.mapRegion_parent;
-        this.mapRegion_offsetX = data.mapRegion_offsetX;
-        this.mapRegion_offsetY = data.mapRegion_offsetY;
-        this.mapRegion_scaleX = data.mapRegion_scaleX;
-        this.mapRegion_scaleY = data.mapRegion_scaleY;
-        this.mapRegion_state = data.mapRegion_state;
+        this.mapRegion_offsetX = Number( Number( data.mapRegion_offsetX ).toFixed( ROUND_PLACES ) );
+        this.mapRegion_offsetY = Number( Number( data.mapRegion_offsetY ).toFixed( ROUND_PLACES ) );
+        this.mapRegion_scaleX = Number( Number( data.mapRegion_scaleX ).toFixed( ROUND_PLACES ) );
+        this.mapRegion_scaleY = Number( Number( data.mapRegion_scaleY ).toFixed( ROUND_PLACES ) );
+        this.mapRegion_state = String( data.mapRegion_state );
+    }
+
+    /**
+     * Returns an Array of all the MapRegion's variables
+     * @returns {Array<>}
+     */
+    getAllVariables() {
+        return [this.mapRegion_map_id, this.mapRegion_region_id, this.mapRegion_parent, this.mapRegion_offsetX, this.mapRegion_offsetY, this.mapRegion_scaleX, this.mapRegion_scaleY, this.mapRegion_state];
     }
 }
