@@ -170,7 +170,7 @@ function type( regionNames, parents ) {
                 let color = attemptColors[3];
                 const myInput = `${selectParent.value}__${util.inputToId( input.value )}`;
                 // If the user input matches a region's name
-                if ( object[myInput] !== null ) {
+                if ( object[myInput] !== undefined ) {
                     color = repeatColor;
                     const group = svg.querySelector(`#${CSS.escape( myInput )}`);
                     // The user has already typed this region
@@ -183,7 +183,6 @@ function type( regionNames, parents ) {
                         correctNode.textContent = util.idToInput( myInput );
                         correctNode.style["background-color"] = "rgb(75, 255, 75)";
                         correctNode.style["border"] = "1px solid green";
-                        object[myInput] = 0;
                         input.value = "";
                         numCorrect++;
                         color = attemptColors[0];
@@ -487,15 +486,6 @@ function unzoom( e ) {
     input.focus();
 }
 
-function endGame() {
-    current = "-";
-    updateLabels();
-    input.setAttribute('disabled', true);
-    covering.style.visibility = "";
-    gameEndPanel.style.display = "flex";
-    console.log( "YOU WIN!" );
-}
-
 showNames.addEventListener('change', e => {
     // Show all names
     if ( e.target.checked ) {
@@ -511,6 +501,15 @@ showNames.addEventListener('change', e => {
         });
     }
 });
+
+function endGame() {
+    current = "-";
+    updateLabels();
+    input.setAttribute('disabled', true);
+    covering.style.visibility = "";
+    gameEndPanel.style.display = "flex";
+    console.log( "YOU WIN!" );
+}
 
 export const gamemodeMap = {
     'learn': learn,
