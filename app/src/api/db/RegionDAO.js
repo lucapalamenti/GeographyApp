@@ -130,6 +130,20 @@ const createMapRegion = async ( mapRegion ) => {
     });
 };
 
+const getStates = async () => {
+    return await database.query(`
+        SELECT COLUMN_TYPE
+        FROM INFORMATION_SCHEMA.COLUMNS
+        WHERE TABLE_SCHEMA = 'geographyapp'
+            AND TABLE_NAME = 'mapRegion'
+            AND COLUMN_NAME = 'mapRegion_state';
+        `, []).then( rows => {
+            // Looks like "enum('disabled','enabled')"
+            const str = rows[0].COLUMN_TYPE;
+            return str.substring(6, str.length - 2).split("','");
+    });
+}
+
 module.exports = {
     getRegions,
     getRegionById,
@@ -138,5 +152,6 @@ module.exports = {
     getMapRegion,
     getRegionParentsForMap,
     createRegion,
-    createMapRegion
+    createMapRegion,
+    getStates
 };

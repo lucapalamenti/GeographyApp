@@ -31,7 +31,7 @@ function learn() {
     promptLabel.textContent = "Click on a region to see its name";
     input.style.display = "none";
     promptBar.style.display = "flex";
-    document.querySelectorAll('G:not(.disabled)').forEach( group => {
+    document.querySelectorAll('G:not(.disabled, .outside)').forEach( group => {
         group.classList.add('groupClickable');
     });
     svg.addEventListener('click', e => {
@@ -42,7 +42,7 @@ function learn() {
 
 function clickGamemodes( regionNames ) {
     numPrompts = regionNames.length;
-    document.querySelectorAll('G:not(.disabled)').forEach( group => {
+    document.querySelectorAll('G:not(.disabled, .outside)').forEach( group => {
         group.classList.add('groupClickable');
     });
 

@@ -1,4 +1,4 @@
-export default class Map {
+export default class MMap {
     map_id = null;
     map_scale = null;
     map_name = null;
@@ -10,7 +10,7 @@ export default class Map {
 
     /**
      * Constructor given Map object data
-     * @param {Map} data 
+     * @param {MMap} data 
      */
     constructor ( data ) {
         this.map_id = data.map_id;

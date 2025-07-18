@@ -1,27 +1,85 @@
 polygon {
     fill: rgb(230, 231, 137);
     stroke-width: 0.05%;
-    stroke: rgb(68, 68, 68);
+    stroke: black;
 }
 g:has( polygon:hover ) polygon {
     fill: rgb(210, 211, 117);
 }
 
-g.selected polygon {
+g.enabled polygon {
     fill: rgb(106, 235, 89);
     stroke: black;
 }
-g.selected:has( polygon:hover ) polygon {
+g.enabled:has( polygon:hover ) polygon {
     fill: rgb(86, 215, 69);
 }
 
 g.disabled polygon {
     fill: grey;
     stroke-width: 0.05%;
-    stroke: rgb(68, 68, 68);
+    stroke: black;
 }
 g.disabled:has( polygon:hover ) polygon {
     fill: rgb(108, 108, 108);
+}
+
+g.herring polygon {
+    fill: rgb(240, 219, 35);;
+    stroke-width: 0.05%;
+    stroke: black;
+}
+g.herring:has( polygon:hover ) polygon {
+    fill: rgb(220, 199, 15);
+}
+
+g.outside polygon {
+    fill: rgb(77, 77, 77);
+    stroke-width: 0.05%;
+    stroke: black;
+}
+g.outside:has( polygon:hover ) polygon {
+    fill: rgb(54, 54, 54);
+}
+
+#state-buttons-panel {
+    position: absolute;
+    transform: translate( calc(-50% - 50px) );
+}
+
+#enabled-btn {
+    background-color: rgb(106, 235, 89);
+}
+#enabled-btn:hover {
+    background-color: rgb(86, 215, 69);
+}
+
+#deselect-btn {
+    background-color: rgb(230, 231, 137);
+}
+#deselect-btn:hover {
+    background-color: rgb(210, 211, 117);
+}
+
+#disabled-btn {
+    background-color: grey;
+}
+#disabled-btn:hover {
+    background-color: rgb(108, 108, 108);
+}
+
+#herring-btn {
+    background-color: rgb(240, 219, 35);
+}
+#herring-btn:hover {
+    background-color: rgb(220, 199, 15);
+}
+
+#outside-btn {
+    background-color: rgb(77, 77, 77);
+}
+#outside-btn:hover {
+    background-color: rgb(54, 54, 54);
 }
 
 svg.zoom-1 polygon { stroke-width: 0.25px; }
@@ -61,30 +119,4 @@ svg.zoom-5 polygon { stroke-width: 0.10px; }
     display: flex;
     flex-direction: row;
     justify-content: center;
-}
-
-#state-buttons-panel {
-    position: absolute;
-    transform: translate( calc(-50% - 50px) );
-}
-
-#select-button {
-    background-color: rgb(106, 235, 89);
-}
-#select-button:hover {
-    background-color: rgb(86, 215, 69);
-}
-
-#deselect-button {
-    background-color: rgb(230, 231, 137);
-}
-#deselect-button:hover {
-    background-color: rgb(210, 211, 117);
-}
-
-#disabled-button {
-    background-color: grey;
-}
-#disabled-button:hover {
-    background-color: rgb(108, 108, 108);
 }

@@ -1,6 +1,6 @@
 import HTTPClient from "./HTTPClient.js";
 
-import Map from "./models/Map.js";
+import MMap from "./models/Map.js";
 import MapRegion from "./models/MapRegion.js";
 
 const BASE_API_PATH = "./api";
@@ -101,13 +101,17 @@ const createMapRegion = async ( mapRegionData ) => {
     }
 };
 
-const deleteRegionsFromMap = async ( map_id ) => {
+/**
+ * Retrieves the enum values of mapRegion_state in an array of strings
+ * @returns {Array<String>} 
+ */
+const getStates = async () => {
     try {
-        return await HTTPClient.delete(`${BASE_API_PATH}/regions/map/${map_id}`);
+        return await HTTPClient.get(`${BASE_API_PATH}/mapRegion/states`);
     } catch (error) {
         return handleAuthError(error);
     }
-};
+}
 
 // ----- MapDAO CALLS -----
 
@@ -128,7 +132,7 @@ const getMapById = async ( map_id ) => {
 };
 
 /**
- * @param {Map} map 
+ * @param {MMap} map 
  * @returns 
  */
 const createMap = async ( map ) => {
@@ -140,7 +144,7 @@ const createMap = async ( map ) => {
 };
 
 /**
- * @param {Map} map 
+ * @param {MMap} map 
  * @returns 
  */
 const updateMap = async ( map ) => {
@@ -209,6 +213,7 @@ export default {
     getRegionParentsForMap,
     createRegion,
     createMapRegion,
+    getStates,
 
     getMaps,
     getMapById,

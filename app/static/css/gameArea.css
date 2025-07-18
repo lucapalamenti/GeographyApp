@@ -55,7 +55,12 @@ g.groupClickable:active polygon {
 g.disabled polygon {
     fill: grey;
     stroke-width: 0.05%;
-    stroke: rgb(68, 68, 68);
+    stroke: black;
+}
+g.outside polygon {
+    fill: rgb(77, 77, 77);
+    stroke-width: 0.05%;
+    stroke: black;
 }
 
 g.typed polygon {
@@ -63,12 +68,6 @@ g.typed polygon {
 }
 g.typeCurrent polygon {
     fill: rgb(0, 255, 213);
-}
-
-g.grey-out {
-    fill: grey;
-    stroke-width: 0.1%;
-    stroke: rgb(88, 88, 88);
 }
 
 svg.showGuesses g.guesses0 polygon {
@@ -87,7 +86,7 @@ svg.showGuesses g.guesses3 polygon {
 polygon {
     fill: rgb(230, 231, 137);
     stroke-width: 0.05%;
-    stroke: rgb(0, 0, 0);
+    stroke: black;
 }
 
 .clickLabel {

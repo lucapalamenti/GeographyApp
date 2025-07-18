@@ -3,11 +3,9 @@
 ## Recent Changes
 
 ### To Add
-- New region states:
-    - herring: clickable but wont show up as an answer
-    - outside: not clickable and shows up a different color than disabled
-- map_id should auto increment
+- Get rid of "parent" name in a group's id and instead nest groups with the same parent inside another g element
 - disabled regions should be listed below when creating a map
+- add a tooltip for the mapRegion_states buttons
 - Add sounds on input
 - When finishing a game, display regions that you struggled with
 - Add "Borders" table to database that tells you what regions a region borders
@@ -19,7 +17,6 @@
 - Drag map to move it
 - Labels show off screen when clicking in Learn gamemode
 - Add main menu button
-- When creating map, you should be able to make sure certain diabled regions are always on screen
 - Settings to add:
     - Toggle "auto enter" after every keystroke
     - Toggle input flashing
@@ -40,14 +37,19 @@
 - "mark as correct" option for type (hard) if you mistype
 - Select a thumbnail for a created map
 - Add an admin page for things like editing non custom maps
+- Multiple color schemes
 
 ### Added
 - Input box flashes a color depending on correctness of input
+- In type gamemode, if region is typed multiple times, it will subtly flash that region
 - Backup background image if the first one cant be found
 - Hit ESC to cancel delete map
 - rework how user interaction works for creating a map
 - Add "region_type" attribute to mapRegion
-- Ability to add "disabled/greyed out" regions to a map
+- New mapRegion states:
+    - "disabled": grey, unclickable regions. These regions will ALWAYS be visible when playing
+    - "herring": clickable regions, but are not included as answers
+    - "outside": grey, unclickable regions. Do not have to be visible when playing
 - Display maps in center of screen instead of top left
 - Changed storage of map_primary_color from a string 'R,G,B' to 3 separate integer values
 - Type gamemode has the no map list

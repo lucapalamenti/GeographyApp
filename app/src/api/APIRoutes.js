@@ -72,7 +72,16 @@ APIRouter.get('/regions/map/:mapId', (req, res) => {
         res.json( regions );
     })
     .catch( err => {
-        res.status(500).json({error:err, message: 'Error with DELETE request to /regions/map/:mapId'});
+        res.status(500).json({error:err, message: 'Error with GET request to /regions/map/:mapId'});
+    });
+});
+
+APIRouter.get('/mapRegion/states', (req, res) => {
+    RegionDAO.getStates().then( states => {
+        res.json( states );
+    })
+    .catch( err => {
+        res.status(500).json({error:err, message: 'Error with GET request to /mapRegion/states'});
     });
 });
 
@@ -81,7 +90,7 @@ APIRouter.get('/mapRegion/parents/:mapId', (req, res) => {
         res.json( parents );
     })
     .catch( err => {
-        res.status(500).json({error:err, message: 'Error with POST request to /mapRegion'});
+        res.status(500).json({error:err, message: 'Error with GET request to /mapRegion/parents/:mapId'});
     });
 });
 
@@ -90,7 +99,7 @@ APIRouter.get('/mapRegion/:mapId/:regionId', (req, res) => {
         res.json( region );
     })
     .catch( err => {
-        res.status(500).json({error:err, message: 'Error with POST request to /mapRegion'});
+        res.status(500).json({error:err, message: 'Error with GET request to /mapRegion/:mapId/:regionId'});
     });
 });
 

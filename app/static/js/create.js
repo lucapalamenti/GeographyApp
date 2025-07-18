@@ -3,7 +3,7 @@ import populateSVG from "./populateSVG.js";
 import util from "./util.js";
 
 import MapRegion from "./models/MapRegion.js";
-import Map from "./models/Map.js";
+import MMap from "./models/Map.js";
 
 const mapName = document.getElementById('map-name');
 const mapTemplate = document.getElementById('select-template');
@@ -55,33 +55,34 @@ await APIClient.getMaps( "map_id" ).then( maps => {
 }).catch( err => {
     console.error( err );
 });
+const statesArray = await APIClient.getStates();
+statesArray.push("deselect");
+const states = new Map();
+for ( const state of statesArray ) {
+    states[state] = {
+        name : state,
+        btn : document.getElementById(`${state}-btn`),
+        set : new Set()
+    }
+}
+let state = states.enabled;
 
-// A state for each side button
-const states = Object.freeze({
-    SELECTING : document.getElementById('select-button'),
-    DESELECTING : document.getElementById('deselect-button'),
-    DISABLING : document.getElementById('disabled-button'),
-});
-let state = states.SELECTING;
 stateButtonsPanel.addEventListener('click', e => {
     if ( e.target.tagName === "BUTTON" ) {
         // If the user selects a new button
-        if ( e.target !== state ) {
-            state.classList.remove('btn-selected');
-            state = e.target;
-            state.classList.add('btn-selected');
+        if ( e.target !== state.btn ) {
+            state.btn.classList.remove('btn-selected');
+            state = states[e.target.id.substring( 0, e.target.id.length - 4 )];
+            state.btn.classList.add('btn-selected');
         }
     }
 });
 
 let dragging = false;
-let selectedRegions = new Set();
-let disabledRegions = new Set();
 let map;
 mapTemplate.addEventListener('change', async e => {
     svg.innerHTML = "";
     selectedList.style.display = "none";
-    selectedRegions = new Set();
     // Get the chosen map and display it
     await APIClient.getMapById( mapTemplate.value ).then( async returnedMap => {
         map = returnedMap;
@@ -115,39 +116,21 @@ document.addEventListener('mouseup', e => {
  * @param {MouseEvent} mouse 
  */
 function changeRegionState( mouse ) {
-    const targetParent = mouse.target.parentNode;
-    const targetParentId = targetParent.id;
-    switch ( state ) {
-        case states.SELECTING:
-            selectedRegions.add( targetParentId );
-            targetParent.classList.add('selected');
-            disabledRegions.delete( targetParentId );
-            targetParent.classList.remove('disabled');
-            break;
-        case states.DESELECTING:
-            selectedRegions.delete( targetParentId );
-            targetParent.classList.remove('selected');
-            disabledRegions.delete( targetParentId );
-            targetParent.classList.remove('disabled');
-            break;
-        case states.DISABLING:
-            selectedRegions.delete( targetParentId );
-            targetParent.classList.remove('selected');
-            disabledRegions.add( targetParentId );
-            targetParent.classList.add('disabled');
-            break;
+    const region = mouse.target.parentNode;
+    const regionID = region.id;
+    for ( const className of region.classList ) {
+        region.classList.remove( className );
+        states[className].set.delete( regionID );
     }
+    region.classList.add( state.name );
+    state.set.add( regionID );
 }
 
 function displaySelection() {
     selectedList.innerHTML = "";
     selectedList.style.display = "flex";
     const sort = {};
-    if ( selectedRegions.size === 0 ) {
-        selectedList.style.display = "none";
-        return;
-    }
-    selectedRegions.forEach( shapeName => {
+    states.enabled.set.forEach( shapeName => {
         const split = shapeName.split('__');
         let parent = util.idToParent( shapeName );
         // If there isn't already a section for this parent
@@ -171,6 +154,97 @@ function displaySelection() {
             p.textContent = util.idToListItem( item );
             div.appendChild( p );
         });
+    });
+    if ( selectedList.innerHTML === "" ) {
+        selectedList.style.display = "none";
+    }
+}
+
+createButton.addEventListener('click', async e => {
+    e.preventDefault();
+    if ( mapName.value && mapTemplate.value && states.enabled.set.size > 1 ) {
+        await createCustomMap().then( map => {
+            // document.location = "../";
+        }).catch( err => {
+            console.error( err );
+        });
+    }
+});
+
+async function createCustomMap() {
+    const mapData = new MMap({
+        map_id : ( await APIClient.getMaps( 'map_id DESC' ) )[0].map_id + 1,
+        map_scale : 1.0,
+        map_name : mapName.value,
+        map_thumbnail : `${mapName.value.split(' ').join('_')}_Thumbnail.png`,
+        map_primary_color_R : parseInt( mapColor.value.substr(1,2), 16 ),
+        map_primary_color_G : parseInt( mapColor.value.substr(3,2), 16 ),
+        map_primary_color_B : parseInt( mapColor.value.substr(5,2), 16 ),
+        map_is_custom : 1
+    });
+    APIClient.createMap( mapData ).catch( err => {
+        console.error( err );
+    });
+
+    let mapMinX = Infinity, mapMaxX = 0, mapMinY = Infinity, mapMaxY = 0;
+    // Find the minium X & Y values for all "enabled", "disabled, and "herring" regions
+    for ( const region of [...states.enabled.set, ...states.disabled.set, ...states.herring.set] ) {
+        let regionMinX = Infinity, regionMinY = Infinity;
+        document.getElementById( region ).querySelectorAll('POLYGON').forEach( polygon => {
+            for ( const point of polygon.points ) {
+                if ( point.x < regionMinX ) regionMinX = point.x;
+                if ( point.y < regionMinY ) regionMinY = point.y;
+
+                if ( point.x > mapMaxX ) mapMaxX = point.x;
+                if ( point.y > mapMaxY ) mapMaxY = point.y;
+            }
+        });
+        if ( regionMinX < mapMinX ) mapMinX = regionMinX;
+        if ( regionMinY < mapMinY ) mapMinY = regionMinY;
+    }
+
+    // Selected Regions
+    for ( const stateName of statesArray ) {
+        for ( const region of states[stateName].set ) {
+            const parentName = util.idToParent( region );
+            const regionName = util.idToInput( region );
+            const region_id = (await APIClient.getRegionByMapIdParentName( mapTemplate.value, parentName, regionName )).region_id;
+
+            let regionMinX = Infinity, regionMinY = Infinity;
+            document.getElementById( region ).querySelectorAll('POLYGON').forEach( polygon => {
+                for ( const point of polygon.points ) {
+                    if ( point.x < regionMinX ) regionMinX = point.x;
+                    if ( point.y < regionMinY ) regionMinY = point.y;
+                }
+            });
+
+            const mapRegion = new MapRegion({
+                mapRegion_map_id : mapData.map_id,
+                mapRegion_region_id : region_id,
+                mapRegion_parent : parentName,
+                mapRegion_offsetX : ( regionMinX - mapMinX ) / map.map_scale,
+                mapRegion_offsetY : ( regionMinY - mapMinY ) / map.map_scale,
+                mapRegion_scaleX : 1.0,
+                mapRegion_scaleY : 1.0,
+                mapRegion_state : stateName
+            });
+            await APIClient.createMapRegion( mapRegion ).then( returnedMapRegion => {}).catch( async err => {
+                await APIClient.deleteMap( mapData.map_id ).then( res => {
+                    console.log( "Map creation aborted, deleting all data." );
+                    return;
+                });
+                console.error( err );
+            });
+        }
+    }
+
+    const xFraction = ( mapMaxX - mapMinX ) / map.map_scale / ( SVG_WIDTH - SVG_PADDING );
+    const yFraction = ( mapMaxY - mapMinY ) / map.map_scale / ( SVG_HEIGHT - SVG_PADDING );
+
+    mapData.map_scale = ( 1 / Math.max( xFraction, yFraction ) ).toFixed(6);
+
+    await APIClient.updateMap( mapData ).catch( err => {
+        console.error( err );
     });
 }
 
@@ -212,99 +286,4 @@ function unzoom( e ) {
     zoomSlider.removeAttribute( 'disabled' );
 
     document.removeEventListener( 'keydown', unzoom );
-}
-
-createButton.addEventListener('click', async e => {
-    e.preventDefault();
-    if ( mapName.value && mapTemplate.value && selectedRegions.size > 1 ) {
-        await createCustomMap().then( map => {
-            // document.location = "../";
-        }).catch( err => {
-            console.error( err );
-        });
-    }
-});
-
-async function createCustomMap() {
-    const mapDataColor = hexToRGB( mapColor.value );
-    const mapData = new Map({
-        map_id : ( await APIClient.getMaps( 'map_id DESC' ) )[0].map_id + 1,
-        map_scale : 1.0,
-        map_name : mapName.value,
-        map_thumbnail : `${mapName.value.split(' ').join('_')}_Thumbnail.png`,
-        map_primary_color_R : mapDataColor[0],
-        map_primary_color_G : mapDataColor[1],
-        map_primary_color_B : mapDataColor[2],
-        map_is_custom : 1
-    });
-    APIClient.createMap( mapData ).catch( err => {
-        console.error( err );
-    });
-
-    let mapMinX = Infinity, mapMaxX = 0, mapMinY = Infinity, mapMaxY = 0;
-    // Find the minium X & Y values for
-    for ( const region of selectedRegions ) {
-        let regionMinX = Infinity, regionMinY = Infinity;
-        document.getElementById( region ).querySelectorAll('POLYGON').forEach( polygon => {
-            for ( const point of polygon.points ) {
-                if ( point.x < regionMinX ) regionMinX = point.x;
-                if ( point.y < regionMinY ) regionMinY = point.y;
-
-                if ( point.x > mapMaxX ) mapMaxX = point.x;
-                if ( point.y > mapMaxY ) mapMaxY = point.y;
-            }
-        });
-        if ( regionMinX < mapMinX ) mapMinX = regionMinX;
-        if ( regionMinY < mapMinY ) mapMinY = regionMinY;
-    }
-
-    // Selected Regions
-    for ( const region of new Set([ ...selectedRegions, ...disabledRegions ]) ) {
-        const parentName = util.idToParent( region );
-        const regionName = util.idToInput( region );
-        const region_id = (await APIClient.getRegionByMapIdParentName( mapTemplate.value, parentName, regionName )).region_id;
-
-        let regionMinX = Infinity, regionMinY = Infinity;
-        document.getElementById( region ).querySelectorAll('POLYGON').forEach( polygon => {
-            for ( const point of polygon.points ) {
-                if ( point.x < regionMinX ) regionMinX = point.x;
-                if ( point.y < regionMinY ) regionMinY = point.y;
-            }
-        });
-
-        const mapRegion = new MapRegion({
-            mapRegion_map_id : mapData.map_id,
-            mapRegion_region_id : region_id,
-            mapRegion_parent : parentName,
-            mapRegion_offsetX : ( regionMinX - mapMinX ) / map.map_scale,
-            mapRegion_offsetY : ( regionMinY - mapMinY ) / map.map_scale,
-            mapRegion_scaleX : 1.0,
-            mapRegion_scaleY : 1.0,
-            mapRegion_state : selectedRegions.has( region ) ? "enabled" : "disabled",
-        });
-        
-        await APIClient.createMapRegion( mapRegion ).then( mapRegion => {}).catch( async err => {
-            await APIClient.deleteMap( mapData.map_id ).then( res => {
-                console.log( "Map creation aborted, deleting all data." );
-                return;
-            });
-            console.error( err );
-        });
-    }
-
-    const xFraction = ( mapMaxX - mapMinX ) / map.map_scale / ( SVG_WIDTH - SVG_PADDING );
-    const yFraction = ( mapMaxY - mapMinY ) / map.map_scale / ( SVG_HEIGHT - SVG_PADDING );
-
-    mapData.map_scale = ( 1 / Math.max( xFraction, yFraction ) ).toFixed(6);
-
-    await APIClient.updateMap( mapData ).catch( err => {
-        console.error( err );
-    });
-}
-
-function hexToRGB( hex ) {
-    const r = parseInt( hex.substr(1,2), 16 )
-    const g = parseInt( hex.substr(3,2), 16 )
-    const b = parseInt( hex.substr(5,2), 16 )
-    return [r,g,b];
 }

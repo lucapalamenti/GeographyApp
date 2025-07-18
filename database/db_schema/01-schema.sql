@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS `mapRegion` (
   `mapRegion_offsetY` decimal(10,6) NOT NULL DEFAULT 0.000000,
   `mapRegion_scaleX` decimal(10,6) NOT NULL DEFAULT 0.000000,
   `mapRegion_scaleY` decimal(10,6) NOT NULL DEFAULT 0.000000,
-  `mapRegion_state` enum('disabled','enabled') NOT NULL DEFAULT 'enabled',
+  `mapRegion_state` enum('disabled','enabled','herring','outside') NOT NULL DEFAULT 'enabled',
   PRIMARY KEY (`mapRegion_id`) USING BTREE,
   KEY `FK_mapRegion_map` (`mapRegion_map_id`) USING BTREE,
   KEY `FK_mapRegion_region` (`mapRegion_region_id`) USING BTREE,

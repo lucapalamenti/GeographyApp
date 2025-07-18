@@ -1,15 +1,16 @@
 import APIClient from "./APIClient.js";
 import util from "./util.js";
 
-import Map from "./models/Map.js";
+import MMap from "./models/Map.js";
 
+const FOCUS_STATES = ["enabled", "disabled", "herring"];
 const SVG_WIDTH = 1600;
 const SVG_HEIGHT = 900;
 const SVG_PADDING = 10; // Pixels
 
 /**
  * Load regions for a given map into an SVG element
- * @param {Map} map map object
+ * @param {MMap} map map object
  * @param {SVGElement} svg reference to an SVG element
  * @returns {Set} a set of region names
  */
@@ -21,7 +22,7 @@ export default async function populateSVG( map, svg ) {
         // Get width and height of map for centering on the page
         let minX = Infinity, maxX = 0, minY = Infinity, maxY = 0;
         for ( const region of returnedRegions ) {
-            if ( region.mapRegion_state === "enabled") {
+            if ( FOCUS_STATES.includes( region.mapRegion_state ) ) {
                 for ( const shape of region.region_points.coordinates ) {
                     const points = shape[0];
                     // Convert each array index from [1,2] to "1,2" and apply scaling & offsets
@@ -53,7 +54,7 @@ export default async function populateSVG( map, svg ) {
                 if ( region.mapRegion_state === "enabled" ) {
                     regionNames.add( regionId );
                 } else {
-                    group.classList.add("disabled");
+                    group.classList.add( region.mapRegion_state );
                 }
             }
             for ( const shape of region.region_points.coordinates ) {
