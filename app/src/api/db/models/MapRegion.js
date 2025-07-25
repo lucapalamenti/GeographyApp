@@ -9,7 +9,7 @@ module.exports = class MapRegion {
     mapRegion_offsetY = null;
     mapRegion_scaleX = null;
     mapRegion_scaleY = null;
-    mapRegion_state = null;
+    mapRegion_type = null;
     
     /**
      * Constructor given MapRegion object data
@@ -24,7 +24,7 @@ module.exports = class MapRegion {
         this.mapRegion_offsetY = Number( Number( data.mapRegion_offsetY ).toFixed( ROUND_PLACES ) );
         this.mapRegion_scaleX = Number( Number( data.mapRegion_scaleX ).toFixed( ROUND_PLACES ) );
         this.mapRegion_scaleY = Number( Number( data.mapRegion_scaleY ).toFixed( ROUND_PLACES ) );
-        this.mapRegion_state = String( data.mapRegion_state );
+        this.mapRegion_type = String( data.mapRegion_type );
     }
 
     /**
@@ -32,6 +32,6 @@ module.exports = class MapRegion {
      * @returns {Array<>}
      */
     getAllVariables() {
-        return [this.mapRegion_map_id, this.mapRegion_region_id, this.mapRegion_parent, this.mapRegion_offsetX, this.mapRegion_offsetY, this.mapRegion_scaleX, this.mapRegion_scaleY, this.mapRegion_state];
+        return [this.mapRegion_map_id, this.mapRegion_region_id, this.mapRegion_parent, this.mapRegion_offsetX, this.mapRegion_offsetY, this.mapRegion_scaleX, this.mapRegion_scaleY, this.mapRegion_type];
     }
 }

@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS `mapRegion` (
   `mapRegion_offsetY` decimal(10,6) NOT NULL DEFAULT 0.000000,
   `mapRegion_scaleX` decimal(10,6) NOT NULL DEFAULT 0.000000,
   `mapRegion_scaleY` decimal(10,6) NOT NULL DEFAULT 0.000000,
-  `mapRegion_state` enum('disabled','enabled','herring','outside') NOT NULL DEFAULT 'enabled',
+  `mapRegion_type` enum('disabled','enabled','herring','outside') NOT NULL DEFAULT 'enabled',
   PRIMARY KEY (`mapRegion_id`) USING BTREE,
   KEY `FK_mapRegion_map` (`mapRegion_map_id`) USING BTREE,
   KEY `FK_mapRegion_region` (`mapRegion_region_id`) USING BTREE,
@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS `mapRegion` (
 -- Data exporting was unselected.
 
 -- Dumping structure for table geographyapp.mapName
-CREATE TABLE IF NO EXISTS `regionName` (
+CREATE TABLE IF NOT EXISTS `regionName` (
   `regionName_id` int(10) NOT NULL AUTO_INCREMENT,
   `regionName_name` varchar(64) NOT NULL,
   PRIMARY KEY (`regionName_id`) USING BTREE

@@ -39,23 +39,24 @@
 - Add an admin page for things like editing non custom maps
 - Multiple color schemes
 
-### Added
+### Frontend changes
 - Input box flashes a color depending on correctness of input
 - In type gamemode, if region is typed multiple times, it will subtly flash that region
 - Backup background image if the first one cant be found
 - Hit ESC to cancel delete map
 - rework how user interaction works for creating a map
-- Add "region_type" attribute to mapRegion
-- New mapRegion states:
+- New mapRegion types:
     - "disabled": grey, unclickable regions. These regions will ALWAYS be visible when playing
     - "herring": clickable regions, but are not included as answers
     - "outside": grey, unclickable regions. Do not have to be visible when playing
 - Display maps in center of screen instead of top left
-- Changed storage of map_primary_color from a string 'R,G,B' to 3 separate integer values
 - Type gamemode has the no map list
 - Sort maps on home screen
 - Delete ALL custom maps button
 
+### Backend/Technical changes
+- changed mapRegion_state to mapRegion_type
+- Changed storage of map_primary_color from a string 'R,G,B' to 3 separate integer values
 - Admin can choose to print query statements to a file in the backend (really just for creating new default maps)
 
 ### Bugs Fixed

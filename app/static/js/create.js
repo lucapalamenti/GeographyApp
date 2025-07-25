@@ -3,7 +3,7 @@ import populateSVG from "./populateSVG.js";
 import util from "./util.js";
 
 import MapRegion from "./models/MapRegion.js";
-import MMap from "./models/Map.js";
+import MMap from "./models/MMap.js";
 
 const mapName = document.getElementById('map-name');
 const mapTemplate = document.getElementById('select-template');
@@ -226,7 +226,7 @@ async function createCustomMap() {
                 mapRegion_offsetY : ( regionMinY - mapMinY ) / map.map_scale,
                 mapRegion_scaleX : 1.0,
                 mapRegion_scaleY : 1.0,
-                mapRegion_state : stateName
+                mapRegion_type : stateName
             });
             await APIClient.createMapRegion( mapRegion ).then( returnedMapRegion => {}).catch( async err => {
                 await APIClient.deleteMap( mapData.map_id ).then( res => {

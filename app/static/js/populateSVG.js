@@ -1,7 +1,7 @@
 import APIClient from "./APIClient.js";
 import util from "./util.js";
 
-import MMap from "./models/Map.js";
+import MMap from "./models/MMap.js";
 
 const FOCUS_STATES = ["enabled", "disabled", "herring"];
 const SVG_WIDTH = 1600;
@@ -22,7 +22,7 @@ export default async function populateSVG( map, svg ) {
         // Get width and height of map for centering on the page
         let minX = Infinity, maxX = 0, minY = Infinity, maxY = 0;
         for ( const region of returnedRegions ) {
-            if ( FOCUS_STATES.includes( region.mapRegion_state ) ) {
+            if ( FOCUS_STATES.includes( region.mapRegion_type ) ) {
                 for ( const shape of region.region_points.coordinates ) {
                     const points = shape[0];
                     // Convert each array index from [1,2] to "1,2" and apply scaling & offsets

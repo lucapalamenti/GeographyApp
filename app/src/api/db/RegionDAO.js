@@ -114,7 +114,7 @@ const getMapRegion = async ( mapRegion_map_id, mapRegion_region_id ) => {
  */
 const createMapRegion = async ( mapRegion ) => {
     const query = `
-        INSERT INTO \`mapRegion\` (\`mapRegion_map_id\`, \`mapRegion_region_id\`, \`mapRegion_parent\`, \`mapRegion_offsetX\`, \`mapRegion_offsetY\`, \`mapRegion_scaleX\`, \`mapRegion_scaleY\`, \`mapRegion_state\`)
+        INSERT INTO \`mapRegion\` (\`mapRegion_map_id\`, \`mapRegion_region_id\`, \`mapRegion_parent\`, \`mapRegion_offsetX\`, \`mapRegion_offsetY\`, \`mapRegion_scaleX\`, \`mapRegion_scaleY\`, \`mapRegion_type\`)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?);
         `;
     const params = [...mapRegion.getAllVariables()];
@@ -136,7 +136,7 @@ const getStates = async () => {
         FROM INFORMATION_SCHEMA.COLUMNS
         WHERE TABLE_SCHEMA = 'geographyapp'
             AND TABLE_NAME = 'mapRegion'
-            AND COLUMN_NAME = 'mapRegion_state';
+            AND COLUMN_NAME = 'mapRegion_type';
         `, []).then( rows => {
             // Looks like "enum('disabled','enabled')"
             const str = rows[0].COLUMN_TYPE;

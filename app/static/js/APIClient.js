@@ -1,6 +1,6 @@
 import HTTPClient from "./HTTPClient.js";
 
-import MMap from "./models/Map.js";
+import MMap from "./models/MMap.js";
 import MapRegion from "./models/MapRegion.js";
 
 const BASE_API_PATH = "./api";
