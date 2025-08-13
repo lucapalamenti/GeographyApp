@@ -51,6 +51,8 @@
 - Type gamemode has the no map list
 - Sort maps on home screen
 - Delete ALL custom maps button
+- All gamemodes have an "end game" button
+- "review map" button after finishing a game
 
 ### Backend/Technical changes
 - changed mapRegion_state to mapRegion_type

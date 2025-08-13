@@ -12,8 +12,9 @@ const navBar = document.getElementById('nav-bar');
 const gamemodePanel = document.getElementById('gamemode-panel');
 const selectButton = gamemodePanel.querySelector('NAV .btn-green');
 const gameEndPanel = document.getElementById('game-end-panel');
-const playAgainButton = gameEndPanel.querySelector('NAV .btn-green');
-const homeButton = gameEndPanel.querySelector('NAV .btn-grey');
+const playAgainButton = gameEndPanel.querySelector('#play-again-button');
+const reviewMapButton = gameEndPanel.querySelector('#review-button');
+const homeButton = gameEndPanel.querySelector('#home-button');
 const bottomGameBar = document.getElementById('bottom-game-bar');
 
 let map;
@@ -58,6 +59,11 @@ selectButton.addEventListener('click', () => {
 
 playAgainButton.addEventListener('click', () => {
     location.reload();
+});
+
+reviewMapButton.addEventListener('click', () => {
+    html.classList.remove('filter-dark');
+    gameEndPanel.style.display = "none";
 });
 
 homeButton.addEventListener('click', () => {

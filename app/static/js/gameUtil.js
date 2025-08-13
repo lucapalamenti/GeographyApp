@@ -225,6 +225,9 @@ const endGame = () => {
     input.setAttribute('disabled', true);
     html.classList.add('filter-dark');
     gameEndPanel.style.display = "flex";
+    for ( const label of document.querySelectorAll('.click-on') ) {
+        label.textContent = "-";
+    }
     // Reappear colors at the end
     svg.classList.add("showGuesses");
     console.log( "YOU WIN!" );

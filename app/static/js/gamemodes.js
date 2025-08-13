@@ -14,6 +14,7 @@ const showNames = document.getElementById('showNames');
 const noMapArea = document.getElementById('no-map-area');
 const noListArea = document.getElementById('no-list-area');
 const endGameButton = document.getElementById('noList-end-button');
+const reviewMapButton = document.getElementById('review-button');
 
 let promptsArr;
 let current = {
@@ -41,6 +42,7 @@ const MAX_GUESSES = 3;
  */
 function learn() {
     enableClicking();
+    reviewMapButton.style.display = "none";
     promptLabel.textContent = "Click on a region to see its name";
     input.style.display = "none";
     promptBar.style.display = "flex";
@@ -150,19 +152,24 @@ function typeGamemodes( regionMap ) {
  * @param {Map<String,Array<String>} regionMap 
  */
 function listGamemodes( regionMap ) {
-    regionMap.forEach(( regionNames, parent ) => {
+    const alphabetized = [];
+    regionMap.forEach(( regionNames, parentName ) => {
+        alphabetized.push( parentName );
+    });
+    alphabetized.sort();
+    for ( const parentName of alphabetized ) {
         const h3 = document.createElement('H3');
-        h3.textContent = util.idToInput( parent );
+        h3.textContent = util.idToInput( parentName );
         const div = document.createElement('DIV');
-        div.setAttribute('id', parent);
-        for ( const name of regionNames ) {
+        div.setAttribute('id', parentName);
+        for ( const name of regionMap.get( parentName ) ) {
             const p = document.createElement('P');
             p.setAttribute('id', name);
             div.appendChild( p );
         }
         noMapArea.appendChild( h3 );
         noMapArea.appendChild( div );
-    });
+    }
 }
 /**
  * Runs the "Type" gamemode
@@ -394,9 +401,9 @@ function noList( regionMap ) {
  * to click on
  */
 function updateLabels() {
-    document.querySelectorAll('.click-on').forEach( label => {
+    for ( const label of document.querySelectorAll('.click-on') ) {
         label.textContent = ( current.pID === "-" ) ? "-" : current.rInput;
-    });
+    }
 }
 
 export const gamemodeMap = {

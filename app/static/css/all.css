@@ -172,7 +172,14 @@ input[type="range"]::-webkit-slider-thumb {
 }
 .btn-green:hover {
     background-color: rgb(80, 168, 58);
-    transition: background-color 0.25s;
+}
+
+.btn-turquoise {
+    border: 3px solid rgb(19, 92, 70);
+    background-color: rgb(69, 204, 136);
+}
+.btn-turquoise:hover {
+    background-color: rgb(56, 163, 110);
 }
 
 .btn-grey {
@@ -181,7 +188,6 @@ input[type="range"]::-webkit-slider-thumb {
 }
 .btn-grey:hover {
     background-color: rgb(173, 173, 173);
-    transition: background-color 0.25s;
 }
 
 .btn-icon {
@@ -211,4 +217,8 @@ input[type="range"]::-webkit-slider-thumb {
     background-image: url("../images/check.png");
     background-size: 100% 100%;
     background-repeat: no-repeat;
+}
+
+.btn-fade {
+    transition: background-color 0.25s;
 }
