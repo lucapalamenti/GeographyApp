@@ -289,6 +289,9 @@ function outline( regionMap ) {
 function noMap( regionMap ) {
     svg.parentNode.style.display = "none";
     type( regionMap );
+    endGameButton.addEventListener('click', e => {
+        svg.parentNode.style.display = "flex";
+    });
 }
 /**
  * Runs the "No List" gamemode
