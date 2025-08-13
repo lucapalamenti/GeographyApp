@@ -13,31 +13,24 @@ const capitalizeFirst = ( string ) => {
     return arr.join(' ');
 }
 
-const idToListItem = ( id ) => {
-    const split = id.split('__');
-    // Only add parent name if it exists
-    return `${idToInput(id)}${ split[0] === '' ? '' : `(${split[0].split(spaceReplacement).join(' ')})` }`;
-}
-
 const idToParent = ( id ) => {
     return capitalizeFirst( id.split('__')[0].split(spaceReplacement).join(' ') );
-}
+};
 
 const idToInput = ( id ) => {
-    return capitalizeFirst( id.split('__')[1].split(spaceReplacement).join(' ') ).split(apostropheReplacement).join("'");
-}
+    return capitalizeFirst( id.split(spaceReplacement).join(' ') ).split(apostropheReplacement).join("'");
+};
 
 const inputToId = ( input ) => {
     return input.split(' ').join(spaceReplacement).split("'").join(apostropheReplacement).toLowerCase();
-}
+};
 
 const inputToQuery = ( input ) => {
     return capitalizeFirst( input.split(' ').join(spaceReplacement).split("'").join(`${apostropheReplacement}`).toLowerCase() );
-}
+};
 
 export default {
     capitalizeFirst,
-    idToListItem,
     idToParent,
     idToInput,
     inputToId,

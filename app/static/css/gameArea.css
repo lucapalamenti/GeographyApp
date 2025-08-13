@@ -25,6 +25,10 @@
     padding-left: 5px;
 }
 
+#bottom-game-bar {
+    display: none;
+}
+
 #svg-container {
     width: 100%;
     height: 100%;
@@ -45,10 +49,10 @@ svg.zoom-3 polygon { stroke-width: 0.15px; }
 svg.zoom-4 polygon { stroke-width: 0.11px; }
 svg.zoom-5 polygon { stroke-width: 0.075px; }
 
-g.groupClickable:hover polygon {
+g.enabled g.clickable:hover polygon, g.herring g.clickable:hover polygon {
     fill: rgb(210, 211, 117);
 }
-g.groupClickable:active polygon {
+g.enabled g.clickable:active polygon, g.herring g.clickable:active polygon {
     fill: rgb(190, 191, 97);
 }
 
@@ -63,9 +67,6 @@ g.outside polygon {
     stroke: black;
 }
 
-g.typed polygon {
-    fill: rgb(106, 235, 89);
-}
 g.typeCurrent polygon {
     fill: rgb(0, 255, 213);
 }
@@ -114,12 +115,24 @@ polygon {
 
 #no-map-area {
     display: none;
-    flex-wrap: wrap;
+    flex-direction: column;
     justify-content: center;
     padding: 10px;
+    gap: 10px;
 }
 
-#no-map-area p {
+#no-map-area h3 {
+    align-self: center;
+}
+
+#no-map-area div {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+#no-map-area div p {
     width: 100%;
     max-width: 250px;
     height: 28px;
@@ -135,11 +148,11 @@ polygon {
 }
 
 #noList-end-button {
-    width: 60%;
+    width: 100%;
     background-color: goldenrod;
     border: 5px solid gold;
     border-radius: 20px;
-    font-size: 2rem;
+    font-size: clamp(1rem, 2vw, 2rem);
     font-weight: bold;
     box-shadow: 2px 4px 8px black;
 }
@@ -147,6 +160,7 @@ polygon {
     background-color: rgb(202, 153, 30);
     border: 5px solid rgb(226, 192, 0);
     color: rgb(223, 223, 223);
+    box-shadow: 1px 3px 8px black;
 }
 #noList-end-button:active {
     background-color: rgb(179, 136, 27);
@@ -155,7 +169,8 @@ polygon {
 }
 
 #endGame-area {
-    display: none;
+    display: flex;
+    flex-direction: column;
 }
 #endGame-area h3 {
     color: rgb(16, 97, 43);

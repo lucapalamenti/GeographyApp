@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="filter-dark">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -24,31 +24,30 @@
             <a href="../">Home</a>
             <strong>></strong>
         </nav>
-        <div id="covering"></div>
     </header>
     <main class="flex-col-center">
         <!-- Shows on load and when switching gamemodes -->
         <form id="gamemode-panel" class="page-center flex-col">
             <h3>Select Gamemode</h3>
             <div class="input-label">
-                <input type="radio" name="gamemode" id="learn" value="learn">
+                <input type="radio" name="gamemode" id="learn" value="Learn">
                 <label for="learn">Learn</label>
             </div>
             <div class="input-label">
-                <input type="radio" name="gamemode" id="click" value="click">
+                <input type="radio" name="gamemode" id="click" value="Click">
                 <label for="click">Click</label>
             </div>
             <div class="input-label">
-                <input type="radio" name="gamemode" id="clickDisappear" value="clickDisappear">
+                <input type="radio" name="gamemode" id="clickDisappear" value="Click (Disappear)">
                 <label for="clickDisappear">Click (Disappear)</label>
             </div>
             <div class="dotted-line"></div>
             <div class="input-label">
-                <input type="radio" name="gamemode" id="type" value="type">
+                <input type="radio" name="gamemode" id="type" value="Type">
                 <label for="type">Type</label>
             </div>
             <div class="input-label">
-                <input type="radio" name="gamemode" id="typeHard" value="typeHard">
+                <input type="radio" name="gamemode" id="typeHard" value="Type (Hard)">
                 <label for="typeHard">Type (Hard)</label>
             </div>
             <!-- <div class="input-label">
@@ -61,11 +60,11 @@
             </div> -->
             <div class="dotted-line"></div>
             <div class="input-label">
-                <input type="radio" name="gamemode" id="noMap" value="noMap">
+                <input type="radio" name="gamemode" id="noMap" value="No Map">
                 <label for="noMap">No Map</label>
             </div>
             <div class="input-label">
-                <input type="radio" name="gamemode" id="noList" value="noList">
+                <input type="radio" name="gamemode" id="noList" value="No List">
                 <label for="noList">No List</label>
             </div>
             <nav class="flex-row">
@@ -103,6 +102,20 @@
                     
                 </svg>
             </div>
+            <!-- Game bar below map -->
+            <div id="bottom-game-bar" class="game-bar flex-row">
+                <div class="input-label" id="showNames-container">
+                    <input type="checkbox" id="showNames">
+                    <label for="showNames">Show region names</label>
+                </div>
+                <div class="dotted-line"></div>
+                <div class="input-label">
+                    <label for="zoom-slider">Change zoom level</label>
+                    <input type="range" name="zoom" min="1" max="5" value="1" id="zoom-slider">
+                </div>
+                <div class="dotted-line"></div>
+                <button id="noList-end-button" class="btn-hover-effect">End Game</button>
+            </div>
             <!-- Used for No Map gamemode -->
             <div class="container-1" id="no-map-area">
                 
@@ -123,19 +136,6 @@
                         <h3>Duplicate Regions</h3>
                     </div>
                 </div>
-                <button id="noList-end-button">End Game</button>
-            </div>
-            <div class="game-bar flex-row">
-                <div class="input-label" id="showNames-container">
-                    <input type="checkbox" id="showNames">
-                    <label for="showNames">Show region names</label>
-                </div>
-                <div class="dotted-line"></div>
-                <div class="input-label">
-                    <label for="zoom-slider">Change zoom level</label>
-                    <input type="range" name="zoom" min="1" max="5" value="1" id="zoom-slider">
-                </div>
-                <div class="dotted-line"></div>
             </div>
         </div>
     </main>

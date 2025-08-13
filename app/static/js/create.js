@@ -10,29 +10,6 @@ const mapTemplate = document.getElementById('select-template');
 const mapColor = document.getElementById('map-color');
 const mapThumbnail = document.getElementById('map-thumbnail');
 
-mapThumbnail.addEventListener('change', async e => {
-    const file = e.target.files[0];
-    if ( file ) {
-        // file.name = ; Change when ready
-        const formData = new FormData();
-        formData.append('uploadedFile', file); // uploadedFile is a key
-        await APIClient.uploadFile( formData ).then( res => {
-            console.log( "File successfully uploaded." );
-        }).catch( err => {
-            console.error( err );
-        });
-    }
-});
-
-const retrieveBtn = document.getElementById('retrieve');
-retrieveBtn.addEventListener('click', async e => {
-    await APIClient.retrieveFile("photo1.png").then( res => {
-        console.log( res );
-    }).catch( err => {
-        console.error({message: "ERROR!", error: err});
-    });
-});
-
 const svg = document.getElementById('templateMap');
 const mapContainer = document.getElementById('map-container');
 const zoomSlider = document.getElementById('zoom-slider');
@@ -44,8 +21,8 @@ const SVG_WIDTH = svg.viewBox.baseVal.width;
 const SVG_HEIGHT = svg.viewBox.baseVal.height;
 const SVG_PADDING = 20; // pixels
 
-// Populate "Choose Template" selection panel
 await APIClient.getMaps( "map_id" ).then( maps => {
+    // Populate "Choose Template" selection panel
     maps.forEach( map => {
         const option = document.createElement('OPTION');
         option.textContent = map.map_name;
@@ -55,25 +32,20 @@ await APIClient.getMaps( "map_id" ).then( maps => {
 }).catch( err => {
     console.error( err );
 });
-const statesArray = await APIClient.getStates();
-statesArray.push("deselect");
-const states = new Map();
-for ( const state of statesArray ) {
-    states[state] = {
-        name : state,
-        btn : document.getElementById(`${state}-btn`),
-        set : new Set()
-    }
-}
-let state = states.enabled;
+// await is necessary even thought VSCode says otherwise
+const typesArray = await APIClient.getStates();
+typesArray.push("deselect");
 
+let selectedType = "enabled";
+
+// Handle user selecting a new region type selector
 stateButtonsPanel.addEventListener('click', e => {
     if ( e.target.tagName === "BUTTON" ) {
         // If the user selects a new button
-        if ( e.target !== state.btn ) {
-            state.btn.classList.remove('btn-selected');
-            state = states[e.target.id.substring( 0, e.target.id.length - 4 )];
-            state.btn.classList.add('btn-selected');
+        if ( !e.target.classList.contains('btn-selected') ) {
+            stateButtonsPanel.querySelector(`#${selectedType}-btn`).classList.remove('btn-selected');
+            selectedType = e.target.id.substring( 0, e.target.id.length - 4 );
+            stateButtonsPanel.querySelector(`#${selectedType}-btn`).classList.add('btn-selected');
         }
     }
 });
@@ -84,15 +56,13 @@ mapTemplate.addEventListener('change', async e => {
     svg.innerHTML = "";
     selectedList.style.display = "none";
     // Get the chosen map and display it
-    await APIClient.getMapById( mapTemplate.value ).then( async returnedMap => {
-        map = returnedMap;
-        await populateSVG( map, svg ).then( regionNames => {
-            svg.querySelectorAll('G').forEach( polygon => {
-                polygon.addEventListener('mouseover', mouse => {
-                    if ( mouse.button === 0 && dragging ) {
-                        changeRegionState( mouse );
-                    }
-                });
+    map = await APIClient.getMapById( mapTemplate.value );
+    await populateSVG( map, svg ).then( regionNames => {
+        svg.querySelectorAll('G').forEach( polygon => {
+            polygon.addEventListener('mouseover', mouse => {
+                if ( mouse.button === 0 && dragging ) {
+                    changeRegionType( mouse );
+                }
             });
         });
     });
@@ -103,66 +73,65 @@ mapTemplate.addEventListener('change', async e => {
 svg.addEventListener('mousedown', mouse => {
     dragging = true;
     if ( mouse.button === 0 && mouse.target.tagName === "polygon" ) {
-        changeRegionState( mouse );
+        changeRegionType( mouse );
     }
 });
 document.addEventListener('mouseup', e => {
-    dragging = false;
-    displaySelection();
+    if ( dragging ) {
+        dragging = false;
+        displaySelection();
+    }
 });
 
 /**
  * Handles changing the state of a region after a user mouses over it
  * @param {MouseEvent} mouse 
  */
-function changeRegionState( mouse ) {
-    const region = mouse.target.parentNode;
-    const regionID = region.id;
+function changeRegionType( mouse ) {
+    const region = mouse.target.parentElement;
     for ( const className of region.classList ) {
         region.classList.remove( className );
-        states[className].set.delete( regionID );
     }
-    region.classList.add( state.name );
-    state.set.add( regionID );
+    region.classList.add( selectedType )
 }
 
+/**
+ * Reset selected regions list and add all currently selected regions
+ */
 function displaySelection() {
     selectedList.innerHTML = "";
     selectedList.style.display = "flex";
-    const sort = {};
-    states.enabled.set.forEach( shapeName => {
-        const split = shapeName.split('__');
-        let parent = util.idToParent( shapeName );
-        // If there isn't already a section for this parent
-        if ( !sort[parent] ) {
-            sort[parent] = [`__${split[1]}`];
-        } else {
-            sort[parent].push( `__${split[1]}` );
-        }
+    const sort = new Object();
+    svg.querySelectorAll('G G.enabled G.enabled').forEach( region => {
+        let parentGroupId = region.parentElement.parentElement.getAttribute('id');
+        // If this parent doesnt yet have any selected regions, initialize its array
+        if ( !sort[parentGroupId] ) sort[parentGroupId] = new Array();
+        sort[parentGroupId] = sort[parentGroupId].concat( region.getAttribute('id') );
     });
-    Object.entries( sort ).forEach( ([parent, list]) => {
+    // Iterate through selected regions and desplay them
+    Object.entries( sort ).forEach( ([parentName, regionNames]) => {
+        // Create header
         const h5 = document.createElement('H5');
-        h5.textContent = `${parent} (${list.length})`;
+        h5.textContent = `${util.idToInput( parentName )} (${regionNames.length})`;
         selectedList.appendChild( h5 );
-
+        // Create div list section
         const div = document.createElement('DIV');
         div.classList.add("list-1");
         selectedList.appendChild( div );
-
-        list.forEach( item => {
+        // Add each selected region to the list
+        for ( const name of regionNames ) {
             const p = document.createElement('P');
-            p.textContent = util.idToListItem( item );
+            p.textContent = util.idToInput( name );
             div.appendChild( p );
-        });
+        };
     });
-    if ( selectedList.innerHTML === "" ) {
-        selectedList.style.display = "none";
-    }
+    // If no regions are selected, hide container
+    if ( selectedList.innerHTML === "" ) selectedList.style.display = "none";
 }
 
 createButton.addEventListener('click', async e => {
     e.preventDefault();
-    if ( mapName.value && mapTemplate.value && states.enabled.set.size > 1 ) {
+    if ( mapName.value && mapTemplate.value && svg.querySelectorAll('G G.enabled G.enabled').length > 1 ) {
         await createCustomMap().then( map => {
             // document.location = "../";
         }).catch( err => {
@@ -188,9 +157,9 @@ async function createCustomMap() {
 
     let mapMinX = Infinity, mapMaxX = 0, mapMinY = Infinity, mapMaxY = 0;
     // Find the minium X & Y values for all "enabled", "disabled, and "herring" regions
-    for ( const region of [...states.enabled.set, ...states.disabled.set, ...states.herring.set] ) {
+    for ( const region of svg.querySelectorAll('G G.enabled G.enabled, G G.enabled G.disabled, G G.enabled G.herring') ) {
         let regionMinX = Infinity, regionMinY = Infinity;
-        document.getElementById( region ).querySelectorAll('POLYGON').forEach( polygon => {
+        for ( const polygon of region.children ) {
             for ( const point of polygon.points ) {
                 if ( point.x < regionMinX ) regionMinX = point.x;
                 if ( point.y < regionMinY ) regionMinY = point.y;
@@ -198,25 +167,25 @@ async function createCustomMap() {
                 if ( point.x > mapMaxX ) mapMaxX = point.x;
                 if ( point.y > mapMaxY ) mapMaxY = point.y;
             }
-        });
+        };
         if ( regionMinX < mapMinX ) mapMinX = regionMinX;
         if ( regionMinY < mapMinY ) mapMinY = regionMinY;
     }
 
     // Selected Regions
-    for ( const stateName of statesArray ) {
-        for ( const region of states[stateName].set ) {
-            const parentName = util.idToParent( region );
-            const regionName = util.idToInput( region );
+    for ( const typeName of typesArray ) {
+        for ( const region of svg.querySelectorAll(`G G.enabled G.${typeName}`) ) {
+            const parentName = util.idToParent( region.parentElement.parentElement.id );
+            const regionName = util.idToInput( region.id );
             const region_id = (await APIClient.getRegionByMapIdParentName( mapTemplate.value, parentName, regionName )).region_id;
 
             let regionMinX = Infinity, regionMinY = Infinity;
-            document.getElementById( region ).querySelectorAll('POLYGON').forEach( polygon => {
+            for ( const polygon of region.children ) {
                 for ( const point of polygon.points ) {
                     if ( point.x < regionMinX ) regionMinX = point.x;
                     if ( point.y < regionMinY ) regionMinY = point.y;
                 }
-            });
+            };
 
             const mapRegion = new MapRegion({
                 mapRegion_map_id : mapData.map_id,
@@ -226,7 +195,7 @@ async function createCustomMap() {
                 mapRegion_offsetY : ( regionMinY - mapMinY ) / map.map_scale,
                 mapRegion_scaleX : 1.0,
                 mapRegion_scaleY : 1.0,
-                mapRegion_type : stateName
+                mapRegion_type : typeName
             });
             await APIClient.createMapRegion( mapRegion ).then( returnedMapRegion => {}).catch( async err => {
                 await APIClient.deleteMap( mapData.map_id ).then( res => {
@@ -247,6 +216,29 @@ async function createCustomMap() {
         console.error( err );
     });
 }
+
+mapThumbnail.addEventListener('change', async e => {
+    const file = e.target.files[0];
+    if ( file ) {
+        // file.name = ; Change when ready
+        const formData = new FormData();
+        formData.append('uploadedFile', file); // uploadedFile is a key
+        await APIClient.uploadFile( formData ).then( res => {
+            console.log( "File successfully uploaded." );
+        }).catch( err => {
+            console.error( err );
+        });
+    }
+});
+
+const retrieveBtn = document.getElementById('retrieve');
+retrieveBtn.addEventListener('click', async e => {
+    await APIClient.retrieveFile("photo1.png").then( res => {
+        console.log( res );
+    }).catch( err => {
+        console.error({message: "ERROR!", error: err});
+    });
+});
 
 // Right click to zoom
 svg.addEventListener( 'contextmenu', e => { e.preventDefault(); });

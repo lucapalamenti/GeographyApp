@@ -6,6 +6,7 @@ const query = window.location.search;
 let parameters = new URLSearchParams( query );
 const map_id = Number( parameters.get('mapId') );
 
+const html = document.querySelector('HTML');
 const svg = document.querySelector('SVG');
 const navBar = document.getElementById('nav-bar');
 const gamemodePanel = document.getElementById('gamemode-panel');
@@ -13,15 +14,7 @@ const selectButton = gamemodePanel.querySelector('NAV .btn-green');
 const gameEndPanel = document.getElementById('game-end-panel');
 const playAgainButton = gameEndPanel.querySelector('NAV .btn-green');
 const homeButton = gameEndPanel.querySelector('NAV .btn-grey');
-const covering = document.getElementById('covering');
-
-// document.getElementById('b1').addEventListener('click', () => {
-//     //APIClient.custom();
-//     APIClient.printRegionInsertQuery().then( r => {
-//     }).catch( err => {
-//         console.error( err );
-//     });
-// });
+const bottomGameBar = document.getElementById('bottom-game-bar');
 
 let map;
 // Update header bar
@@ -41,22 +34,23 @@ await APIClient.getMapById( map_id ).then( returnedMap => {
 
 // Store the names of all regions for the current map and show them on the map
 // ( await is necessary here even though vscode says otherwise )
-const regionNames = await populateSVG( map, svg );
+const regionMap = await populateSVG( map, svg );
 
 let currentGamemode = null;
-
 selectButton.addEventListener('click', () => {
     const gmInput = document.querySelector('INPUT[name="gamemode"]:checked');
     // If a gamemode radio button has been selected
     if ( gmInput ) {
+        html.classList.remove('filter-dark');
         currentGamemode = gmInput.value;
-        covering.style.visibility = "hidden";
         gamemodePanel.style.visibility = "hidden";
         gamemodePanel.style.cursor = "default";
+        bottomGameBar.style.display = "flex";
         APIClient.getRegionParentsForMap( map_id ).then( parents => {
-            gamemodeMap[currentGamemode]( Array.from( regionNames ), parents.map( index => { return index.split(' ').join('_') } ) );
+            // Call the method for the selected gamemode
+            gamemodeMap[currentGamemode]( regionMap );
             const gamemodeLabel = document.createElement('P');
-            gamemodeLabel.textContent = document.querySelector(`LABEL[for="${currentGamemode}"]`).textContent;
+            gamemodeLabel.textContent = currentGamemode;
             navBar.appendChild( gamemodeLabel );
         });
     }

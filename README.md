@@ -1,15 +1,13 @@
 # GeographyApp
 
-## Recent Changes
-
 ### To Add
-- Get rid of "parent" name in a group's id and instead nest groups with the same parent inside another g element
 - disabled regions should be listed below when creating a map
 - add a tooltip for the mapRegion_states buttons
 - Add sounds on input
-- When finishing a game, display regions that you struggled with
+- When finishing a game, display regions that you struggled with under the "game finished" box
 - Add "Borders" table to database that tells you what regions a region borders
 - Incorrect inputs shown at end for type and noMap gamemodes
+- "review map" button after finishing a game
 - No map gamemode has no end
 - Something to do with having to scroll up and down when deleting multiple maps at bottom
 - Make the type gamemode list toggleable
@@ -58,6 +56,7 @@
 - changed mapRegion_state to mapRegion_type
 - Changed storage of map_primary_color from a string 'R,G,B' to 3 separate integer values
 - Admin can choose to print query statements to a file in the backend (really just for creating new default maps)
+- Reworked svg element IDs. Regions with the same parent are now nested in a parent G element. Parent G elements are further split into groups of regions withthe same mapRegion_type
 
 ### Bugs Fixed
 - When hovering over a county in create mode only that polygon is shaded

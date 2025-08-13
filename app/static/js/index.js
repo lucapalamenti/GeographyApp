@@ -103,6 +103,7 @@ deleteAllMapsButton.addEventListener('click', async e => {
     });
 });
 
+// The button that says OOOOOOOO
 const btn = document.getElementById('b1');
 
 btn.addEventListener('click', async e => {
