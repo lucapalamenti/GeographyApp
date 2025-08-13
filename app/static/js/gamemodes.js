@@ -48,7 +48,7 @@ function learn() {
     promptBar.style.display = "flex";
     svg.addEventListener('click', e => {
         const group = e.target.parentNode;
-        if ( svg.querySelector(`svg > g g #${group.id}`) ) {
+        if ( group.parentElement !== svg && svg.querySelector(`svg > g g #${group.id}`) ) {
             gameUtil.showLabel( group, e, true, true );
             gameUtil.regionDisappearTrigger( group, ATTEMPT_COLORS[0], true, 1000, 1000 );
         }

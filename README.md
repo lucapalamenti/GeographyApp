@@ -62,6 +62,7 @@
 
 ### Bugs Fixed
 - When hovering over a county in create mode only that polygon is shaded
+- When dragging from one element into another (both within the same parent) in the learn gamemode, if the parent region is also the name of a region (ex: washington state and washington county) then the entire parent region gets highlighted
 
 ## Things I need to remember
 
