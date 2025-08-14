@@ -154,7 +154,10 @@ function typeGamemodes( regionMap ) {
 function listGamemodes( regionMap ) {
     const alphabetized = [];
     regionMap.forEach(( regionNames, parentName ) => {
-        alphabetized.push( parentName );
+        // Only display is list if this parent region contains regions of type "enabled"
+        if ( svg.querySelector(`SVG > G#${parentName} G.enabled`) ) {
+            alphabetized.push( parentName );
+        }
     });
     alphabetized.sort();
     for ( const parentName of alphabetized ) {
@@ -193,7 +196,7 @@ function type( regionMap ) {
                 // If the user input matches a region's name
                 if ( regionMap.get( selectParent.value ).includes( myInput ) ) {
                     color = REPEAT_COLOR;
-                    const group = svg.querySelector(`#${CSS.escape( myInput )}`);
+                    const group = svg.querySelector(`G#${selectParent.value} G G#${CSS.escape( myInput )}`);
                     // The user has not yet typed this region
                     if ( !group.classList.contains('typed') ) {
                         // Update map
