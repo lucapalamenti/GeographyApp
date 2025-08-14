@@ -124,17 +124,23 @@ const shuffleRegionMap = ( regionMap ) => {
     return arr;
 };
 
+const getOrderedParents = ( regionMap ) => {
+    const ordered = [];
+    regionMap.forEach(( regionNames, parentName ) => {
+        // Only display is list if this parent region contains regions of type "enabled"
+        if ( svg.querySelector(`SVG > G#${parentName} G.enabled`) ) {
+            ordered.push( parentName );
+        }
+    });
+    return ordered.sort();
+};
+
 /**
  * Populates the Select dropdown for gamemodes that need it
  * @param {Map<String,Array<String>} regionMap 
  */
-const populateSelect = ( regionMap ) => {
-    const alphabetized = [];
-    regionMap.forEach(( regionNames, parentName ) => {
-        alphabetized.push( parentName );
-    });
-    alphabetized.sort();
-    for ( const name of alphabetized ) {
+const populateSelect = ( regionMap ) => { 
+    for ( const name of getOrderedParents( regionMap ) ) {
         const option = document.createElement('OPTION');
         option.value = name.toLowerCase();
         option.innerText = util.idToInput( name );
@@ -239,6 +245,7 @@ export default {
     showLabel,
     getNumPrompts,
     shuffleRegionMap,
+    getOrderedParents,
     populateSelect,
     endGame
 }

@@ -152,15 +152,7 @@ function typeGamemodes( regionMap ) {
  * @param {Map<String,Array<String>} regionMap 
  */
 function listGamemodes( regionMap ) {
-    const alphabetized = [];
-    regionMap.forEach(( regionNames, parentName ) => {
-        // Only display is list if this parent region contains regions of type "enabled"
-        if ( svg.querySelector(`SVG > G#${parentName} G.enabled`) ) {
-            alphabetized.push( parentName );
-        }
-    });
-    alphabetized.sort();
-    for ( const parentName of alphabetized ) {
+    for ( const parentName of gameUtil.getOrderedParents( regionMap ) ) {
         const h3 = document.createElement('H3');
         h3.textContent = util.idToInput( parentName );
         const div = document.createElement('DIV');

@@ -133,8 +133,8 @@ createButton.addEventListener('click', async e => {
     e.preventDefault();
     if ( mapName.value && mapTemplate.value && svg.querySelectorAll('G G.enabled G.enabled').length > 1 ) {
         await createCustomMap().then( map => {
-            // document.location = "../";
-            console.info("complete");
+            document.location = "../";
+            console.info("Map created!");
         }).catch( err => {
             console.error( err );
         });
