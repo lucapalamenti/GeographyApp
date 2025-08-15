@@ -1,7 +1,6 @@
 # GeographyApp
 
 ### To Add
-- disabled regions should be listed below when creating a map
 - add a tooltip for the mapRegion_states buttons
 - Add sounds on input
 - When finishing a game, display regions that you struggled with under the "game finished" box
@@ -54,6 +53,7 @@
 - All gamemodes have an "end game" button
 - "review map" button after finishing a game
 - When creating a map, a rectangle outline of what will be included in the viewport can be toggled using the "Show Outline" checkbox
+- Regions of all selected types are listed when creating a map
 
 ### Backend/Technical changes
 - changed mapRegion_state to mapRegion_type

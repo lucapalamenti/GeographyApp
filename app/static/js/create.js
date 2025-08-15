@@ -36,8 +36,8 @@ await APIClient.getMaps( "map_id" ).then( maps => {
     console.error( err );
 });
 // await is necessary even thought VSCode says otherwise
-const typesArray = await APIClient.getStates();
-typesArray.push("deselect");
+const regionTypes = await APIClient.getStates();
+regionTypes.push("deselect");
 
 let selectedType = "enabled";
 
@@ -120,30 +120,38 @@ function changeRegionType( mouse ) {
 function displaySelection() {
     selectedList.innerHTML = "";
     selectedList.style.display = "flex";
-    const sort = new Object();
-    svg.querySelectorAll('G G.enabled G.enabled').forEach( region => {
-        let parentGroupId = region.parentElement.parentElement.getAttribute('id');
-        // If this parent doesnt yet have any selected regions, initialize its array
-        if ( !sort[parentGroupId] ) sort[parentGroupId] = new Array();
-        sort[parentGroupId] = sort[parentGroupId].concat( region.getAttribute('id') );
-    });
-    // Iterate through selected regions and desplay them
-    Object.entries( sort ).forEach( ([parentName, regionNames]) => {
-        // Create header
-        const h5 = document.createElement('H5');
-        h5.textContent = `${util.idToInput( parentName )} (${regionNames.length})`;
-        selectedList.appendChild( h5 );
-        // Create div list section
-        const div = document.createElement('DIV');
-        div.classList.add("list-1");
-        selectedList.appendChild( div );
-        // Add each selected region to the list
-        for ( const name of regionNames ) {
-            const p = document.createElement('P');
-            p.textContent = util.idToInput( name );
-            div.appendChild( p );
-        };
-    });
+    for ( const type of regionTypes ) {
+        const sort = {};
+        if ( type != "deselect" ) {
+            // Create type header
+            const h3 = document.createElement('H3');
+            h3.textContent = util.capitalizeFirst( type );
+            selectedList.appendChild(h3);
+            svg.querySelectorAll(`G G.enabled G.${type}`).forEach( region => {
+                let parentGroupId = region.parentElement.parentElement.getAttribute('id');
+                // If this parent doesnt yet have any selected regions, initialize its array
+                sort[parentGroupId] = sort[parentGroupId] ? sort[parentGroupId].concat( region.getAttribute('id') ) : [region.getAttribute('id')];
+            });
+            // Iterate through selected regions and desplay them
+            Object.entries( sort ).forEach( ([parentName, regionNames]) => {
+                // Create header
+                const h5 = document.createElement('H5');
+                h5.textContent = `${util.idToInput( parentName )} (${regionNames.length})`;
+                selectedList.appendChild( h5 );
+                // Create div list section
+                const div = document.createElement('DIV');
+                div.classList.add("list-1");
+                selectedList.appendChild( div );
+                // Add each selected region to the list
+                for ( const name of regionNames ) {
+                    const p = document.createElement('P');
+                    p.textContent = util.idToInput( name );
+                    div.appendChild( p );
+                };
+            });
+        }
+    }
+    
     // If no regions are selected, hide container
     if ( selectedList.innerHTML === "" ) selectedList.style.display = "none";
 }
@@ -180,7 +188,7 @@ async function createCustomMap() {
     let mapMinX = minMax.mapMinX, mapMaxX = minMax.mapMaxX, mapMinY = minMax.mapMinY, mapMaxY = minMax.mapMaxY;
 
     // For each region type
-    for ( const typeName of typesArray ) {
+    for ( const typeName of regionTypes ) {
         // For each selected region of this type
         for ( const region of svg.querySelectorAll(`G G.enabled G.${typeName}`) ) {
             const parentName = util.idToParent( region.parentElement.parentElement.id );
