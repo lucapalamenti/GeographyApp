@@ -35,7 +35,8 @@
 - Add an admin page for things like editing non custom maps
 - Multiple color schemes
 - When using a map with different region types as a template, all regions are displayed the same as "enabeld" regions, and "outside" regions are not displayed in the viewport
-- Add a "creating" screen when clicking the "create" map button
+- can still click on regions when reviewing map
+- right click multiple times to zoom further
 
 ### Frontend changes
 - Input box flashes a color depending on correctness of input
@@ -55,6 +56,7 @@
 - "review map" button after finishing a game
 - When creating a map, a rectangle outline of what will be included in the viewport can be toggled using the "Show Outline" checkbox
 - Regions of all selected types are listed when creating a map
+- "Creating Map" screen appears when clicking the "create" map button. Stops user from interacting with screen during this time
 
 ### Backend/Technical changes
 - changed mapRegion_state to mapRegion_type

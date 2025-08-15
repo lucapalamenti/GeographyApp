@@ -19,6 +19,7 @@ const selectedList = document.getElementById('selected-list');
 const createButton = document.getElementById('create-button');
 const stateButtonsPanel = document.getElementById('state-buttons-panel');
 const mapOutline = document.getElementById('map-outline');
+const loadingScreen = document.getElementById('loading-screen');
 
 const SVG_WIDTH = svg.viewBox.baseVal.width;
 const SVG_HEIGHT = svg.viewBox.baseVal.height;
@@ -164,9 +165,9 @@ function displaySelection() {
 createButton.addEventListener('click', async e => {
     e.preventDefault();
     if ( mapName.value && mapTemplate.value && svg.querySelectorAll('G G.enabled G.enabled').length > 1 ) {
+        loadingScreen.style.display = "flex";
         await createCustomMap().then( map => {
             document.location = "../";
-            console.info("Map created!");
         }).catch( err => {
             console.error( err );
         });
