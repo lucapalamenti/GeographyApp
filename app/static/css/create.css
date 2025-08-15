@@ -42,6 +42,14 @@ g g g.outside:has( polygon:hover ) polygon {
     fill: rgb(54, 54, 54);
 }
 
+#map-outline {
+    fill: none;
+    stroke: red;
+    stroke-width: 2px;
+}
+
+/* Type Buttons */
+
 #state-buttons-panel {
     position: absolute;
     transform: translate( calc(-50% - 50px) );
@@ -89,6 +97,7 @@ svg.zoom-4 polygon { stroke-width: 0.13px; }
 svg.zoom-5 polygon { stroke-width: 0.10px; }
 
 #map-container {
+    flex-direction: column;
     align-items: center;
     width: 90%;
     max-width: 1200px;
@@ -96,6 +105,12 @@ svg.zoom-5 polygon { stroke-width: 0.10px; }
 
 #map-container input[type="range"] {
     width: 150px;
+}
+
+#top-map-bar {
+    width: 100%;
+    display: flex;
+    gap: 5px;
 }
 
 #templateMap {

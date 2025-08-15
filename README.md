@@ -7,7 +7,6 @@
 - When finishing a game, display regions that you struggled with under the "game finished" box
 - Add "Borders" table to database that tells you what regions a region borders
 - Incorrect inputs shown at end for type and noMap gamemodes
-- "review map" button after finishing a game
 - No map gamemode has no end
 - Something to do with having to scroll up and down when deleting multiple maps at bottom
 - Make the type gamemode list toggleable
@@ -36,6 +35,7 @@
 - Select a thumbnail for a created map
 - Add an admin page for things like editing non custom maps
 - Multiple color schemes
+- When using a map with different region types as a template, all regions are displayed the same as "enabeld" regions, and "outside" regions are not displayed in the viewport
 
 ### Frontend changes
 - Input box flashes a color depending on correctness of input
@@ -53,6 +53,7 @@
 - Delete ALL custom maps button
 - All gamemodes have an "end game" button
 - "review map" button after finishing a game
+- When creating a map, a rectangle outline of what will be included in the viewport can be toggled using the "Show Outline" checkbox
 
 ### Backend/Technical changes
 - changed mapRegion_state to mapRegion_type

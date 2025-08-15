@@ -1,6 +1,7 @@
 import APIClient from "./APIClient.js";
 import populateSVG from "./populateSVG.js";
 import util from "./util.js";
+import createUtil from "./createUtil.js";
 
 import MapRegion from "./models/MapRegion.js";
 import MMap from "./models/MMap.js";
@@ -9,13 +10,15 @@ const mapName = document.getElementById('map-name');
 const mapTemplate = document.getElementById('select-template');
 const mapColor = document.getElementById('map-color');
 const mapThumbnail = document.getElementById('map-thumbnail');
+const zoomSlider = document.getElementById('zoom-slider');
+const showOutline = document.getElementById('show-outline');
 
 const svg = document.getElementById('templateMap');
 const mapContainer = document.getElementById('map-container');
-const zoomSlider = document.getElementById('zoom-slider');
 const selectedList = document.getElementById('selected-list');
 const createButton = document.getElementById('create-button');
 const stateButtonsPanel = document.getElementById('state-buttons-panel');
+const mapOutline = document.getElementById('map-outline');
 
 const SVG_WIDTH = svg.viewBox.baseVal.width;
 const SVG_HEIGHT = svg.viewBox.baseVal.height;
@@ -53,8 +56,12 @@ stateButtonsPanel.addEventListener('click', e => {
 let dragging = false;
 let map;
 mapTemplate.addEventListener('change', async e => {
-    svg.innerHTML = "";
+    mapOutline.style.display = "none";
     selectedList.style.display = "none";
+    mapContainer.style.display = "none";
+    for ( const group of svg.querySelectorAll('SVG > G') ) {
+        svg.removeChild( group );
+    }
     // Get the chosen map and display it
     map = await APIClient.getMapById( mapTemplate.value );
     await populateSVG( map, svg ).then( regionNames => {
@@ -66,8 +73,7 @@ mapTemplate.addEventListener('change', async e => {
             });
         });
     });
-    mapContainer.removeAttribute('hidden');
-    mapContainer.classList.add('flex-col');
+    mapContainer.style.display = "flex";
 });
 
 svg.addEventListener('mousedown', mouse => {
@@ -77,9 +83,22 @@ svg.addEventListener('mousedown', mouse => {
     }
 });
 document.addEventListener('mouseup', e => {
-    if ( dragging ) {
-        dragging = false;
+    dragging = false;
+    if ( svg.querySelectorAll('G G.enabled G.enabled, G G.enabled G.disabled, G G.enabled G.herring').length ) {
         displaySelection();
+        if ( showOutline.checked ) {
+            createUtil.createOutline();
+            mapOutline.style.display = "block";
+        }
+    }
+});
+
+showOutline.addEventListener('change', e => {
+    if ( showOutline.checked ) {
+        createUtil.createOutline();
+        mapOutline.style.display = "block";
+    } else {
+        mapOutline.style.display = "none";
     }
 });
 
@@ -156,25 +175,13 @@ async function createCustomMap() {
         console.error( err );
     });
 
-    let mapMinX = Infinity, mapMaxX = 0, mapMinY = Infinity, mapMaxY = 0;
-    // Find the minium X & Y values for all "enabled", "disabled, and "herring" regions
-    for ( const region of svg.querySelectorAll('G G.enabled G.enabled, G G.enabled G.disabled, G G.enabled G.herring') ) {
-        let regionMinX = Infinity, regionMinY = Infinity;
-        for ( const polygon of region.children ) {
-            for ( const point of polygon.points ) {
-                if ( point.x < regionMinX ) regionMinX = point.x;
-                if ( point.y < regionMinY ) regionMinY = point.y;
+    // Find min and max X & Y values
+    const minMax = createUtil.findMinMax();
+    let mapMinX = minMax.mapMinX, mapMaxX = minMax.mapMaxX, mapMinY = minMax.mapMinY, mapMaxY = minMax.mapMaxY;
 
-                if ( point.x > mapMaxX ) mapMaxX = point.x;
-                if ( point.y > mapMaxY ) mapMaxY = point.y;
-            }
-        };
-        if ( regionMinX < mapMinX ) mapMinX = regionMinX;
-        if ( regionMinY < mapMinY ) mapMinY = regionMinY;
-    }
-
-    // Selected Regions
+    // For each region type
     for ( const typeName of typesArray ) {
+        // For each selected region of this type
         for ( const region of svg.querySelectorAll(`G G.enabled G.${typeName}`) ) {
             const parentName = util.idToParent( region.parentElement.parentElement.id );
             const regionName = util.idToInput( region.id );
@@ -188,6 +195,7 @@ async function createCustomMap() {
                 }
             };
 
+            // Create the mapRegion
             const mapRegion = new MapRegion({
                 mapRegion_map_id : mapData.map_id,
                 mapRegion_region_id : region_id,

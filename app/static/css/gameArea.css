@@ -4,12 +4,6 @@
     background-color: rgb(31, 151, 71);
 }
 
-.game-bar {
-    border: 3px solid rgb(28, 134, 64);
-    padding: 5px;
-    background-color: rgb(31, 151, 71);
-}
-
 #prompt-bar {
     justify-content: space-between;
     border-bottom: none;

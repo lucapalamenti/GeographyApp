@@ -59,10 +59,21 @@
             </aside>
         </form>
 
-        <div class="container-1" id="map-container" hidden>
-            <input type="range" name="zoom" min="1" max="5" value="1" id="zoom-slider">
-            <svg viewBox="0 0 1600 900" preserveAspectRatio="none" id="templateMap">
+        <div class="" id="map-container" hidden>
+            <div id="top-map-bar" class="game-bar">
+                <div class="input-label">
+                    <label for="zoom-slider">Change zoom level</label>
+                    <input type="range" name="zoom" min="1" max="5" value="1" id="zoom-slider">
+                </div>
+                <div class="dotted-line"></div>
+                <div class="input-label">
+                    <input type="checkbox" id="show-outline">
+                    <label for="show-outline">Show Outline</label>
+                </div>
+            </div>
             
+            <svg viewBox="0 0 1600 900" preserveAspectRatio="none" id="templateMap" class="container-1">
+                <rect id="map-outline"></rect>
             </svg>
         </div>
         

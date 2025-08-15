@@ -127,7 +127,7 @@ const shuffleRegionMap = ( regionMap ) => {
 const getOrderedParents = ( regionMap ) => {
     const ordered = [];
     regionMap.forEach(( regionNames, parentName ) => {
-        // Only display is list if this parent region contains regions of type "enabled"
+        // Only select parents with regions of type "enabled"
         if ( svg.querySelector(`SVG > G#${parentName} G.enabled`) ) {
             ordered.push( parentName );
         }

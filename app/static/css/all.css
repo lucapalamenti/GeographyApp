@@ -119,6 +119,12 @@ select {
     filter: opacity(50%);
 }
 
+.game-bar {
+    border: 3px solid rgb(28, 134, 64);
+    padding: 5px;
+    background-color: rgb(31, 151, 71);
+}
+
 /* ----- <<<<< FORM >>>>> ----- */
 
 form {
