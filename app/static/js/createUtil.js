@@ -46,7 +46,7 @@ const createOutline = () => {
     let height = tempHeight + 2 * newPadding;
     // Make sure outline is proportional
     if ( xFraction > yFraction ) {
-        const newHeight = height * ( xFraction / yFraction )
+        const newHeight = height * ( xFraction / yFraction );
         y -= ( newHeight - height ) / 2;
         height = newHeight;
     } else {
