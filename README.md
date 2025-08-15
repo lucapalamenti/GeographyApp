@@ -35,6 +35,7 @@
 - Add an admin page for things like editing non custom maps
 - Multiple color schemes
 - When using a map with different region types as a template, all regions are displayed the same as "enabeld" regions, and "outside" regions are not displayed in the viewport
+- Add a "creating" screen when clicking the "create" map button
 
 ### Frontend changes
 - Input box flashes a color depending on correctness of input
