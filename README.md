@@ -1,7 +1,6 @@
 # GeographyApp
 
 ### To Add
-- add a tooltip for the mapRegion_states buttons
 - Add sounds on input
 - When finishing a game, display regions that you struggled with under the "game finished" box
 - Add "Borders" table to database that tells you what regions a region borders
@@ -57,6 +56,7 @@
 - When creating a map, a rectangle outline of what will be included in the viewport can be toggled using the "Show Outline" checkbox
 - Regions of all selected types are listed when creating a map
 - "Creating Map" screen appears when clicking the "create" map button. Stops user from interacting with screen during this time
+- The select region type buttons now show a tooltip with their name
 
 ### Backend/Technical changes
 - changed mapRegion_state to mapRegion_type

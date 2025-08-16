@@ -32,7 +32,7 @@
             <div class="input-label">
                 <label for="select-template">Choose Template</label>
                 <select name="select-template" id="select-template" required>
-                    <option value="">Select</option>
+                    <option value="-1">Select</option>
                 </select>
             </div>
             <div class="input-label">
@@ -50,12 +50,12 @@
                 <a href="../" class="btn-grey">Cancel</a>
             </nav>
 
-            <aside id="state-buttons-panel" class="container-1 flex-col">
-                <button class="btn-icon" id="deselect-btn" type="button"></button>
-                <button class="btn-icon btn-selected" id="enabled-btn" type="button"></button>
-                <button class="btn-icon" id="disabled-btn" type="button"></button>
-                <button class="btn-icon" id="herring-btn" type="button"></button>
-                <button class="btn-icon" id="outside-btn" type="button"></button>
+            <aside id="state-buttons-panel" class="flex-col">
+                <button class="btn-icon" id="deselect-btn" type="button"><aside>Deselect</aside></button>
+                <button class="btn-icon btn-selected" id="enabled-btn" type="button"><aside>Enable</aside></button>
+                <button class="btn-icon" id="disabled-btn" type="button"><aside>Disable</aside></button>
+                <button class="btn-icon" id="herring-btn" type="button"><aside>Herring</aside></button>
+                <button class="btn-icon" id="outside-btn" type="button"><aside>Outside</aside></button>
             </aside>
         </form>
 

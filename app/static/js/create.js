@@ -60,21 +60,25 @@ mapTemplate.addEventListener('change', async e => {
     mapOutline.style.display = "none";
     selectedList.style.display = "none";
     mapContainer.style.display = "none";
+    stateButtonsPanel.style.display = "none";
     for ( const group of svg.querySelectorAll('SVG > G') ) {
         svg.removeChild( group );
     }
-    // Get the chosen map and display it
-    map = await APIClient.getMapById( mapTemplate.value );
-    await populateSVG( map, svg ).then( regionNames => {
-        svg.querySelectorAll('G').forEach( polygon => {
-            polygon.addEventListener('mouseover', mouse => {
-                if ( mouse.button === 0 && dragging ) {
-                    changeRegionType( mouse );
-                }
-            });
+    if ( mapTemplate.value >= 0 ) {
+        // Get the chosen map and display it
+        map = await APIClient.getMapById( mapTemplate.value );
+        await populateSVG( map, svg ).then( regionNames => {
+            for ( const group of svg.querySelectorAll('SVG G G G') ) {
+                group.addEventListener('mouseover', mouse => {
+                    if ( mouse.button === 0 && dragging ) {
+                        changeRegionType( mouse );
+                    }
+                });
+            }
         });
-    });
-    mapContainer.style.display = "flex";
+        stateButtonsPanel.style.display = "flex";
+        mapContainer.style.display = "flex";
+    }
 });
 
 svg.addEventListener('mousedown', mouse => {
@@ -185,7 +189,7 @@ async function createCustomMap() {
         map_primary_color_B : parseInt( mapColor.value.substr(5,2), 16 ),
         map_is_custom : 1
     });
-    APIClient.createMap( mapData ).catch( err => {
+    await APIClient.createMap( mapData ).catch( err => {
         console.error( err );
     });
 

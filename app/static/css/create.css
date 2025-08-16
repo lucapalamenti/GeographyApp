@@ -48,11 +48,31 @@ g g g.outside:has( polygon:hover ) polygon {
     stroke-width: 2px;
 }
 
-/* Type Buttons */
+/* Region Type Button panel */
 
 #state-buttons-panel {
     position: absolute;
     transform: translate( calc(-50% - 50px) );
+    display: none;
+}
+#state-buttons-panel aside {
+    display: none;
+}
+#state-buttons-panel button {
+    position: relative;
+}
+#state-buttons-panel button:hover aside {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    transform: translate(calc(-100% + 15px), -2px);
+    display: block;
+    background-color: rgb(31, 151, 71);
+    border: 3px solid rgb(28, 134, 64);
+    border-radius: 5px;
+    padding: 1px;
+    padding-right: 5px;
+    padding-left: 5px;
 }
 
 #enabled-btn {
