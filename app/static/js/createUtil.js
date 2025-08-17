@@ -1,16 +1,16 @@
-const svg = document.getElementById('templateMap');
-const mapOutline = document.getElementById('map-outline');
+import { svg, mapOutline } from "./documentElements-create.js";
+import { SVG_WIDTH, SVG_HEIGHT, SVG_PADDING } from "./documentElements-create.js";
 
-const SVG_WIDTH = svg.viewBox.baseVal.width;
-const SVG_HEIGHT = svg.viewBox.baseVal.height;
-const SVG_PADDING = 20; // pixels
+const getCenteredRegions = () => {
+    return svg.querySelectorAll('G G.enabled G.enabled, G G.enabled G.disabled, G G.enabled G.herring');
+}
 
 /**
  * Find the minium and maximum X & Y values for all "enabled", "disabled, and "herring" regions
  */
 const findMinMax = () => {
     let mapMinX = Infinity, mapMaxX = 0, mapMinY = Infinity, mapMaxY = 0;
-    for ( const region of svg.querySelectorAll('G G.enabled G.enabled, G G.enabled G.disabled, G G.enabled G.herring') ) {
+    for ( const region of getCenteredRegions() ) {
         let regionMinX = Infinity, regionMinY = Infinity;
         for ( const polygon of region.children ) {
             for ( const point of polygon.points ) {
@@ -62,6 +62,7 @@ const createOutline = () => {
 };
 
 export default {
+    getCenteredRegions,
     findMinMax,
     createOutline
 }

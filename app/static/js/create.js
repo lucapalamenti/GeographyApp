@@ -6,24 +6,10 @@ import createUtil from "./createUtil.js";
 import MapRegion from "./models/MapRegion.js";
 import MMap from "./models/MMap.js";
 
-const mapName = document.getElementById('map-name');
-const mapTemplate = document.getElementById('select-template');
-const mapColor = document.getElementById('map-color');
-const mapThumbnail = document.getElementById('map-thumbnail');
-const zoomSlider = document.getElementById('zoom-slider');
-const showOutline = document.getElementById('show-outline');
-
-const svg = document.getElementById('templateMap');
-const mapContainer = document.getElementById('map-container');
-const selectedList = document.getElementById('selected-list');
-const createButton = document.getElementById('create-button');
-const stateButtonsPanel = document.getElementById('state-buttons-panel');
-const mapOutline = document.getElementById('map-outline');
-const loadingScreen = document.getElementById('loading-screen');
-
-const SVG_WIDTH = svg.viewBox.baseVal.width;
-const SVG_HEIGHT = svg.viewBox.baseVal.height;
-const SVG_PADDING = 20; // pixels
+import { mapName, mapTemplate, mapColor, mapThumbnail, createButton } from "./documentElements-create.js";
+import { zoomSlider, showOutline, stateButtonsPanel } from "./documentElements-create.js";
+import { mapContainer, svg, mapOutline, loadingScreen, selectedList } from "./documentElements-create.js";
+import { SVG_WIDTH, SVG_HEIGHT, SVG_PADDING } from "./documentElements-create.js";
 
 await APIClient.getMaps( "map_id" ).then( maps => {
     // Populate "Choose Template" selection panel
@@ -39,7 +25,6 @@ await APIClient.getMaps( "map_id" ).then( maps => {
 // await is necessary even thought VSCode says otherwise
 const regionTypes = await APIClient.getStates();
 regionTypes.push("deselect");
-
 let selectedType = "enabled";
 
 // Handle user selecting a new region type selector
@@ -89,7 +74,7 @@ svg.addEventListener('mousedown', mouse => {
 });
 document.addEventListener('mouseup', e => {
     dragging = false;
-    if ( svg.querySelectorAll('G G.enabled G.enabled, G G.enabled G.disabled, G G.enabled G.herring').length ) {
+    if ( createUtil.getCenteredRegions().length > 0 ) {
         displaySelection();
         if ( showOutline.checked ) {
             createUtil.createOutline();
@@ -99,7 +84,7 @@ document.addEventListener('mouseup', e => {
 });
 
 showOutline.addEventListener('change', e => {
-    if ( showOutline.checked ) {
+    if ( showOutline.checked && createUtil.getCenteredRegions().length ) {
         createUtil.createOutline();
         mapOutline.style.display = "block";
     } else {
@@ -113,9 +98,8 @@ showOutline.addEventListener('change', e => {
  */
 function changeRegionType( mouse ) {
     const region = mouse.target.parentElement;
-    for ( const className of region.classList ) {
-        region.classList.remove( className );
-    }
+    // Remove existing class from the region and add the new one
+    region.classList.remove( region.classList[0] )
     region.classList.add( selectedType )
 }
 
