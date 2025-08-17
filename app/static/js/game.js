@@ -2,20 +2,11 @@ import APIClient from "./APIClient.js";
 import { gamemodeMap } from "./gamemodes.js";
 import populateSVG from "./populateSVG.js";
 
+import { html, svg, navBar, gamemodePanel, selectButton, gameEndPanel, playAgainButton, reviewMapButton, homeButton, bottomGameBar } from "./documentElements-game.js";
+
 const query = window.location.search;
 let parameters = new URLSearchParams( query );
 const map_id = Number( parameters.get('mapId') );
-
-const html = document.querySelector('HTML');
-const svg = document.querySelector('SVG');
-const navBar = document.getElementById('nav-bar');
-const gamemodePanel = document.getElementById('gamemode-panel');
-const selectButton = gamemodePanel.querySelector('NAV .btn-green');
-const gameEndPanel = document.getElementById('game-end-panel');
-const playAgainButton = gameEndPanel.querySelector('#play-again-button');
-const reviewMapButton = gameEndPanel.querySelector('#review-button');
-const homeButton = gameEndPanel.querySelector('#home-button');
-const bottomGameBar = document.getElementById('bottom-game-bar');
 
 let map;
 // Update header bar

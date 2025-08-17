@@ -1,41 +1,21 @@
 import util from "./util.js";
 import gameUtil from "./gameUtil.js";
 
-const svg = document.querySelector('SVG');
-const promptBar = document.getElementById('prompt-bar');
-const input = promptBar.querySelector('INPUT');
-const promptLabel = promptBar.querySelector('P');
-const tally = promptBar.querySelector('#tally');
-
-const zoomSlider = document.getElementById('zoom-slider');
-const tooltip = document.getElementById('tooltip');
-const selectParent = document.getElementById('select-parent');
-const showNames = document.getElementById('showNames');
-const noMapArea = document.getElementById('no-map-area');
-const noListArea = document.getElementById('no-list-area');
-const endGameButton = document.getElementById('noList-end-button');
-const reviewMapButton = document.getElementById('review-button');
+import { svg, promptBar, input, promptLabel, noListArea, endGameButton, reviewMapButton, tally, zoomSlider, tooltip, selectParent, showNames, noMapArea} from "./documentElements-game.js";
+import { ATTEMPT_COLORS, REPEAT_COLOR, MAX_GUESSES } from "./documentElements-game.js";
 
 let promptsArr;
-let current = {
-    pID : "",
-    pInput : "",
-    rID : "",
-    rInput : ""
-};
-/**
- * Returns a reference to the G element for the current region
- * @returns {HTMLElement}
- */
-const queryCurrentRegion = () => { return svg.querySelector(`svg > #${current.pID} #${current.rID}`) };
+let currentPrompt = { pID : "", pInput : "", rID : "", rInput : "" };
 
 let numPrompts;
 let numCorrect = 0;
 let guesses = 0;
 
-const ATTEMPT_COLORS = [ 'rgb(75, 255, 75)', 'rgb(240, 219, 35)', 'rgb(243, 148, 24)', 'rgb(235, 89, 89)' ];
-const REPEAT_COLOR = "rgba(172, 233, 164, 1)";
-const MAX_GUESSES = 3;
+/**
+ * Returns a reference to the G element for the current region
+ * @returns {HTMLElement}
+ */
+const queryCurrentRegion = () => { return svg.querySelector(`svg > #${currentPrompt.pID} #${currentPrompt.rID}`) };
 
 /**
  * Run the "Learn" gamemode
@@ -68,7 +48,7 @@ function click ( regionMap, disappear ) {
     tally.textContent = `Correct: ${numCorrect}/${numPrompts = gameUtil.getNumPrompts( regionMap )}`;
     // Shuffle the prompts and display the first one on screen
     promptsArr = gameUtil.shuffleRegionMap( regionMap );
-    current = promptsArr.pop();
+    currentPrompt = promptsArr.pop();
     updateLabels();
     promptBar.style.display = "flex";
     // Setup tooltip to follow cursor
@@ -87,7 +67,7 @@ function click ( regionMap, disappear ) {
         const group = e.target.parentNode;
         if ( group.classList.contains('clickable') ) {
             // Correct region clicked
-            if ( group.getAttribute('id') === current.rID ) {
+            if ( group.getAttribute('id') === currentPrompt.rID ) {
                 if ( guesses === 0 ) numCorrect++;
                 next( group );
             }
@@ -113,7 +93,7 @@ function click ( regionMap, disappear ) {
         group.classList.add(`guesses${guesses}`);
         tally.textContent = `Correct: ${numCorrect}/${numPrompts}`;
         // If there are no more prompts left
-        if ( !( current = promptsArr.pop() ) )
+        if ( !( currentPrompt = promptsArr.pop() ) )
             gameUtil.endGame();
         // Continue to next prompt
         else {
@@ -224,7 +204,7 @@ function typeHard( regionMap ) {
     promptLabel.textContent = "Name the highlighted region";
     typeGamemodes( regionMap );
     promptsArr = gameUtil.shuffleRegionMap( regionMap );
-    current = promptsArr.pop();
+    currentPrompt = promptsArr.pop();
 
     let currentGroup = queryCurrentRegion();
     currentGroup.classList.add('typeCurrent');
@@ -235,7 +215,7 @@ function typeHard( regionMap ) {
             // Only check if the value & parent arent blank
             if ( input.value !== '' ) {
                 // If input is correct
-                if ( input.value.toLowerCase() === current.rInput.toLowerCase() ) {
+                if ( input.value.toLowerCase() === currentPrompt.rInput.toLowerCase() ) {
                     gameUtil.pulseElementBG( input, "white", ATTEMPT_COLORS[guesses] );
                     gameUtil.showLabel( currentGroup, null, true, true );
                     next();
@@ -258,7 +238,7 @@ function typeHard( regionMap ) {
         currentGroup.classList.add(`guesses${guesses}`);
         if ( guesses === 0 ) numCorrect++;
         input.value = "";
-        if ( !( current = promptsArr.pop() ) ) {
+        if ( !( currentPrompt = promptsArr.pop() ) ) {
             gameUtil.endGame();
         } else {
             currentGroup = queryCurrentRegion();
@@ -400,7 +380,7 @@ function noList( regionMap ) {
  */
 function updateLabels() {
     for ( const label of document.querySelectorAll('.click-on') ) {
-        label.textContent = ( current.pID === "-" ) ? "-" : current.rInput;
+        label.textContent = ( currentPrompt.pID === "-" ) ? "-" : currentPrompt.rInput;
     }
 }
 

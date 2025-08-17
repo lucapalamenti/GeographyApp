@@ -1,18 +1,14 @@
 import util from "./util.js";
 
-const html = document.querySelector('HTML');
-const svg = document.querySelector('SVG');
-const promptBar = document.getElementById('prompt-bar');
-const input = promptBar.querySelector('INPUT');
-const zoomSlider = document.getElementById('zoom-slider');
-const tooltip = document.getElementById('tooltip');
-const gameEndPanel = document.getElementById('game-end-panel');
-const selectParent = document.getElementById('select-parent');
-const showNames = document.getElementById('showNames');
-const endGameButton = document.getElementById('noList-end-button');
+import { html, tooltip, svg, input, selectParent, zoomSlider, showNames, endGameButton, gameEndPanel } from "./documentElements-game.js";
+import { SVG_WIDTH, SVG_HEIGHT } from "./documentElements-game.js";
 
-const SVG_WIDTH = 1600;
-const SVG_HEIGHT = 900;
+/**
+ * Returns a reference to the G element for the current region
+ * @returns {HTMLElement}
+ */
+const queryCurrentRegion = () => { return svg.querySelector(`svg > #${currentPrompt.pID} #${currentPrompt.rID}`) };
+
 /**
  * Pulses a given group element a color
  * @param {SVGGElement} group 
@@ -240,6 +236,7 @@ const endGame = () => {
 }
 
 export default {
+    queryCurrentRegion,
     regionDisappearTrigger,
     pulseElementBG,
     showLabel,

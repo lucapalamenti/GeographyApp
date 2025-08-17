@@ -6,9 +6,7 @@ import createUtil from "./createUtil.js";
 import MapRegion from "./models/MapRegion.js";
 import MMap from "./models/MMap.js";
 
-import { mapName, mapTemplate, mapColor, mapThumbnail, createButton } from "./documentElements-create.js";
-import { zoomSlider, showOutline, stateButtonsPanel } from "./documentElements-create.js";
-import { mapContainer, svg, mapOutline, loadingScreen, selectedList } from "./documentElements-create.js";
+import { mapName, mapTemplate, mapColor, mapThumbnail, createButton, zoomSlider, showOutline, stateButtonsPanel, mapContainer, svg, mapOutline, loadingScreen, selectedList } from "./documentElements-create.js";
 import { SVG_WIDTH, SVG_HEIGHT, SVG_PADDING } from "./documentElements-create.js";
 
 await APIClient.getMaps( "map_id" ).then( maps => {
