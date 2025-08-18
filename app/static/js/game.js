@@ -1,8 +1,10 @@
 import APIClient from "./APIClient.js";
 import { gamemodeMap } from "./gamemodes.js";
 import populateSVG from "./populateSVG.js";
+import gameUtil from "./gameUtil.js";
+import util from "./util.js";
 
-import { html, svg, navBar, gamemodePanel, selectButton, gameEndPanel, playAgainButton, reviewMapButton, homeButton, bottomGameBar } from "./documentElements-game.js";
+import { html, svg, navBar, gamemodePanel, selectButton, gameEndPanel, playAgainButton, reviewMapButton, homeButton, bottomGameBar, tooltip } from "./documentElements-game.js";
 
 const query = window.location.search;
 let parameters = new URLSearchParams( query );
@@ -53,8 +55,20 @@ playAgainButton.addEventListener('click', () => {
 });
 
 reviewMapButton.addEventListener('click', () => {
+    svg.classList.add('reviewing');
     html.classList.remove('filter-dark');
     gameEndPanel.style.display = "none";
+    gameUtil.enableTooltip();
+    tooltip.removeChild( tooltip.firstChild );
+    tooltip.style.fontWeight = "bold";
+    svg.addEventListener('mousemove', e => {
+        if ( e.target.tagName === "polygon" ) {
+            tooltip.textContent = util.idToInput( e.target.parentElement.id );
+            tooltip.style.display = "block" ;
+        } else {
+            tooltip.style.display = "none" ;
+        }
+    });
 });
 
 homeButton.addEventListener('click', () => {

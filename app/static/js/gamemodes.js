@@ -52,15 +52,7 @@ function click ( regionMap, disappear ) {
     updateLabels();
     promptBar.style.display = "flex";
     // Setup tooltip to follow cursor
-    svg.addEventListener('mousemove', moveToolTip );
-    svg.addEventListener('scroll', moveToolTip );
-    svg.addEventListener('mouseout', e => {
-        tooltip.style.display = "none" ;
-    });
-    function moveToolTip( e ) {
-        tooltip.style.transform = `translate( calc( -50% + ${e.clientX}px ), calc( 60% + ${e.clientY + window.scrollY}px ) )`;
-        tooltip.style.display = "block";
-    }
+    gameUtil.enableTooltip();
     // In disappear mode remove showGuesses so that the region color changes back to default
     if ( disappear ) svg.classList.remove("showGuesses");
     svg.addEventListener('click', e => {

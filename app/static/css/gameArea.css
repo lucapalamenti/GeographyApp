@@ -28,62 +28,6 @@
     height: 100%;
 }
 
-svg {
-    display: block;
-    background-color: rgb(141, 209, 226) !important;
-}
-
-svg.hide-polygons polygon {
-    visibility: hidden;
-}
-
-svg.zoom-1 polygon { stroke-width: 0.30px; }
-svg.zoom-2 polygon { stroke-width: 0.20px; }
-svg.zoom-3 polygon { stroke-width: 0.15px; }
-svg.zoom-4 polygon { stroke-width: 0.11px; }
-svg.zoom-5 polygon { stroke-width: 0.075px; }
-
-g.enabled g.clickable:hover polygon, g.herring g.clickable:hover polygon {
-    fill: rgb(210, 211, 117);
-}
-g.enabled g.clickable:active polygon, g.herring g.clickable:active polygon {
-    fill: rgb(190, 191, 97);
-}
-
-g.disabled polygon {
-    fill: grey;
-    stroke-width: 0.05%;
-    stroke: black;
-}
-g.outside polygon {
-    fill: rgb(77, 77, 77);
-    stroke-width: 0.05%;
-    stroke: black;
-}
-
-g.typeCurrent polygon {
-    fill: rgb(0, 255, 213);
-}
-
-svg.showGuesses g.guesses0 polygon {
-    fill: rgb(106, 235, 89);
-}
-svg.showGuesses g.guesses1 polygon {
-    fill: rgb(240, 219, 35);
-}
-svg.showGuesses g.guesses2 polygon {
-    fill: rgb(243, 148, 24);
-}
-svg.showGuesses g.guesses3 polygon {
-    fill: rgb(235, 89, 89);
-}
-
-polygon {
-    fill: rgb(230, 231, 137);
-    stroke-width: 0.05%;
-    stroke: black;
-}
-
 .clickLabel {
     position: absolute;
     border: 2px solid black;

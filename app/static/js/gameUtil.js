@@ -4,6 +4,7 @@ import { html, tooltip, svg, input, selectParent, zoomSlider, showNames, endGame
 import { SVG_WIDTH, SVG_HEIGHT } from "./documentElements-game.js";
 
 let gameEnded = false;
+let tooltipActive = false;
 
 /**
  * Returns a reference to the G element for the current region
@@ -80,6 +81,28 @@ const showLabel = ( group, e, center, timeout ) => {
         }, 1500 );
     }
 };
+
+/**
+ * Moves tooltip with cursor
+ * @param {Event} e 
+ */
+const moveToolTip = ( e ) => {
+    tooltip.style.transform = `translate( calc( -50% + ${e.clientX}px ), calc( 60% + ${e.clientY + window.scrollY}px ) )`;
+}
+
+/**
+ * Enables the tooltip to follow mouse
+ */
+const enableTooltip = () => {
+    if ( !tooltipActive ) {
+        tooltipActive = true;
+        svg.addEventListener('mousemove', moveToolTip);
+        svg.addEventListener('scroll', moveToolTip);
+        svg.addEventListener('mouseout', e => {
+            tooltip.style.display = "none" ;
+        });
+    }
+}
 
 /**
  * Returns the number of regions to prompt the user with
@@ -214,9 +237,9 @@ function unzoom( e ) {
 };
 
 endGameButton.addEventListener('click', e => {
-    for ( const group of svg.querySelectorAll('g:not(.guesses0, .guesses1, .guesses2, .guesses3)') ) {
+    for ( const group of svg.querySelectorAll('g g g:not(.guesses0, .guesses1, .guesses2, .guesses3)') ) {
         group.classList.remove('clickable');
-        group.classList.add('disabled');
+        group.classList.add('inactive');
     }
     endGame();
 });
@@ -243,6 +266,8 @@ export default {
     regionDisappearTrigger,
     pulseElementBG,
     showLabel,
+    moveToolTip,
+    enableTooltip,
     getNumPrompts,
     shuffleRegionMap,
     getOrderedParents,

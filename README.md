@@ -51,7 +51,7 @@
 - Sort maps on home screen
 - Delete ALL custom maps button
 - All gamemodes have an "end game" button
-- "review map" button after finishing a game
+- "Review map" button after finishing a game allows you see final state of the map and list
 - When creating a map, a rectangle outline of what will be included in the viewport can be toggled using the "Show Outline" checkbox
 - Regions of all selected types are listed when creating a map
 - "Creating Map" screen appears when clicking the "create" map button. Stops user from interacting with screen during this time
