@@ -34,7 +34,6 @@
 - Add an admin page for things like editing non custom maps
 - Multiple color schemes
 - When using a map with different region types as a template, all regions are displayed the same as "enabeld" regions, and "outside" regions are not displayed in the viewport
-- can still click on regions when reviewing map
 - right click multiple times to zoom further
 
 ### Frontend changes
@@ -68,6 +67,7 @@
 - When hovering over a county in create mode only that polygon is shaded
 - When dragging from one element into another (both within the same parent) in the learn gamemode, if the parent region is also the name of a region (ex: washington state and washington county) then the entire parent region gets highlighted
 - List gamemodes display parent regions without regions of type "enabled" in list, even though they have no regions to type
+- If game ends within 2 seconds of clicking a region, the region stays clickable when reviewing map
 
 ## Things I need to remember
 

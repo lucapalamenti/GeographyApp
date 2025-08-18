@@ -3,6 +3,8 @@ import util from "./util.js";
 import { html, tooltip, svg, input, selectParent, zoomSlider, showNames, endGameButton, gameEndPanel } from "./documentElements-game.js";
 import { SVG_WIDTH, SVG_HEIGHT } from "./documentElements-game.js";
 
+let gameEnded = false;
+
 /**
  * Returns a reference to the G element for the current region
  * @returns {HTMLElement}
@@ -29,7 +31,7 @@ const regionDisappearTrigger = ( group, color, clickable, hold = 1000, fade = 10
             // Fade out for 'fade' milliseconds
             setTimeout( function() {
                 polygon.style.transition = '';
-                if ( clickable ) group.classList.add('clickable');
+                if ( clickable && !gameEnded ) group.classList.add('clickable');
             }, fade );
         }, hold );
     });
@@ -223,6 +225,7 @@ endGameButton.addEventListener('click', e => {
  * Run when finishing a game
  */
 const endGame = () => {
+    gameEnded = true;
     document.getElementById('bottom-game-bar').style.display = "none";
     input.setAttribute('disabled', true);
     html.classList.add('filter-dark');
