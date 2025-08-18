@@ -7,14 +7,17 @@ const FILENAME_PREFIX = "04-Map-";
 const COPY_TO_FILE = true;
 
 /**
+ * SQL injection is possible
+ * @param {String} where SQL query to SELECT * WHERE
  * @param {String} orderBy SQL query to ORDER BY
  * @returns 
  */
-const getMaps = async ( orderBy ) => {
+const getMaps = async ( where, orderBy ) => {
     const VALID_QUERIES = new Set(["map_id", "map_id DESC", "map_name", "map_name DESC"]);
     if ( VALID_QUERIES.has( orderBy ) ) {
         return await database.query(`
             SELECT * FROM map
+            WHERE ${where}
             ORDER BY ${orderBy};
             `, []).then( rows => {
                 return rows.map( row => new Map( row ) );

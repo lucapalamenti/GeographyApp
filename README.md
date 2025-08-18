@@ -35,6 +35,7 @@
 - Multiple color schemes
 - When using a map with different region types as a template, all regions are displayed the same as "enabeld" regions, and "outside" regions are not displayed in the viewport
 - right click multiple times to zoom further
+- create session storage for sorting & filtering maps selection
 
 ### Frontend changes
 - Input box flashes a color depending on correctness of input
@@ -48,7 +49,7 @@
     - "outside": grey, unclickable regions. Do not have to be visible when playing
 - Display maps in center of screen instead of top left
 - Type gamemode has the no map list
-- Sort maps on home screen
+- Maps on home screen can be filtered and sorted
 - Delete ALL custom maps button
 - All gamemodes have an "end game" button
 - "Review map" button after finishing a game allows you see final state of the map and list

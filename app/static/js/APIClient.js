@@ -115,9 +115,9 @@ const getStates = async () => {
 
 // ----- MapDAO CALLS -----
 
-const getMaps = async ( ORDER_BY ) => {
+const getMaps = async ( where, orderBy ) => {
     try {
-        return await HTTPClient.get(`${BASE_API_PATH}/maplist/${ORDER_BY}`);
+        return await HTTPClient.get(`${BASE_API_PATH}/maplist/where/${where}/orderBy/${orderBy}`);
     } catch (error) {
         return handleAuthError(error);
     }

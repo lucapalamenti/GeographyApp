@@ -4,19 +4,20 @@ const mapSection = document.getElementById('map-section');
 const mapNavigation = document.getElementById('map-navigation');
 const deleteMapButton = document.getElementById('delete-map-btn');
 const deleteAllMapsButton = document.getElementById('delete-all-maps-btn');
+const filterMapsSelect = document.getElementById('filter-maps');
 const sortMapsSelect = document.getElementById('sort-maps');
 
 // Populate screen with map buttons
-populateMaps( "map_id" );
+await populateMaps( getSelectedFilter(), getSelectedSort() );
 
 /**
  * Retrieves maps from the database given given a table header to sort by
  * @param {String} orderBy SQL query to ORDER BY
  */
-async function populateMaps( orderBy ) {
+async function populateMaps( where, orderBy ) {
     // First empty the map navigation container
     mapNavigation.innerHTML = "";
-    await APIClient.getMaps( orderBy ).then( returnedMaps => {
+    await APIClient.getMaps( where, orderBy ).then( returnedMaps => {
         const mapButtonTemplate = document.getElementById('map-button-template');
         for ( const map of returnedMaps ) {
             const mapButtonInstance = mapButtonTemplate.content.cloneNode(true);
@@ -42,8 +43,18 @@ async function populateMaps( orderBy ) {
     });
 }
 
-sortMapsSelect.addEventListener('change', option => {
-    populateMaps( option.target.value );
+function getSelectedFilter() {
+    return filterMapsSelect.options[filterMapsSelect.selectedIndex].value;
+}
+function getSelectedSort() {
+    return sortMapsSelect.options[sortMapsSelect.selectedIndex].value;
+}
+
+filterMapsSelect.addEventListener('change', async option => {
+    await populateMaps( option.target.value, getSelectedSort() );
+});
+sortMapsSelect.addEventListener('change', async option => {
+    await populateMaps( getSelectedFilter(), option.target.value );
 });
 
 /* ----- Code related to deleting maps ----- */
