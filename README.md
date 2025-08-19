@@ -41,9 +41,9 @@
 - rework how user interaction works for creating a map
 - New mapRegion types:
     - "disabled": grey, unclickable regions. These regions will ALWAYS be visible when playing
-    - "herring": clickable regions, but are not included as answers
+    - "herring": clickable regions, but are not included as prompts
     - "outside": grey, unclickable regions. Do not have to be visible when playing
-- Display maps in center of screen instead of top left
+- Maps are centered instead of top-left adjusted
 - Type gamemode has the no map list
 - Maps on home screen can be filtered and sorted
 - Delete ALL custom maps button

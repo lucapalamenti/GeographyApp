@@ -9,7 +9,7 @@ import MMap from "./models/MMap.js";
 import { mapName, mapTemplate, mapColor, mapThumbnail, createButton, zoomSlider, showOutline, stateButtonsPanel, mapContainer, svg, mapOutline, loadingScreen, selectedList } from "./documentElements-create.js";
 import { SVG_WIDTH, SVG_HEIGHT, SVG_PADDING } from "./documentElements-create.js";
 
-await APIClient.getMaps( "map_id" ).then( maps => {
+await APIClient.getMaps( "map_id > 0", "map_id" ).then( maps => {
     // Populate "Choose Template" selection panel
     maps.forEach( map => {
         const option = document.createElement('OPTION');
@@ -162,7 +162,7 @@ createButton.addEventListener('click', async e => {
 
 async function createCustomMap() {
     const mapData = new MMap({
-        map_id : ( await APIClient.getMaps( 'map_id DESC' ) )[0].map_id + 1,
+        map_id : ( await APIClient.getMaps( "map_id > -1", 'map_id DESC' ) )[0].map_id + 1,
         map_scale : 1.0,
         map_name : mapName.value,
         map_thumbnail : `${mapName.value.split(' ').join('_')}_Thumbnail.png`,
