@@ -3,13 +3,11 @@
 ### To Add
 - Add sounds on input
 - Add "Borders" table to database that tells you what regions a region borders
-- Incorrect inputs shown at end for type and noMap gamemodes
 - Something to do with having to scroll up and down when deleting multiple maps at bottom
 - Make the type gamemode list toggleable
 - Add to database alternative spellings
 - Drag map to move it
 - Labels show off screen when clicking in Learn gamemode
-- Add main menu button
 - Settings to add:
     - Toggle "auto enter" after every keystroke
     - Toggle input flashing
