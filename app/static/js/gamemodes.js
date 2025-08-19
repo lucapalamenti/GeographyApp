@@ -277,7 +277,7 @@ function noList( regionMap ) {
     input.focus();
 
     const correctRegions = new Map(), missedRegions = new Map(), unknownRegions = new Map(), duplicateRegions = new Map();
-    const maps = [ correctRegions, missedRegions, unknownRegions, duplicateRegions ];
+    const maps = [ unknownRegions, duplicateRegions ];
     regionMap.forEach(( regionNames, parent ) => {
         missedRegions.set( parent, new Array() );
         // Initialize all regions into missedRegions
@@ -302,8 +302,8 @@ function noList( regionMap ) {
                     // The user has not yet typed this region
                     if ( !group.classList.contains('typed') ) {
                         // Initialize array for parent if it doesn't exist
-                        if ( !correctRegions.get( pValue ) ) correctRegions.set( pValue, new Array() );
-                        correctRegions.get( pValue ).push( myInput );
+                        // if ( !correctRegions.get( pValue ) ) correctRegions.set( pValue, new Array() );
+                        // correctRegions.get( pValue ).push( myInput );
                         // Remove the region from missedRegions
                         missedRegions.get( pValue ).splice( missedRegions.get( pValue ).indexOf( myInput ), 1 );
                         // Update map
@@ -334,12 +334,7 @@ function noList( regionMap ) {
             }
         }
     });
-    const regionAreas = [
-        document.getElementById('correct-regions'),
-        document.getElementById('missed-regions'),
-        document.getElementById('unknown-regions'),
-        document.getElementById('duplicate-regions'),
-    ];
+    const regionAreas = [ noListArea.querySelector('#unknown-regions'), noListArea.querySelector('#duplicate-regions'), ];
     endGameButton.addEventListener('click', e => {
         const endGameRegionsTemplate = document.getElementById('endGame-regions-template');
         // Display map and list

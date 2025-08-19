@@ -57,14 +57,14 @@ svg.reviewing g g g.inactive:has( polygon:hover ) polygon {
     fill: rgb(108, 108, 108);
 }
 svg.reviewing g g g.guesses0:has( polygon:hover ) polygon {
-    fill: rgb(98, 216, 82);
+    fill: rgb(92, 204, 78);
 }
 svg.reviewing g g g.guesses1:has( polygon:hover ) polygon {
-    fill: rgb(214, 196, 31);
+    fill: rgb(204, 187, 30);
 }
 svg.reviewing g g g.guesses2:has( polygon:hover ) polygon {
-    fill: rgb(209, 127, 21);
+    fill: rgb(199, 121, 20);
 }
 svg.reviewing g g g.guesses3:has( polygon:hover ) polygon {
-    fill: rgb(207, 79, 79);
+    fill: rgb(197, 75, 75);
 }

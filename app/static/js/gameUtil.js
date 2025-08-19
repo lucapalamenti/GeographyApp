@@ -1,6 +1,6 @@
 import util from "./util.js";
 
-import { html, tooltip, svg, input, selectParent, zoomSlider, showNames, endGameButton, gameEndPanel } from "./documentElements-game.js";
+import { html, tooltip, svg, input, selectParent, zoomSlider, showNames, endGameButton, gameEndPanel, noMapArea } from "./documentElements-game.js";
 import { SVG_WIDTH, SVG_HEIGHT } from "./documentElements-game.js";
 
 let gameEnded = false;
@@ -190,6 +190,12 @@ showNames.addEventListener('change', e => {
     }
 });
 
+function fillTable() {
+    for ( const cell of noMapArea.querySelectorAll('P') ) {
+        cell.textContent = util.idToInput( cell.id );
+    }
+}
+
 // Right click to zoom
 svg.addEventListener( 'contextmenu', e => { e.preventDefault(); });
 svg.addEventListener( 'contextmenu', zoom );
@@ -256,6 +262,7 @@ const endGame = () => {
     for ( const label of document.querySelectorAll('.click-on') ) {
         label.textContent = "-";
     }
+    fillTable();
     // Reappear colors at the end
     svg.classList.add("showGuesses");
     console.log( "YOU WIN!" );
