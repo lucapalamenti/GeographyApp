@@ -7,7 +7,7 @@ import MapRegion from "./models/MapRegion.js";
 import MMap from "./models/MMap.js";
 
 import { mapName, mapTemplate, mapColor, mapThumbnail, createButton, zoomSlider, showOutline, stateButtonsPanel, mapContainer, svg, mapOutline, loadingScreen, selectedList } from "./documentElements-create.js";
-import { SVG_WIDTH, SVG_HEIGHT, SVG_PADDING } from "./documentElements-create.js";
+import { SVG_WIDTH, SVG_HEIGHT, SVG_PADDING } from "./variables.js";
 
 await APIClient.getMaps( "map_id > 0", "map_id" ).then( maps => {
     // Populate "Choose Template" selection panel
@@ -183,7 +183,7 @@ async function createCustomMap() {
     for ( const typeName of regionTypes ) {
         // For each selected region of this type
         for ( const region of svg.querySelectorAll(`G G.enabled G.${typeName}`) ) {
-            const parentName = util.idToParent( region.parentElement.parentElement.id );
+            const parentName = util.idToInput( region.parentElement.parentElement.id );
             const regionName = util.idToInput( region.id );
             const region_id = (await APIClient.getRegionByMapIdParentName( mapTemplate.value, parentName, regionName )).region_id;
 

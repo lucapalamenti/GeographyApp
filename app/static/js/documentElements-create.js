@@ -13,7 +13,3 @@ export const svg = document.getElementById('templateMap');
 export const mapOutline = document.getElementById('map-outline');
 export const loadingScreen = document.getElementById('loading-screen');
 export const selectedList = document.getElementById('selected-list');
-
-export const SVG_WIDTH = svg.viewBox.baseVal.width;
-export const SVG_HEIGHT = svg.viewBox.baseVal.height;
-export const SVG_PADDING = 20; // pixels

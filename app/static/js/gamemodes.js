@@ -1,8 +1,8 @@
 import util from "./util.js";
 import gameUtil from "./gameUtil.js";
 
-import { svg, promptBar, input, promptLabel, noListArea, endGameButton, reviewMapButton, tally, zoomSlider, tooltip, selectParent, showNames, noMapArea} from "./documentElements-game.js";
-import { ATTEMPT_COLORS, REPEAT_COLOR, MAX_GUESSES } from "./documentElements-game.js";
+import { svg, promptBar, input, promptLabel, noListArea, endGameButton, reviewMapButton, tally, zoomSlider, selectParent, showNames, noMapArea} from "./documentElements-game.js";
+import { ATTEMPT_COLORS, REPEAT_COLOR, MAX_GUESSES, ATTEMPT_SOUNDS } from "./variables.js";
 
 let promptsArr;
 let currentPrompt = { pID : "", pInput : "", rID : "", rInput : "" };
@@ -10,12 +10,6 @@ let currentPrompt = { pID : "", pInput : "", rID : "", rInput : "" };
 let numPrompts;
 let numCorrect = 0;
 let guesses = 0;
-
-/**
- * Returns a reference to the G element for the current region
- * @returns {HTMLElement}
- */
-const queryCurrentRegion = () => { return svg.querySelector(`svg > #${currentPrompt.pID} #${currentPrompt.rID}`) };
 
 /**
  * Run the "Learn" gamemode
@@ -31,6 +25,7 @@ function learn() {
         if ( group.parentElement !== svg && svg.querySelector(`svg > g g #${group.id}`) ) {
             gameUtil.showLabel( group, e, true, true );
             gameUtil.regionDisappearTrigger( group, ATTEMPT_COLORS[0], true, 1000, 1000 );
+            gameUtil.playSound( ATTEMPT_SOUNDS[1] );
         }
     });
 }
@@ -61,16 +56,19 @@ function click ( regionMap, disappear ) {
             // Correct region clicked
             if ( group.getAttribute('id') === currentPrompt.rID ) {
                 if ( guesses === 0 ) numCorrect++;
+                gameUtil.playSound( ATTEMPT_SOUNDS[guesses] );
                 next( group );
             }
             // Incorrect region clicked
             else {
                 guesses++;
                 gameUtil.regionDisappearTrigger( group, ATTEMPT_COLORS[3], true );
+                gameUtil.playSound( ATTEMPT_SOUNDS[3] );
                 // If too many guesses have been taken then highlight the correct answer
                 if ( guesses === MAX_GUESSES ) {
-                    const correctRegion = queryCurrentRegion();
+                    const correctRegion = gameUtil.queryCurrentRegion( currentPrompt );
                     gameUtil.showLabel( correctRegion, e, true, true );
+                    gameUtil.playSound( ATTEMPT_SOUNDS[4] );
                     next( correctRegion );
                 }
             }
@@ -174,12 +172,16 @@ function type( regionMap ) {
                         input.value = "";
                         numCorrect++;
                         color = ATTEMPT_COLORS[0];
+                        gameUtil.playSound( ATTEMPT_SOUNDS[0] );
                     }
                     // The user has already typed this region
                     else {
                         gameUtil.regionDisappearTrigger( group, REPEAT_COLOR, false, 0 );
                         gameUtil.pulseElementBG( noMapArea.querySelector(`#${selectParent.value} #${myInput}`), "rgb(75, 255, 75)", color );
+                        gameUtil.playSound( ATTEMPT_SOUNDS[1] );
                     }
+                } else {
+                    gameUtil.playSound( ATTEMPT_SOUNDS[3] );
                 }
                 gameUtil.pulseElementBG( input, "white", color );
                 tally.textContent = `Correct: ${numCorrect}/${numPrompts}`;
@@ -198,7 +200,7 @@ function typeHard( regionMap ) {
     promptsArr = gameUtil.shuffleRegionMap( regionMap );
     currentPrompt = promptsArr.pop();
 
-    let currentGroup = queryCurrentRegion();
+    let currentGroup = gameUtil.queryCurrentRegion( currentPrompt );
     currentGroup.classList.add('typeCurrent');
 
     input.addEventListener('keypress', e => {
@@ -210,14 +212,17 @@ function typeHard( regionMap ) {
                 if ( input.value.toLowerCase() === currentPrompt.rInput.toLowerCase() ) {
                     gameUtil.pulseElementBG( input, "white", ATTEMPT_COLORS[guesses] );
                     gameUtil.showLabel( currentGroup, null, true, true );
+                    gameUtil.playSound( ATTEMPT_SOUNDS[guesses] );
                     next();
                 // If input is incorrect
                 } else {
-                    gameUtil.pulseElementBG( input, "white", ATTEMPT_COLORS[3] );
                     guesses++;
+                    gameUtil.pulseElementBG( input, "white", ATTEMPT_COLORS[3] );
+                    gameUtil.playSound( ATTEMPT_SOUNDS[3] );
                     // If too many guesses have been given
                     if ( guesses === MAX_GUESSES ) {
                         gameUtil.showLabel( currentGroup, null, true, true );
+                        gameUtil.playSound( ATTEMPT_SOUNDS[4] );
                         next();
                     }
                 }
@@ -233,7 +238,7 @@ function typeHard( regionMap ) {
         if ( !( currentPrompt = promptsArr.pop() ) ) {
             gameUtil.endGame();
         } else {
-            currentGroup = queryCurrentRegion();
+            currentGroup = gameUtil.queryCurrentRegion( currentPrompt );
             currentGroup.classList.add('typeCurrent');
             guesses = 0;
         }
@@ -276,7 +281,7 @@ function noList( regionMap ) {
     zoomSlider.setAttribute('disabled', true);
     input.focus();
 
-    const correctRegions = new Map(), missedRegions = new Map(), unknownRegions = new Map(), duplicateRegions = new Map();
+    const missedRegions = new Map(), unknownRegions = new Map(), duplicateRegions = new Map();
     const maps = [ unknownRegions, duplicateRegions ];
     regionMap.forEach(( regionNames, parent ) => {
         missedRegions.set( parent, new Array() );
@@ -292,18 +297,12 @@ function noList( regionMap ) {
             if ( input.value !== '' && pValue !== '' ) {
                 const myInput = util.inputToId( input.value );
                 input.value = "";
-
-                // Initially set to 'incorrect' color
-                let color = ATTEMPT_COLORS[3];
+                gameUtil.playSound( ATTEMPT_SOUNDS[1] );
                 // If the user input matches a region's name
                 if ( regionMap.get( pValue ).includes( myInput ) ) {
-                    color = REPEAT_COLOR;
                     const group = svg.querySelector(`#${CSS.escape( myInput )}`);
                     // The user has not yet typed this region
                     if ( !group.classList.contains('typed') ) {
-                        // Initialize array for parent if it doesn't exist
-                        // if ( !correctRegions.get( pValue ) ) correctRegions.set( pValue, new Array() );
-                        // correctRegions.get( pValue ).push( myInput );
                         // Remove the region from missedRegions
                         missedRegions.get( pValue ).splice( missedRegions.get( pValue ).indexOf( myInput ), 1 );
                         // Update map

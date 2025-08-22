@@ -13,10 +13,6 @@ const capitalizeFirst = ( string ) => {
     return arr.join(' ');
 }
 
-const idToParent = ( id ) => {
-    return capitalizeFirst( id.split('__')[0].split(spaceReplacement).join(' ') );
-};
-
 const idToInput = ( id ) => {
     return capitalizeFirst( id.split(spaceReplacement).join(' ') ).split(apostropheReplacement).join("'");
 };
@@ -25,14 +21,8 @@ const inputToId = ( input ) => {
     return input.split(' ').join(spaceReplacement).split("'").join(apostropheReplacement).toLowerCase();
 };
 
-const inputToQuery = ( input ) => {
-    return capitalizeFirst( input.split(' ').join(spaceReplacement).split("'").join(`${apostropheReplacement}`).toLowerCase() );
-};
-
 export default {
     capitalizeFirst,
-    idToParent,
     idToInput,
-    inputToId,
-    inputToQuery
+    inputToId
 }

@@ -1,7 +1,9 @@
 import util from "./util.js";
 
 import { html, tooltip, svg, input, selectParent, zoomSlider, showNames, endGameButton, gameEndPanel, noMapArea } from "./documentElements-game.js";
-import { SVG_WIDTH, SVG_HEIGHT } from "./documentElements-game.js";
+import { SVG_WIDTH, SVG_HEIGHT } from "./variables.js";
+
+const audioPath = "../audio/";
 
 let gameEnded = false;
 let tooltipActive = false;
@@ -10,7 +12,11 @@ let tooltipActive = false;
  * Returns a reference to the G element for the current region
  * @returns {HTMLElement}
  */
-const queryCurrentRegion = () => { return svg.querySelector(`svg > #${currentPrompt.pID} #${currentPrompt.rID}`) };
+const queryCurrentRegion = ( currentPrompt ) => { return svg.querySelector(`svg > #${currentPrompt.pID} #${currentPrompt.rID}`) };
+
+const playSound = ( filename ) => {
+    new Audio( `${audioPath}${filename}` ).play();
+};
 
 /**
  * Pulses a given group element a color
@@ -190,6 +196,9 @@ showNames.addEventListener('change', e => {
     }
 });
 
+/**
+ * Populates all cells in the table with the formatted version of their id
+ */
 function fillTable() {
     for ( const cell of noMapArea.querySelectorAll('P') ) {
         cell.textContent = util.idToInput( cell.id );
@@ -249,7 +258,6 @@ endGameButton.addEventListener('click', e => {
     }
     endGame();
 });
-
 /**
  * Run when finishing a game
  */
@@ -270,6 +278,7 @@ const endGame = () => {
 
 export default {
     queryCurrentRegion,
+    playSound,
     regionDisappearTrigger,
     pulseElementBG,
     showLabel,

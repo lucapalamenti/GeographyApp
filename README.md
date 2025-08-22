@@ -1,7 +1,6 @@
 # GeographyApp
 
 ### To Add
-- Add sounds on input
 - Add "Borders" table to database that tells you what regions a region borders
 - Something to do with having to scroll up and down when deleting multiple maps at bottom
 - Make the type gamemode list toggleable
@@ -53,7 +52,8 @@
 - Regions of all selected types are listed when creating a map
 - "Creating Map" screen appears when clicking the "create" map button. Stops user from interacting with screen during this time
 - The select region type buttons now show a tooltip with their name
-- Gamemodes that show the list after completion will now fill in the list with missed regions 
+- Gamemodes that show the list after completion will now fill in the list with missed regions
+- There are now sounds on input
 
 ### Backend/Technical changes
 - changed mapRegion_state to mapRegion_type
