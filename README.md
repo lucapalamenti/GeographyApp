@@ -1,6 +1,6 @@
 # GeographyApp
 
-### To Add
+## To Add
 - Add "Borders" table to database that tells you what regions a region borders
 - Something to do with having to scroll up and down when deleting multiple maps at bottom
 - Make the type gamemode list toggleable
@@ -32,7 +32,20 @@
 - right click multiple times to zoom further
 - create session storage for sorting & filtering maps selection
 
-### Frontend changes
+# Changelog
+
+## Ongoing
+
+### Frontend
+- There are now sounds on input
+
+### Backend/Technical
+
+### Bug Fixes
+
+## Beta 1.1.250825
+
+### Frontend
 - Input box flashes a color depending on correctness of input
 - In type gamemode, if region is typed multiple times, it will subtly flash that region
 - Backup background image if the first one cant be found
@@ -53,37 +66,15 @@
 - "Creating Map" screen appears when clicking the "create" map button. Stops user from interacting with screen during this time
 - The select region type buttons now show a tooltip with their name
 - Gamemodes that show the list after completion will now fill in the list with missed regions
-- There are now sounds on input
 
-### Backend/Technical changes
+### Backend/Technical
 - changed mapRegion_state to mapRegion_type
 - Changed storage of map_primary_color from a string 'R,G,B' to 3 separate integer values
 - Admin can choose to print query statements to a file in the backend (really just for creating new default maps)
 - Reworked svg element IDs. Regions with the same parent are now nested in a parent G element. Parent G elements are further split into groups of regions withthe same mapRegion_type
 
-### Bugs Fixed
+### Bug Fixes
 - When hovering over a county in create mode only that polygon is shaded
 - When dragging from one element into another (both within the same parent) in the learn gamemode, if the parent region is also the name of a region (ex: washington state and washington county) then the entire parent region gets highlighted
 - List gamemodes display parent regions without regions of type "enabled" in list, even though they have no regions to type
 - If game ends within 2 seconds of clicking a region, the region stays clickable when reviewing map
-
-## Things I need to remember
-
-### Caldwell
-1. Kentucky
-2. Missouri
-3. North Carolina
-4. Texas
-5. Louisiana
-
-### Crawford
-1. Arkansas
-2. Georgia
-3. Illinois
-4. Iowa
-5. kansas
-6. Michigan
-7. Missouri
-9. Ohio
-10. Pennsylvania
-11. Wisconsin
