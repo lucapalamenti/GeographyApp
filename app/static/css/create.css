@@ -9,7 +9,6 @@ g g g:has( polygon:hover ) polygon {
 
 g g g.enabled polygon {
     fill: rgb(106, 235, 89);
-    stroke: black;
 }
 g g g.enabled:has( polygon:hover ) polygon {
     fill: rgb(86, 215, 69);
@@ -18,7 +17,6 @@ g g g.enabled:has( polygon:hover ) polygon {
 g g g.disabled polygon {
     fill: grey;
     stroke-width: 0.05%;
-    stroke: black;
 }
 g g g.disabled:has( polygon:hover ) polygon {
     fill: rgb(108, 108, 108);
@@ -27,7 +25,6 @@ g g g.disabled:has( polygon:hover ) polygon {
 g g g.herring polygon {
     fill: rgb(240, 219, 35);
     stroke-width: 0.05%;
-    stroke: black;
 }
 g g g.herring:has( polygon:hover ) polygon {
     fill: rgb(220, 199, 15);
@@ -36,7 +33,6 @@ g g g.herring:has( polygon:hover ) polygon {
 g g g.outside polygon {
     fill: rgb(77, 77, 77);
     stroke-width: 0.05%;
-    stroke: black;
 }
 g g g.outside:has( polygon:hover ) polygon {
     fill: rgb(54, 54, 54);

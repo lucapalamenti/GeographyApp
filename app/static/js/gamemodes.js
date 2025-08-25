@@ -103,6 +103,7 @@ function clickDisappear ( regionMap ) {
  * Makes sure all regions that should be clickable have the class "clickable"
  */
 function enableClicking() {
+    selectParent.setAttribute('hidden', true);
     svg.querySelectorAll('g.enabled g, g.herring g').forEach( group => {
         group.classList.add("clickable");
     });
@@ -196,6 +197,7 @@ function type( regionMap ) {
  */
 function typeHard( regionMap ) {
     promptLabel.textContent = "Name the highlighted region";
+    selectParent.setAttribute('hidden', true);
     typeGamemodes( regionMap );
     promptsArr = gameUtil.shuffleRegionMap( regionMap );
     currentPrompt = promptsArr.pop();

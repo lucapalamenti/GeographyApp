@@ -155,7 +155,7 @@ const getOrderedParents = ( regionMap ) => {
     const ordered = [];
     regionMap.forEach(( regionNames, parentName ) => {
         // Only select parents with regions of type "enabled"
-        if ( svg.querySelector(`SVG > G#${parentName} G.enabled`) ) {
+        if ( svg.querySelector(`SVG > G#${parentName} G.enabled, SVG > G#${parentName} G.herring`) ) {
             ordered.push( parentName );
         }
     });
@@ -166,18 +166,19 @@ const getOrderedParents = ( regionMap ) => {
  * Populates the Select dropdown for gamemodes that need it
  * @param {Map<String,Array<String>} regionMap 
  */
-const populateSelect = ( regionMap ) => { 
-    for ( const name of getOrderedParents( regionMap ) ) {
+const populateSelect = ( regionMap ) => {
+    const orderedParents = getOrderedParents( regionMap );
+    for ( const name of orderedParents ) {
         const option = document.createElement('OPTION');
         option.value = name.toLowerCase();
         option.innerText = util.idToInput( name );
         selectParent.appendChild( option );
     }
-    if ( regionMap.size === 1 ) {
+    // Auto select the parent if there is only one with enabled regions
+    if ( orderedParents.length === 1 ) {
         selectParent.selectedIndex = 1;
         selectParent.setAttribute('disabled', true);
     }
-    selectParent.style.display = "block";
 };
 
 showNames.addEventListener('change', e => {
