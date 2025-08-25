@@ -1,4 +1,4 @@
-INSERT INTO `map` (`map_id`, `map_scale`, `map_name`, `map_thumbnail`, `map_primary_color`, `map_is_custom`) VALUES (23, 355.959193, 'Maryland', 'Maryland_Counties_Thumbnail.png', '0,0,0', 0);
+INSERT INTO `map` (`map_id`, `map_scale`, `map_name`, `map_thumbnail`, `map_primary_color_R`, `map_primary_color_G`, `map_primary_color_B`, `map_is_custom`) VALUES (23, 355.959193, 'Maryland', 'Maryland_Counties_Thumbnail.png', 0,0,0, 0);
 INSERT INTO `mapRegion` (`mapRegion_map_id`, `mapRegion_region_id`, `mapRegion_parent`, `mapRegion_offsetX`, `mapRegion_offsetY`, `mapRegion_scaleX`, `mapRegion_scaleY`) VALUES (23, 1308, "Maryland", 0.000000, 0.000242, 1.000000, 1.000000);
 INSERT INTO `mapRegion` (`mapRegion_map_id`, `mapRegion_region_id`, `mapRegion_parent`, `mapRegion_offsetX`, `mapRegion_offsetY`, `mapRegion_scaleX`, `mapRegion_scaleY`) VALUES (23, 1298, "Maryland", 0.420092, 0.000000, 1.000000, 1.000000);
 INSERT INTO `mapRegion` (`mapRegion_map_id`, `mapRegion_region_id`, `mapRegion_parent`, `mapRegion_offsetX`, `mapRegion_offsetY`, `mapRegion_scaleX`, `mapRegion_scaleY`) VALUES (23, 1318, "Maryland", 1.124191, 0.000391, 1.000000, 1.000000);

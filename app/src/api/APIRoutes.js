@@ -1,4 +1,5 @@
 const express = require('express');
+const multer = require('multer');
 
 const APIRouter = express.Router();
 
@@ -8,6 +9,10 @@ const { TokenMiddleware, generateToken, removeToken } = require('../middleware/t
 const RegionDAO = require('./db/RegionDAO.js');
 const MapDAO = require('./db/MapDAO.js');
 const CustomDAO = require('./db/CustomDAO.js');
+
+const Map = require('./db/models/Map.js');
+const MapRegion = require('./db/models/MapRegion.js');
+const Region = require('./db/models/Region.js');
 
 // ----- CustomDAO ROUTES -----
 
@@ -67,7 +72,16 @@ APIRouter.get('/regions/map/:mapId', (req, res) => {
         res.json( regions );
     })
     .catch( err => {
-        res.status(500).json({error:err, message: 'Error with DELETE request to /regions/map/:mapId'});
+        res.status(500).json({error:err, message: 'Error with GET request to /regions/map/:mapId'});
+    });
+});
+
+APIRouter.get('/mapRegion/states', (req, res) => {
+    RegionDAO.getStates().then( states => {
+        res.json( states );
+    })
+    .catch( err => {
+        res.status(500).json({error:err, message: 'Error with GET request to /mapRegion/states'});
     });
 });
 
@@ -76,7 +90,7 @@ APIRouter.get('/mapRegion/parents/:mapId', (req, res) => {
         res.json( parents );
     })
     .catch( err => {
-        res.status(500).json({error:err, message: 'Error with POST request to /mapRegion'});
+        res.status(500).json({error:err, message: 'Error with GET request to /mapRegion/parents/:mapId'});
     });
 });
 
@@ -85,12 +99,13 @@ APIRouter.get('/mapRegion/:mapId/:regionId', (req, res) => {
         res.json( region );
     })
     .catch( err => {
-        res.status(500).json({error:err, message: 'Error with POST request to /mapRegion'});
+        res.status(500).json({error:err, message: 'Error with GET request to /mapRegion/:mapId/:regionId'});
     });
 });
 
 APIRouter.post('/regions', (req, res) => {
-    RegionDAO.createRegion( req.body ).then( region => {
+    const region = new Region( req.body );
+    RegionDAO.createRegion( region ).then( region => {
         res.json( region );
     })
     .catch( err => {
@@ -99,7 +114,8 @@ APIRouter.post('/regions', (req, res) => {
 });
 
 APIRouter.post('/mapRegion', (req, res) => {
-    RegionDAO.createMapRegion( req.body ).then( mapRegion => {
+    const mapRegion = new MapRegion( req.body );
+    RegionDAO.createMapRegion( mapRegion ).then( mapRegion => {
         res.json( mapRegion );
     })
     .catch( err => {
@@ -118,8 +134,8 @@ APIRouter.delete('/regions/map/:mapId', (req, res) => {
 
 // ----- MapDAO ROUTES -----
 
-APIRouter.get('/maplist/:orderBy', (req, res) => {
-    MapDAO.getMaps( req.params.orderBy ).then( maps => {
+APIRouter.get('/maplist/where/:where/orderBy/:orderBy', (req, res) => {
+    MapDAO.getMaps( req.params.where, req.params.orderBy ).then( maps => {
         res.json( maps );
     })
     .catch( err => {
@@ -137,7 +153,8 @@ APIRouter.get('/maps/:mapId', (req, res) => {
 });
 
 APIRouter.post('/maps', (req, res) => {
-    MapDAO.createMap( req.body ).then( map => {
+    const map = new Map( req.body );
+    MapDAO.createMap( map ).then( map => {
         res.json( map );
     })
     .catch( err => {
@@ -146,7 +163,8 @@ APIRouter.post('/maps', (req, res) => {
 });
 
 APIRouter.put('/maps', (req, res) => {
-    MapDAO.updateMap( req.body ).then( map => {
+    const map = new Map( req.body );
+    MapDAO.updateMap( map ).then( map => {
         res.json( map );
     })
     .catch( err => {
@@ -154,13 +172,33 @@ APIRouter.put('/maps', (req, res) => {
     });
 });
 
-APIRouter.delete('/maps/:mapId', (req,res) => {
+APIRouter.delete('/maps', (req, res) => {
+    MapDAO.deleteAllCustomMaps().then( deletedMaps => {
+        res.json({deletedMaps:deletedMaps});
+    })
+    .catch( err => {
+        res.status(500).json({error:err, message: 'Error with DELETE request to /maps/:mapId'});
+    });
+});
+
+APIRouter.delete('/maps/:mapId', (req, res) => {
     MapDAO.deleteMap( req.params.mapId ).then( deletedMaps => {
         res.json({deletedMaps:deletedMaps});
     })
     .catch( err => {
         res.status(500).json({error:err, message: 'Error with DELETE request to /maps/:mapId'});
     });
+});
+
+// ----- OTHER ROUTES -----
+
+const upload = multer({ dest: 'uploads/' });
+APIRouter.post('/uploadFile', upload.single('uploadedFile'), (req, res) => {
+    if (req.file) {
+        res.json({ message: 'File uploaded successfully', filename: req.file.filename });
+    } else {
+        res.status(400).json({ message: 'No file uploaded' });
+    }
 });
 
 module.exports = APIRouter;

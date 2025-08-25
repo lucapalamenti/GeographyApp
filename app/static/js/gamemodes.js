@@ -1,188 +1,208 @@
 import util from "./util.js";
+import gameUtil from "./gameUtil.js";
 
-const svg = document.querySelector('SVG');
-const promptBar = document.getElementById('prompt-bar');
-const input = promptBar.querySelector('INPUT');
-const promptLabel = promptBar.querySelector('P');
-const tally = promptBar.querySelector('#tally');
+import { svg, promptBar, input, promptLabel, noListArea, endGameButton, reviewMapButton, tally, zoomSlider, selectParent, showNames, noMapArea} from "./documentElements-game.js";
+import { ATTEMPT_COLORS, REPEAT_COLOR, MAX_GUESSES, ATTEMPT_SOUNDS } from "./variables.js";
 
-const zoomSlider = document.getElementById('zoom-slider');
-const tooltip = document.getElementById('tooltip');
-const gameEndPanel = document.getElementById('game-end-panel');
-const covering = document.getElementById('covering');
-const selectParent = document.getElementById('select-parent');
-const showNames = document.getElementById('showNames');
-
-let arr;
-let current;
+let promptsArr;
+let currentPrompt = { pID : "", pInput : "", rID : "", rInput : "" };
 
 let numPrompts;
 let numCorrect = 0;
 let guesses = 0;
-const attemptColors = [ 'rgb(106, 235, 89)', 'rgb(240, 219, 35)', 'rgb(243, 148, 24)', 'rgb(235, 89, 89)' ];
 
-const SVG_WIDTH = 1600;
-const SVG_HEIGHT = 900;
-const MAX_GUESSES = 3;
-
+/**
+ * Run the "Learn" gamemode
+ */
 function learn() {
+    enableClicking();
+    reviewMapButton.style.display = "none";
     promptLabel.textContent = "Click on a region to see its name";
-    input.style.display = 'none';
+    input.style.display = "none";
     promptBar.style.display = "flex";
-    document.querySelectorAll('G').forEach( group => {
-        group.classList.add('groupClickable');
-    });
     svg.addEventListener('click', e => {
         const group = e.target.parentNode;
-        if ( group.nodeName === "g" ) showLabel( group, e, true, true );
+        if ( group.parentElement !== svg && svg.querySelector(`svg > g g #${group.id}`) ) {
+            gameUtil.showLabel( group, e, true, true );
+            gameUtil.regionDisappearTrigger( group, ATTEMPT_COLORS[0], true, 1000, 1000 );
+            gameUtil.playSound( ATTEMPT_SOUNDS[1] );
+        }
     });
 }
 
-function clickGamemodes( regionNames ) {
-    numPrompts = regionNames.length;
-    document.querySelectorAll('G').forEach( group => {
-        group.classList.add('groupClickable');
-    });
-
+/**
+ * Run the "Click" gamemode
+ * @param {Map<String,Array<String>} regionMap 
+ * @param {Boolean} disappear enable disappear mode
+ */
+function click ( regionMap, disappear ) {
+    enableClicking();
+    // Format top gamebar
     promptLabel.textContent = "Click on";
-    input.style.display = 'none';
-    tally.textContent = `Correct: ${numCorrect}/${numPrompts}`;
-
-    arr = shuffleArray( regionNames );
-    current = arr.pop();
+    input.style.display = "none";
+    tally.textContent = `Correct: ${numCorrect}/${numPrompts = gameUtil.getNumPrompts( regionMap )}`;
+    // Shuffle the prompts and display the first one on screen
+    promptsArr = gameUtil.shuffleRegionMap( regionMap );
+    currentPrompt = promptsArr.pop();
     updateLabels();
-    
     promptBar.style.display = "flex";
-
-    svg.addEventListener('mousemove', moveToolTip );
-    svg.addEventListener('scroll', moveToolTip );
-    svg.addEventListener('mouseout', e => {
-        tooltip.style.display = "none" ;
-    });
-    function moveToolTip( e ) {
-        tooltip.style.transform = `translate( calc( -50% + ${e.clientX}px ), calc( 60% + ${e.clientY + window.scrollY}px ) )`;
-        tooltip.style.display = "block";
-    }
-}
-function click ( regionNames ) {
-    clickGamemodes( regionNames, false );
+    // Setup tooltip to follow cursor
+    gameUtil.enableTooltip();
+    // In disappear mode remove showGuesses so that the region color changes back to default
+    if ( disappear ) svg.classList.remove("showGuesses");
     svg.addEventListener('click', e => {
         const group = e.target.parentNode;
-        if ( group.classList.contains('groupClickable') ) {
+        if ( group.classList.contains('clickable') ) {
             // Correct region clicked
-            if ( util.idToInput( group.getAttribute('id') ) === util.idToInput( current ) ) {
+            if ( group.getAttribute('id') === currentPrompt.rID ) {
                 if ( guesses === 0 ) numCorrect++;
+                gameUtil.playSound( ATTEMPT_SOUNDS[guesses] );
                 next( group );
             }
             // Incorrect region clicked
             else {
                 guesses++;
-                regionDisappearTrigger( group, attemptColors[3], true );
+                gameUtil.regionDisappearTrigger( group, ATTEMPT_COLORS[3], true );
+                gameUtil.playSound( ATTEMPT_SOUNDS[3] );
                 // If too many guesses have been taken then highlight the correct answer
                 if ( guesses === MAX_GUESSES ) {
-                    showLabel( svg.getElementById( current ), e, true, true );
-                    next( svg.getElementById( current ) );
+                    const correctRegion = gameUtil.queryCurrentRegion( currentPrompt );
+                    gameUtil.showLabel( correctRegion, e, true, true );
+                    gameUtil.playSound( ATTEMPT_SOUNDS[4] );
+                    next( correctRegion );
                 }
             }
-            showLabel( group, e, false, true );
+            gameUtil.showLabel( group, e, false, true );
         }
     });
     function next( group ) {
-        group.classList.remove('groupClickable');
+        // In disappear mode regions fade back to original color
+        if ( disappear ) gameUtil.regionDisappearTrigger( group, ATTEMPT_COLORS[guesses], true );
+        else group.classList.remove('clickable');
+        
         group.classList.add(`guesses${guesses}`);
-        if ( !( current = arr.pop() ) ) {
-            endGame();
-        } else {
+        tally.textContent = `Correct: ${numCorrect}/${numPrompts}`;
+        // If there are no more prompts left
+        if ( !( currentPrompt = promptsArr.pop() ) )
+            gameUtil.endGame();
+        // Continue to next prompt
+        else {
             updateLabels();
             guesses = 0;
         }
-        tally.textContent = `Correct: ${numCorrect}/${numPrompts}`;
     }
 }
-function clickDisappear ( regionNames ) {
-    clickGamemodes( regionNames );
-    svg.classList.remove("showGuesses");
-    svg.addEventListener('click', e => {
-        const group = e.target.parentNode;
-        if ( group.classList.contains('groupClickable') ) {
-            // Correct region clicked
-            if ( util.idToInput( group.getAttribute('id') ) === util.idToInput( current ) ) {
-                if ( guesses === 0 ) numCorrect++;
-                next( group );
-            }
-            // Incorrect region clicked
-            else {
-                guesses++;
-                regionDisappearTrigger( group, attemptColors[3], true );
-                // If too many guesses have been taken then highlight the correct answer
-                if ( guesses === MAX_GUESSES ) {
-                    showLabel( svg.getElementById( current ), e, true, true );
-                    next( svg.getElementById( current ) );
-                }
-            }
-            showLabel( group, e, false, true );
-        }
+/**
+ * Run the "Click (Disappear)" gamemode
+ * @param {Map<String,Array<String>} regionMap 
+ */
+function clickDisappear ( regionMap ) {
+    click( regionMap, true );
+}
+/**
+ * Makes sure all regions that should be clickable have the class "clickable"
+ */
+function enableClicking() {
+    selectParent.setAttribute('hidden', true);
+    svg.querySelectorAll('g.enabled g, g.herring g').forEach( group => {
+        group.classList.add("clickable");
     });
-    function next( group ) {
-        regionDisappearTrigger( group, attemptColors[guesses], true );
-        group.classList.add(`guesses${guesses}`);
-        if ( !( current = arr.pop() ) ) {
-            // Reappear colors at the end
-            svg.classList.add("showGuesses");
-            endGame();
-        } else {
-            updateLabels();
-            guesses = 0;
-        }
-        tally.textContent = `Correct: ${numCorrect}/${numPrompts}`;
-    }
 }
 
-function typeGamemodes( regionNames ) {
-    numPrompts = regionNames.length;
-    tally.textContent = `Correct: ${numCorrect}/${numPrompts}`;
+/**
+ * Runs with all typing gamemodes
+ * @param {Map<String,Array<String>} regionMap 
+ */
+function typeGamemodes( regionMap ) {
+    tally.textContent = `Correct: ${numCorrect}/${numPrompts = gameUtil.getNumPrompts( regionMap )}`;
     promptBar.style.display = "flex";
     input.focus();
 }
-function type( regionNames, parents ) {
-    populateSelect( parents );
-    typeGamemodes( regionNames, false );
+/**
+ * Runs with all gamemodes that show the list
+ * @param {Map<String,Array<String>} regionMap 
+ */
+function listGamemodes( regionMap ) {
+    for ( const parentName of gameUtil.getOrderedParents( regionMap ) ) {
+        const h3 = document.createElement('H3');
+        h3.textContent = util.idToInput( parentName );
+        const div = document.createElement('DIV');
+        div.setAttribute('id', parentName);
+        for ( const name of regionMap.get( parentName ) ) {
+            const p = document.createElement('P');
+            p.setAttribute('id', name);
+            div.appendChild( p );
+        }
+        noMapArea.appendChild( h3 );
+        noMapArea.appendChild( div );
+    }
+}
+/**
+ * Runs the "Type" gamemode
+ * @param {Map<String,Array<String>} regionMap
+ */
+function type( regionMap ) {
+    gameUtil.populateSelect( regionMap );
+    typeGamemodes( regionMap );
+    listGamemodes( regionMap );
+    noMapArea.style.display = "flex";
     promptLabel.textContent = "Name all regions";
+
     input.addEventListener('keypress', e => {
         // If enter key is pressed
         if ( e.key === 'Enter' ) {
-            // Dont check if the value & parent are blank
-            if ( input.value !== '' && selectParent.value !== '' ) {
+            // If input is valid
+            if ( input.value !== "" && selectParent.value !== '' ) {
                 // Initially set to 'incorrect' color
-                let color = attemptColors[3];
-                for ( const name of regionNames ) {
-                    // If the user input matches this region name
-                    if ( name === `${selectParent.value}__${util.inputToId( input.value )}`) {
-                        color = attemptColors[1];
-                        const group = svg.querySelector(`#${CSS.escape( name )}`);
-                        if ( !group.classList.contains('typed') ) {
-                            group.classList.add('typed');
-                            input.value = "";
-                            numCorrect++;
-                            color = attemptColors[0];
-                            break;
-                        }
+                let color = ATTEMPT_COLORS[3];
+                const myInput = util.inputToId( input.value );
+                // If the user input matches a region's name
+                if ( regionMap.get( selectParent.value ).includes( myInput ) ) {
+                    color = REPEAT_COLOR;
+                    const group = svg.querySelector(`G#${selectParent.value} G G#${CSS.escape( myInput )}`);
+                    // The user has not yet typed this region
+                    if ( !group.classList.contains('typed') ) {
+                        // Update map
+                        group.classList.add('typed');
+                        group.classList.add('guesses0');
+                        // Update list
+                        const correctNode = noMapArea.querySelector(`#${selectParent.value} #${myInput}`);
+                        correctNode.textContent = util.idToInput( myInput );
+                        correctNode.style["background-color"] = "rgb(75, 255, 75)";
+                        correctNode.style["border"] = "1px solid green";
+                        input.value = "";
+                        numCorrect++;
+                        color = ATTEMPT_COLORS[0];
+                        gameUtil.playSound( ATTEMPT_SOUNDS[0] );
                     }
+                    // The user has already typed this region
+                    else {
+                        gameUtil.regionDisappearTrigger( group, REPEAT_COLOR, false, 0 );
+                        gameUtil.pulseElementBG( noMapArea.querySelector(`#${selectParent.value} #${myInput}`), "rgb(75, 255, 75)", color );
+                        gameUtil.playSound( ATTEMPT_SOUNDS[1] );
+                    }
+                } else {
+                    gameUtil.playSound( ATTEMPT_SOUNDS[3] );
                 }
-                inputColor( color );
+                gameUtil.pulseElementBG( input, "white", color );
                 tally.textContent = `Correct: ${numCorrect}/${numPrompts}`;
-                if ( numCorrect === numPrompts ) endGame();
+                if ( numCorrect === numPrompts ) gameUtil.endGame();
             }
         }
     });
 }
-function typeHard( regionNames ) {
+/**
+ * Runs the "Type (Hard)" gamemode
+ * @param {Map<String,Array<String>} regionMap
+ */
+function typeHard( regionMap ) {
     promptLabel.textContent = "Name the highlighted region";
-    typeGamemodes( regionNames );
-    arr = shuffleArray( regionNames );
-    current = arr.pop();
+    selectParent.setAttribute('hidden', true);
+    typeGamemodes( regionMap );
+    promptsArr = gameUtil.shuffleRegionMap( regionMap );
+    currentPrompt = promptsArr.pop();
 
-    let currentGroup = svg.querySelector(`#${current}`);
+    let currentGroup = gameUtil.queryCurrentRegion( currentPrompt );
     currentGroup.classList.add('typeCurrent');
 
     input.addEventListener('keypress', e => {
@@ -191,16 +211,20 @@ function typeHard( regionNames ) {
             // Only check if the value & parent arent blank
             if ( input.value !== '' ) {
                 // If input is correct
-                if ( input.value.toLowerCase() === util.idToInput( current ).toLowerCase() ) {
-                    inputColor( attemptColors[guesses] );
+                if ( input.value.toLowerCase() === currentPrompt.rInput.toLowerCase() ) {
+                    gameUtil.pulseElementBG( input, "white", ATTEMPT_COLORS[guesses] );
+                    gameUtil.showLabel( currentGroup, null, true, true );
+                    gameUtil.playSound( ATTEMPT_SOUNDS[guesses] );
                     next();
                 // If input is incorrect
                 } else {
-                    inputColor( attemptColors[3] );
                     guesses++;
+                    gameUtil.pulseElementBG( input, "white", ATTEMPT_COLORS[3] );
+                    gameUtil.playSound( ATTEMPT_SOUNDS[3] );
                     // If too many guesses have been given
                     if ( guesses === MAX_GUESSES ) {
-                        showLabel( svg.getElementById( current ), null, true, true );
+                        gameUtil.showLabel( currentGroup, null, true, true );
+                        gameUtil.playSound( ATTEMPT_SOUNDS[4] );
                         next();
                     }
                 }
@@ -213,203 +237,129 @@ function typeHard( regionNames ) {
         currentGroup.classList.add(`guesses${guesses}`);
         if ( guesses === 0 ) numCorrect++;
         input.value = "";
-        if ( !( current = arr.pop() ) ) {
-            endGame();
+        if ( !( currentPrompt = promptsArr.pop() ) ) {
+            gameUtil.endGame();
         } else {
-            currentGroup = svg.querySelector(`#${current}`);
+            currentGroup = gameUtil.queryCurrentRegion( currentPrompt );
             currentGroup.classList.add('typeCurrent');
             guesses = 0;
         }
     }
-}
-
-function outline( regionNames ) {
-
-}
-
-function noMap( regionNames, parents ) {
-    populateSelect( parents );
-    const noMapArea = document.getElementById('no-map-area');
-    numPrompts = regionNames.length;
-
-    let n = 1;
-    const array = {};
-    regionNames.forEach( name => {
-        array[ util.inputToId( name ) ] = n++;
-    });
-
-    for ( let i = 0; i < numPrompts; i++ ) {
-        noMapArea.appendChild( document.createElement('P') );
-    }
-
-    promptLabel.textContent = "Name all regions";
-    tally.textContent = `Correct: ${numCorrect}/${numPrompts}`;
-    noMapArea.style.display = "flex";
-    promptBar.style.display = "flex";
-    document.getElementById('game-area').removeChild( svg.parentNode );
-    input.focus();
-
-    input.addEventListener('keypress', e => {
-        if ( e.key === 'Enter' ) {
-            // Only check if the value & parent arent blank
-            if ( input.value !== '' && selectParent.value !== '' ) {
-                const myInput = `${selectParent.value.toLowerCase()}__${util.inputToId( input.value )}`;
-                if ( array[ myInput ] ) {
-                    const correctNode = noMapArea.childNodes[ array[ myInput ] ];
-                    correctNode.textContent = util.idToInput( myInput );
-                    correctNode.style["background-color"] = "rgb(75, 255, 75)";
-                    correctNode.style["border"] = "1px solid green";
-                    array[ myInput ] = null;
-                    input.value = "";
-                    numCorrect++;
-                }
-            }
-        }
-        tally.textContent = `Correct: ${numCorrect}/${numPrompts}`;
-        if ( numCorrect === numPrompts ) endGame();
+    endGameButton.addEventListener('click', e => {
+        currentGroup.classList.remove('typeCurrent');
     });
 }
+/**
+ * Runs the "Outline" gamemode
+ * @param {Map<String,Array<String>} regionMap
+ */
+function outline( regionMap ) {
 
-function noList( regionNames, parents ) {
-    populateSelect( parents );
-    const noListArea = document.getElementById('no-list-area');
+}
+/**
+ * Runs the "No Map" gamemode
+ * @param {Map<String,Array<String>} regionMap
+ */
+function noMap( regionMap ) {
+    svg.parentNode.style.display = "none";
+    type( regionMap );
+    endGameButton.addEventListener('click', e => {
+        svg.parentNode.style.display = "flex";
+    });
+}
+/**
+ * Runs the "No List" gamemode
+ * @param {Map<String,Array<String>} regionMap
+ */
+function noList( regionMap ) {
+    listGamemodes( regionMap );
+    gameUtil.populateSelect( regionMap );
+    svg.parentNode.style.display = "none";
+    // Format top gamebar
     promptLabel.textContent = "Name all regions";
     tally.textContent = "Correct: ?";
     promptBar.style.display = "flex";
-    noListArea.style.display = "flex";
-    document.getElementById('game-area').removeChild( svg.parentNode );
     showNames.setAttribute('disabled', true);
     zoomSlider.setAttribute('disabled', true);
     input.focus();
 
-    const validList = new Map();
-    const invalidList = new Map();
-    parents.forEach( p => {
-        validList[p] = new Map();
-        invalidList[p] = new Map();
+    const missedRegions = new Map(), unknownRegions = new Map(), duplicateRegions = new Map();
+    const maps = [ unknownRegions, duplicateRegions ];
+    regionMap.forEach(( regionNames, parent ) => {
+        missedRegions.set( parent, new Array() );
+        // Initialize all regions into missedRegions
+        for ( const name of regionNames ) {
+            missedRegions.get( parent ).push( name );
+        }
     });
-    regionNames.forEach( name => {
-        const parentName = name.split('__')[0];
-        const regionName = util.idToInput( name );
-        validList[parentName][regionName.toLowerCase()] = 0;
-    });
-
     input.addEventListener('keypress', e => {
         if ( e.key === 'Enter' ) {
-            // Only check the value if it isn't blank
-            const parentValue = selectParent.childElementCount === 1 ? parents[0] : selectParent.value
-            if ( input.value !== '' && parentValue !== '' ) {
-                const myInput = input.value.toLowerCase();
-                // Input is a valid region
-                if ( validList[parentValue][myInput] !== undefined ) {
-                    validList[parentValue][myInput]++;
-                }
-                // Input is not a valid region
-                else {
-                    invalidList[parentValue][myInput] = 1;
-                }
+            const pValue = selectParent.value;
+            // If input is valid
+            if ( input.value !== '' && pValue !== '' ) {
+                const myInput = util.inputToId( input.value );
                 input.value = "";
+                gameUtil.playSound( ATTEMPT_SOUNDS[1] );
+                // If the user input matches a region's name
+                if ( regionMap.get( pValue ).includes( myInput ) ) {
+                    const group = svg.querySelector(`#${CSS.escape( myInput )}`);
+                    // The user has not yet typed this region
+                    if ( !group.classList.contains('typed') ) {
+                        // Remove the region from missedRegions
+                        missedRegions.get( pValue ).splice( missedRegions.get( pValue ).indexOf( myInput ), 1 );
+                        // Update map
+                        group.classList.add('typed');
+                        group.classList.add('guesses0');
+                        // Update list
+                        const correctNode = noMapArea.querySelector(`#${pValue} #${myInput}`);
+                        correctNode.textContent = util.idToInput( myInput );
+                        correctNode.style["background-color"] = "rgb(75, 255, 75)";
+                        correctNode.style["border"] = "1px solid green";
+                        numCorrect++;
+                    }
+                    // The user has already typed this region
+                    else {
+                        // Initialize array for parent if it doesn't exist
+                        if ( !duplicateRegions.get( pValue ) ) duplicateRegions.set( pValue, new Array() );
+                        // Only add if it isn't already on there
+                        if ( !duplicateRegions.get( pValue ).includes( myInput ) ) duplicateRegions.get( pValue ).push( myInput );
+                    }
+                }
+                // User input doesn't match a region's name
+                else {
+                    // Initialize array for parent if it doesn't exist
+                    if ( !unknownRegions.get( pValue ) ) unknownRegions.set( pValue, new Array() );
+                    unknownRegions.get( pValue ).push( myInput );
+                }
+                gameUtil.pulseElementBG( input, "white", ATTEMPT_COLORS[1] );
             }
         }
     });
-    const endGameButton = document.getElementById('noList-end-button');
-    const endGameArea = document.getElementById('endGame-area');
-    const regionAreas = [
-        document.getElementById('correct-regions'),
-        document.getElementById('missed-regions'),
-        document.getElementById('unknown-regions'),
-        document.getElementById('duplicate-regions'),
-    ];
+    const regionAreas = [ noListArea.querySelector('#unknown-regions'), noListArea.querySelector('#duplicate-regions'), ];
     endGameButton.addEventListener('click', e => {
-        noListArea.removeChild( endGameButton );
-        input.setAttribute('disabled', true);
-        selectParent.setAttribute('disabled', true);
-        const numParents = Object.entries( validList ).length;
         const endGameRegionsTemplate = document.getElementById('endGame-regions-template');
-        Object.entries( validList ).forEach( ([parent, map]) => {
-            const arrays = [[],[],[],[]];
-            Object.entries( map ).forEach( ([name, value]) => {
-                if ( value === 1 ) {
-                    arrays[0].push( name );
-                } else if ( value === 0 ) {
-                    arrays[1].push( name );
-                } else {
-                    arrays[0].push( name );
-                    arrays[3].push( name );
+        // Display map and list
+        // For each map of region correctness
+        for ( let i = 0; i < maps.length; i++ ) {
+            // For each parent and their regions
+            maps[i].forEach( ( regions, parent ) => {
+                const containerInstance = endGameRegionsTemplate.content.cloneNode(true);
+                const containerElement = containerInstance.querySelector('DIV');
+                const parentLabel = containerElement.querySelector('H5');
+                parentLabel.textContent = util.idToInput( parent );
+                const nameContainer = containerElement.querySelector('DIV');
+                for ( const regionName of regions ) {
+                    const p = document.createElement('P');
+                    p.textContent = util.idToInput( regionName );
+                    nameContainer.appendChild( p );
                 }
+                regionAreas[i].appendChild( containerElement );
             });
-            Object.entries( invalidList[parent] ).forEach( ([name, value]) => {
-                arrays[2].push( name );
-            });
-
-            for ( let i = 0; i < 4; i++ ) {
-                if ( arrays[i].length !== 0 ) {
-                    const containerInstance = endGameRegionsTemplate.content.cloneNode(true);
-                    const containerElement = containerInstance.querySelector('DIV');
-                    console.log(  );
-                    if ( numParents > 1 ) {
-                        const parentLabel = containerElement.querySelector('H5');
-                        parentLabel.textContent = parent.split('_').join(' ');
-                    }
-                    const nameContainer = containerElement.querySelector('DIV');
-                    arrays[i].forEach( name => {
-                        const p = document.createElement('P');
-                        p.textContent = util.capitalizeFirst( name );
-                        nameContainer.appendChild( p );
-                    });
-                    regionAreas[i].appendChild( containerElement );
-                }
-            }
-
-        });
-        endGameArea.style.display = "block";
+        }
+        svg.parentNode.style.display = "flex";
+        noMapArea.style.display = "flex";
+        noListArea.style.display = "flex";
     });
-}
-
-function regionDisappearTrigger( group, color, clickable ) {
-    group.classList.remove('groupClickable');
-    group.querySelectorAll('POLYGON').forEach( polygon => {
-        polygon.style.fill = color;
-        // Hold for 1 second
-        setTimeout( function() {
-            polygon.style.transition = 'fill 1s ease';
-            polygon.style.fill = '';
-            // Fade out for 1 second
-            setTimeout( function() {
-                polygon.style.transition = '';
-                if ( clickable ) group.classList.add('groupClickable');
-            }, 1000 );
-        }, 1000 );
-    });
-}
-function inputColor( color ) {
-    input.style.transition = '';
-    input.style.backgroundColor = color;
-    setTimeout(() => {
-        input.style.transition = 'background-color 1s ease';
-        input.style.backgroundColor = "white";
-    }, 10 );
-}
-
-function showLabel( group, e, center, timeout ) {
-    const p = document.createElement('P');
-    p.classList.add('clickLabel');
-    p.textContent = util.idToInput( group.id );
-    if ( center ) {
-        const rect = group.getBoundingClientRect();
-        p.style.transform = `translate( calc( -50% + ${rect.left + rect.width / 2 + scrollX}px ), calc( -50% + ${rect.top + rect.height / 2 + scrollY}px ) )`;
-    } else {
-        p.style.transform = `translate( calc( -50% + ${e.clientX}px ), calc( -120% + ${e.clientY + window.scrollY}px ) )`;
-    }
-    p.addEventListener('contextmenu', e => { e.preventDefault() });
-    tooltip.before( p );
-
-    if ( timeout ) {
-        // Show for 1.5 seconds
-        setTimeout( function() {
-            tooltip.parentNode.removeChild( p );
-        }, 1500 );
-    }
 }
 
 /**
@@ -417,119 +367,18 @@ function showLabel( group, e, center, timeout ) {
  * to click on
  */
 function updateLabels() {
-    document.querySelectorAll('.click-on').forEach( label => {
-        label.textContent = ( current === "-" ) ? "-" : util.capitalizeFirst( util.idToInput( current ) );
-    });
-}
-
-/**
- * Randomly shuffles an array
- * @param {Array} arr 
- */
-function shuffleArray( arr ) {
-    for ( let i = arr.length - 1; i >= 0; i-- ) {
-        const j = Math.floor( Math.random() * i );
-        const temp = arr[i];
-        arr[i] = arr[j];
-        arr[j] = temp;
+    for ( const label of document.querySelectorAll('.click-on') ) {
+        label.textContent = ( currentPrompt.pID === "-" ) ? "-" : currentPrompt.rInput;
     }
-    return arr;
 }
-
-/**
- * Populates the Select dropdown for gamemodes that need it
- * @param {Array<String>} parents 
- */
-function populateSelect( parents ) {
-    parents.forEach( name => {
-        const option = document.createElement('OPTION');
-        option.value = name;
-        option.innerText = name.split('_').join(' ');
-        selectParent.appendChild( option );
-    });
-    if ( parents.length === 1 ) {
-        selectParent.selectedIndex = 1;
-        selectParent.setAttribute('disabled', true);
-    }
-    selectParent.style.display = "block";
-}
-
-// Right click to zoom
-svg.addEventListener( 'contextmenu', e => { e.preventDefault(); });
-svg.addEventListener( 'contextmenu', zoom );
-function zoom( e ) {
-    const zoomLevel = zoomSlider.value * 10;
-    document.querySelectorAll('.clickLabel').forEach( label => {
-        label.style.display = "none";
-    });
-    const rect = svg.getBoundingClientRect();
-    // X coordinate of zoom viewport
-    let startX = ( e.clientX - rect.left ) * SVG_WIDTH / rect.width - SVG_WIDTH / zoomLevel;
-    // Y coordinate of zoom viewport
-    let startY = ( e.clientY - rect.top ) * SVG_HEIGHT / rect.height - SVG_HEIGHT / zoomLevel;
-    // Adjust so zoom is not greater than original viewport
-    const ratioX = SVG_WIDTH * ( 1 - 2 / zoomLevel );
-    const ratioY = SVG_HEIGHT * ( 1 - 2 / zoomLevel );
-    startX = startX < 0 ? 0 : ( startX > ratioX ) ? ratioX : startX;
-    startY = startY < 0 ? 0 : ( startY > ratioY ) ? ratioY : startY;
-
-    svg.setAttribute('viewBox', `${startX} ${startY} ${ SVG_WIDTH / zoomLevel * 2 } ${ SVG_HEIGHT / zoomLevel * 2 }`);
-    svg.classList.add(`zoom-${zoomSlider.value}`);
-    svg.removeEventListener( 'contextmenu', zoom );
-    zoomSlider.setAttribute( 'disabled', true );
-    showNames.setAttribute( 'disabled', true );
-    showNames.checked = false;
-
-    // Escape key to unzoom
-    document.addEventListener( 'keydown', unzoom );
-    input.focus();
-}
-function unzoom( e ) {
-    if ( e.key !== 'Escape' ) return;
-    svg.classList.remove(`zoom-${zoomSlider.value}`);
-    svg.setAttribute('viewBox', "0 0 1600 900");
-    svg.addEventListener( 'contextmenu', zoom );
-    document.querySelectorAll('.clickLabel').forEach( label => {
-        label.style.display = "none";
-    });
-    zoomSlider.removeAttribute( 'disabled' );
-    showNames.removeAttribute( 'disabled' );
-    document.removeEventListener( 'keydown', unzoom );
-    input.focus();
-}
-
-function endGame() {
-    current = "-";
-    updateLabels();
-    input.setAttribute('disabled', true);
-    covering.style.visibility = "";
-    gameEndPanel.style.display = "flex";
-    console.log( "YOU WIN!" );
-}
-
-showNames.addEventListener('change', e => {
-    // Show all names
-    if ( e.target.checked ) {
-        document.querySelectorAll('G').forEach( group => {
-            if ( group.classList.contains('grey-out') ) return;
-            showLabel( group, e, true, false );
-        });
-    }
-    // Hide all names
-    else {
-        document.querySelectorAll('.clickLabel').forEach( label => {
-            label.parentNode.removeChild( label );
-        });
-    }
-});
 
 export const gamemodeMap = {
-    'learn': learn,
-    'click': click,
-    'clickDisappear': clickDisappear,
-    'type': type,
-    'typeHard': typeHard,
-    'outline': outline,
-    'noMap': noMap,
-    'noList': noList,
+    'Learn': learn,
+    'Click': click,
+    'Click (Disappear)': clickDisappear,
+    'Type': type,
+    'Type (Hard)': typeHard,
+    'Outline': outline,
+    'No Map': noMap,
+    'No List': noList,
 };

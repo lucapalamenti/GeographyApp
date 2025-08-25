@@ -1,4 +1,4 @@
-INSERT INTO `map` (`map_id`, `map_scale`, `map_name`, `map_thumbnail`, `map_primary_color`, `map_is_custom`) VALUES (22, 160.005023, 'Maine Counties', 'Maine_Counties_Thumbnail.png', '196,0,29', 0);
+INSERT INTO `map` (`map_id`, `map_scale`, `map_name`, `map_thumbnail`, `map_primary_color_R`, `map_primary_color_G`, `map_primary_color_B`, `map_is_custom`) VALUES (22, 160.005023, 'Maine Counties', 'Maine_Counties_Thumbnail.png', 196,0,29, 0);
 INSERT INTO `mapRegion` (`mapRegion_map_id`, `mapRegion_region_id`, `mapRegion_parent`, `mapRegion_offsetX`, `mapRegion_offsetY`, `mapRegion_scaleX`, `mapRegion_scaleY`) VALUES (22, 1283, "Maine", 1.060561, 0.000000, 1.000000, 1.000000);
 INSERT INTO `mapRegion` (`mapRegion_map_id`, `mapRegion_region_id`, `mapRegion_parent`, `mapRegion_offsetX`, `mapRegion_offsetY`, `mapRegion_scaleX`, `mapRegion_scaleY`) VALUES (22, 1291, "Maine", 1.728258, 1.329880, 1.000000, 1.000000);
 INSERT INTO `mapRegion` (`mapRegion_map_id`, `mapRegion_region_id`, `mapRegion_parent`, `mapRegion_offsetX`, `mapRegion_offsetY`, `mapRegion_scaleX`, `mapRegion_scaleY`) VALUES (22, 1292, "Maine", 1.251107, 1.107041, 1.000000, 1.000000);

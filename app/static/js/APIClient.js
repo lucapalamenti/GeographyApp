@@ -1,5 +1,8 @@
 import HTTPClient from "./HTTPClient.js";
 
+import MMap from "./models/MMap.js";
+import MapRegion from "./models/MapRegion.js";
+
 const BASE_API_PATH = "./api";
 
 const handleAuthError = ( error ) => {
@@ -70,6 +73,10 @@ const getMapRegion = async ( mapRegion_map_id, mapRegion_region_id ) => {
     }
 };
 
+/**
+ * @param {Number} map_id 
+ * @returns {Array<MapRegion>}
+ */
 const getRegionsByMapId = async ( map_id ) => {
     try {
         return await HTTPClient.get(`${BASE_API_PATH}/regions/map/${map_id}`);
@@ -94,19 +101,23 @@ const createMapRegion = async ( mapRegionData ) => {
     }
 };
 
-const deleteRegionsFromMap = async ( map_id ) => {
+/**
+ * Retrieves the enum values of mapRegion_state in an array of strings
+ * @returns {Array<String>} 
+ */
+const getStates = async () => {
     try {
-        return await HTTPClient.delete(`${BASE_API_PATH}/regions/map/${map_id}`);
+        return await HTTPClient.get(`${BASE_API_PATH}/mapRegion/states`);
     } catch (error) {
         return handleAuthError(error);
     }
-};
+}
 
 // ----- MapDAO CALLS -----
 
-const getMaps = async ( ORDER_BY ) => {
+const getMaps = async ( where, orderBy ) => {
     try {
-        return await HTTPClient.get(`${BASE_API_PATH}/maplist/${ORDER_BY}`);
+        return await HTTPClient.get(`${BASE_API_PATH}/maplist/where/${where}/orderBy/${orderBy}`);
     } catch (error) {
         return handleAuthError(error);
     }
@@ -120,25 +131,71 @@ const getMapById = async ( map_id ) => {
     }
 };
 
-const createMap = async ( mapData ) => {
+/**
+ * @param {MMap} map 
+ * @returns 
+ */
+const createMap = async ( map ) => {
     try {
-        return await HTTPClient.post(`${BASE_API_PATH}/maps`, mapData);
+        return await HTTPClient.post(`${BASE_API_PATH}/maps`, map);
     } catch (error) {
         return handleAuthError(error);
     }
 };
 
-const updateMap = async ( mapData ) => {
+/**
+ * @param {MMap} map 
+ * @returns 
+ */
+const updateMap = async ( map ) => {
     try {
-        return await HTTPClient.put(`${BASE_API_PATH}/maps`, mapData);
+        return await HTTPClient.put(`${BASE_API_PATH}/maps`, map);
     } catch (error) {
         return handleAuthError(error);
     }
 };
 
+/**
+ * Deletes all custom maps
+ * @returns 
+ */
+const deleteAllCustomMaps = async () => {
+    try {
+        return await HTTPClient.delete(`${BASE_API_PATH}/maps`);
+    } catch (error) {
+        return handleAuthError(error);
+    }
+};
+
+/**
+ * Deletes the map with the given map_id
+ * @param {Number} map_id
+ * @returns
+ */
 const deleteMap = async ( map_id ) => {
     try {
         return await HTTPClient.delete(`${BASE_API_PATH}/maps/${map_id}`);
+    } catch (error) {
+        return handleAuthError(error);
+    }
+};
+
+// ----- OTHER -----
+
+const uploadFile = async ( data ) => {
+    try {
+        return await fetch(`${BASE_API_PATH}/uploadFile`, {
+            method: 'POST',
+            body: data
+        });
+    } catch (error) {
+        return handleAuthError(error);
+    }
+};
+
+const retrieveFile = async ( fileName ) => {
+    try {
+        return await HTTPClient.get(`/uploads/${fileName}`);
     } catch (error) {
         return handleAuthError(error);
     }
@@ -156,11 +213,15 @@ export default {
     getRegionParentsForMap,
     createRegion,
     createMapRegion,
-    deleteRegionsFromMap,
+    getStates,
 
     getMaps,
     getMapById,
     createMap,
     updateMap,
-    deleteMap
+    deleteAllCustomMaps,
+    deleteMap,
+
+    uploadFile,
+    retrieveFile
 }

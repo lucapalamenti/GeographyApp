@@ -1,4 +1,4 @@
-INSERT INTO `map` (`map_id`, `map_scale`, `map_name`, `map_thumbnail`, `map_primary_color`) VALUES (1, 1, 'US States Polygon', 'US_States_Polygon_Thumbnail.png', '0,0,0');
+INSERT INTO `map` (`map_id`, `map_scale`, `map_name`, `map_thumbnail`, `map_primary_color_R`, `map_primary_color_G`, `map_primary_color_B`) VALUES (1, 1, 'US States Polygon', 'US_States_Polygon_Thumbnail.png', 0,0,0);
 INSERT INTO `mapRegion` (`mapRegion_map_id`, `mapRegion_region_id`, `mapRegion_parent`, `mapRegion_offsetX`, `mapRegion_offsetY`, `mapRegion_scaleX`, `mapRegion_scaleY`) VALUES (1, 5, 'United States', 17, 26, 1, 1);
 INSERT INTO `mapRegion` (`mapRegion_map_id`, `mapRegion_region_id`, `mapRegion_parent`, `mapRegion_offsetX`, `mapRegion_offsetY`, `mapRegion_scaleX`, `mapRegion_scaleY`) VALUES (1, 6, 'United States', 28, 136, 1, 1);
 INSERT INTO `mapRegion` (`mapRegion_map_id`, `mapRegion_region_id`, `mapRegion_parent`, `mapRegion_offsetX`, `mapRegion_offsetY`, `mapRegion_scaleX`, `mapRegion_scaleY`) VALUES (1, 7, 'United States', 28, 26, 1, 1);

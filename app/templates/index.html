@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+
     <link rel="stylesheet" href="css/all.css" />
     <link rel="stylesheet" href="css/header.css" />
     <link rel="stylesheet" href="css/index.css" />
@@ -27,10 +29,25 @@
             <nav class="flex-row">
                 <a href="create" class="btn-1 btn-hover-effect">Create Custom Map</a>
                 <button class="btn-1 btn-hover-effect" id="delete-map-btn">Delete Custom Map</button>
+                <button class="btn-1 btn-hover-effect" id="delete-all-maps-btn">Delete ALL Custom Maps</button>
+                <button class="btn-1 btn-hover-effect" id="b1">OOOOOOOOOOOOOOOOOOOOO</button>
             </nav>
-            <nav class="flex-row-center" id="map-navigation">
-                <h5 class="flex-col" id="delete-popup">Click on Custom Map to Delete</h5>
-            </nav>
+            <div class="flex-row-center">
+                <select name="filter-maps" id="filter-maps">
+                    <option value="map_id > 0">Filter Maps</option>
+                    <option value="map_is_custom = 0">Default Only</option>
+                    <option value="map_is_custom = 1">Custom Only</option>
+                </select>
+                <select name="sort-maps" id="sort-maps">
+                    <option value="map_id">Sort Maps</option>
+                    <option value="map_id DESC">Newest</option>
+                    <option value="map_id">Oldest</option>
+                    <option value="map_name">A -> Z</option>
+                    <option value="map_name DESC">Z -> A</option>
+                </select>
+            </div>
+            <nav class="flex-row-center" id="map-navigation"></nav>
+            <h5 class="flex-col" id="delete-popup">Click on Custom Map to Delete</h5>
         </section>
     </main>
 

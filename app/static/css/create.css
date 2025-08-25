@@ -1,18 +1,109 @@
 polygon {
+    fill: rgb(230, 231, 137);
+    stroke-width: 0.05%;
+    stroke: black;
+}
+g g g:has( polygon:hover ) polygon {
+    fill: rgb(210, 211, 117);
+}
+
+g g g.enabled polygon {
+    fill: rgb(106, 235, 89);
+}
+g g g.enabled:has( polygon:hover ) polygon {
+    fill: rgb(86, 215, 69);
+}
+
+g g g.disabled polygon {
     fill: grey;
     stroke-width: 0.05%;
-    stroke: rgb(68, 68, 68);
 }
-polygon:hover {
+g g g.disabled:has( polygon:hover ) polygon {
     fill: rgb(108, 108, 108);
 }
 
-g.selected polygon {
-    fill: rgb(230, 231, 137);
-    stroke: black;
+g g g.herring polygon {
+    fill: rgb(240, 219, 35);
+    stroke-width: 0.05%;
 }
-g.selected polygon:hover {
-    fill: rgb(210, 211, 117);
+g g g.herring:has( polygon:hover ) polygon {
+    fill: rgb(220, 199, 15);
+}
+
+g g g.outside polygon {
+    fill: rgb(77, 77, 77);
+    stroke-width: 0.05%;
+}
+g g g.outside:has( polygon:hover ) polygon {
+    fill: rgb(54, 54, 54);
+}
+
+#map-outline {
+    fill: none;
+    stroke: red;
+    stroke-width: 2px;
+}
+
+/* Region Type Button panel */
+
+#state-buttons-panel {
+    position: absolute;
+    transform: translate( calc(-50% - 50px) );
+    display: none;
+}
+#state-buttons-panel aside {
+    display: none;
+}
+#state-buttons-panel button {
+    position: relative;
+}
+#state-buttons-panel button:hover aside {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    transform: translate(calc(-100% + 15px), -2px);
+    display: block;
+    background-color: rgb(31, 151, 71);
+    border: 3px solid rgb(28, 134, 64);
+    border-radius: 5px;
+    padding: 1px;
+    padding-right: 5px;
+    padding-left: 5px;
+}
+
+#enabled-btn {
+    background-color: rgb(106, 235, 89);
+}
+#enabled-btn:hover {
+    background-color: rgb(86, 215, 69);
+}
+
+#deselect-btn {
+    background-color: rgb(230, 231, 137);
+}
+#deselect-btn:hover {
+    background-color: rgb(210, 211, 117);
+}
+
+#disabled-btn {
+    background-color: grey;
+}
+#disabled-btn:hover {
+    background-color: rgb(108, 108, 108);
+}
+
+#herring-btn {
+    background-color: rgb(240, 219, 35);
+}
+#herring-btn:hover {
+    background-color: rgb(220, 199, 15);
+}
+
+#outside-btn {
+    background-color: rgb(77, 77, 77);
+}
+#outside-btn:hover {
+    background-color: rgb(54, 54, 54);
 }
 
 svg.zoom-1 polygon { stroke-width: 0.25px; }
@@ -21,17 +112,29 @@ svg.zoom-3 polygon { stroke-width: 0.16px; }
 svg.zoom-4 polygon { stroke-width: 0.13px; }
 svg.zoom-5 polygon { stroke-width: 0.10px; }
 
-#hidden-area {
+#map-container {
+    flex-direction: column;
     align-items: center;
     width: 90%;
     max-width: 1200px;
 }
 
-#hidden-area input[type="range"] {
+#map-container input[type="range"] {
     width: 150px;
 }
 
+#top-map-bar {
+    width: 100%;
+    display: flex;
+    gap: 5px;
+}
+
+#templateMap {
+    background-color: rgb(141, 209, 226);
+}
+
 #selected-list {
+    max-width: 80%;
     display: none;
     flex-direction: column;
     align-items: center;
@@ -49,3 +152,20 @@ svg.zoom-5 polygon { stroke-width: 0.10px; }
     justify-content: center;
 }
 
+#loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    font-size: 4rem;
+    font-weight: bold;
+    font-style: italic;
+    color:rgb(27, 133, 27);
+     -webkit-text-stroke: 1px white;
+    text-shadow: 5px 5px 10px black;
+}

@@ -25,7 +25,9 @@ CREATE TABLE IF NOT EXISTS `map` (
   `map_scale` decimal(10,6) NOT NULL DEFAULT 1.000000,
   `map_name` varchar(100) NOT NULL DEFAULT '',
   `map_thumbnail` tinytext DEFAULT '',
-  `map_primary_color` varchar(31) NOT NULL DEFAULT '255,255,255',
+  `map_primary_color_R` int(3) NOT NULL DEFAULT 255,
+  `map_primary_color_G` int(3) NOT NULL DEFAULT 255,
+  `map_primary_color_B` int(3) NOT NULL DEFAULT 255,
   `map_is_custom` bit(1) DEFAULT 0,
   PRIMARY KEY (`map_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
@@ -52,6 +54,7 @@ CREATE TABLE IF NOT EXISTS `mapRegion` (
   `mapRegion_offsetY` decimal(10,6) NOT NULL DEFAULT 0.000000,
   `mapRegion_scaleX` decimal(10,6) NOT NULL DEFAULT 0.000000,
   `mapRegion_scaleY` decimal(10,6) NOT NULL DEFAULT 0.000000,
+  `mapRegion_type` enum('enabled','disabled','herring','outside') NOT NULL DEFAULT 'enabled',
   PRIMARY KEY (`mapRegion_id`) USING BTREE,
   KEY `FK_mapRegion_map` (`mapRegion_map_id`) USING BTREE,
   KEY `FK_mapRegion_region` (`mapRegion_region_id`) USING BTREE,
@@ -61,17 +64,12 @@ CREATE TABLE IF NOT EXISTS `mapRegion` (
 
 -- Data exporting was unselected.
 
--- Dumping structure for table geographyapp.surroundings
--- CREATE TABLE IF NOT EXISTS `surroundings` (
---   `surroundings_id` int(10) NOT NULL AUTO_INCREMENT,
---   `surroundings_map_id` int(10) NOT NULL DEFAULT 0,
---   `surroundings_other_id` int(10) NOT NULL DEFAULT 0,
---   PRIMARY KEY (`surroundings_id`),
---   KEY `FK_surroundings_map` (`surroundings_map_id`),
---   KEY `FK_surroundings_map_2` (`surroundings_other_id`),
---   CONSTRAINT `FK_surroundings_map` FOREIGN KEY (`surroundings_map_id`) REFERENCES `map` (`map_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
---   CONSTRAINT `FK_surroundings_map_2` FOREIGN KEY (`surroundings_other_id`) REFERENCES `map` (`map_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
--- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+-- Dumping structure for table geographyapp.mapName
+CREATE TABLE IF NOT EXISTS `regionName` (
+  `regionName_id` int(10) NOT NULL AUTO_INCREMENT,
+  `regionName_name` varchar(64) NOT NULL,
+  PRIMARY KEY (`regionName_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=103 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 -- Data exporting was unselected.
 

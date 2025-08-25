@@ -1,4 +1,4 @@
-INSERT INTO `map` (`map_id`, `map_scale`, `map_name`, `map_thumbnail`, `map_primary_color`, `map_is_custom`) VALUES (31, 100.566409, 'Nevada Counties', 'Nevada_Counties_Thumbnail.png', '255,163,0', 0);
+INSERT INTO `map` (`map_id`, `map_scale`, `map_name`, `map_thumbnail`, `map_primary_color_R`, `map_primary_color_G`, `map_primary_color_B`, `map_is_custom`) VALUES (31, 100.566409, 'Nevada Counties', 'Nevada_Counties_Thumbnail.png', 255,163,0, 0);
 INSERT INTO `mapRegion` (`mapRegion_map_id`, `mapRegion_region_id`, `mapRegion_parent`, `mapRegion_offsetX`, `mapRegion_offsetY`, `mapRegion_scaleX`, `mapRegion_scaleY`) VALUES (31, 1855, "Nevada", 2.987327, 0.000000, 1.000000, 1.000000);
 INSERT INTO `mapRegion` (`mapRegion_map_id`, `mapRegion_region_id`, `mapRegion_parent`, `mapRegion_offsetX`, `mapRegion_offsetY`, `mapRegion_scaleX`, `mapRegion_scaleY`) VALUES (31, 1858, "Nevada", 0.674678, 0.002282, 1.000000, 1.000000);
 INSERT INTO `mapRegion` (`mapRegion_map_id`, `mapRegion_region_id`, `mapRegion_parent`, `mapRegion_offsetX`, `mapRegion_offsetY`, `mapRegion_scaleX`, `mapRegion_scaleY`) VALUES (31, 1864, "Nevada", 0.666450, 1.301696, 1.000000, 1.000000);

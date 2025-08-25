@@ -1,4 +1,4 @@
-INSERT INTO `map` (`map_id`, `map_scale`, `map_name`, `map_thumbnail`, `map_primary_color`, `map_is_custom`) VALUES (6, 124.116670, 'Arizona Counties', 'Arizona_Counties_Thumbnail.png', '0,33,100', 0);
+INSERT INTO `map` (`map_id`, `map_scale`, `map_name`, `map_thumbnail`, `map_primary_color_R`, `map_primary_color_G`, `map_primary_color_B`, `map_is_custom`) VALUES (6, 124.116670, 'Arizona Counties', 'Arizona_Counties_Thumbnail.png', 0,33,100, 0);
 INSERT INTO `mapRegion` (`mapRegion_map_id`, `mapRegion_region_id`, `mapRegion_parent`, `mapRegion_offsetX`, `mapRegion_offsetY`, `mapRegion_scaleX`, `mapRegion_scaleY`) VALUES (6, 214, "Arizona", 0.000000, 4.424771, 1.000000, 1.000000);
 INSERT INTO `mapRegion` (`mapRegion_map_id`, `mapRegion_region_id`, `mapRegion_parent`, `mapRegion_offsetX`, `mapRegion_offsetY`, `mapRegion_scaleX`, `mapRegion_scaleY`) VALUES (6, 206, "Arizona", 0.082963, 3.357933, 1.000000, 1.000000);
 INSERT INTO `mapRegion` (`mapRegion_map_id`, `mapRegion_region_id`, `mapRegion_parent`, `mapRegion_offsetX`, `mapRegion_offsetY`, `mapRegion_scaleX`, `mapRegion_scaleY`) VALUES (6, 208, "Arizona", 0.058567, 0.004384, 1.000000, 1.000000);

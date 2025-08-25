@@ -1,4 +1,4 @@
-INSERT INTO `map` (`map_id`, `map_scale`, `map_name`, `map_thumbnail`, `map_primary_color`, `map_is_custom`) VALUES (47, 140.698722, 'Utah Counties', 'Utah_Counties_Thumbnail.png', '170,2,0', 0);
+INSERT INTO `map` (`map_id`, `map_scale`, `map_name`, `map_thumbnail`, `map_primary_color_R`, `map_primary_color_G`, `map_primary_color_B`, `map_is_custom`) VALUES (47, 140.698722, 'Utah Counties', 'Utah_Counties_Thumbnail.png', 170,2,0, 0);
 INSERT INTO `mapRegion` (`mapRegion_map_id`, `mapRegion_region_id`, `mapRegion_parent`, `mapRegion_offsetX`, `mapRegion_offsetY`, `mapRegion_scaleX`, `mapRegion_scaleY`) VALUES (47, 2883, "Utah", 0.010409, 0.000436, 1.000000, 1.000000);
 INSERT INTO `mapRegion` (`mapRegion_map_id`, `mapRegion_region_id`, `mapRegion_parent`, `mapRegion_offsetX`, `mapRegion_offsetY`, `mapRegion_scaleX`, `mapRegion_scaleY`) VALUES (47, 2884, "Utah", 1.888215, 0.002561, 1.000000, 1.000000);
 INSERT INTO `mapRegion` (`mapRegion_map_id`, `mapRegion_region_id`, `mapRegion_parent`, `mapRegion_offsetX`, `mapRegion_offsetY`, `mapRegion_scaleX`, `mapRegion_scaleY`) VALUES (47, 2898, "Utah", 2.541166, 0.000000, 1.000000, 1.000000);
