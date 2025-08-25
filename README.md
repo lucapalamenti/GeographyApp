@@ -1,6 +1,6 @@
 # GeographyApp
 
-### To Add
+## To Add
 - Add "Borders" table to database that tells you what regions a region borders
 - Something to do with having to scroll up and down when deleting multiple maps at bottom
 - Make the type gamemode list toggleable
@@ -32,20 +32,20 @@
 - right click multiple times to zoom further
 - create session storage for sorting & filtering maps selection
 
-## Changelog
+# Changelog
 
-### Ongoing
+## Ongoing
 
-#### Frontend
+### Frontend
 - There are now sounds on input
 
-#### Backend/Technical
+### Backend/Technical
 
-#### Bug Fixes
+### Bug Fixes
 
-### Beta 1.1.250825
+## Beta 1.1.250825
 
-#### Frontend
+### Frontend
 - Input box flashes a color depending on correctness of input
 - In type gamemode, if region is typed multiple times, it will subtly flash that region
 - Backup background image if the first one cant be found
@@ -67,13 +67,13 @@
 - The select region type buttons now show a tooltip with their name
 - Gamemodes that show the list after completion will now fill in the list with missed regions
 
-#### Backend/Technical
+### Backend/Technical
 - changed mapRegion_state to mapRegion_type
 - Changed storage of map_primary_color from a string 'R,G,B' to 3 separate integer values
 - Admin can choose to print query statements to a file in the backend (really just for creating new default maps)
 - Reworked svg element IDs. Regions with the same parent are now nested in a parent G element. Parent G elements are further split into groups of regions withthe same mapRegion_type
 
-#### Bug Fixes
+### Bug Fixes
 - When hovering over a county in create mode only that polygon is shaded
 - When dragging from one element into another (both within the same parent) in the learn gamemode, if the parent region is also the name of a region (ex: washington state and washington county) then the entire parent region gets highlighted
 - List gamemodes display parent regions without regions of type "enabled" in list, even though they have no regions to type
