@@ -1,6 +1,6 @@
 import util from "./util.js";
 
-import { html, tooltip, svg, input, selectParent, zoomSlider, showNames, endGameButton, gameEndPanel, noMapArea } from "./documentElements-game.js";
+import { html, tooltip, svg, input, selectParent, zoomSlider, showNames, endGameButton, gameEndPanel, noMapArea, promptTally } from "./documentElements-game.js";
 import { SVG_WIDTH, SVG_HEIGHT } from "./variables.js";
 
 const audioPath = "../audio/";
@@ -267,6 +267,7 @@ const endGame = () => {
     document.getElementById('bottom-game-bar').style.display = "none";
     input.setAttribute('disabled', true);
     html.classList.add('filter-dark');
+    promptTally.style.display = "none";
     gameEndPanel.style.display = "flex";
     for ( const label of document.querySelectorAll('.click-on') ) {
         label.textContent = "-";

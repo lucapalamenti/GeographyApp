@@ -13,7 +13,6 @@
     - Change level of detail in outlines (requires multiple datasets)
     - Toggle allowing alternate spellings
     - Disabled sounds
-- Show number of Correct regions separate from the counter in the top right (change that to something like "question number")
 - When taking more than 3 attempts in type (hard) gamemode, instead of just displaying the label is skipping it, make the user type the correct answer
 - Gamemodes:
     - "Borders": Name all surrounding regions
@@ -38,6 +37,7 @@
 
 ### Frontend
 - There are now sounds on input
+- Show prompt number next to number correct tally in some gamemodes
 
 ### Backend/Technical
 

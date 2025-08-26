@@ -9,6 +9,7 @@ export const promptBar = document.getElementById('prompt-bar');
 export const input = promptBar.querySelector('INPUT');
 export const selectParent = document.getElementById('select-parent');
 export const promptLabel = promptBar.querySelector('P');
+export const promptTally = promptBar.querySelector('#promptTally');
 export const tally = promptBar.querySelector('#tally');
 
 export const bottomGameBar = document.getElementById('bottom-game-bar');

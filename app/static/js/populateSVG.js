@@ -3,9 +3,8 @@ import util from "./util.js";
 
 import MMap from "./models/MMap.js";
 
-const FOCUS_STATES = ["enabled", "disabled", "herring"];
-const SVG_WIDTH = 1600;
-const SVG_HEIGHT = 900;
+import { SVG_WIDTH, SVG_HEIGHT, FOCUS_STATES } from "./variables.js";
+
 const SVG_PADDING = 10; // Pixels
 
 const polygonTemplate = document.getElementById('polygon-template').content;
