@@ -1,7 +1,7 @@
 import util from "./util.js";
 
-import { html, tooltip, svg, input, selectParent, zoomSlider, showNames, endGameButton, gameEndPanel, noMapArea, promptTally } from "./documentElements-game.js";
-import { SVG_WIDTH, SVG_HEIGHT } from "./variables.js";
+import { html, tooltip, svg, input, selectParent, showNames, endGameButton, gameEndPanel, noMapArea, promptTally } from "./documentElements-game.js";
+import { SVG_WIDTH, SVG_HEIGHT, SVG_ZOOM_START, SVG_ZOOM_INC, SVG_MAX_ZOOMS } from "./variables.js";
 
 const audioPath = "../audio/";
 
@@ -93,6 +93,7 @@ const showLabel = ( group, e, center, timeout ) => {
  * @param {Event} e 
  */
 const moveToolTip = ( e ) => {
+    tooltip.style.display = "block";
     tooltip.style.transform = `translate( calc( -50% + ${e.clientX}px ), calc( 60% + ${e.clientY + window.scrollY}px ) )`;
 }
 
@@ -209,61 +210,68 @@ function fillTable() {
 // Right click to zoom
 svg.addEventListener( 'contextmenu', e => { e.preventDefault(); });
 svg.addEventListener( 'contextmenu', zoom );
+let zoomLevel = SVG_ZOOM_START;
 function zoom( e ) {
-    const zoomLevel = zoomSlider.value * 10;
-    document.querySelectorAll('.clickLabel').forEach( label => {
-        label.style.display = "none";
-    });
-    const rect = svg.getBoundingClientRect();
-    // X coordinate of zoom viewport
-    let startX = ( e.clientX - rect.left ) * SVG_WIDTH / rect.width - SVG_WIDTH / zoomLevel;
-    // Y coordinate of zoom viewport
-    let startY = ( e.clientY - rect.top ) * SVG_HEIGHT / rect.height - SVG_HEIGHT / zoomLevel;
-    // Adjust so zoom is not greater than original viewport
-    const ratioX = SVG_WIDTH * ( 1 - 2 / zoomLevel );
-    const ratioY = SVG_HEIGHT * ( 1 - 2 / zoomLevel );
-    startX = startX < 0 ? 0 : ( startX > ratioX ) ? ratioX : startX;
-    startY = startY < 0 ? 0 : ( startY > ratioY ) ? ratioY : startY;
+    // Only allow if you are not too far zoomed in
+    if ( zoomLevel <= SVG_ZOOM_START + SVG_ZOOM_INC * SVG_MAX_ZOOMS ) {
+        document.querySelectorAll('.clickLabel').forEach( label => {
+            label.style.display = "none";
+        });
+        const currentVB = svg.getAttribute('viewBox').split(' ').map( value => Number(value) );
+        const rect = svg.getBoundingClientRect();
+        // X coordinate of zoom viewport
+        let startX = currentVB[0] + ( e.clientX - rect.left ) * currentVB[2] / rect.width - currentVB[2] / zoomLevel;
+        // Y coordinate of zoom viewport
+        let startY = currentVB[1] + ( e.clientY - rect.top ) * currentVB[3] / rect.height - currentVB[3] / zoomLevel;
+        // Adjust so zoom is not greater than original viewport
+        const maxX = SVG_WIDTH * sumZooms();
+        const maxY = SVG_HEIGHT * sumZooms();
+        startX = startX < 0 ? 0 : ( startX > maxX ) ? maxX : startX;
+        startY = startY < 0 ? 0 : ( startY > maxY ) ? maxY : startY;
 
-    svg.setAttribute('viewBox', `${startX} ${startY} ${ SVG_WIDTH / zoomLevel * 2 } ${ SVG_HEIGHT / zoomLevel * 2 }`);
-    svg.classList.add(`zoom-${zoomSlider.value}`);
-    svg.removeEventListener( 'contextmenu', zoom );
-    zoomSlider.setAttribute( 'disabled', true );
-    showNames.setAttribute( 'disabled', true );
-    showNames.checked = false;
+        svg.setAttribute('viewBox', `${startX} ${startY} ${ currentVB[2] / zoomLevel * 2 } ${ currentVB[3] / zoomLevel * 2 }`);
+        showNames.setAttribute( 'disabled', true );
+        showNames.checked = false;
 
-    // Escape key to unzoom
-    document.addEventListener( 'keydown', unzoom );
-    input.focus();
+        // Escape key to unzoom
+        document.addEventListener( 'keydown', unzoom );
+        input.focus();
+        zoomLevel += SVG_ZOOM_INC;
+    }
 };
 // Escape to unzoom
 function unzoom( e ) {
     if ( e.key === 'Escape' ) {
-        svg.classList.remove(`zoom-${zoomSlider.value}`);
         svg.setAttribute('viewBox', "0 0 1600 900");
-        svg.addEventListener( 'contextmenu', zoom );
         document.querySelectorAll('.clickLabel').forEach( label => {
             label.style.display = "none";
         });
-        zoomSlider.removeAttribute( 'disabled' );
         showNames.removeAttribute( 'disabled' );
         document.removeEventListener( 'keydown', unzoom );
         input.focus();
+        zoomLevel = SVG_ZOOM_START;
     }
 };
-
-endGameButton.addEventListener('click', e => {
-    for ( const group of svg.querySelectorAll('g g g:not(.guesses0, .guesses1, .guesses2, .guesses3)') ) {
-        group.classList.remove('clickable');
-        group.classList.add('inactive');
+function sumZooms() {
+    let i = zoomLevel;
+    let rtn = 0;
+    while ( i >= SVG_ZOOM_START ) {
+        rtn += ( 1 - 2 / i );
+        i -= SVG_ZOOM_INC;
     }
-    endGame();
-});
+    return rtn;
+}
+
 /**
  * Run when finishing a game
  */
 const endGame = () => {
     gameEnded = true;
+    for ( const group of svg.querySelectorAll('g g g:not(.guesses0, .guesses1, .guesses2, .guesses3)') ) {
+        group.classList.remove('clickable');
+        group.classList.add('inactive');
+    }
+    svg.parentElement.style.display = "block";
     document.getElementById('bottom-game-bar').style.display = "none";
     input.setAttribute('disabled', true);
     html.classList.add('filter-dark');
@@ -277,6 +285,7 @@ const endGame = () => {
     svg.classList.add("showGuesses");
     console.log( "YOU WIN!" );
 }
+endGameButton.addEventListener('click', endGame);
 
 export default {
     queryCurrentRegion,

@@ -28,7 +28,6 @@
 - Add an admin page for things like editing non custom maps
 - Multiple color schemes
 - When using a map with different region types as a template, all regions are displayed the same as "enabeld" regions, and "outside" regions are not displayed in the viewport
-- right click multiple times to zoom further
 - create session storage for sorting & filtering maps selection
 
 # Changelog
@@ -38,6 +37,7 @@
 ### Frontend
 - There are now sounds on input
 - Show prompt number next to number correct tally in some gamemodes
+- Instead of a zoom slider, right click multiple times to zoom further
 
 ### Backend/Technical
 

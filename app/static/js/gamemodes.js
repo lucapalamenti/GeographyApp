@@ -1,7 +1,7 @@
 import util from "./util.js";
 import gameUtil from "./gameUtil.js";
 
-import { svg, promptBar, input, promptLabel, noListArea, endGameButton, reviewMapButton, tally, promptTally, zoomSlider, selectParent, showNames, noMapArea } from "./documentElements-game.js";
+import { svg, promptBar, input, promptLabel, noListArea, endGameButton, reviewMapButton, tally, promptTally, selectParent, showNames, noMapArea } from "./documentElements-game.js";
 import { ATTEMPT_COLORS, REPEAT_COLOR, MAX_GUESSES, ATTEMPT_SOUNDS } from "./variables.js";
 
 let promptsArr;
@@ -264,7 +264,7 @@ function outline( regionMap ) {
  * @param {Map<String,Array<String>} regionMap
  */
 function noMap( regionMap ) {
-    svg.parentNode.style.display = "none";
+    svg.parentElement.style.display = "none";
     type( regionMap );
     endGameButton.addEventListener('click', e => {
         svg.parentNode.style.display = "flex";
@@ -283,7 +283,6 @@ function noList( regionMap ) {
     tally.textContent = "Correct: ?";
     promptBar.style.display = "flex";
     showNames.setAttribute('disabled', true);
-    zoomSlider.setAttribute('disabled', true);
     input.focus();
 
     const missedRegions = new Map(), unknownRegions = new Map(), duplicateRegions = new Map();
