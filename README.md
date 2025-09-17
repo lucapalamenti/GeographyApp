@@ -3,7 +3,6 @@
 ## To Add
 - Add "Borders" table to database that tells you what regions a region borders
 - Something to do with having to scroll up and down when deleting multiple maps at bottom
-- Make the type gamemode list toggleable
 - Add to database alternative spellings
 - Drag map to move it
 - Labels show off screen when clicking in Learn gamemode
@@ -13,22 +12,23 @@
     - Change level of detail in outlines (requires multiple datasets)
     - Toggle allowing alternate spellings
     - Disabled sounds
-- When taking more than 3 attempts in type (hard) gamemode, instead of just displaying the label is skipping it, make the user type the correct answer
+    - Multiple color schemes
 - Gamemodes:
     - "Borders": Name all surrounding regions
     - "Outline": Name region based on outline and surrounding regions
     - "Outline (Hard)": Name region based only on outline
-    - "undisabled": only available on maps that have disabled regions, where all disabled regions are switched to the "herring" state
-- Change Zoom levels
-- In click (disappear) gamemode, when you get a region that there are multiple of (meaning there are at least 2 parents) disable the regions with the same name that you've already clicked on
 - Interactive map (type a name and all counties with name show up), option for similar sounding names with different spellings
 - Ability to edit existing maps to add/remove regions
-- "mark as correct" option for type (hard) if you mistype
 - Select a thumbnail for a created map
 - Add an admin page for things like editing non custom maps
-- Multiple color schemes
-- When using a map with different region types as a template, all regions are displayed the same as "enabeld" regions, and "outside" regions are not displayed in the viewport
+- When using a map with different region types as a template, all regions are displayed the same as "enabled" regions, and "outside" regions are not displayed in the viewport
 - create session storage for sorting & filtering maps selection
+
+- Unsure if I want to add
+    - "mark as correct" option for type (hard) if you mistype
+    - In click (disappear) gamemode, when you get a region that there are multiple of (meaning there are at least 2 parents) disable the regions with the same name that you've already clicked on
+    - When taking more than 3 attempts in type (hard) gamemode, instead of just displaying the label is skipping it, make the user type the correct answer
+    - Make the type gamemode list toggleable
 
 # Changelog
 

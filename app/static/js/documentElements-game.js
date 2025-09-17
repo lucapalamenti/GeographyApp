@@ -15,7 +15,7 @@ export const tally = promptBar.querySelector('#tally');
 export const bottomGameBar = document.getElementById('bottom-game-bar');
 export const zoomSlider = document.getElementById('zoom-slider');
 export const showNames = document.getElementById('showNames');
-export const endGameButton = document.getElementById('noList-end-button');
+export const endGameButton = document.getElementById('end-button');
 
 export const gamemodePanel = document.getElementById('gamemode-panel');
 export const selectButton = gamemodePanel.querySelector('NAV .btn-green');

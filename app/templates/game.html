@@ -76,16 +76,6 @@
             </nav>
         </form>
 
-        <!-- Shows after ending a game -->
-        <form id="game-end-panel" class="page-center flex-col">
-            <h3>Game Finished</h3>
-            <nav class="flex-row">
-                <button type="button" class="btn-green btn-fade" id="play-again-button">Play Again</button>
-                <button type="button" class="btn-turquoise btn-fade" id="review-button">Review Map</button>
-                <button type="button" class="btn-grey btn-fade" id="home-button">Home</button>
-            </nav>
-        </form>
-
         <div id="game-area">
             <!-- Top game bar -->
             <div class="game-bar" id="prompt-bar">
@@ -102,7 +92,6 @@
                     <div class="dotted-line"></div>
                     <p id="tally"></p>
                 </div>
-                
             </div>
             <!-- Used for all gamemodes with a map -->
             <div class="container-1" id="svg-container">
@@ -112,13 +101,15 @@
             </div>
             <!-- Game bar below map -->
             <div id="bottom-game-bar" class="game-bar flex-row">
+                <button id="game-settings-btn"></button>
                 <div class="input-label" id="showNames-container">
                     <input type="checkbox" id="showNames">
                     <label for="showNames">Show region names</label>
                 </div>
                 <div class="dotted-line"></div>
-                <button id="noList-end-button" class="btn-hover-effect">End Game</button>
+                <button id="end-button" class="btn-hover-effect">End Game</button>
             </div>
+
             <!-- Used for No Map gamemode -->
             <div class="container-1" id="no-map-area">
                 
@@ -135,6 +126,16 @@
                 </div>
             </div>
         </div>
+
+        <!-- Shows after ending a game -->
+        <form id="game-end-panel" class="page-center flex-col">
+            <h3>Game Finished</h3>
+            <nav class="flex-row">
+                <button type="button" class="btn-green btn-fade" id="play-again-button">Play Again</button>
+                <button type="button" class="btn-turquoise btn-fade" id="review-button">Review Map</button>
+                <button type="button" class="btn-grey btn-fade" id="home-button">Home</button>
+            </nav>
+        </form>
     </main>
     <!-- Polygon template ( it is necessary to copy polygons from inside an svg instead of creating new
          polygons in a js file, since a standard <polygon> element will be unrecognized ) -->
