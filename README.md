@@ -34,6 +34,7 @@
     - sorting & filtering maps selection
 - Other Physical features like rivers & lakes
 - Throttling & Debouncing
+- Make VirginiaFix more scalable. Instead make a new region variable called "isEnclave" 
 
 - Unsure if I want to add
     - "mark as correct" option for type (hard) if you mistype
