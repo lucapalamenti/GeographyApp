@@ -5,6 +5,7 @@
 - Something to do with having to scroll up and down when deleting multiple maps at bottom
 - Add to database alternative spellings
 - Drag map to move it
+- Red circle around highlighted area after 5 seconds if the user cant find whats highlighted
 - Labels show off screen when clicking in Learn gamemode
 - Settings to add:
     - Toggle "auto enter" after every keystroke
@@ -14,6 +15,13 @@
     - Disabled sounds
     - Multiple color schemes
 - Gamemodes:
+    - add "modifiers" to some gamemodes. ex: 
+        - "type (hard)":
+            - Only 1 guess per prompt instead of 3
+            - Show first letter after first incorrect answer
+            - timed mode (~5 seconds per prompt)
+            - skip to next: press space or enter to go to next prompt (just say the name out loud)
+    - "Timed": Maybe just an option for all gamemodes (different from having a timer in the corner)
     - "Borders": Name all surrounding regions
     - "Outline": Name region based on outline and surrounding regions
     - "Outline (Hard)": Name region based only on outline
@@ -22,7 +30,10 @@
 - Select a thumbnail for a created map
 - Add an admin page for things like editing non custom maps
 - When using a map with different region types as a template, all regions are displayed the same as "enabled" regions, and "outside" regions are not displayed in the viewport
-- create session storage for sorting & filtering maps selection
+- create session storage
+    - sorting & filtering maps selection
+- Other Physical features like rivers & lakes
+- Throttling & Debouncing
 
 - Unsure if I want to add
     - "mark as correct" option for type (hard) if you mistype

@@ -76,7 +76,7 @@ export default async function populateSVG( map, svg ) {
                 typeGroup.appendChild( childGroup );
             };
         };
-        if ( map.map_id === 3 || map.map_id === 48 ) virginiaFix( svg );
+        if ( map.map_id === 3 || map.map_id === 49 ) virginiaFix( svg );
         svg.classList.remove('hide-polygons');
     }).catch( err => {
         console.error( err );
