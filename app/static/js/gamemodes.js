@@ -11,6 +11,7 @@ let numPrompts = 0;
 let promptNumber = 1;
 let numCorrect = 0;
 let guesses = 0;
+let maxGuesses = MAX_GUESSES;
 
 /**
  * Run the "Learn" gamemode
@@ -65,7 +66,7 @@ function click ( regionMap, disappear ) {
                 gameUtil.regionDisappearTrigger( group, ATTEMPT_COLORS[3], true );
                 gameUtil.playSound( ATTEMPT_SOUNDS[3] );
                 // If too many guesses have been taken then highlight the correct answer
-                if ( guesses === MAX_GUESSES ) {
+                if ( guesses === maxGuesses ) {
                     const correctRegion = gameUtil.queryCurrentRegion( currentPrompt );
                     gameUtil.showLabel( correctRegion, e, true, true );
                     gameUtil.playSound( ATTEMPT_SOUNDS[4] );
@@ -216,7 +217,7 @@ function typeHard( regionMap ) {
                 if ( input.value.toLowerCase() === currentPrompt.rInput.toLowerCase() ) {
                     gameUtil.pulseElementBG( input, "white", ATTEMPT_COLORS[guesses] );
                     gameUtil.showLabel( currentGroup, null, true, true );
-                    gameUtil.playSound( ATTEMPT_SOUNDS[guesses] );
+                    gameUtil.playSound( ATTEMPT_SOUNDS[Math.min( guesses, 3 )] );
                     next();
                 // If input is incorrect
                 } else {
@@ -224,7 +225,7 @@ function typeHard( regionMap ) {
                     gameUtil.pulseElementBG( input, "white", ATTEMPT_COLORS[3] );
                     gameUtil.playSound( ATTEMPT_SOUNDS[3] );
                     // If too many guesses have been given
-                    if ( guesses === MAX_GUESSES ) {
+                    if ( guesses === maxGuesses ) {
                         gameUtil.showLabel( currentGroup, null, true, true );
                         gameUtil.playSound( ATTEMPT_SOUNDS[4] );
                         next();
@@ -236,7 +237,7 @@ function typeHard( regionMap ) {
     });
     function next() {
         currentGroup.classList.remove('typeCurrent');
-        currentGroup.classList.add(`guesses${guesses}`);
+        currentGroup.classList.add(`guesses${Math.min( guesses, 3 )}`);
         if ( guesses === 0 ) numCorrect++;
         input.value = "";
         if ( !( currentPrompt = promptsArr.pop() ) ) {
@@ -251,6 +252,32 @@ function typeHard( regionMap ) {
     endGameButton.addEventListener('click', e => {
         currentGroup.classList.remove('typeCurrent');
     });
+}
+/**
+ * Runs the "Type (Invisible)" gamemode
+ * @param {Map<String,Array<String>} regionMap
+ */
+function typeInvisible( regionMap ) {
+    svg.classList.add('invisible-mode');
+    type( regionMap );
+}
+/**
+ * Runs the "Type (Hard) (Invisible)" gamemode
+ * @param {Map<String,Array<String>} regionMap
+ */
+function typeHardInvisible( regionMap ) {
+    maxGuesses = Infinity;
+    svg.classList.add('invisible-mode');
+    typeHard( regionMap );
+}
+/**
+ * Runs the "Type (Hard) (Invisibler)" gamemode
+ * @param {Map<String,Array<String>} regionMap
+ */
+function typeHardInvisibler( regionMap ) {
+    maxGuesses = Infinity;
+    svg.classList.add('invisible-mode-hard');
+    typeHard( regionMap );
 }
 /**
  * Runs the "Outline" gamemode
@@ -387,6 +414,9 @@ export const gamemodeMap = {
     'Click (Disappear)': clickDisappear,
     'Type': type,
     'Type (Hard)': typeHard,
+    'Type (Invisible)': typeInvisible,
+    'Type (Hard) (Invisible)': typeHardInvisible,
+    'Type (Hard) (Invisibler)': typeHardInvisibler,
     'Outline': outline,
     'No Map': noMap,
     'No List': noList,

@@ -3,6 +3,14 @@ svg {
     background-color: rgb(141, 209, 226) !important;
 }
 
+svg.invisible-mode:not(.reviewing) g g.enabled g:not(.typed, .typeCurrent, .guesses0, .guesses1, .guesses2, .guesses3) polygon {
+    /* fill:  !important; */
+    stroke: rgb(230, 231, 137);
+}
+svg.invisible-mode-hard:not(.reviewing) g g g:not(.typed, .typeCurrent) polygon {
+    display: none;
+}
+
 polygon {
     fill: rgb(230, 231, 137);
     stroke-width: 0.05%;

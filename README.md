@@ -25,6 +25,7 @@
     - "Borders": Name all surrounding regions
     - "Outline": Name region based on outline and surrounding regions
     - "Outline (Hard)": Name region based only on outline
+    - travle but countyle
 - Interactive map (type a name and all counties with name show up), option for similar sounding names with different spellings
 - Ability to edit existing maps to add/remove regions
 - Select a thumbnail for a created map
@@ -35,6 +36,7 @@
 - Other Physical features like rivers & lakes
 - Throttling & Debouncing
 - Make VirginiaFix more scalable. Instead make a new region variable called "isEnclave" 
+- If enter is pressed with no parent selected, flash the parent dropdown
 
 - Unsure if I want to add
     - "mark as correct" option for type (hard) if you mistype
@@ -50,6 +52,10 @@
 - There are now sounds on input
 - Show prompt number next to number correct tally in some gamemodes
 - Instead of a zoom slider, right click multiple times to zoom further
+- New Gamemodes:
+    - Type (Invisible): Same as Type, but no outlines are given
+    - Type (Hard) (Invisible): Same as Type (Hard), but no outlines are given
+    - Type (Hard) (Invisibler): Same as Type (Hard) (Invisible), but the outlines disappear
 
 ### Backend/Technical
 
