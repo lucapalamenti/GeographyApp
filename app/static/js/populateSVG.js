@@ -76,7 +76,6 @@ export default async function populateSVG( map, svg ) {
                 typeGroup.appendChild( childGroup );
             };
         };
-        if ( map.map_id === 3 || map.map_id === 49 ) virginiaFix( svg );
         svg.classList.remove('hide-polygons');
     }).catch( err => {
         console.error( err );
@@ -101,18 +100,4 @@ function createGElement( id, classList ) {
         }
     }
     return group;
-}
-
-/**
- * Moves Virginia cities to the bottom of the svg element so that they show up on
- * top of the counties that surround them
- * @param {SVGElement} svg 
- */
-function virginiaFix( svg ) {
-    svg.querySelectorAll('#virginia G G').forEach( group => {
-        if ( group.id.endsWith( "_city" ) ) {
-            const parent = group.parentElement;
-            parent.appendChild( parent.removeChild( group ) );
-        }
-    });
 }

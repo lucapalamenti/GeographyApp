@@ -1,6 +1,9 @@
 module.exports = class Region {
+    /** @type {Number} */
     region_id = null;
+    /** @type {String} */
     region_name = null;
+    /** @type {*} */
     region_points = null;
 
     /**

@@ -16,16 +16,19 @@
     - Multiple color schemes
 - Gamemodes:
     - add "modifiers" to some gamemodes. ex: 
+        - "type":
+            - "select all" so you dont have to specify parent region
+            - remove parent from dropdown when you have typed all its child regions
         - "type (hard)":
             - Only 1 guess per prompt instead of 3
             - Show first letter after first incorrect answer
             - timed mode (~5 seconds per prompt)
             - skip to next: press space or enter to go to next prompt (just say the name out loud)
-    - "Timed": Maybe just an option for all gamemodes (different from having a timer in the corner)
     - "Borders": Name all surrounding regions
     - "Outline": Name region based on outline and surrounding regions
     - "Outline (Hard)": Name region based only on outline
     - travle but countyle
+    - "Drag & Drop": drag and drop county outline onto a blank map
 - Interactive map (type a name and all counties with name show up), option for similar sounding names with different spellings
 - Ability to edit existing maps to add/remove regions
 - Select a thumbnail for a created map
@@ -35,8 +38,8 @@
     - sorting & filtering maps selection
 - Other Physical features like rivers & lakes
 - Throttling & Debouncing
-- Make VirginiaFix more scalable. Instead make a new region variable called "isEnclave" 
 - If enter is pressed with no parent selected, flash the parent dropdown
+- Rework VirginiaFix to make it more scalable. Instead make a new Database table called Enclaves
 
 - Unsure if I want to add
     - "mark as correct" option for type (hard) if you mistype

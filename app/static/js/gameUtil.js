@@ -14,8 +14,11 @@ let tooltipActive = false;
  */
 const queryCurrentRegion = ( currentPrompt ) => { return svg.querySelector(`svg > #${currentPrompt.pID} #${currentPrompt.rID}`) };
 
-const playSound = ( filename ) => {
-    new Audio( `${audioPath}${filename}` ).play();
+const playSound = ( filename ) => { new Audio( `${audioPath}${filename}` ).play() };
+
+const setGuessesColor = ( guesses ) => {
+    // set css class given the number of guesses
+    // maybe this can be different for the invisible gamemodes, idk
 };
 
 /**
@@ -282,6 +285,8 @@ const endGame = () => {
     }
     fillTable();
     // Reappear colors at the end
+    svg.classList.remove("invisible-mode");
+    svg.classList.remove("invisible-mode-hard");
     svg.classList.add("showGuesses");
     console.log( "YOU WIN!" );
 }

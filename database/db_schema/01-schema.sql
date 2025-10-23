@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS `mapRegion` (
 
 -- Data exporting was unselected.
 
--- Dumping structure for table geographyapp.mapName
+-- Dumping structure for table geographyapp.regionName
 CREATE TABLE IF NOT EXISTS `regionName` (
   `regionName_id` int(10) NOT NULL AUTO_INCREMENT,
   `regionName_name` varchar(64) NOT NULL,
