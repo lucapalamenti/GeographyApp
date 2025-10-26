@@ -1,6 +1,6 @@
-import { SQLPolygon } from "./SQLGeometry.js";
+const { SQLPolygon } = require("./SQLGeometry.js");
 
-export default class Polygon extends SVGPolygonElement {
+module.exports = class Polygon {
     /** @type {Number} */
     polygon_id = null;
     /** @type {Number} */
@@ -21,7 +21,7 @@ export default class Polygon extends SVGPolygonElement {
         this.polygon_region_id = data.polygon_region_id;
         this.polygon_is_enclave = data.polygon_is_enclave;
         this.polygon_enclave_of_region_id = data.polygon_enclave_of_region_id;
-        this.polygon_points = data.polygon_points;
+        this.polygon_points = new SQLPolygon( data.polygon_points );
     } 
     
     /**

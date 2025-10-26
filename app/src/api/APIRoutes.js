@@ -9,10 +9,12 @@ const { TokenMiddleware, generateToken, removeToken } = require('../middleware/t
 const RegionDAO = require('./db/RegionDAO.js');
 const MapDAO = require('./db/MapDAO.js');
 const CustomDAO = require('./db/CustomDAO.js');
+const PolygonDAO = require('./db/PolygonDAO.js');
 
 const Map = require('./db/models/MMap.js');
 const MapRegion = require('./db/models/MapRegion.js');
 const Region = require('./db/models/Region.js');
+const Polygon = require('./db/models/Polygon.js');
 
 // ----- CustomDAO ROUTES -----
 
@@ -187,6 +189,19 @@ APIRouter.delete('/maps/:mapId', (req, res) => {
     })
     .catch( err => {
         res.status(500).json({error:err, message: 'Error with DELETE request to /maps/:mapId'});
+    });
+});
+
+// ----- PolygonDAO ROUTES -----
+
+APIRouter.post('/polygons', (req, res) => {
+    const polygon = new Polygon( req.body );
+    res.json( polygon ); return;
+    PolygonDAO.createPolygon( polygon ).then( createdPolygon => {
+        res.json( createdPolygon );
+    })
+    .catch( err => {
+        res.status(500).json({error:err, message: 'Error with POST request to /polygons'});
     });
 });
 

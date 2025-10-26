@@ -4,7 +4,7 @@ const util = require('./backend/util.js');
 const Map = require('./models/MMap.js');
 
 const FILENAME_PREFIX = "04-Map-";
-const COPY_TO_FILE = true;
+const COPY_TO_FILE = false;
 
 /**
  * SQL injection is possible

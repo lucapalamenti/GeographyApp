@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS `mapRegion` (
 -- Dumping structure for table geographyapp.polygon
 CREATE TABLE IF NOT EXISTS `polygon` (
   `polygon_id` int(10) NOT NULL AUTO_INCREMENT,
-  `polygon_region_id` int(10) DEFAULT NULL,
+  `polygon_region_id` int(10) NOT NULL,
   `polygon_is_enclave` bit(1) DEFAULT b'0',
   `polygon_enclave_of_region_id` int(10) DEFAULT NULL,
   `polygon_points` polygon NOT NULL,

@@ -2,6 +2,7 @@ import HTTPClient from "./HTTPClient.js";
 
 import MMap from "./models/MMap.js";
 import MapRegion from "./models/MapRegion.js";
+import Polygon from "./models/Polygon.js";
 
 const BASE_API_PATH = "./api";
 
@@ -9,6 +10,10 @@ const handleAuthError = ( error ) => {
     // Unauthorized error
     if( error.status === 401 ) {
         document.location = "./login";
+    }
+    // Payload Too Large error
+    if (error.status === 413 ) {
+        
     }
     throw error;
 };
@@ -180,6 +185,21 @@ const deleteMap = async ( map_id ) => {
     }
 };
 
+// ----- PolygonDAO CALLS -----
+
+/**
+ * 
+ * @param {Polygon} polygon 
+ */
+const createPolygon = async ( polygon ) => {
+    console.log( JSON.stringify(polygon).length );
+    try {
+        return await HTTPClient.post(`${BASE_API_PATH}/polygons`, polygon);
+    } catch (error) {
+        return handleAuthError(error);
+    }
+}
+
 // ----- OTHER -----
 
 const uploadFile = async ( data ) => {
@@ -221,6 +241,8 @@ export default {
     updateMap,
     deleteAllCustomMaps,
     deleteMap,
+
+    createPolygon,
 
     uploadFile,
     retrieveFile

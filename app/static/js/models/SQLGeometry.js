@@ -55,10 +55,13 @@ export class SQLPoint extends SQLGeometry {
 
     /**
      * Constructor given an SQL cell with the POINT data type
-     * @param {Object} sqlPoint
+     * @param {SQLPoint} sqlPoint
      */
     constructor ( sqlPoint ) {
-        super( sqlPoint["type"] );
+        if ( sqlPoint.type !== "Point" ) {
+            throw new TypeError( `Cannot initialize an SQLPoint object of type "${sqlPoint.type}"` );
+        }
+        super( "Point" );
         this.coordinates = sqlPoint["coordinates"];
     }
 
@@ -76,10 +79,13 @@ export class SQLLineString extends SQLGeometry {
 
     /**
      * Constructor given an SQL cell with the LINESTRING data type
-     * @param {Object} sqlLineString
+     * @param {SQLLineString} sqlLineString
      */
     constructor ( sqlLineString ) {
-        super( sqlLineString["type"] );
+        if ( sqlLineString.type !== "LineString" ) {
+            throw new TypeError( `Cannot initialize an SQLLineString object of type "${sqlLineString.type}"` );
+        }
+        super( "LineString" );
         this.coordinates = sqlLineString["coordinates"];
     }
 
@@ -99,10 +105,13 @@ export class SQLPolygon extends SQLGeometry {
     
     /**
      * Constructor given an SQL cell with the POLYGON data type
-     * @param {Array<Array<Array<Number>>>} sqlPolygon 
+     * @param {SQLPolygon} sqlPolygon 
      */
     constructor ( sqlPolygon ) {
-        super( sqlPolygon["type"] );
+        if ( sqlPolygon.type !== "Polygon" ) {
+            throw new TypeError( `Cannot initialize an SQLPolygon object of type "${sqlPolygon.type}"` );
+        }
+        super( "Polygon" );
         this.coordinates = sqlPolygon["coordinates"];
     }
 
