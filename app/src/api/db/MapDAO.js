@@ -1,7 +1,7 @@
 const database = require('./databaseConnections.js');
 const util = require('./backend/util.js');
 
-const Map = require('./models/Map.js');
+const Map = require('./models/MMap.js');
 
 const FILENAME_PREFIX = "04-Map-";
 const COPY_TO_FILE = true;

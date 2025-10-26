@@ -2,7 +2,7 @@
 -- Host:                         localhost
 -- Server version:               11.6.2-MariaDB-ubu2404 - mariadb.org binary distribution
 -- Server OS:                    debian-linux-gnu
--- HeidiSQL Version:             12.10.0.7000
+-- HeidiSQL Version:             12.12.0.7122
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -34,16 +34,6 @@ CREATE TABLE IF NOT EXISTS `map` (
 
 -- Data exporting was unselected.
 
--- Dumping structure for table geographyapp.region
-CREATE TABLE IF NOT EXISTS `region` (
-  `region_id` int(10) NOT NULL AUTO_INCREMENT,
-  `region_name` tinytext NOT NULL,
-  `region_points` multipolygon NOT NULL,
-  PRIMARY KEY (`region_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=103 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
-
--- Data exporting was unselected.
-
 -- Dumping structure for table geographyapp.mapRegion
 CREATE TABLE IF NOT EXISTS `mapRegion` (
   `mapRegion_id` int(10) NOT NULL AUTO_INCREMENT,
@@ -60,7 +50,33 @@ CREATE TABLE IF NOT EXISTS `mapRegion` (
   KEY `FK_mapRegion_region` (`mapRegion_region_id`) USING BTREE,
   CONSTRAINT `FK_mapRegion_map` FOREIGN KEY (`mapRegion_map_id`) REFERENCES `map` (`map_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_mapRegion_region` FOREIGN KEY (`mapRegion_region_id`) REFERENCES `region` (`region_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=103 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6588 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+
+-- Data exporting was unselected.
+
+-- Dumping structure for table geographyapp.polygon
+CREATE TABLE IF NOT EXISTS `polygon` (
+  `polygon_id` int(10) NOT NULL AUTO_INCREMENT,
+  `polygon_region_id` int(10) DEFAULT NULL,
+  `polygon_is_enclave` bit(1) DEFAULT b'0',
+  `polygon_enclave_of_region_id` int(10) DEFAULT NULL,
+  `polygon_points` polygon NOT NULL,
+  PRIMARY KEY (`polygon_id`),
+  KEY `FK_polygon_region_id` (`polygon_region_id`) USING BTREE,
+  KEY `FK_polygon_enclave_of_region_id` (`polygon_enclave_of_region_id`),
+  CONSTRAINT `FK_polygon_region` FOREIGN KEY (`polygon_region_id`) REFERENCES `region` (`region_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_polygon_region_2` FOREIGN KEY (`polygon_enclave_of_region_id`) REFERENCES `region` (`region_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+
+-- Data exporting was unselected.
+
+-- Dumping structure for table geographyapp.region
+CREATE TABLE IF NOT EXISTS `region` (
+  `region_id` int(10) NOT NULL AUTO_INCREMENT,
+  `region_name` tinytext NOT NULL,
+  `region_points` multipolygon NOT NULL,
+  PRIMARY KEY (`region_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=3247 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 -- Data exporting was unselected.
 
@@ -70,6 +86,19 @@ CREATE TABLE IF NOT EXISTS `regionName` (
   `regionName_name` varchar(64) NOT NULL,
   PRIMARY KEY (`regionName_id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=103 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+
+-- Data exporting was unselected.
+
+-- Dumping structure for table geographyapp.regionPolygon
+CREATE TABLE IF NOT EXISTS `regionPolygon` (
+  `regionPolygon_region_id` int(10) NOT NULL DEFAULT 0,
+  `regionPolygon_polygon_id` int(10) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`regionPolygon_polygon_id`,`regionPolygon_region_id`),
+  KEY `FK_regionPolygon_region_id` (`regionPolygon_region_id`),
+  KEY `FK_regionPolygon_polygon_id` (`regionPolygon_polygon_id`),
+  CONSTRAINT `FK_regionPolygon_polygon` FOREIGN KEY (`regionPolygon_polygon_id`) REFERENCES `polygon` (`polygon_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_regionPolygon_region` FOREIGN KEY (`regionPolygon_region_id`) REFERENCES `region` (`region_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 -- Data exporting was unselected.
 

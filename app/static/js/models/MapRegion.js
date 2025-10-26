@@ -1,14 +1,23 @@
 const ROUND_PLACES = 6;
 
 export default class MapRegion {
+    /** @type {Number} */
     mapRegion_id = null;
+    /** @type {Number} */
     mapRegion_map_id = null;
+    /** @type {Number} */
     mapRegion_region_id = null;
+    /** @type {String} */
     mapRegion_parent = null;
+    /** @type {Number} */
     mapRegion_offsetX = null;
+    /** @type {Number} */
     mapRegion_offsetY = null;
+    /** @type {Number} */
     mapRegion_scaleX = null;
+    /** @type {Number} */
     mapRegion_scaleY = null;
+    /** @type {String} */
     mapRegion_type = null;
     
     /**

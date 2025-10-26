@@ -115,9 +115,9 @@ deleteAllMapsButton.addEventListener('click', async e => {
 });
 
 // The button that says OOOOOOOO
-const btn = document.getElementById('b1');
+const b1 = document.getElementById('b1');
 
-btn.addEventListener('click', async e => {
+b1.addEventListener('click', async e => {
     const allRegions = await APIClient.getRegions();
     console.log( allRegions );
 });

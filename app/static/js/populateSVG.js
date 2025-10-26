@@ -22,8 +22,8 @@ export default async function populateSVG( map, svg ) {
         let minX = Infinity, maxX = 0, minY = Infinity, maxY = 0;
         for ( const region of returnedRegions ) {
             if ( FOCUS_STATES.includes( region.mapRegion_type ) ) {
-                for ( const shape of region.region_points.coordinates ) {
-                    const points = shape[0];
+                for ( const polygon of region.region_points.coordinates ) {
+                    const points = polygon[0];
                     // Convert each array index from [1,2] to "1,2" and apply scaling & offsets
                     for ( let i = 0; i < points.length; i++ ) {
                         let X = ( points[i][0] + Number( region.mapRegion_offsetX ) ) * map.map_scale * region.mapRegion_scaleX;
