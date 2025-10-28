@@ -2,6 +2,7 @@ import HTTPClient from "./HTTPClient.js";
 
 import MMap from "./models/MMap.js";
 import MapRegion from "./models/MapRegion.js";
+import Region from "./models/Region.js";
 import Polygon from "./models/Polygon.js";
 
 const BASE_API_PATH = "./api";
@@ -18,64 +19,60 @@ const handleAuthError = ( error ) => {
     throw error;
 };
 
+/**
+ * Handles calling HTTPClient. Catches errors
+ * @param {CallableFunction} apiMethod 
+ * @param {String} url 
+ * @param {Object} payload 
+ * @returns {Promise}
+ */
+const clientHandler = async ( apiMethod, url, payload ) => {
+    try {
+        return await apiMethod(url, payload);
+    } catch (error) {
+        return handleAuthError(error);
+    }
+}
+
 // ----- CustomDAO CALLS -----
 
 const custom = async () => {
-    try {
-        return await HTTPClient.get(`${BASE_API_PATH}/custom`);
-    } catch (error) {
-        return handleAuthError(error);
-    }
+    return await clientHandler( HTTPClient.get, `${BASE_API_PATH}/custom` );
 };
 
 const printRegionInsertQuery = async () => {
-    try {
-        return await HTTPClient.post(`${BASE_API_PATH}/customPrint`);
-    } catch (error) {
-        return handleAuthError(error);
-    }
+    return await clientHandler( HTTPClient.post, `${BASE_API_PATH}/customPrint` );
 }
 
 // ----- RegionDAO CALLS -----
 
+/**
+ * Returns all Region objects
+ * @returns {Array<Region>}
+ */
 const getRegions = async () => {
-    try {
-        return await HTTPClient.get(`${BASE_API_PATH}/regions`);
-    } catch (error) {
-        return handleAuthError(error);
-    }
+    return await clientHandler( HTTPClient.get, `${BASE_API_PATH}/regions` );
 };
 
+/**
+ * Returns a Region with the given region_id
+ * @param {Number} region_id 
+ * @returns {Region}
+ */
 const getRegionById = async ( region_id ) => {
-    try {
-        return await HTTPClient.get(`${BASE_API_PATH}/regions/${region_id}`);
-    } catch (error) {
-        return handleAuthError(error);
-    }
+    return await clientHandler( HTTPClient.get, `${BASE_API_PATH}/regions/${region_id}` );
 };
 
 const getRegionByMapIdParentName = async ( mapRegion_map_id, mapRegion_parent, region_name ) => {
-    try {
-        return await HTTPClient.get(`${BASE_API_PATH}/regions/${mapRegion_map_id}/${mapRegion_parent}/${region_name.split('-').join('%2D')}`);
-    } catch (error) {
-        return handleAuthError(error);
-    }
+    return await clientHandler( HTTPClient.get, `${BASE_API_PATH}/regions/${mapRegion_map_id}/${mapRegion_parent}/${region_name.split('-').join('%2D')}` );
 }
 
 const getRegionParentsForMap = async ( mapRegion_map_id ) => {
-    try {
-        return await HTTPClient.get(`${BASE_API_PATH}/mapRegion/parents/${mapRegion_map_id}`);
-    } catch (error) {
-        return handleAuthError(error);
-    }
+    return await clientHandler( HTTPClient.get, `${BASE_API_PATH}/mapRegion/parents/${mapRegion_map_id}` );
 };
 
 const getMapRegion = async ( mapRegion_map_id, mapRegion_region_id ) => {
-    try {
-        return await HTTPClient.get(`${BASE_API_PATH}/mapRegion/${mapRegion_map_id}/${mapRegion_region_id}`);
-    } catch (error) {
-        return handleAuthError(error);
-    }
+    return await clientHandler( HTTPClient.get, `${BASE_API_PATH}/mapRegion/${mapRegion_map_id}/${mapRegion_region_id}` );
 };
 
 /**
@@ -83,69 +80,42 @@ const getMapRegion = async ( mapRegion_map_id, mapRegion_region_id ) => {
  * @returns {Array<MapRegion>}
  */
 const getRegionsByMapId = async ( map_id ) => {
-    try {
-        return await HTTPClient.get(`${BASE_API_PATH}/regions/map/${map_id}`);
-    } catch (error) {
-        return handleAuthError(error);
-    }
+    return await clientHandler( HTTPClient.get, `${BASE_API_PATH}/regions/map/${map_id}` );
 };
 
 const createRegion = async ( regionData ) => {
-    try {
-        return await HTTPClient.post(`${BASE_API_PATH}/regions`, regionData);
-    } catch (error) {
-        return handleAuthError(error);
-    }
+    return await clientHandler( HTTPClient.post, `${BASE_API_PATH}/regions`, regionData );
 };
 
 const createMapRegion = async ( mapRegionData ) => {
-    try {
-        return await HTTPClient.post(`${BASE_API_PATH}/mapRegion`, mapRegionData);
-    } catch (error) {
-        return handleAuthError(error);
-    }
+    return await clientHandler( HTTPClient.post, `${BASE_API_PATH}/mapRegion`, mapRegionData );
 };
 
 /**
  * Retrieves the enum values of mapRegion_state in an array of strings
  * @returns {Array<String>} 
  */
-const getStates = async () => {
-    try {
-        return await HTTPClient.get(`${BASE_API_PATH}/mapRegion/states`);
-    } catch (error) {
-        return handleAuthError(error);
-    }
+const getMapRegionStates = async () => {
+    return await clientHandler( HTTPClient.get, `${BASE_API_PATH}/mapRegion/states` );
 }
 
 // ----- MapDAO CALLS -----
 
 const getMaps = async ( where, orderBy ) => {
-    try {
-        return await HTTPClient.get(`${BASE_API_PATH}/maplist/where/${where}/orderBy/${orderBy}`);
-    } catch (error) {
-        return handleAuthError(error);
-    }
+    return await clientHandler( HTTPClient.get, `${BASE_API_PATH}/maplist/where/${where}/orderBy/${orderBy}` );
 };
 
 const getMapById = async ( map_id ) => {
-    try {
-        return await HTTPClient.get(`${BASE_API_PATH}/maps/${map_id}`);
-    } catch (error) {
-        return handleAuthError(error);
-    }
+    return await clientHandler( HTTPClient.get, `${BASE_API_PATH}/maps/${map_id}` );
 };
 
 /**
+ * Creates a Map in the database
  * @param {MMap} map 
  * @returns 
  */
 const createMap = async ( map ) => {
-    try {
-        return await HTTPClient.post(`${BASE_API_PATH}/maps`, map);
-    } catch (error) {
-        return handleAuthError(error);
-    }
+    return await clientHandler( HTTPClient.post, `${BASE_API_PATH}/maps`, map );
 };
 
 /**
@@ -153,11 +123,7 @@ const createMap = async ( map ) => {
  * @returns 
  */
 const updateMap = async ( map ) => {
-    try {
-        return await HTTPClient.put(`${BASE_API_PATH}/maps`, map);
-    } catch (error) {
-        return handleAuthError(error);
-    }
+    return await clientHandler( HTTPClient.put, `${BASE_API_PATH}/maps`, map );
 };
 
 /**
@@ -165,11 +131,7 @@ const updateMap = async ( map ) => {
  * @returns 
  */
 const deleteAllCustomMaps = async () => {
-    try {
-        return await HTTPClient.delete(`${BASE_API_PATH}/maps`);
-    } catch (error) {
-        return handleAuthError(error);
-    }
+    return await clientHandler( HTTPClient.delete, `${BASE_API_PATH}/maps` );
 };
 
 /**
@@ -178,11 +140,7 @@ const deleteAllCustomMaps = async () => {
  * @returns
  */
 const deleteMap = async ( map_id ) => {
-    try {
-        return await HTTPClient.delete(`${BASE_API_PATH}/maps/${map_id}`);
-    } catch (error) {
-        return handleAuthError(error);
-    }
+    return await clientHandler( HTTPClient.delete, `${BASE_API_PATH}/maps/${map_id}` );
 };
 
 // ----- PolygonDAO CALLS -----
@@ -193,11 +151,7 @@ const deleteMap = async ( map_id ) => {
  */
 const createPolygon = async ( polygon ) => {
     console.log( JSON.stringify(polygon).length );
-    try {
-        return await HTTPClient.post(`${BASE_API_PATH}/polygons`, polygon);
-    } catch (error) {
-        return handleAuthError(error);
-    }
+    return await clientHandler( HTTPClient.post, `${BASE_API_PATH}/polygons`, polygon );
 }
 
 // ----- OTHER -----
@@ -233,7 +187,7 @@ export default {
     getRegionParentsForMap,
     createRegion,
     createMapRegion,
-    getStates,
+    getMapRegionStates,
 
     getMaps,
     getMapById,

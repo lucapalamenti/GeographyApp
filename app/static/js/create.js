@@ -21,7 +21,7 @@ await APIClient.getMaps( "map_id > 0", "map_id" ).then( maps => {
     console.error( err );
 });
 // await is necessary even thought VSCode says otherwise
-const regionTypes = await APIClient.getStates();
+const regionTypes = await APIClient.getMapRegionStates();
 regionTypes.push("deselect");
 let selectedType = "enabled";
 

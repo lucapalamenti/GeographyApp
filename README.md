@@ -102,4 +102,6 @@
 
 ## Questions
 
-- Is it necessary to have a single primary key for an SQL table?
+- Is it good practice to have a single primary key for an SQL table?
+
+- How is the max payload determined? Can I change it? Should I change it?

@@ -79,7 +79,7 @@ APIRouter.get('/regions/map/:mapId', (req, res) => {
 });
 
 APIRouter.get('/mapRegion/states', (req, res) => {
-    RegionDAO.getStates().then( states => {
+    RegionDAO.getMapRegionStates().then( states => {
         res.json( states );
     })
     .catch( err => {

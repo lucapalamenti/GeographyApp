@@ -130,7 +130,7 @@ const createMapRegion = async ( mapRegion ) => {
     });
 };
 
-const getStates = async () => {
+const getMapRegionStates = async () => {
     return await database.query(`
         SELECT COLUMN_TYPE
         FROM INFORMATION_SCHEMA.COLUMNS
@@ -153,5 +153,5 @@ module.exports = {
     getRegionParentsForMap,
     createRegion,
     createMapRegion,
-    getStates
+    getMapRegionStates
 };
