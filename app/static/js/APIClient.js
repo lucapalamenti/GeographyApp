@@ -5,6 +5,7 @@ import MapRegion from "./models/MapRegion.js";
 import Region from "./models/Region.js";
 import Polygon from "./models/Polygon.js";
 
+const LARGEST_KNOWN_SAFE_PAYLOAD = 72198;
 const BASE_API_PATH = "./api";
 
 const handleAuthError = ( error ) => {
@@ -23,15 +24,76 @@ const handleAuthError = ( error ) => {
  * Handles calling HTTPClient. Catches errors
  * @param {CallableFunction} apiMethod 
  * @param {String} url 
- * @param {Object} payload 
+ * @param {JSON} payload 
  * @returns {Promise}
  */
-const clientHandler = async ( apiMethod, url, payload ) => {
+async function clientHandler( apiMethod, url, payload = null ) {
+    // Check payload size and throw an error if it's too large
+    // if ( payload && getPayloadSize( payload ) > LARGEST_KNOWN_SAFE_PAYLOAD ) {
+    //     payload = await GzipCompressJson( payload );
+    //     if ( payload.size > LARGEST_KNOWN_SAFE_PAYLOAD ) {
+    //         throw new Error( `Payload of '${getPayloadSize( payload )}' characters is too large!` );
+    //     }
+    //     apiMethod = HTTPClient.postCompressed;
+    //     // Convert your data (e.g., JSON object) to a Blob
+    //     const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+
+    //     // Compress the blob stream
+    //     const compressedStream = blob.stream().pipeThrough(new CompressionStream('gzip'));
+    //     const compressedBlob = await new Response(compressedStream).blob();
+
+    //     // Send the compressed blob to the backend
+    //     const response = await fetch(url, {
+    //         method: 'POST',
+    //         body: compressedBlob,
+    //         headers: {
+    //             'Content-Encoding': 'gzip' // Inform the backend about the compression
+    //         }
+    //     });
+
+    //     if (response.ok) {
+    //         console.log('Compressed data sent successfully');
+    //     } else {
+    //         console.error('Failed to send data');
+    //     }
+    // }
+
+    // payload = await GzipCompressJson( payload );
+    if ( getPayloadSize( payload ) > LARGEST_KNOWN_SAFE_PAYLOAD ) {
+        throw new Error( `Payload of '${getPayloadSize( payload )}' characters is too large!` );
+    }
     try {
-        return await apiMethod(url, payload);
+        return await apiMethod( url, payload );
     } catch (error) {
         return handleAuthError(error);
     }
+}
+
+function getPayloadSize( payload ) {
+    return new Blob( [JSON.stringify( payload )], {type: 'application/json'} ).size;
+}
+
+/**
+ * Compresses a json object into a Blob using gzip
+ * @param {JSON} payload
+ * @returns {Blob}
+ */
+async function GzipCompressJson( payload ) {
+    const stream = new Blob( [JSON.stringify( payload )], {type: 'application/json'} ).stream();
+    const compressedReadableStream = stream.pipeThrough( new CompressionStream("gzip") );
+    const compressedBlob = await new Response( compressedReadableStream ).blob();
+    return compressedBlob;
+}
+
+/**
+ * Decompresses a Blob into a json object using gzip
+ * @param {Blob} compressedBlob
+ * @returns {JSON}
+ */
+async function GzipDecompressJson( compressedBlob ) {
+    const ds = new DecompressionStream("gzip");
+    const decompressedStream = compressedBlob.stream().pipeThrough( ds );
+    return await new Response( decompressedStream ).json();
 }
 
 // ----- CustomDAO CALLS -----
@@ -64,7 +126,7 @@ const getRegionById = async ( region_id ) => {
 };
 
 const getRegionByMapIdParentName = async ( mapRegion_map_id, mapRegion_parent, region_name ) => {
-    return await clientHandler( HTTPClient.get, `${BASE_API_PATH}/regions/${mapRegion_map_id}/${mapRegion_parent}/${region_name.split('-').join('%2D')}` );
+    return await clientHandler( HTTPClient.get, `${BASE_API_PATH}/regions/${mapRegion_map_id}/${mapRegion_parent}/${region_name}` );
 }
 
 const getRegionParentsForMap = async ( mapRegion_map_id ) => {
@@ -146,11 +208,9 @@ const deleteMap = async ( map_id ) => {
 // ----- PolygonDAO CALLS -----
 
 /**
- * 
  * @param {Polygon} polygon 
  */
 const createPolygon = async ( polygon ) => {
-    console.log( JSON.stringify(polygon).length );
     return await clientHandler( HTTPClient.post, `${BASE_API_PATH}/polygons`, polygon );
 }
 

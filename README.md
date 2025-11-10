@@ -105,3 +105,5 @@
 - Is it good practice to have a single primary key for an SQL table?
 
 - How is the max payload determined? Can I change it? Should I change it?
+
+- Should I just compress everything or only if absolutely necessary?
