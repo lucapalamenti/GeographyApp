@@ -4,15 +4,17 @@
  * @see {SQLPoint}
  * @see {SQLLineString}
  * @see {SQLPolygon}
+ * 
+ * @typedef {String} SQLGeometryType Valid values for SQLGeometry.type
  */
 class SQLGeometry {
-    /** Valid values for SQLGeometry.type */
+    /** @type {Array<SQLGeometryType>} */
     static #types = ["Point", "MultiPoint", "LineString", "MultiLineString", "Polygon", "MultiPolygon", "GeometryCollection"];
     /** @type {String} */
     type = null;
 
     /**
-     * @param {String} type 
+     * @param {SQLGeometryType} type 
      */
     constructor ( type ) {
         if ( new.target === SQLGeometry ) {

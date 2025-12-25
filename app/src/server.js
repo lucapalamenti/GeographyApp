@@ -4,7 +4,7 @@ const routes = require('./routes');
 const PORT = process.env.PORT || 3000;
 
 const app = express();
-app.use(express.json({ limit: '1mb' }));
+app.use(express.json({ limit: '100kb' }));
 app.use( routes );
 
 // Ask the server to listen for incoming connections

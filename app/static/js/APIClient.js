@@ -4,8 +4,8 @@ import MMap from "./models/MMap.js";
 import MapRegion from "./models/MapRegion.js";
 import Region from "./models/Region.js";
 import Polygon from "./models/Polygon.js";
+import { FrontendPayloadManager, PayloadChunk, SentinelChunk } from "./models/FrontendPayloadManager.js";
 
-const LARGEST_KNOWN_SAFE_PAYLOAD = 72198;
 const BASE_API_PATH = "./api";
 
 const handleAuthError = ( error ) => {
@@ -22,78 +22,69 @@ const handleAuthError = ( error ) => {
 
 /**
  * Handles calling HTTPClient. Catches errors
- * @param {CallableFunction} apiMethod 
+ * @param {Request} apiMethod 
  * @param {String} url 
  * @param {JSON} payload 
  * @returns {Promise}
  */
 async function clientHandler( apiMethod, url, payload = null ) {
-    // Check payload size and throw an error if it's too large
-    // if ( payload && getPayloadSize( payload ) > LARGEST_KNOWN_SAFE_PAYLOAD ) {
-    //     payload = await GzipCompressJson( payload );
-    //     if ( payload.size > LARGEST_KNOWN_SAFE_PAYLOAD ) {
-    //         throw new Error( `Payload of '${getPayloadSize( payload )}' characters is too large!` );
-    //     }
-    //     apiMethod = HTTPClient.postCompressed;
-    //     // Convert your data (e.g., JSON object) to a Blob
-    //     const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
-
-    //     // Compress the blob stream
-    //     const compressedStream = blob.stream().pipeThrough(new CompressionStream('gzip'));
-    //     const compressedBlob = await new Response(compressedStream).blob();
-
-    //     // Send the compressed blob to the backend
-    //     const response = await fetch(url, {
-    //         method: 'POST',
-    //         body: compressedBlob,
-    //         headers: {
-    //             'Content-Encoding': 'gzip' // Inform the backend about the compression
-    //         }
-    //     });
-
-    //     if (response.ok) {
-    //         console.log('Compressed data sent successfully');
-    //     } else {
-    //         console.error('Failed to send data');
-    //     }
-    // }
-
-    // payload = await GzipCompressJson( payload );
-    if ( getPayloadSize( payload ) > LARGEST_KNOWN_SAFE_PAYLOAD ) {
-        throw new Error( `Payload of '${getPayloadSize( payload )}' characters is too large!` );
-    }
     try {
-        return await apiMethod( url, payload );
-    } catch (error) {
+        // Chunkify ALL payloads, not just big ones
+        if ( payload ) {
+            // Make sure payload is a string
+            if ( typeof payload == "object" ) payload = JSON.stringify( payload );
+            const groupId = FrontendPayloadManager.requestGroup();
+            let chunkId = 0;
+            /** @type {Array<Promise>} */
+            let responses = [];
+            // Max of 6 requests can be sent at once
+            while ( payload.length > 0 ) {
+                // Send each chunk as it's sliced from the payload
+                responses[chunkId] = apiMethod( url, new PayloadChunk( chunkId, groupId, payload.slice( 0, FrontendPayloadManager.MAX_PAYLOAD_SIZE ) ) );
+                payload = payload.slice( FrontendPayloadManager.MAX_PAYLOAD_SIZE );
+                chunkId++;
+            }
+            // Let the backend know that we're done sending chunks
+            responses.push( apiMethod( url, new SentinelChunk( groupId, chunkId ) ) );
+            let resolves = await Promise.all( responses );
+            FrontendPayloadManager.removeGroup( groupId );
+            // Return the one chunk that isn't just the "Chunk received" message
+            return resolves.find( e => e.message === "Chunk received" );
+        } else {
+            return await apiMethod( url );
+        }
+    } catch ( error ) {
         return handleAuthError(error);
     }
 }
 
-function getPayloadSize( payload ) {
-    return new Blob( [JSON.stringify( payload )], {type: 'application/json'} ).size;
-}
+async function compressAndSendPayload( url, payload ) {
+    // 1. Convert the payload to a ReadableStream
+    const stream = new Blob([JSON.stringify(payload)], { type: 'application/json' }).stream();
+    // 2. Pipe the stream through a Gzip CompressionStream
+    const compressedReadableStream = stream.pipeThrough( new CompressionStream( "gzip" ) );
+    // 3. Convert the compressed stream back into a Blob or ArrayBuffer for sending
+    const compressedBlob = await new Response(compressedReadableStream).blob();
+    // 4. Send the compressed data with the 'Content-Encoding: gzip' header
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json', // Or appropriate content type for your data
+                'Content-Encoding': 'gzip'
+            },
+            body: compressedBlob
+        });
 
-/**
- * Compresses a json object into a Blob using gzip
- * @param {JSON} payload
- * @returns {Blob}
- */
-async function GzipCompressJson( payload ) {
-    const stream = new Blob( [JSON.stringify( payload )], {type: 'application/json'} ).stream();
-    const compressedReadableStream = stream.pipeThrough( new CompressionStream("gzip") );
-    const compressedBlob = await new Response( compressedReadableStream ).blob();
-    return compressedBlob;
-}
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
 
-/**
- * Decompresses a Blob into a json object using gzip
- * @param {Blob} compressedBlob
- * @returns {JSON}
- */
-async function GzipDecompressJson( compressedBlob ) {
-    const ds = new DecompressionStream("gzip");
-    const decompressedStream = compressedBlob.stream().pipeThrough( ds );
-    return await new Response( decompressedStream ).json();
+        const responseData = await response.json();
+        console.log('Server response:', responseData);
+    } catch (error) {
+        console.error('Error sending compressed data:', error);
+    }
 }
 
 // ----- CustomDAO CALLS -----
@@ -207,6 +198,10 @@ const deleteMap = async ( map_id ) => {
 
 // ----- PolygonDAO CALLS -----
 
+const getPolygonById = async ( polygon_id ) => {
+    return await clientHandler( HTTPClient.get, `${BASE_API_PATH}/polygons/${polygon_id}` );
+}
+
 /**
  * @param {Polygon} polygon 
  */
@@ -256,6 +251,7 @@ export default {
     deleteAllCustomMaps,
     deleteMap,
 
+    getPolygonById,
     createPolygon,
 
     uploadFile,
