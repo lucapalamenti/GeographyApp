@@ -122,7 +122,6 @@ const b1 = document.getElementById('b1');
 
 b1.addEventListener('click', async e => {
     const allRegions = await APIClient.getRegions();
-    // console.log( allRegions );
     for ( const region of allRegions ) {
         const coordinates = region.region_points["coordinates"];
         for ( const polygon of coordinates ) {
@@ -134,8 +133,12 @@ b1.addEventListener('click', async e => {
                 polygon_points : new SQLPolygon({type:"Polygon",coordinates:polygon})
             });
             p = await APIClient.createPolygon( p );
-            // console.log(p.polygon_region_id);
+            console.log( p );
+            return;
         }
     }
-    // console.log( "done!" );
+    console.log( "done!" );
 });
+function getPayloadSize( payload ) {
+    return new Blob( [JSON.stringify( payload )], {type: 'application/json'} ).size;
+}
