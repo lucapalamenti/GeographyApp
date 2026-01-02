@@ -1,13 +1,8 @@
-svg {
-    display: block;
-    background-color: rgb(141, 209, 226) !important;
-}
-
-svg.invisible-mode:not(.reviewing) g g.enabled g:not(.typed, .typeCurrent, .guesses0, .guesses1, .guesses2, .guesses3) polygon {
+#game-svg-container.invisible-mode:not(.reviewing) g g.enabled g:not(.typed, .typeCurrent, .guesses0, .guesses1, .guesses2, .guesses3) polygon {
     /* fill:  !important; */
     stroke: rgb(230, 231, 137);
 }
-svg.invisible-mode-hard:not(.reviewing) g g g:not(.typed, .typeCurrent) polygon {
+#game-svg-container.invisible-mode-hard:not(.reviewing) g g g:not(.typed, .typeCurrent) polygon {
     display: none;
 }
 
@@ -38,16 +33,16 @@ g.typeCurrent polygon {
     fill: rgb(0, 255, 213);
 }
 
-svg.showGuesses g.guesses0 polygon {
+#game-svg-container.showGuesses g.guesses0 polygon {
     fill: rgb(106, 235, 89);
 }
-svg.showGuesses g.guesses1 polygon {
+#game-svg-container.showGuesses g.guesses1 polygon {
     fill: rgb(240, 219, 35);
 }
-svg.showGuesses g.guesses2 polygon {
+#game-svg-container.showGuesses g.guesses2 polygon {
     fill: rgb(243, 148, 24);
 }
-svg.showGuesses g.guesses3 polygon {
+#game-svg-container.showGuesses g.guesses3 polygon {
     fill: rgb(235, 89, 89);
 }
 
@@ -55,18 +50,18 @@ svg g g g.inactive polygon {
     fill: grey;
 }
 
-svg.reviewing g g g.inactive:has( polygon:hover ) polygon {
+#game-svg-container.reviewing g g g.inactive:has( polygon:hover ) polygon {
     fill: rgb(108, 108, 108);
 }
-svg.reviewing g g g.guesses0:has( polygon:hover ) polygon {
+#game-svg-container.reviewing g g g.guesses0:has( polygon:hover ) polygon {
     fill: rgb(92, 204, 78);
 }
-svg.reviewing g g g.guesses1:has( polygon:hover ) polygon {
+#game-svg-container.reviewing g g g.guesses1:has( polygon:hover ) polygon {
     fill: rgb(204, 187, 30);
 }
-svg.reviewing g g g.guesses2:has( polygon:hover ) polygon {
+#game-svg-container.reviewing g g g.guesses2:has( polygon:hover ) polygon {
     fill: rgb(199, 121, 20);
 }
-svg.reviewing g g g.guesses3:has( polygon:hover ) polygon {
+#game-svg-container.reviewing g g g.guesses3:has( polygon:hover ) polygon {
     fill: rgb(197, 75, 75);
 }

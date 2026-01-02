@@ -1,7 +1,7 @@
 import util from "./util.js";
 import gameUtil from "./gameUtil.js";
 
-import { svg, promptBar, input, promptLabel, noListArea, endGameButton, reviewMapButton, tally, promptTally, selectParent, showNames, noMapArea } from "./documentElements-game.js";
+import { svgContainer, promptBar, input, promptLabel, noListArea, endGameButton, reviewMapButton, tally, promptTally, selectParent, showNames, noMapArea } from "./documentElements-game.js";
 import { ATTEMPT_COLORS, REPEAT_COLOR, MAX_GUESSES, ATTEMPT_SOUNDS } from "./variables.js";
 
 let promptsArr;
@@ -22,9 +22,9 @@ function learn() {
     promptLabel.textContent = "Click on a region to see its name";
     input.style.display = "none";
     promptBar.style.display = "flex";
-    svg.addEventListener('click', e => {
+    svgContainer.addEventListener('click', e => {
         const group = e.target.parentNode;
-        if ( group.parentElement !== svg && svg.querySelector(`svg > g g #${group.id}`) ) {
+        if ( group.parentElement !== svgContainer && svgContainer.querySelector(`svg > g g #${group.id}`) ) {
             gameUtil.showLabel( group, e, true, true );
             gameUtil.regionDisappearTrigger( group, ATTEMPT_COLORS[0], true, 1000, 1000 );
             gameUtil.playSound( ATTEMPT_SOUNDS[1] );
@@ -50,8 +50,8 @@ function click ( regionMap, disappear ) {
     // Setup tooltip to follow cursor
     gameUtil.enableTooltip();
     // In disappear mode remove showGuesses so that the region color changes back to default
-    if ( disappear ) svg.classList.remove("showGuesses");
-    svg.addEventListener('click', e => {
+    if ( disappear ) svgContainer.classList.remove("showGuesses");
+    svgContainer.addEventListener('click', e => {
         const group = e.target.parentNode;
         if ( group.classList.contains('clickable') ) {
             // Correct region clicked
@@ -106,7 +106,7 @@ function clickDisappear ( regionMap ) {
  */
 function enableClicking() {
     selectParent.setAttribute('hidden', true);
-    svg.querySelectorAll('g.enabled g, g.herring g').forEach( group => {
+    svgContainer.querySelectorAll('g.enabled g, g.herring g').forEach( group => {
         group.classList.add("clickable");
     });
 }
@@ -162,7 +162,7 @@ function type( regionMap ) {
                 // If the user input matches a region's name
                 if ( regionMap.get( selectParent.value ).includes( myInput ) ) {
                     color = REPEAT_COLOR;
-                    const group = svg.querySelector(`G#${selectParent.value} G G#${CSS.escape( myInput )}`);
+                    const group = svgContainer.querySelector(`G#${selectParent.value} G G#${CSS.escape( myInput )}`);
                     // The user has not yet typed this region
                     if ( !group.classList.contains('typed') ) {
                         // Update map
@@ -258,7 +258,7 @@ function typeHard( regionMap ) {
  * @param {Map<String,Array<String>} regionMap
  */
 function typeInvisible( regionMap ) {
-    svg.classList.add('invisible-mode');
+    svgContainer.classList.add('invisible-mode');
     type( regionMap );
 }
 /**
@@ -267,7 +267,7 @@ function typeInvisible( regionMap ) {
  */
 function typeHardInvisible( regionMap ) {
     maxGuesses = Infinity;
-    svg.classList.add('invisible-mode');
+    svgContainer.classList.add('invisible-mode');
     typeHard( regionMap );
 }
 /**
@@ -276,7 +276,7 @@ function typeHardInvisible( regionMap ) {
  */
 function typeHardInvisibler( regionMap ) {
     maxGuesses = Infinity;
-    svg.classList.add('invisible-mode-hard');
+    svgContainer.classList.add('invisible-mode-hard');
     typeHard( regionMap );
 }
 /**
@@ -291,10 +291,10 @@ function outline( regionMap ) {
  * @param {Map<String,Array<String>} regionMap
  */
 function noMap( regionMap ) {
-    svg.parentElement.style.display = "none";
+    svgContainer.parentElement.style.display = "none";
     type( regionMap );
     endGameButton.addEventListener('click', e => {
-        svg.parentNode.style.display = "flex";
+        svgContainer.parentNode.style.display = "flex";
     });
 }
 /**
@@ -304,7 +304,7 @@ function noMap( regionMap ) {
 function noList( regionMap ) {
     listGamemodes( regionMap );
     gameUtil.populateSelect( regionMap );
-    svg.parentNode.style.display = "none";
+    svgContainer.parentNode.style.display = "none";
     // Format top gamebar
     promptLabel.textContent = "Name all regions";
     tally.textContent = "Correct: ?";
@@ -331,7 +331,7 @@ function noList( regionMap ) {
                 gameUtil.playSound( ATTEMPT_SOUNDS[1] );
                 // If the user input matches a region's name
                 if ( regionMap.get( pValue ).includes( myInput ) ) {
-                    const group = svg.querySelector(`G#${selectParent.value} G G#${CSS.escape( myInput )}`);
+                    const group = svgContainer.querySelector(`G#${selectParent.value} G G#${CSS.escape( myInput )}`);
                     // The user has not yet typed this region
                     if ( !group.classList.contains('typed') ) {
                         // Remove the region from missedRegions
@@ -386,7 +386,7 @@ function noList( regionMap ) {
             });
         }
         updateLabels( regionMap, true )
-        svg.parentNode.style.display = "flex";
+        svgContainer.parentNode.style.display = "flex";
         noMapArea.style.display = "flex";
         noListArea.style.display = "flex";
     });

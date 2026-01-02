@@ -4,7 +4,7 @@ import populateSVG from "./populateSVG.js";
 import gameUtil from "./gameUtil.js";
 import util from "./util.js";
 
-import { html, svg, navBar, gamemodePanel, selectButton, gameEndPanel, playAgainButton, reviewMapButton, homeButton, bottomGameBar, tooltip } from "./documentElements-game.js";
+import { html, svgContainer, navBar, gamemodePanel, selectButton, gameEndPanel, playAgainButton, reviewMapButton, homeButton, bottomGameBar, tooltip } from "./documentElements-game.js";
 
 const query = window.location.search;
 let parameters = new URLSearchParams( query );
@@ -28,7 +28,7 @@ await APIClient.getMapById( map_id ).then( returnedMap => {
 
 // Store the names of all regions for the current map and show them on the map
 // ( await is necessary here even though vscode says otherwise )
-const regionMap = await populateSVG( map, svg );
+const regionMap = await populateSVG( map, svgContainer );
 
 let currentGamemode = null;
 selectButton.addEventListener('click', () => {
@@ -55,13 +55,13 @@ playAgainButton.addEventListener('click', () => {
 });
 
 reviewMapButton.addEventListener('click', () => {
-    svg.classList.add('reviewing');
+    svgContainer.classList.add('reviewing');
     html.classList.remove('filter-dark');
     gameEndPanel.style.display = "none";
     gameUtil.enableTooltip();
     tooltip.removeChild( tooltip.firstChild );
     tooltip.style.fontWeight = "bold";
-    svg.addEventListener('mousemove', e => {
+    svgContainer.addEventListener('mousemove', e => {
         if ( e.target.tagName === "polygon" ) {
             tooltip.textContent = util.idToInput( e.target.parentElement.id );
             tooltip.style.display = "block" ;
