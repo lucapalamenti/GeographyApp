@@ -21,6 +21,7 @@ export default async function populateSVG( map, svg ) {
         // Get width and height of map for centering on the page
         let minX = Infinity, maxX = 0, minY = Infinity, maxY = 0;
         for ( const region of returnedRegions ) {
+            // Only update min/max x/y for states that must be focused on screen
             if ( FOCUS_STATES.includes( region.mapRegion_type ) ) {
                 for ( const polygon of region.region_points.coordinates ) {
                     const points = polygon[0];
