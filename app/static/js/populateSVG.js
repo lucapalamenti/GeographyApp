@@ -12,12 +12,10 @@ const polygonTemplate = document.getElementById('polygon-template').content;
 /**
  * Load regions for a given map into an SVG element
  * @param {MMap} map map object
- * @param {Element} svgContainer container for the game svg's
+ * @param {SVGElement} svg SVG html element
  * @returns {Map<String,Array<String>} a map where the keys are parent names and the values are arrays of region names
  */
-export default async function populateSVG( map, svgContainer ) {
-    const svgMain = svgContainer.querySelector('#svg-main');
-    const svgEnclaves = svgContainer.querySelector('#svg-enclaves');
+export default async function populateSVG( map, svg ) {
     const regionMap = new Map();
     await APIClient.getRegionsByMapId( map.map_id ).then( async returnedRegions => {
         // Get width and height of map for centering on the page
@@ -45,11 +43,11 @@ export default async function populateSVG( map, svgContainer ) {
         for ( const region of returnedRegions ) {
             const parentId = util.inputToId( region.mapRegion_parent );
             const regionId = util.inputToId( region.region_name );
-            let parentGroup = svgMain.querySelector(`svg > #${parentId}`);
+            let parentGroup = svg.querySelector(`svg > #${parentId}`);
             // If there doesn't exist a group for the region's parent, create it
             if ( !parentGroup ) {
                 parentGroup = createGElement( parentId )
-                svgMain.appendChild( parentGroup );
+                svg.appendChild( parentGroup );
                 regionMap.set( parentId, [] );
             }
             let typeGroup = parentGroup.querySelector(`.${region.mapRegion_type}`);

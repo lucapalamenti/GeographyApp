@@ -232,5 +232,3 @@ button {
 .btn-fade {
     transition: background-color 0.25s;
 }
-
-#map { height: 180px; }
