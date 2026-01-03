@@ -61,6 +61,13 @@
     - Type (Hard) (Invisibler): Same as Type (Hard) (Invisible), but the outlines disappear
 
 ### Backend/Technical
+- HTTP request payloads are now wrapped in a "Chunk" object before being send to the backend. If the payload is larger than 100kb then it is broken up and sent as multiple Chunks.
+A Chunk contains:
+    - a fragment of the payload
+    - a payload ID so fragments from the same payload can find eachother
+    - a chunk ID for its index within the group of fragments
+Once all Chunks are sent, a Sentinel Chunk is sent to tell the backend how many Chunks it should've received for a given payload. The backend will then piece these fragments together to recreate the full payload.
+- All API routes expecting a payload must use the new PayloadManager's Chunk middleware to interpret the incoming chunks
 
 ### Bug Fixes
 
@@ -106,4 +113,8 @@
 
 - How is the max payload determined? Can I change it? Should I change it?
 
-- Should I just compress everything or only if absolutely necessary?
+- When should I compress data being sent over HTTP requests? Compressing takes more time & doesn't allow you to send more data
+
+- Are promises in the backend automatically compressed? How am i able to retrieve large payloads but not send them
+
+- What are the benefits to using typescript over javascript

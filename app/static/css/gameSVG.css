@@ -1,6 +1,8 @@
 #svg-game.invisible-mode:not(.reviewing) g g.enabled g:not(.typed, .typeCurrent, .guesses0, .guesses1, .guesses2, .guesses3) polygon {
     /* fill:  !important; */
     stroke: rgb(230, 231, 137);
+    /* Make this as small as possibles */
+    stroke-width: 0.1%; 
 }
 #svg-game.invisible-mode-hard:not(.reviewing) g g g:not(.typed, .typeCurrent) polygon {
     display: none;
