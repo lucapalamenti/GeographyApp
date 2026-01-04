@@ -49,7 +49,7 @@ async function clientHandler( apiMethod, url, payload = null ) {
             let resolves = await Promise.all( responses );
             FrontendPayloadManager.removeGroup( groupId );
             // Return the one chunk that isn't just the "Chunk received" message
-            return resolves.find( e => e.message === "Chunk received" );
+            return resolves.find( e => e.message !== "Chunk received" );
         } else {
             return await apiMethod( url );
         }

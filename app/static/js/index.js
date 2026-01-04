@@ -139,3 +139,9 @@ b1.addEventListener('click', async e => {
     }
     console.log( "done!" );
 });
+
+const bDel = document.getElementById( 'delete-all-polygons' );
+bDel.addEventListener('click', async e => {
+    const numDelRows = await APIClient.deleteAllPolygons();
+    console.log( numDelRows, "polygons deleted" );
+});

@@ -6,6 +6,8 @@ const APIRouter = express.Router();
 APIRouter.use( express.json() );
 
 const { TokenMiddleware, generateToken, removeToken } = require('../middleware/tokenMiddleware.js');
+const BackendPayloadManager = require('../middleware/BackendPayloadManager.js');
+
 const RegionDAO = require('./db/RegionDAO.js');
 const MapDAO = require('./db/MapDAO.js');
 const CustomDAO = require('./db/CustomDAO.js');
@@ -15,7 +17,6 @@ const Map = require('./db/models/MMap.js');
 const MapRegion = require('./db/models/MapRegion.js');
 const Region = require('./db/models/Region.js');
 const Polygon = require('./db/models/Polygon.js');
-const BackendPayloadManager = require('./db/models/BackendPayloadManager.js');
 
 // ----- CustomDAO ROUTES -----
 
