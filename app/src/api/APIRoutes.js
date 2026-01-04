@@ -206,10 +206,17 @@ APIRouter.get('/polygons/:polygonId', (req, res) => {
 
 APIRouter.post('/polygons', BackendPayloadManager.chunkMiddleware, (req, res) => {
     const polygon = new Polygon( req.body );
-    res.json( polygon );
-    return;
     PolygonDAO.createPolygon( polygon ).then( createdPolygon => {
         res.json( createdPolygon );
+    })
+    .catch( err => {
+        res.status(500).json({error:err, message: 'Error with POST request to /polygons'});
+    });
+});
+
+APIRouter.delete('/polygons', (req, res) => {
+    PolygonDAO.deleteAllPolygons().then( numAffectedRows => {
+        res.json( numAffectedRows );
     })
     .catch( err => {
         res.status(500).json({error:err, message: 'Error with POST request to /polygons'});

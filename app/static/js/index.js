@@ -139,6 +139,3 @@ b1.addEventListener('click', async e => {
     }
     console.log( "done!" );
 });
-function getPayloadSize( payload ) {
-    return new Blob( [JSON.stringify( payload )], {type: 'application/json'} ).size;
-}

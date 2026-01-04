@@ -31,7 +31,16 @@ const createPolygon = async ( polygon ) => {
     });
 };
 
+const deleteAllPolygons = async () => {
+    return await database.query(`
+        DELETE FROM polygon;
+        `, []).then( rows => {
+            return rows.affectedRows;
+    });
+}
+
 module.exports = {
     getPolygonById,
-    createPolygon
+    createPolygon,
+    deleteAllPolygons
 };

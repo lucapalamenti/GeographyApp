@@ -200,7 +200,7 @@ const deleteMap = async ( map_id ) => {
 
 const getPolygonById = async ( polygon_id ) => {
     return await clientHandler( HTTPClient.get, `${BASE_API_PATH}/polygons/${polygon_id}` );
-}
+};
 
 /**
  * @param {Polygon} polygon 
@@ -208,6 +208,10 @@ const getPolygonById = async ( polygon_id ) => {
 const createPolygon = async ( polygon ) => {
     return await clientHandler( HTTPClient.post, `${BASE_API_PATH}/polygons`, polygon );
 }
+
+const deleteAllPolygons = async () => {
+    return await clientHandler( HTTPClient.delete, `${BASE_API_PATH}/polygons` );
+};
 
 // ----- OTHER -----
 
@@ -253,6 +257,7 @@ export default {
 
     getPolygonById,
     createPolygon,
+    deleteAllPolygons,
 
     uploadFile,
     retrieveFile
