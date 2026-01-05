@@ -49,7 +49,7 @@ async function clientHandler( apiMethod, url, payload = null ) {
             let resolves = await Promise.all( responses );
             FrontendPayloadManager.removeGroup( groupId );
             // Return the one chunk that isn't just the "Chunk received" message
-            return resolves.find( e => e.message === "Chunk received" );
+            return resolves.find( e => e.message !== "Chunk received" );
         } else {
             return await apiMethod( url );
         }
@@ -200,6 +200,10 @@ const deleteMap = async ( map_id ) => {
 
 const getPolygonById = async ( polygon_id ) => {
     return await clientHandler( HTTPClient.get, `${BASE_API_PATH}/polygons/${polygon_id}` );
+};
+
+const getPolygonsByRegionId = async ( region_id ) => {
+    return await clientHandler( HTTPClient.get, `${BASE_API_PATH}/polygons/regionId/${region_id}` );
 }
 
 /**
@@ -208,6 +212,10 @@ const getPolygonById = async ( polygon_id ) => {
 const createPolygon = async ( polygon ) => {
     return await clientHandler( HTTPClient.post, `${BASE_API_PATH}/polygons`, polygon );
 }
+
+const deleteAllPolygons = async () => {
+    return await clientHandler( HTTPClient.delete, `${BASE_API_PATH}/polygons` );
+};
 
 // ----- OTHER -----
 
@@ -252,7 +260,9 @@ export default {
     deleteMap,
 
     getPolygonById,
+    getPolygonsByRegionId,
     createPolygon,
+    deleteAllPolygons,
 
     uploadFile,
     retrieveFile

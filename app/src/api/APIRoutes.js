@@ -6,6 +6,8 @@ const APIRouter = express.Router();
 APIRouter.use( express.json() );
 
 const { TokenMiddleware, generateToken, removeToken } = require('../middleware/tokenMiddleware.js');
+const BackendPayloadManager = require('../middleware/BackendPayloadManager.js');
+
 const RegionDAO = require('./db/RegionDAO.js');
 const MapDAO = require('./db/MapDAO.js');
 const CustomDAO = require('./db/CustomDAO.js');
@@ -15,7 +17,6 @@ const Map = require('./db/models/MMap.js');
 const MapRegion = require('./db/models/MapRegion.js');
 const Region = require('./db/models/Region.js');
 const Polygon = require('./db/models/Polygon.js');
-const BackendPayloadManager = require('./db/models/BackendPayloadManager.js');
 
 // ----- CustomDAO ROUTES -----
 
@@ -204,12 +205,28 @@ APIRouter.get('/polygons/:polygonId', (req, res) => {
     });
 });
 
+APIRouter.get('/polygons/regionId/:regionId', (req, res) => {
+    PolygonDAO.getPolygonsByRegionId( req.params.regionId ).then( returnedPolygons => {
+        res.json( returnedPolygons );
+    })
+    .catch( err => {
+        res.status(500).json({error:err, message: 'Error with GET request to /polygons/regionId/:regionId'});
+    });
+});
+
 APIRouter.post('/polygons', BackendPayloadManager.chunkMiddleware, (req, res) => {
     const polygon = new Polygon( req.body );
-    res.json( polygon );
-    return;
     PolygonDAO.createPolygon( polygon ).then( createdPolygon => {
         res.json( createdPolygon );
+    })
+    .catch( err => {
+        res.status(500).json({error:err, message: 'Error with POST request to /polygons'});
+    });
+});
+
+APIRouter.delete('/polygons', (req, res) => {
+    PolygonDAO.deleteAllPolygons().then( numAffectedRows => {
+        res.json( numAffectedRows );
     })
     .catch( err => {
         res.status(500).json({error:err, message: 'Error with POST request to /polygons'});

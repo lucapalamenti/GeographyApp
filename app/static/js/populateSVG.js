@@ -12,7 +12,7 @@ const polygonTemplate = document.getElementById('polygon-template').content;
 /**
  * Load regions for a given map into an SVG element
  * @param {MMap} map map object
- * @param {SVGElement} svg reference to an SVG element
+ * @param {SVGElement} svg SVG html element
  * @returns {Map<String,Array<String>} a map where the keys are parent names and the values are arrays of region names
  */
 export default async function populateSVG( map, svg ) {
@@ -21,6 +21,7 @@ export default async function populateSVG( map, svg ) {
         // Get width and height of map for centering on the page
         let minX = Infinity, maxX = 0, minY = Infinity, maxY = 0;
         for ( const region of returnedRegions ) {
+            // Only update min/max x/y for states that must be focused on screen
             if ( FOCUS_STATES.includes( region.mapRegion_type ) ) {
                 for ( const polygon of region.region_points.coordinates ) {
                     const points = polygon[0];
@@ -76,7 +77,6 @@ export default async function populateSVG( map, svg ) {
                 typeGroup.appendChild( childGroup );
             };
         };
-        svg.classList.remove('hide-polygons');
     }).catch( err => {
         console.error( err );
     });

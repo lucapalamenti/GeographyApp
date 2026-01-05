@@ -112,8 +112,7 @@ const deleteAllCustomMaps = async () => {
         DELETE mapRegion FROM mapRegion JOIN map
         ON mapRegion_map_id = map_id
         WHERE map_is_custom = 1;
-        `, [])
-        .then( rows => {
+        `, []).then( rows => {
             return rows.affectedRows;
     });
     return await database.query(`
