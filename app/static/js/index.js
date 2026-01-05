@@ -133,8 +133,7 @@ b1.addEventListener('click', async e => {
                 polygon_points : new SQLPolygon({type:"Polygon",coordinates:polygon})
             });
             p = await APIClient.createPolygon( p );
-            console.log( p );
-            return;
+            console.log( p.polygon_id );
         }
     }
     console.log( "done!" );
