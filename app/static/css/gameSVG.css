@@ -1,20 +1,20 @@
-#svg-game.invisible-mode:not(.reviewing) g g.enabled g:not(.typed, .typeCurrent, .guesses0, .guesses1, .guesses2, .guesses3) polygon {
+#svg-game.invisible-mode:not(.reviewing) g g g.enabled g:not(.typed, .typeCurrent, .guesses0, .guesses1, .guesses2, .guesses3) polygon {
     /* fill:  !important; */
     stroke: rgb(230, 231, 137);
     /* Make this as small as possibles */
     stroke-width: 0.1%; 
 }
-#svg-game.invisible-mode-hard:not(.reviewing) g g g:not(.typed, .typeCurrent) polygon {
+#svg-game.invisible-mode-hard:not(.reviewing) g g g g:not(.typed, .typeCurrent) polygon {
     display: none;
 }
 
 polygon {
     fill: rgb(230, 231, 137);
-    stroke-width: 0.05%;
+    stroke-width: 0.1%;
     stroke: black;
 }
 
-g.enabled g.clickable:hover polygon, g.herring g.clickable:hover polygon {
+g.enabled g.clickable:has(polygon:hover) polygon, g.herring g.clickable:hover polygon {
     fill: rgb(210, 211, 117);
 }
 g.enabled g.clickable:active polygon, g.herring g.clickable:active polygon {
@@ -23,12 +23,12 @@ g.enabled g.clickable:active polygon, g.herring g.clickable:active polygon {
 
 g.disabled g polygon {
     fill: grey;
-    stroke-width: 0.05%;
+    stroke-width: 0.1%;
 }
 
 g.outside g polygon {
     fill: rgb(77, 77, 77);
-    stroke-width: 0.05%;
+    stroke-width: 0.1%;
 }
 
 g.typeCurrent polygon {
@@ -52,18 +52,18 @@ svg g g g.inactive polygon {
     fill: grey;
 }
 
-#svg-game.reviewing g g g.inactive:has( polygon:hover ) polygon {
+#svg-game.reviewing g g g g.inactive:has( polygon:hover ) polygon {
     fill: rgb(108, 108, 108);
 }
-#svg-game.reviewing g g g.guesses0:has( polygon:hover ) polygon {
+#svg-game.reviewing g g g g.guesses0:has( polygon:hover ) polygon {
     fill: rgb(92, 204, 78);
 }
-#svg-game.reviewing g g g.guesses1:has( polygon:hover ) polygon {
+#svg-game.reviewing g g g g.guesses1:has( polygon:hover ) polygon {
     fill: rgb(204, 187, 30);
 }
-#svg-game.reviewing g g g.guesses2:has( polygon:hover ) polygon {
+#svg-game.reviewing g g g g.guesses2:has( polygon:hover ) polygon {
     fill: rgb(199, 121, 20);
 }
-#svg-game.reviewing g g g.guesses3:has( polygon:hover ) polygon {
+#svg-game.reviewing g g g g.guesses3:has( polygon:hover ) polygon {
     fill: rgb(197, 75, 75);
 }
