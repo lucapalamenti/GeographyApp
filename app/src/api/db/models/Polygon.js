@@ -31,4 +31,8 @@ module.exports = class Polygon {
     getAllVariables() {
         return [this.polygon_region_id, this.polygon_is_enclave, this.polygon_enclave_of_region_id, this.polygon_points];
     }
+
+    insertStatement() {
+        return `INSERT INTO \`polygon\` (\`polygon_id\`, \`polygon_region_id\`, \`polygon_is_enclave\`, \`polygon_enclave_of_region_id\`, \`polygon_points\`) VALUES (${this.polygon_id}, ${this.polygon_region_id}, ${this.polygon_is_enclave}, ${this.polygon_enclave_of_region_id}, ${this.polygon_points.toQueryStringWrapped()});`;
+    }
 };
