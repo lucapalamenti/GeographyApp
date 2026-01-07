@@ -2,6 +2,11 @@ const database = require('./databaseConnections.js');
 
 const Polygon = require('./models/Polygon.js');
 
+/**
+ * 
+ * @param {Number} polygon_id 
+ * @returns {Polygon}
+ */
 const getPolygonById = async ( polygon_id ) => {
     return await database.query(`
         SELECT * FROM polygon

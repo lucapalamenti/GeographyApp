@@ -202,6 +202,11 @@ const getPolygonById = async ( polygon_id ) => {
     return await clientHandler( HTTPClient.get, `${BASE_API_PATH}/polygons/${polygon_id}` );
 };
 
+/**
+ * 
+ * @param {Number} region_id 
+ * @returns {Array<Polygon>}
+ */
 const getPolygonsByRegionId = async ( region_id ) => {
     return await clientHandler( HTTPClient.get, `${BASE_API_PATH}/polygons/regionId/${region_id}` );
 }

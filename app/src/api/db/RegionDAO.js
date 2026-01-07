@@ -16,6 +16,11 @@ const getRegions = async () => {
     });
 };
 
+/**
+ * 
+ * @param {Number} region_id 
+ * @returns {Region}
+ */
 const getRegionById = async ( region_id ) => {
     return await database.query(`
         SELECT * FROM region
@@ -66,12 +71,16 @@ const getRegionParentsForMap = async ( mapRegion_map_id ) => {
     });
 };
 
-const createRegion = async ( regionData ) => {
-    const { region_name, region_points } = regionData;
+/**
+ * 
+ * @param {Region} region 
+ * @returns 
+ */
+const createRegion = async ( region ) => {
     return await database.query(`
-        INSERT INTO region (region_name, region_points)
+        INSERT INTO region (region_name, region_parent_id)
         VALUES (?, ST_GEOMFROMTEXT(?));
-        `, [region_name, region_points]).then( rows => {
+        `, [region.region_name, region.region_parent_id]).then( rows => {
             if ( rows.affectedRows === 1 ) {
                 return getRegionById( rows.insertId );
             }
@@ -103,6 +112,23 @@ const getMapRegion = async ( mapRegion_map_id, mapRegion_region_id ) => {
         `, [mapRegion_map_id, mapRegion_region_id]).then( rows => {
             if ( rows.length ) {
                 return new MapRegion( rows[0] );
+            }
+            throw new Error("MapRegion not found!");
+    });
+};
+
+/**
+ * 
+ * @param {Number} mapRegion_region_id 
+ * @returns {String}
+ */
+const getMapRegionParent = async ( mapRegion_region_id ) => {
+    return await database.query(`
+        SELECT * FROM mapRegion
+        WHERE mapRegion_region_id = ?;
+        `, [mapRegion_region_id]).then( rows => {
+            if ( rows.length ) {
+                return new MapRegion( rows[0] ).mapRegion_parent;
             }
             throw new Error("MapRegion not found!");
     });
@@ -151,6 +177,7 @@ module.exports = {
     getRegionsByMapId,
     getMapRegion,
     getRegionParentsForMap,
+    getMapRegionParent,
     createRegion,
     createMapRegion,
     getMapRegionStates
