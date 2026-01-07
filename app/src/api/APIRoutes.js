@@ -214,6 +214,15 @@ APIRouter.get('/polygons/regionId/:regionId', (req, res) => {
     });
 });
 
+APIRouter.get('/polygons/mapId/:mapId', (req, res) => {
+    PolygonDAO.getPolygonsByMapId( req.params.mapId ).then( returnedPolygons => {
+        res.json( returnedPolygons );
+    })
+    .catch( err => {
+        res.status(500).json({error:err, message: 'Error with GET request to /polygons/regionId/:regionId'});
+    });
+});
+
 APIRouter.post('/polygons', BackendPayloadManager.chunkMiddleware, (req, res) => {
     const polygon = new Polygon( req.body );
     PolygonDAO.createPolygon( polygon ).then( createdPolygon => {

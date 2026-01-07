@@ -212,6 +212,15 @@ const getPolygonsByRegionId = async ( region_id ) => {
 }
 
 /**
+ * 
+ * @param {Number} map_id 
+ * @returns {Array<>}
+ */
+const getPolygonsByMapId = async ( map_id ) => {
+    return await clientHandler( HTTPClient.get, `${BASE_API_PATH}/polygons/mapId/${map_id}` );
+}
+
+/**
  * @param {Polygon} polygon 
  */
 const createPolygon = async ( polygon ) => {
@@ -266,6 +275,7 @@ export default {
 
     getPolygonById,
     getPolygonsByRegionId,
+    getPolygonsByMapId,
     createPolygon,
     deleteAllPolygons,
 

@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS `map` (
   `map_primary_color_R` int(3) NOT NULL DEFAULT 255,
   `map_primary_color_G` int(3) NOT NULL DEFAULT 255,
   `map_primary_color_B` int(3) NOT NULL DEFAULT 255,
-  `map_is_custom` bit(1) DEFAULT 0,
+  `map_is_custom` bit(1) DEFAULT b'0',
   PRIMARY KEY (`map_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
@@ -50,14 +50,14 @@ CREATE TABLE IF NOT EXISTS `mapRegion` (
   KEY `FK_mapRegion_region` (`mapRegion_region_id`) USING BTREE,
   CONSTRAINT `FK_mapRegion_map` FOREIGN KEY (`mapRegion_map_id`) REFERENCES `map` (`map_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_mapRegion_region` FOREIGN KEY (`mapRegion_region_id`) REFERENCES `region` (`region_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=6588 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14064 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 -- Data exporting was unselected.
 
 -- Dumping structure for table geographyapp.polygon
 CREATE TABLE IF NOT EXISTS `polygon` (
   `polygon_id` int(10) NOT NULL AUTO_INCREMENT,
-  `polygon_region_id` int(10) NOT NULL,
+  `polygon_region_id` int(10) DEFAULT NULL,
   `polygon_is_enclave` bit(1) DEFAULT b'0',
   `polygon_enclave_of_region_id` int(10) DEFAULT NULL,
   `polygon_points` polygon NOT NULL,
@@ -66,16 +66,18 @@ CREATE TABLE IF NOT EXISTS `polygon` (
   KEY `FK_polygon_enclave_of_region_id` (`polygon_enclave_of_region_id`),
   CONSTRAINT `FK_polygon_region` FOREIGN KEY (`polygon_region_id`) REFERENCES `region` (`region_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_polygon_region_2` FOREIGN KEY (`polygon_enclave_of_region_id`) REFERENCES `region` (`region_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5879 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 -- Data exporting was unselected.
 
 -- Dumping structure for table geographyapp.region
 CREATE TABLE IF NOT EXISTS `region` (
   `region_id` int(10) NOT NULL AUTO_INCREMENT,
-  `region_name` tinytext NOT NULL,
-  `region_points` multipolygon NOT NULL,
-  PRIMARY KEY (`region_id`) USING BTREE
+  `region_name` varchar(128) NOT NULL DEFAULT '0',
+  `region_parent_id` int(10) DEFAULT NULL,
+  PRIMARY KEY (`region_id`) USING BTREE,
+  KEY `FK_region_region` (`region_parent_id`),
+  CONSTRAINT `FK_region_region` FOREIGN KEY (`region_parent_id`) REFERENCES `region` (`region_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=3247 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 -- Data exporting was unselected.
@@ -86,19 +88,6 @@ CREATE TABLE IF NOT EXISTS `regionName` (
   `regionName_name` varchar(64) NOT NULL,
   PRIMARY KEY (`regionName_id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=103 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
-
--- Data exporting was unselected.
-
--- Dumping structure for table geographyapp.regionPolygon
-CREATE TABLE IF NOT EXISTS `regionPolygon` (
-  `regionPolygon_region_id` int(10) NOT NULL DEFAULT 0,
-  `regionPolygon_polygon_id` int(10) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`regionPolygon_polygon_id`,`regionPolygon_region_id`),
-  KEY `FK_regionPolygon_region_id` (`regionPolygon_region_id`),
-  KEY `FK_regionPolygon_polygon_id` (`regionPolygon_polygon_id`),
-  CONSTRAINT `FK_regionPolygon_polygon` FOREIGN KEY (`regionPolygon_polygon_id`) REFERENCES `polygon` (`polygon_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `FK_regionPolygon_region` FOREIGN KEY (`regionPolygon_region_id`) REFERENCES `region` (`region_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 -- Data exporting was unselected.
 
