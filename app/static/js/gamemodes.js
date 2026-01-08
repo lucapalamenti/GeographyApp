@@ -52,7 +52,6 @@ function click ( regionMap, disappear ) {
     // In disappear mode remove showGuesses so that the region color changes back to default
     if ( disappear ) svg.classList.remove("showGuesses");
     svg.addEventListener('click', e => {
-        console.log( guesses );
         const group = e.target.parentNode;
         if ( group.classList.contains('clickable') ) {
             // Correct region clicked

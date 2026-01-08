@@ -208,7 +208,7 @@ async function createCustomMap() {
             });
             await APIClient.createMapRegion( mapRegion ).then( returnedMapRegion => {}).catch( async err => {
                 await APIClient.deleteMap( mapData.map_id ).then( res => {
-                    console.log( "Map creation aborted, deleting all data." );
+                    console.log( "Map creation aborted, deleted all data." );
                     return;
                 });
                 console.error( err );
