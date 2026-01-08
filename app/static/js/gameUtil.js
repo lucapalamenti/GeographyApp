@@ -159,7 +159,7 @@ const getOrderedParents = ( regionMap ) => {
     const ordered = [];
     regionMap.forEach(( regionNames, parentName ) => {
         // Only select parents with regions of type "enabled"
-        if ( svg.querySelector(`SVG > G#${parentName} G.enabled, SVG > G#${parentName} G.herring`) ) {
+        if ( svg.querySelector(`SVG G > G#${parentName} > G.enabled, SVG G > G#${parentName} > G.herring`) ) {
             ordered.push( parentName );
         }
     });

@@ -59,13 +59,13 @@ CREATE TABLE IF NOT EXISTS `polygon` (
   `polygon_id` int(10) NOT NULL AUTO_INCREMENT,
   `polygon_region_id` int(10) DEFAULT NULL,
   `polygon_is_enclave` bit(1) DEFAULT b'0',
-  `polygon_enclave_of_region_id` int(10) DEFAULT NULL,
+  `polygon_enclave_of_polygon_id` int(10) DEFAULT NULL,
   `polygon_points` polygon NOT NULL,
   PRIMARY KEY (`polygon_id`),
   KEY `FK_polygon_region_id` (`polygon_region_id`) USING BTREE,
-  KEY `FK_polygon_enclave_of_region_id` (`polygon_enclave_of_region_id`),
+  KEY `FK_polygon_enclave_of_polygon_id` (`polygon_enclave_of_polygon_id`),
   CONSTRAINT `FK_polygon_region` FOREIGN KEY (`polygon_region_id`) REFERENCES `region` (`region_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `FK_polygon_region_2` FOREIGN KEY (`polygon_enclave_of_region_id`) REFERENCES `region` (`region_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `FK_polygon_polygon` FOREIGN KEY (`polygon_enclave_of_polygon_id`) REFERENCES `polygon` (`polygon_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=5879 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 -- Data exporting was unselected.
