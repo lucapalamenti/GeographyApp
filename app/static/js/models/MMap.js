@@ -1,3 +1,6 @@
+
+const ROUND_PLACES = 6;
+
 export default class MMap {
     /** @type {Number} */
     map_id = null;
@@ -22,7 +25,7 @@ export default class MMap {
      */
     constructor ( data ) {
         this.map_id = data.map_id;
-        this.map_scale = data.map_scale;
+        this.map_scale = Number( Number( data.map_scale ).toFixed( ROUND_PLACES ) );
         this.map_name = data.map_name;
         this.map_thumbnail = data.map_thumbnail;
         this.map_primary_color_R = data.map_primary_color_R;

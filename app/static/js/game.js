@@ -5,6 +5,7 @@ import gameUtil from "./gameUtil.js";
 import util from "./util.js";
 
 import { html, svg, navBar, gamemodePanel, selectButton, gameEndPanel, playAgainButton, reviewMapButton, homeButton, bottomGameBar, tooltip } from "./documentElements-game.js";
+import MMap from "./models/MMap.js";
 
 const query = window.location.search;
 let parameters = new URLSearchParams( query );
@@ -13,7 +14,7 @@ const map_id = Number( parameters.get('mapId') );
 let map;
 // Update header bar
 await APIClient.getMapById( map_id ).then( returnedMap => {
-    map = returnedMap;
+    map = new MMap( returnedMap );
     document.querySelector('TITLE').textContent = returnedMap.map_name;
     const nextLink = document.createElement('A');
     nextLink.href = '/game?mapId=' + map_id;

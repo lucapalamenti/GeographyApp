@@ -27,8 +27,8 @@ export default async function populateSVG( map, svg ) {
                 const points = polygon.polygon_points.coordinates;
                 // Check each point [X,Y] for this Polygon to see if it's a new min/max value
                 for ( let i = 0; i < points.length; i++ ) {
-                    let X = ( points[i][0] + Number( polygon.mapRegion_offsetX ) ) * map.map_scale * polygon.mapRegion_scaleX;
-                    let Y = ( points[i][1] + Number( polygon.mapRegion_offsetY ) ) * map.map_scale * polygon.mapRegion_scaleY;
+                    let X = ( points[i][0] + polygon.mapRegion_offsetX ) * map.map_scale * polygon.mapRegion_scaleX;
+                    let Y = ( points[i][1] + polygon.mapRegion_offsetY ) * map.map_scale * polygon.mapRegion_scaleY;
                     if ( X < minX ) minX = X;
                     if ( X > maxX ) maxX = X;
                     if ( Y < minY ) minY = Y;
@@ -75,7 +75,7 @@ export default async function populateSVG( map, svg ) {
             }
             // Create a polygon for the current region
             const p = polygonTemplate.cloneNode( true ).querySelector('POLYGON');
-            const points = new Polygon( polygon ).polygon_points.coordinates;
+            const points = polygon.polygon_points.coordinates;
             // Convert each array index from [1,2] to "1,2" and apply scaling & offsets
             for ( let i = 0; i < points.length; i++ ) {
                 let X = ( points[i][0] + Number( polygon.mapRegion_offsetX ) ) * map.map_scale * polygon.mapRegion_scaleX + SVG_PADDING + xCenter;

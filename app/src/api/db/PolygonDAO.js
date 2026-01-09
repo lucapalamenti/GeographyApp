@@ -1,4 +1,5 @@
 const database = require('./databaseConnections.js');
+const MapRegionPolygon = require('./models/MapRegionPolygon.js');
 
 const Polygon = require('./models/Polygon.js');
 
@@ -51,10 +52,10 @@ const getPolygonsByMapId = async ( map_id ) => {
         ORDER BY region_name;
         `, [map_id])
         .then( rows => {
-            rows.map( row => {
-                const p = new Polygon( row );
-                rows.polygon_points = p.polygon_points;
+            rows = rows.map( row => {
+                return new MapRegionPolygon( row );
             });
+            console.log( rows[0] );
             return rows;
     });
 };
