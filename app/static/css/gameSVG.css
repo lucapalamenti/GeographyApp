@@ -2,6 +2,7 @@
     /* fill:  !important; */
     stroke: rgb(230, 231, 137);
     /* Make this as small as possibles */
+    stroke-width: 0.1%;
 }
 #svg-game.invisible-mode-hard:not(.reviewing) g g g g:not(.typed, .typeCurrent) polygon {
     display: none;
@@ -13,10 +14,14 @@ polygon {
     stroke: black;
 }
 
+/* svg:has(g g g.enabled g.clickable:hover ) g g g.enabled g.clickable polygon {
+    fill: rgb(210, 211, 117);
+} */
+
 g.enabled g.clickable:has(polygon:hover) polygon, g.herring g.clickable:hover polygon {
     fill: rgb(210, 211, 117);
 }
-g.enabled g.clickable:active polygon, g.herring g.clickable:active polygon {
+g.enabled g.clickable:has(polygon:active) polygon, g.herring g.clickable:active polygon {
     fill: rgb(190, 191, 97);
 }
 
