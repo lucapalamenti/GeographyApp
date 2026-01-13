@@ -79,7 +79,7 @@ const getRegionParentsForMap = async ( mapRegion_map_id ) => {
 const createRegion = async ( region ) => {
     return await database.query(`
         INSERT INTO region (region_name, region_parent_id)
-        VALUES (?, ST_GEOMFROMTEXT(?));
+        VALUES (?, ?);
         `, [region.region_name, region.region_parent_id]).then( rows => {
             if ( rows.affectedRows === 1 ) {
                 return getRegionById( rows.insertId );

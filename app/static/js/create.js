@@ -48,7 +48,7 @@ mapTemplate.addEventListener('change', async e => {
     svg.querySelector('SVG > G#enclaves').innerHTML = "";
     if ( mapTemplate.value >= 0 ) {
         // Get the chosen map and display it
-        map = await APIClient.getMapById( mapTemplate.value );
+        map = new MMap( await APIClient.getMapById( mapTemplate.value ) );
         await populateSVG( map, svg ).then( regionNames => {
             for ( const group of svg.querySelectorAll('SVG G G G') ) {
                 group.addEventListener('mouseover', mouse => {
@@ -149,7 +149,7 @@ function displaySelection() {
 
 createButton.addEventListener('click', async e => {
     e.preventDefault();
-    if ( mapName.value && mapTemplate.value && svg.querySelectorAll('G G.enabled G.enabled').length > 1 ) {
+    if ( mapName.value && mapTemplate.value && svg.querySelectorAll('G G G.enabled G.enabled').length > 1 ) {
         loadingScreen.style.display = "flex";
         await createCustomMap().then( map => {
             document.location = "../";
@@ -214,10 +214,9 @@ async function createCustomMap() {
             });
         }
     }
-
+    
     const xFraction = ( mapMaxX - mapMinX ) / map.map_scale / ( SVG_WIDTH - SVG_PADDING );
     const yFraction = ( mapMaxY - mapMinY ) / map.map_scale / ( SVG_HEIGHT - SVG_PADDING );
-
     mapData.map_scale = ( 1 / Math.max( xFraction, yFraction ) ).toFixed(6);
 
     await APIClient.updateMap( mapData ).catch( err => {

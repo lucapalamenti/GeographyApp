@@ -158,6 +158,11 @@ const getMaps = async ( where, orderBy ) => {
     return await clientHandler( HTTPClient.get, `${BASE_API_PATH}/maplist/where/${where}/orderBy/${orderBy}` );
 };
 
+/**
+ * 
+ * @param {Number} map_id 
+ * @returns {MMap}
+ */
 const getMapById = async ( map_id ) => {
     return await clientHandler( HTTPClient.get, `${BASE_API_PATH}/maps/${map_id}` );
 };

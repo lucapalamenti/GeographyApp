@@ -29,7 +29,7 @@ APIRouter.get('/custom', (req, res) => {
     });
 });
 
-APIRouter.post('/customPrint', BackendPayloadManager.chunkMiddleware, (req, res) => {
+APIRouter.post('/customPrint', (req, res) => {
     CustomDAO.printRegionInsertQuery().then( r => {
         res.json( r );
     }).catch ( err => {
@@ -166,7 +166,7 @@ APIRouter.post('/maps', BackendPayloadManager.chunkMiddleware, (req, res) => {
     });
 });
 
-APIRouter.put('/maps', (req, res) => {
+APIRouter.put('/maps', BackendPayloadManager.chunkMiddleware, (req, res) => {
     const map = new Map( req.body );
     MapDAO.updateMap( map ).then( map => {
         res.json( map );

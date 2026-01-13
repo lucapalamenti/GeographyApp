@@ -120,22 +120,24 @@ deleteAllMapsButton.addEventListener('click', async e => {
 // The button that says OOOOOOOO
 const b1 = document.getElementById('b1');
 b1.addEventListener('click', async e => {
-    const allRegions = await APIClient.getRegions();
-    for ( const region of allRegions ) {
-        const coordinates = region.region_points["coordinates"];
-        for ( const polygon of coordinates ) {
-            let p = new Polygon({
-                polygon_id : null,
-                polygon_region_id : region.region_id,
-                polygon_is_enclave : false,
-                polygon_enclave_of_region_id : null,
-                polygon_points : new SQLPolygon({type:"Polygon",coordinates:polygon})
-            });
-            p = await APIClient.createPolygon( p );
-            console.log( p.polygon_id );
-        }
-    }
-    console.log( "done!" );
+    // const allRegions = await APIClient.getRegions();
+    // for ( const region of allRegions ) {
+    //     const coordinates = region.region_points["coordinates"];
+    //     for ( const polygon of coordinates ) {
+    //         let p = new Polygon({
+    //             polygon_id : null,
+    //             polygon_region_id : region.region_id,
+    //             polygon_is_enclave : false,
+    //             polygon_enclave_of_region_id : null,
+    //             polygon_points : new SQLPolygon({type:"Polygon",coordinates:polygon})
+    //         });
+    //         p = await APIClient.createPolygon( p );
+    //         console.log( p.polygon_id );
+    //     }
+    // }
+    // console.log( "done!" );
+    const p = await APIClient.printRegionInsertQuery();
+    console.log( p );
 });
 
 // Print statements button

@@ -2,7 +2,7 @@ import { svg, mapOutline } from "./documentElements-create.js";
 import { SVG_WIDTH, SVG_HEIGHT, SVG_PADDING } from "./variables.js";
 
 const getCenteredRegions = () => {
-    return svg.querySelectorAll('G G.enabled G.enabled, G G.enabled G.disabled, G G.enabled G.herring');
+    return svg.querySelectorAll('G G G.enabled G.enabled, G G G.enabled G.disabled, G G G.enabled G.herring');
 }
 
 /**
