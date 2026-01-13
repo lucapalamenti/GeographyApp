@@ -1,7 +1,7 @@
 export const html = document.querySelector('HTML');
 export const navBar = document.getElementById('nav-bar');
 export const tooltip = document.getElementById('tooltip');
-export const svgContainer = document.getElementById('svg-game');
+export const svg = document.getElementById('svg-game');
 export const noListArea = document.getElementById('no-list-area');
 export const noMapArea = document.getElementById('no-map-area');
 

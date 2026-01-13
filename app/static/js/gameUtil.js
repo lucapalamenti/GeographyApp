@@ -1,6 +1,6 @@
 import util from "./util.js";
 
-import { html, tooltip, svgContainer, input, selectParent, showNames, endGameButton, gameEndPanel, noMapArea, promptTally } from "./documentElements-game.js";
+import { html, tooltip, svg, input, selectParent, showNames, endGameButton, gameEndPanel, noMapArea, promptTally } from "./documentElements-game.js";
 import { SVG_WIDTH, SVG_HEIGHT, SVG_ZOOM_START, SVG_ZOOM_INC, SVG_MAX_ZOOMS } from "./variables.js";
 
 const audioPath = "../audio/";
@@ -12,7 +12,7 @@ let tooltipActive = false;
  * Returns a reference to the G element for the current region
  * @returns {HTMLElement}
  */
-const queryCurrentRegion = ( currentPrompt ) => { return svgContainer.querySelector(`svg > #${currentPrompt.pID} #${currentPrompt.rID}`) };
+const queryCurrentRegion = ( currentPrompt ) => { return svg.querySelector(`svg g #${currentPrompt.pID} g #${currentPrompt.rID}`) };
 
 const playSound = ( filename ) => { new Audio( `${audioPath}${filename}` ).play() };
 
@@ -106,9 +106,9 @@ const moveToolTip = ( e ) => {
 const enableTooltip = () => {
     if ( !tooltipActive ) {
         tooltipActive = true;
-        svgContainer.addEventListener('mousemove', moveToolTip);
-        svgContainer.addEventListener('scroll', moveToolTip);
-        svgContainer.addEventListener('mouseout', e => {
+        svg.addEventListener('mousemove', moveToolTip);
+        svg.addEventListener('scroll', moveToolTip);
+        svg.addEventListener('mouseout', e => {
             tooltip.style.display = "none" ;
         });
     }
@@ -159,7 +159,7 @@ const getOrderedParents = ( regionMap ) => {
     const ordered = [];
     regionMap.forEach(( regionNames, parentName ) => {
         // Only select parents with regions of type "enabled"
-        if ( svgContainer.querySelector(`SVG > G#${parentName} G.enabled, SVG > G#${parentName} G.herring`) ) {
+        if ( svg.querySelector(`SVG G > G#${parentName} > G.enabled, SVG G > G#${parentName} > G.herring`) ) {
             ordered.push( parentName );
         }
     });
@@ -211,8 +211,8 @@ function fillTable() {
 }
 
 // Right click to zoom
-svgContainer.addEventListener( 'contextmenu', e => { e.preventDefault(); });
-svgContainer.addEventListener( 'contextmenu', zoom );
+svg.addEventListener( 'contextmenu', e => { e.preventDefault(); });
+svg.addEventListener( 'contextmenu', zoom );
 let zoomLevel = SVG_ZOOM_START;
 function zoom( e ) {
     // Only allow if you are not too far zoomed in
@@ -220,8 +220,8 @@ function zoom( e ) {
         document.querySelectorAll('.clickLabel').forEach( label => {
             label.style.display = "none";
         });
-        const currentVB = svgContainer.getAttribute('viewBox').split(' ').map( value => Number(value) );
-        const rect = svgContainer.getBoundingClientRect();
+        const currentVB = svg.getAttribute('viewBox').split(' ').map( value => Number(value) );
+        const rect = svg.getBoundingClientRect();
         // X coordinate of zoom viewport
         let startX = currentVB[0] + ( e.clientX - rect.left ) * currentVB[2] / rect.width - currentVB[2] / zoomLevel;
         // Y coordinate of zoom viewport
@@ -232,7 +232,7 @@ function zoom( e ) {
         startX = startX < 0 ? 0 : ( startX > maxX ) ? maxX : startX;
         startY = startY < 0 ? 0 : ( startY > maxY ) ? maxY : startY;
 
-        svgContainer.setAttribute('viewBox', `${startX} ${startY} ${ currentVB[2] / zoomLevel * 2 } ${ currentVB[3] / zoomLevel * 2 }`);
+        svg.setAttribute('viewBox', `${startX} ${startY} ${ currentVB[2] / zoomLevel * 2 } ${ currentVB[3] / zoomLevel * 2 }`);
         showNames.setAttribute( 'disabled', true );
         showNames.checked = false;
 
@@ -245,7 +245,7 @@ function zoom( e ) {
 // Escape to unzoom
 function unzoom( e ) {
     if ( e.key === 'Escape' ) {
-        svgContainer.setAttribute('viewBox', "0 0 1600 900");
+        svg.setAttribute('viewBox', "0 0 1600 900");
         document.querySelectorAll('.clickLabel').forEach( label => {
             label.style.display = "none";
         });
@@ -270,11 +270,11 @@ function sumZooms() {
  */
 const endGame = () => {
     gameEnded = true;
-    for ( const group of svgContainer.querySelectorAll('g g g:not(.guesses0, .guesses1, .guesses2, .guesses3)') ) {
+    for ( const group of svg.querySelectorAll('g g g:not(.guesses0, .guesses1, .guesses2, .guesses3)') ) {
         group.classList.remove('clickable');
         group.classList.add('inactive');
     }
-    svgContainer.parentElement.style.display = "block";
+    svg.parentElement.style.display = "block";
     document.getElementById('bottom-game-bar').style.display = "none";
     input.setAttribute('disabled', true);
     html.classList.add('filter-dark');
@@ -285,9 +285,9 @@ const endGame = () => {
     }
     fillTable();
     // Reappear colors at the end
-    svgContainer.classList.remove("invisible-mode");
-    svgContainer.classList.remove("invisible-mode-hard");
-    svgContainer.classList.add("showGuesses");
+    svg.classList.remove("invisible-mode");
+    svg.classList.remove("invisible-mode-hard");
+    svg.classList.add("showGuesses");
     console.log( "YOU WIN!" );
 }
 endGameButton.addEventListener('click', endGame);

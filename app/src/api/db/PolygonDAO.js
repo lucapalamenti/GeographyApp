@@ -1,7 +1,13 @@
 const database = require('./databaseConnections.js');
+const MapRegionPolygon = require('./models/MapRegionPolygon.js');
 
 const Polygon = require('./models/Polygon.js');
 
+/**
+ * 
+ * @param {Number} polygon_id 
+ * @returns {Polygon}
+ */
 const getPolygonById = async ( polygon_id ) => {
     return await database.query(`
         SELECT * FROM polygon
@@ -13,7 +19,7 @@ const getPolygonById = async ( polygon_id ) => {
             }
             throw new Error("Polygon not found!");
     });
-}
+};
 
 /**
  * 
@@ -30,7 +36,29 @@ const getPolygonsByRegionId = async ( region_id ) => {
                 return new Polygon( row );
             });
     });
-}
+};
+
+/**
+ * 
+ * @param {Number} map_id 
+ * @returns {Array<Polygon>}
+ */
+const getPolygonsByMapId = async ( map_id ) => {
+    return await database.query(`
+        SELECT * FROM polygon
+        JOIN region ON polygon_region_id = region_id
+        JOIN mapRegion ON region_id = mapRegion_region_id
+        WHERE mapRegion_map_id = ?
+        ORDER BY region_name;
+        `, [map_id])
+        .then( rows => {
+            rows = rows.map( row => {
+                return new MapRegionPolygon( row );
+            });
+            console.log( rows[0] );
+            return rows;
+    });
+};
 
 /**
  * 
@@ -96,6 +124,7 @@ const createRegionPolygon = async ( region_id, polygon_id ) => {
 module.exports = {
     getPolygonById,
     getPolygonsByRegionId,
+    getPolygonsByMapId,
     createPolygon,
     deleteAllPolygons
 };

@@ -102,7 +102,7 @@ class SQLLineString extends SQLGeometry {
  * Javascript representation of the SQL "POLYGON" data type
  */
 class SQLPolygon extends SQLGeometry {
-    /** @type {Array<Array<Array<Number>>>} */
+    /** @type {Array<Array<Number>>} */
     coordinates = null;
     
     /**
@@ -114,7 +114,7 @@ class SQLPolygon extends SQLGeometry {
             throw new TypeError( `Cannot initialize an SQLPolygon object of type "${sqlPolygon.type}"` );
         }
         super( "Polygon" );
-        this.coordinates = sqlPolygon["coordinates"];
+        this.coordinates = sqlPolygon["coordinates"][0];
     }
 
     toQueryString() {
@@ -127,12 +127,7 @@ class SQLPolygon extends SQLGeometry {
     }
 
     toQueryStringWrapped() {
-        return SQLGeometry.toQueryStringWrapper( `POLYGON((${
-            this.coordinates.map( lineString => {
-                return lineString.map( point => {
-                    return point.join(" "); }).join(",");
-                }).join("),(")
-        }))` );
+        return SQLGeometry.toQueryStringWrapper( this.toQueryString() );
     }
 }
 

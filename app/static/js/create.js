@@ -44,9 +44,8 @@ mapTemplate.addEventListener('change', async e => {
     selectedList.style.display = "none";
     mapContainer.style.display = "none";
     stateButtonsPanel.style.display = "none";
-    for ( const group of svg.querySelectorAll('SVG > G') ) {
-        svg.removeChild( group );
-    }
+    svg.querySelector('SVG > G#main').innerHTML = "";
+    svg.querySelector('SVG > G#enclaves').innerHTML = "";
     if ( mapTemplate.value >= 0 ) {
         // Get the chosen map and display it
         map = await APIClient.getMapById( mapTemplate.value );
@@ -182,7 +181,7 @@ async function createCustomMap() {
     // For each region type
     for ( const typeName of regionTypes ) {
         // For each selected region of this type
-        for ( const region of svg.querySelectorAll(`G G.enabled G.${typeName}`) ) {
+        for ( const region of svg.querySelectorAll(`G G G.enabled G.${typeName}`) ) {
             const parentName = util.idToInput( region.parentElement.parentElement.id );
             const regionName = util.idToInput( region.id );
             const region_id = (await APIClient.getRegionByMapIdParentName( mapTemplate.value, parentName, regionName )).region_id;
@@ -208,7 +207,7 @@ async function createCustomMap() {
             });
             await APIClient.createMapRegion( mapRegion ).then( returnedMapRegion => {}).catch( async err => {
                 await APIClient.deleteMap( mapData.map_id ).then( res => {
-                    console.log( "Map creation aborted, deleting all data." );
+                    console.log( "Map creation aborted, deleted all data." );
                     return;
                 });
                 console.error( err );
