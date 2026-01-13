@@ -5,7 +5,7 @@ INSERT INTO `region` (`region_id`, `region_name`, `region_parent_id`) VALUES (6,
 INSERT INTO `polygon` (`polygon_id`, `polygon_region_id`, `polygon_points`) VALUES (2082, 6, ST_GEOMFROMTEXT('POLYGON((9 0,202 10,199 161,0 161,9 0))'));
 
 INSERT INTO `region` (`region_id`, `region_name`, `region_parent_id`) VALUES (7, 'Idaho', null);
-INSERT INTO `polygon` (`polygon_id`, `polygon_region_id`, `polygon_points`) VALUES (2083, 7, ST_GEOMFROMTEXT('POLYGON((199 0,226 0,361 179,361 271,199 271,202 120,199 0))'));
+INSERT INTO `polygon` (`polygon_id`, `polygon_region_id`, `polygon_points`) VALUES (2083, 7, ST_GEOMFROMTEXT('POLYGON((0 0,27 0,162 179,162 271,0 271,3 120,0 0))'));
 
 INSERT INTO `region` (`region_id`, `region_name`, `region_parent_id`) VALUES (8, 'Montana', null);
 INSERT INTO `polygon` (`polygon_id`, `polygon_region_id`, `polygon_points`) VALUES (2084, 8, ST_GEOMFROMTEXT('POLYGON((0 0,324 0,324 159,135 179,0 0))'));
