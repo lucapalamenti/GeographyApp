@@ -292,10 +292,10 @@ function outline( regionMap ) {
  * @param {Map<String,Array<String>} regionMap
  */
 function noMap( regionMap ) {
-    svg.parentElement.style.display = "none";
+    svg.style.display = "none";
     type( regionMap );
     endGameButton.addEventListener('click', e => {
-        svg.parentNode.style.display = "flex";
+        svg.style.display = "flex";
     });
 }
 /**
@@ -305,7 +305,7 @@ function noMap( regionMap ) {
 function noList( regionMap ) {
     listGamemodes( regionMap );
     gameUtil.populateSelect( regionMap );
-    svg.parentNode.style.display = "none";
+    svg.style.display = "none";
     // Format top gamebar
     promptLabel.textContent = "Name all regions";
     tally.textContent = "Correct: ?";
@@ -387,7 +387,7 @@ function noList( regionMap ) {
             });
         }
         updateLabels( regionMap, true )
-        svg.parentNode.style.display = "flex";
+        svg.style.display = "flex";
         noMapArea.style.display = "flex";
         noListArea.style.display = "flex";
     });
