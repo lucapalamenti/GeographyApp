@@ -125,6 +125,7 @@ function typeGamemodes( regionMap ) {
  * @param {Map<String,Array<String>} regionMap 
  */
 function listGamemodes( regionMap ) {
+    console.log( regionMap );
     for ( const parentName of gameUtil.getOrderedParents( regionMap ) ) {
         const h3 = document.createElement('H3');
         h3.textContent = util.idToInput( parentName );

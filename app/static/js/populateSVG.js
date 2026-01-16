@@ -48,7 +48,7 @@ export default async function populateSVG( map, svg ) {
             const layerGroup = ( polygon.polygon_is_enclave ) ? gEnclaves : gMain;
             const parentId = util.inputToId( polygon.mapRegion_parent );
             const regionId = util.inputToId( polygon.region_name );
-
+            
             // If there doesn't exist a group for the region's parent, create it
             let parentGroup = layerGroup.querySelector(`:scope > #${parentId}`);
             if ( !parentGroup ) {
@@ -70,7 +70,7 @@ export default async function populateSVG( map, svg ) {
                 childGroup = createGElement( regionId );
                 typeGroup.appendChild( childGroup );
             }
-            if ( polygon.mapRegion_type === "enabled" ) {
+            if ( polygon.mapRegion_type === "enabled" && !regionMap.get( parentId ).includes( regionId ) ) {
                 regionMap.get( parentId ).push( regionId );
             }
             // Create a polygon for the current region
