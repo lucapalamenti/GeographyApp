@@ -156,7 +156,7 @@ createButton.addEventListener('click', async e => {
     if ( mapName.value && mapTemplate.value && svg.querySelectorAll('G G G.enabled G.enabled').length > 1 ) {
         loadingScreen.style.display = "flex";
         await createCustomMap().then( map => {
-            // document.location = "../";
+            document.location = "../";
         }).catch( err => {
             console.error( err );
         });

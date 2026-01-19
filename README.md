@@ -40,6 +40,7 @@
 - Throttling & Debouncing
 - If enter is pressed with no parent selected, flash the parent dropdown
 - Rework VirginiaFix to make it more scalable. Instead make a new Database table called Enclaves
+- Ability to take a new .kml file from USCensusBureau and have it replace existing data
 
 - Unsure if I want to add
     - "mark as correct" option for type (hard) if you mistype

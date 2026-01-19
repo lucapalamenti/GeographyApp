@@ -17,16 +17,16 @@ export default class ParentChildMap {
     }
 
     addParent( name ) {
-        this.#map.set( name, new Map() );
+        if ( !this.#map.has( name ) ) {
+            this.#map.set( name, new Map() );
+        }
     }
 
     addChild( parentName, childName, id ) {
-        this.#map.get( parentName ).set( childName, id );
-    }
-
-    hasChild( parentName, childName ) {
         const parent = this.#map.get( parentName );
-        return ( parent ) ? parent.has( childName ) : false;
+        if ( parent && !this.#map.has( childName ) ) {
+            parent.set( childName, id );
+        }
     }
 
     getChild( parentName, childName ) {

@@ -70,7 +70,7 @@ export default async function populateSVG( map, svg ) {
                 childGroup = createGElement( regionId );
                 typeGroup.appendChild( childGroup );
             }
-            if ( polygon.mapRegion_type === "enabled" && !regionMap.hasChild( parentId, regionId ) ) {
+            if ( polygon.mapRegion_type === "enabled" ) {
                 regionMap.addChild( parentId, regionId, polygon.polygon_region_id );
             }
             // Create a polygon for the current region
