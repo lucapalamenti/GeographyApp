@@ -3,6 +3,7 @@ import gameUtil from "./gameUtil.js";
 
 import { svg, promptBar, input, promptLabel, noListArea, endGameButton, reviewMapButton, tally, promptTally, selectParent, showNames, noMapArea } from "./documentElements-game.js";
 import { ATTEMPT_COLORS, REPEAT_COLOR, MAX_GUESSES, ATTEMPT_SOUNDS } from "./variables.js";
+import ParentChildMap from "./models/ParentChildMap.js";
 
 let promptsArr;
 let currentPrompt = { pID : "", pInput : "", rID : "", rInput : "" };
@@ -34,7 +35,7 @@ function learn() {
 
 /**
  * Run the "Click" gamemode
- * @param {Map<String,Array<String>} regionMap 
+ * @param {ParentChildMap} regionMap 
  * @param {Boolean} disappear enable disappear mode
  */
 function click ( regionMap, disappear ) {
@@ -396,10 +397,10 @@ function noList( regionMap ) {
 /**
  * Updates labels such as ones with the class 'click-on' to contain the current region
  * and the top game bar's prompt count and correct tally
- * @param {Map<String,Array<String>} regionMap
+ * @param {ParentChildMap} regionMap
  */
 function updateLabels( regionMap, showPrompt ) {
-    if ( numPrompts === 0 ) numPrompts = gameUtil.getNumPrompts( regionMap );
+    if ( numPrompts === 0 ) numPrompts = regionMap.numChildren();
     promptTally.textContent = `Prompt ${promptNumber}/${numPrompts}`;
     tally.textContent = `Correct: ${numCorrect}/${numPrompts}`;
     if ( showPrompt ) {

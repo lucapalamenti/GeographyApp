@@ -2,6 +2,7 @@ import util from "./util.js";
 
 import { html, tooltip, svg, input, selectParent, showNames, endGameButton, gameEndPanel, noMapArea, promptTally } from "./documentElements-game.js";
 import { SVG_WIDTH, SVG_HEIGHT, SVG_ZOOM_START, SVG_ZOOM_INC, SVG_MAX_ZOOMS } from "./variables.js";
+import ParentChildMap from "./models/ParentChildMap.js";
 
 const audioPath = "../audio/";
 
@@ -115,36 +116,23 @@ const enableTooltip = () => {
 }
 
 /**
- * Returns the number of regions to prompt the user with
- * @param {Map<String,Array>} regionMap 
- */
-const getNumPrompts = ( regionMap ) => {
-    let sum = 0;
-    regionMap.forEach((regionNames, parent) => {
-        sum += regionNames.length;
-    });
-    return sum;
-};
-
-/**
  * Randomly shuffles an array
- * @param {Map<String,Array>} regionMap 
+ * @param {ParentChildMap} regionMap 
  * @returns {Array<Object>} looks like [{pID : "parent_name", pInput : "Parent Name", rID : "region_name", rInput : "Region Input"},{...}]
  */
 const shuffleRegionMap = ( regionMap ) => {
     const arr = [];
     // First add all [parent,region] pairs into the array
-    // Value comes before Key in the Map.forEach() method
-    regionMap.forEach(( regionNames, parent ) => {
-        for ( const name of regionNames ) {
+    for ( const parentName of regionMap.getParentNames() ) {
+        for ( const childName of regionMap.getChildNames( parentName ) ) {
             arr.push({
-                pID : parent,
-                pinput : util.idToInput( parent ),
-                rID : name,
-                rInput : util.idToInput( name )
+                pID : parentName,
+                pinput : util.idToInput( parentName ),
+                rID : childName,
+                rInput : util.idToInput( childName )
             });
         }
-    });
+    }
     // Then shuffle the array
     for ( let i = arr.length - 1; i >= 0; i-- ) {
         const j = Math.floor( Math.random() * i );
@@ -155,20 +143,24 @@ const shuffleRegionMap = ( regionMap ) => {
     return arr;
 };
 
+/**
+ * 
+ * @param {ParentChildMap} regionMap 
+ * @returns {Array<String>}
+ */
 const getOrderedParents = ( regionMap ) => {
     const ordered = [];
-    regionMap.forEach(( regionNames, parentName ) => {
-        // Only select parents with regions of type "enabled"
-        if ( svg.querySelector(`SVG G > G#${parentName} > G.enabled, SVG G > G#${parentName} > G.herring`) ) {
+    for ( const parentName of regionMap.getParentNames() ) {
+        if ( svg.querySelector(`SVG G > G#${parentName} > G.enabled G`) ) {
             ordered.push( parentName );
         }
-    });
+    }
     return ordered.sort();
 };
 
 /**
  * Populates the Select dropdown for gamemodes that need it
- * @param {Map<String,Array<String>} regionMap 
+ * @param {ParentChildMap} regionMap 
  */
 const populateSelect = ( regionMap ) => {
     const orderedParents = getOrderedParents( regionMap );
@@ -300,7 +292,6 @@ export default {
     showLabel,
     moveToolTip,
     enableTooltip,
-    getNumPrompts,
     shuffleRegionMap,
     getOrderedParents,
     populateSelect,

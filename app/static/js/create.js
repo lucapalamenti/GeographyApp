@@ -8,6 +8,9 @@ import MMap from "./models/MMap.js";
 
 import { mapName, mapTemplate, mapColor, mapThumbnail, createButton, zoomSlider, showOutline, stateButtonsPanel, mapContainer, svg, mapOutline, loadingScreen, selectedList } from "./documentElements-create.js";
 import { SVG_WIDTH, SVG_HEIGHT, SVG_PADDING } from "./variables.js";
+import ParentChildMap from "./models/ParentChildMap.js";
+
+// SOMETHING HERE IS NOT WORKING FOR MAP CREATION ----------------- ****************************************
 
 await APIClient.getMaps( "map_id > 0", "map_id" ).then( maps => {
     // Populate "Choose Template" selection panel
@@ -20,7 +23,7 @@ await APIClient.getMaps( "map_id > 0", "map_id" ).then( maps => {
 }).catch( err => {
     console.error( err );
 });
-// await is necessary even thought VSCode says otherwise
+
 const regionTypes = await APIClient.getMapRegionStates();
 regionTypes.push("deselect");
 let selectedType = "enabled";
@@ -39,6 +42,8 @@ stateButtonsPanel.addEventListener('click', e => {
 
 let dragging = false;
 let map;
+/** @type {ParentChildMap} */
+let regionMap;
 mapTemplate.addEventListener('change', async e => {
     mapOutline.style.display = "none";
     selectedList.style.display = "none";
@@ -49,15 +54,14 @@ mapTemplate.addEventListener('change', async e => {
     if ( mapTemplate.value >= 0 ) {
         // Get the chosen map and display it
         map = new MMap( await APIClient.getMapById( mapTemplate.value ) );
-        await populateSVG( map, svg ).then( regionNames => {
-            for ( const group of svg.querySelectorAll('SVG G G G') ) {
-                group.addEventListener('mouseover', mouse => {
-                    if ( mouse.button === 0 && dragging ) {
-                        changeRegionType( mouse );
-                    }
-                });
-            }
-        });
+        regionMap = await populateSVG( map, svg );
+        for ( const group of svg.querySelectorAll('SVG G G G') ) {
+            group.addEventListener('mouseover', mouse => {
+                if ( mouse.button === 0 && dragging ) {
+                    changeRegionType( mouse );
+                }
+            });
+        }
         stateButtonsPanel.style.display = "flex";
         mapContainer.style.display = "flex";
     }
@@ -152,7 +156,7 @@ createButton.addEventListener('click', async e => {
     if ( mapName.value && mapTemplate.value && svg.querySelectorAll('G G G.enabled G.enabled').length > 1 ) {
         loadingScreen.style.display = "flex";
         await createCustomMap().then( map => {
-            document.location = "../";
+            // document.location = "../";
         }).catch( err => {
             console.error( err );
         });
@@ -181,13 +185,15 @@ async function createCustomMap() {
     // For each region type
     for ( const typeName of regionTypes ) {
         // For each selected region of this type
-        for ( const region of svg.querySelectorAll(`G G G.enabled G.${typeName}`) ) {
-            const parentName = util.idToInput( region.parentElement.parentElement.id );
-            const regionName = util.idToInput( region.id );
-            const region_id = (await APIClient.getRegionByMapIdParentName( mapTemplate.value, parentName, regionName )).region_id;
+        for ( const regionGElement of svg.querySelectorAll(`G G G.enabled G.${typeName}`) ) {
+            const parentId = regionGElement.parentElement.parentElement.id;
+            const parentName = util.idToInput( parentId );
+            const regionName = util.idToInput( regionGElement.id );
+            const region_id = regionMap.getChild( parentId, regionGElement.id );
+            // const region_id = (await APIClient.getRegionByMapIdParentName( mapTemplate.value, parentName, regionName )).region_id;
 
             let regionMinX = Infinity, regionMinY = Infinity;
-            for ( const polygon of region.children ) {
+            for ( const polygon of regionGElement.children ) {
                 for ( const point of polygon.points ) {
                     if ( point.x < regionMinX ) regionMinX = point.x;
                     if ( point.y < regionMinY ) regionMinY = point.y;

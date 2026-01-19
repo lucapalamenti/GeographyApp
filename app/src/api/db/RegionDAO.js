@@ -8,10 +8,17 @@ const Region = require('./models/Region.js');
 const FILENAME_PREFIX = "04-Map-";
 const COPY_TO_FILE = true;
 
+// ----- <<<<< SELECT STATEMENTS >>>>> -----
+
+/**
+ * Gets all Region objects from the database
+ * @returns {Array<Region>}
+ */
 const getRegions = async () => {
     return await database.query(`
         SELECT * FROM region;
-        `, []).then( rows => {
+        `, [])
+        .then( rows => {
             return rows.map( row => new Region( row ) );
     });
 };
@@ -25,7 +32,8 @@ const getRegionById = async ( region_id ) => {
     return await database.query(`
         SELECT * FROM region
         WHERE region_id = ?;
-        `, [region_id]).then( rows => {
+        `, [region_id])
+        .then( rows => {
             if ( rows.length === 1 ) {
                 return new Region( rows[0] );
             }
@@ -33,6 +41,11 @@ const getRegionById = async ( region_id ) => {
     });
 };
 
+/**
+ * 
+ * @param {*} regionData 
+ * @returns {MapRegion}
+ */
 const getRegionByMapIdParentName = async ( regionData ) => {
     const { mapRegion_map_id, mapRegion_parent, region_name } = regionData;
     return await database.query(`
@@ -47,6 +60,11 @@ const getRegionByMapIdParentName = async ( regionData ) => {
     });
 };
 
+/**
+ * 
+ * @param {*} mapRegion_map_id 
+ * @returns 
+ */
 const getRegionsByMapId = async ( mapRegion_map_id ) => {
     return await database.query(`
         SELECT * FROM mapRegion JOIN region

@@ -4,7 +4,7 @@ import util from "./util.js";
 import MMap from "./models/MMap.js";
 
 import { SVG_WIDTH, SVG_HEIGHT, FOCUS_STATES } from "./variables.js";
-import Polygon from "./models/Polygon.js";
+import ParentChildMap from "./models/ParentChildMap.js";
 
 const SVG_PADDING = 10; // Pixels
 
@@ -14,10 +14,10 @@ const polygonTemplate = document.getElementById('polygon-template').content;
  * Load regions for a given map into an SVG element
  * @param {MMap} map map object
  * @param {SVGElement} svg SVG html element
- * @returns {Map<String,Array<String>} a map where the keys are parent names and the values are arrays of region names
+ * @returns {ParentChildMap} a map where the keys are parent names and the values are arrays of region names. *The first element of the array is the 
  */
 export default async function populateSVG( map, svg ) {
-    const regionMap = new Map();
+    const regionMap = new ParentChildMap();
     await APIClient.getPolygonsByMapId( map.map_id ).then( async returnedPolygons => {
         // Get width and height of map for centering on the page
         let minX = Infinity, maxX = 0, minY = Infinity, maxY = 0;
@@ -54,7 +54,7 @@ export default async function populateSVG( map, svg ) {
             if ( !parentGroup ) {
                 parentGroup = createGElement( parentId )
                 layerGroup.appendChild( parentGroup );
-                regionMap.set( parentId, [] );
+                regionMap.addParent( parentId );
             }
             
             // If the parent group doesnt contain a group for the region type, create it
@@ -70,8 +70,8 @@ export default async function populateSVG( map, svg ) {
                 childGroup = createGElement( regionId );
                 typeGroup.appendChild( childGroup );
             }
-            if ( polygon.mapRegion_type === "enabled" && !regionMap.get( parentId ).includes( regionId ) ) {
-                regionMap.get( parentId ).push( regionId );
+            if ( polygon.mapRegion_type === "enabled" && !regionMap.hasChild( parentId, regionId ) ) {
+                regionMap.addChild( parentId, regionId, polygon.polygon_region_id );
             }
             // Create a polygon for the current region
             const p = polygonTemplate.cloneNode( true ).querySelector('POLYGON');

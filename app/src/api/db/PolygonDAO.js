@@ -52,11 +52,9 @@ const getPolygonsByMapId = async ( map_id ) => {
         ORDER BY region_name;
         `, [map_id])
         .then( rows => {
-            rows = rows.map( row => {
+            return rows.map( row => {
                 return new MapRegionPolygon( row );
             });
-            console.log( rows[0] );
-            return rows;
     });
 };
 
@@ -81,6 +79,10 @@ const createPolygon = async ( polygon ) => {
     return createdPolygon;
 };
 
+/**
+ * Deletes all Polygons and references to polygons in the database and 
+ * @returns {Number}
+ */
 const deleteAllPolygons = async () => {
     await database.query(`
         DELETE FROM regionPolygon;

@@ -24,7 +24,11 @@ module.exports = class Region {
         return [this.region_id, this.region_name, this.region_parent_id];
     }
 
+    /**
+     * Returns the SQL insert statement for this Region object
+     * @returns {String}
+     */
     insertStatement() {
-        return `INSERT INTO \`region\` (\`region_id\`, \`region_name\`, \`region_parent_id\`) VALUES (${this.region_id}, '${this.region_name}', ${this.region_parent_id});`;
+        return `INSERT INTO \`region\` (\`region_id\`, \`region_name\`, \`region_parent_id\`) VALUES (${this.region_id}, "${this.region_name}", ${this.region_parent_id});`;
     }
 };
