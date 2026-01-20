@@ -97,7 +97,7 @@ function click ( regionMap, disappear ) {
 }
 /**
  * Run the "Click (Disappear)" gamemode
- * @param {Map<String,Array<String>} regionMap 
+ * @param {ParentChildMap} regionMap 
  */
 function clickDisappear ( regionMap ) {
     click( regionMap, true );
@@ -114,7 +114,7 @@ function enableClicking() {
 
 /**
  * Runs with all typing gamemodes
- * @param {Map<String,Array<String>} regionMap 
+ * @param {ParentChildMap} regionMap 
  */
 function typeGamemodes( regionMap ) {
     updateLabels( regionMap, false );
@@ -123,18 +123,17 @@ function typeGamemodes( regionMap ) {
 }
 /**
  * Runs with all gamemodes that show the list
- * @param {Map<String,Array<String>} regionMap 
+ * @param {ParentChildMap} regionMap 
  */
 function listGamemodes( regionMap ) {
-    console.log( regionMap );
     for ( const parentName of gameUtil.getOrderedParents( regionMap ) ) {
         const h3 = document.createElement('H3');
         h3.textContent = util.idToInput( parentName );
         const div = document.createElement('DIV');
         div.setAttribute('id', parentName);
-        for ( const name of regionMap.get( parentName ) ) {
+        for ( const childName of regionMap.getChildNames( parentName ) ) {
             const p = document.createElement('P');
-            p.setAttribute('id', name);
+            p.setAttribute('id', childName);
             div.appendChild( p );
         }
         noMapArea.appendChild( h3 );
@@ -143,7 +142,7 @@ function listGamemodes( regionMap ) {
 }
 /**
  * Runs the "Type" gamemode
- * @param {Map<String,Array<String>} regionMap
+ * @param {ParentChildMap} regionMap
  */
 function type( regionMap ) {
     gameUtil.populateSelect( regionMap );
@@ -162,7 +161,7 @@ function type( regionMap ) {
                 let color = ATTEMPT_COLORS[3];
                 const myInput = util.inputToId( input.value );
                 // If the user input matches a region's name
-                if ( regionMap.get( selectParent.value ).includes( myInput ) ) {
+                if ( regionMap.hasChild( selectParent.value, myInput ) ) {
                     color = REPEAT_COLOR;
                     const group = svg.querySelector(`G#${selectParent.value} G G#${CSS.escape( myInput )}`);
                     // The user has not yet typed this region
@@ -198,7 +197,7 @@ function type( regionMap ) {
 }
 /**
  * Runs the "Type (Hard)" gamemode
- * @param {Map<String,Array<String>} regionMap
+ * @param {ParentChildMap} regionMap
  */
 function typeHard( regionMap ) {
     promptLabel.textContent = "Name the highlighted region";
@@ -257,7 +256,7 @@ function typeHard( regionMap ) {
 }
 /**
  * Runs the "Type (Invisible)" gamemode
- * @param {Map<String,Array<String>} regionMap
+ * @param {ParentChildMap} regionMap
  */
 function typeInvisible( regionMap ) {
     svg.classList.add('invisible-mode');
@@ -265,7 +264,7 @@ function typeInvisible( regionMap ) {
 }
 /**
  * Runs the "Type (Hard) (Invisible)" gamemode
- * @param {Map<String,Array<String>} regionMap
+ * @param {ParentChildMap} regionMap
  */
 function typeHardInvisible( regionMap ) {
     maxGuesses = Infinity;
@@ -274,7 +273,7 @@ function typeHardInvisible( regionMap ) {
 }
 /**
  * Runs the "Type (Hard) (Invisibler)" gamemode
- * @param {Map<String,Array<String>} regionMap
+ * @param {ParentChildMap} regionMap
  */
 function typeHardInvisibler( regionMap ) {
     maxGuesses = Infinity;
@@ -283,14 +282,14 @@ function typeHardInvisibler( regionMap ) {
 }
 /**
  * Runs the "Outline" gamemode
- * @param {Map<String,Array<String>} regionMap
+ * @param {ParentChildMap} regionMap
  */
 function outline( regionMap ) {
 
 }
 /**
  * Runs the "No Map" gamemode
- * @param {Map<String,Array<String>} regionMap
+ * @param {ParentChildMap} regionMap
  */
 function noMap( regionMap ) {
     svg.style.display = "none";
@@ -301,7 +300,7 @@ function noMap( regionMap ) {
 }
 /**
  * Runs the "No List" gamemode
- * @param {Map<String,Array<String>} regionMap
+ * @param {ParentChildMap} regionMap
  */
 function noList( regionMap ) {
     listGamemodes( regionMap );
@@ -316,13 +315,15 @@ function noList( regionMap ) {
 
     const missedRegions = new Map(), unknownRegions = new Map(), duplicateRegions = new Map();
     const maps = [ unknownRegions, duplicateRegions ];
-    regionMap.forEach(( regionNames, parent ) => {
-        missedRegions.set( parent, new Array() );
+    // Initialize all names as "missed regions" 
+    for ( const parentName of regionMap.getParentNames() ) {
+        missedRegions.set( parentName, [] );
         // Initialize all regions into missedRegions
-        for ( const name of regionNames ) {
-            missedRegions.get( parent ).push( name );
+        for ( const childName of regionMap.getChildNames( parentName ) ) {
+            missedRegions.get( parentName ).push( childName );
         }
-    });
+    }
+
     input.addEventListener('keypress', e => {
         if ( e.key === 'Enter' ) {
             const pValue = selectParent.value;
@@ -332,7 +333,7 @@ function noList( regionMap ) {
                 input.value = "";
                 gameUtil.playSound( ATTEMPT_SOUNDS[1] );
                 // If the user input matches a region's name
-                if ( regionMap.get( pValue ).includes( myInput ) ) {
+                if ( regionMap.hasChild( pValue, myInput ) ) {
                     const group = svg.querySelector(`G#${selectParent.value} G G#${CSS.escape( myInput )}`);
                     // The user has not yet typed this region
                     if ( !group.classList.contains('typed') ) {
