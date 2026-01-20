@@ -24,9 +24,18 @@ export default class ParentChildMap {
 
     addChild( parentName, childName, id ) {
         const parent = this.#map.get( parentName );
-        if ( parent && !this.#map.has( childName ) ) {
+        if ( parent && !parent.has( childName ) ) {
             parent.set( childName, id );
         }
+    }
+
+    hasParent( name ) {
+        return this.#map.has( name );
+    }
+
+    hasChild( parentName, childName ) {
+        const parent = this.#map.get( parentName );
+        return ( parent ) ? parent.get( childName ) : undefined;
     }
 
     getChild( parentName, childName ) {

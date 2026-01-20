@@ -48,7 +48,6 @@ export default async function populateSVG( map, svg ) {
             const layerGroup = ( polygon.polygon_is_enclave ) ? gEnclaves : gMain;
             const parentId = util.inputToId( polygon.mapRegion_parent );
             const regionId = util.inputToId( polygon.region_name );
-            
             // If there doesn't exist a group for the region's parent, create it
             let parentGroup = layerGroup.querySelector(`:scope > #${parentId}`);
             if ( !parentGroup ) {
@@ -73,6 +72,7 @@ export default async function populateSVG( map, svg ) {
             if ( polygon.mapRegion_type === "enabled" ) {
                 regionMap.addChild( parentId, regionId, polygon.polygon_region_id );
             }
+
             // Create a polygon for the current region
             const p = polygonTemplate.cloneNode( true ).querySelector('POLYGON');
             const points = polygon.polygon_points.coordinates;
