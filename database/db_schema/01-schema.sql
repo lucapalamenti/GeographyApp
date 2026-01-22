@@ -85,7 +85,7 @@ CREATE TABLE IF NOT EXISTS `region` (
 -- Dumping structure for table geographyapp.regionName
 CREATE TABLE IF NOT EXISTS `regionName` (
   `regionName_id` int(10) NOT NULL AUTO_INCREMENT,
-  `regionName_name` varchar(64) NOT NULL,
+  `regionName_name` varchar(128) NOT NULL,
   PRIMARY KEY (`regionName_id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=103 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 

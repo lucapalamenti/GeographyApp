@@ -39,8 +39,8 @@
 - Other Physical features like rivers & lakes
 - Throttling & Debouncing
 - If enter is pressed with no parent selected, flash the parent dropdown
-- Rework VirginiaFix to make it more scalable. Instead make a new Database table called Enclaves
 - Ability to take a new .kml file from USCensusBureau and have it replace existing data
+    - Consider using Python for this
 
 - Unsure if I want to add
     - "mark as correct" option for type (hard) if you mistype
@@ -52,6 +52,8 @@
 
 ## Ongoing
 
+## Beta 1.2.260121
+
 ### Frontend
 - There are now sounds on input
 - Show prompt number next to number correct tally in some gamemodes
@@ -60,17 +62,17 @@
     - Type (Invisible): Same as Type, but no outlines are given
     - Type (Hard) (Invisible): Same as Type (Hard), but no outlines are given
     - Type (Hard) (Invisibler): Same as Type (Hard) (Invisible), but the outlines disappear
+- Default county maps now have surrounding "outside" regions
 
 ### Backend/Technical
 - HTTP request payloads are now wrapped in a "Chunk" object before being send to the backend. If the payload is larger than 100kb then it is broken up and sent as multiple Chunks.
 A Chunk contains:
     - a fragment of the payload
-    - a payload ID so fragments from the same payload can find eachother
+    - a payload ID so fragments from the same payload can find eachother in the backend
     - a chunk ID for its index within the group of fragments
 Once all Chunks are sent, a Sentinel Chunk is sent to tell the backend how many Chunks it should've received for a given payload. The backend will then piece these fragments together to recreate the full payload.
 - All API routes expecting a payload must use the new PayloadManager's Chunk middleware to interpret the incoming chunks
-
-### Bug Fixes
+- Coordinate points now stored as POLYGON objects instead of MULTIPOLYGON objects to allow for polygon specific data like "is_enclave" and "enclave_of_region_id"
 
 ## Beta 1.1.250825
 
