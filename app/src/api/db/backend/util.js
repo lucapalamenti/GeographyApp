@@ -14,7 +14,7 @@ function copyQueryToFile( query, params, fileName ) {
     for ( let n = 0; n < arr.length - 1; n++ ) {
         // If the param is a string, we need to add \` before and after it
         if ( typeof params[n] === "string" ) {
-            params[n] = `\`${params[n]}\``;
+            params[n] = `"${params[n]}"`;
         }
         build = build.concat( params[n], arr[n + 1] );
     }

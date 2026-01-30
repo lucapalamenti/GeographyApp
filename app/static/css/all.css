@@ -115,6 +115,7 @@ select {
     height: 100vh;
     content: '';
     position: fixed;
+    z-index: 1;
     background-color: black;
     filter: opacity(50%);
 }

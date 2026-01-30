@@ -6,13 +6,17 @@ const APIRouter = express.Router();
 APIRouter.use( express.json() );
 
 const { TokenMiddleware, generateToken, removeToken } = require('../middleware/tokenMiddleware.js');
+const BackendPayloadManager = require('../middleware/BackendPayloadManager.js');
+
 const RegionDAO = require('./db/RegionDAO.js');
 const MapDAO = require('./db/MapDAO.js');
 const CustomDAO = require('./db/CustomDAO.js');
+const PolygonDAO = require('./db/PolygonDAO.js');
 
-const Map = require('./db/models/Map.js');
+const Map = require('./db/models/MMap.js');
 const MapRegion = require('./db/models/MapRegion.js');
 const Region = require('./db/models/Region.js');
+const Polygon = require('./db/models/Polygon.js');
 
 // ----- CustomDAO ROUTES -----
 
@@ -77,7 +81,7 @@ APIRouter.get('/regions/map/:mapId', (req, res) => {
 });
 
 APIRouter.get('/mapRegion/states', (req, res) => {
-    RegionDAO.getStates().then( states => {
+    RegionDAO.getMapRegionStates().then( states => {
         res.json( states );
     })
     .catch( err => {
@@ -103,8 +107,8 @@ APIRouter.get('/mapRegion/:mapId/:regionId', (req, res) => {
     });
 });
 
-APIRouter.post('/regions', (req, res) => {
-    const region = new Region( req.body );
+APIRouter.post('/regions', BackendPayloadManager.chunkMiddleware, (req, res) => {
+    const region =  new Region(req.body );
     RegionDAO.createRegion( region ).then( region => {
         res.json( region );
     })
@@ -113,7 +117,7 @@ APIRouter.post('/regions', (req, res) => {
     });
 });
 
-APIRouter.post('/mapRegion', (req, res) => {
+APIRouter.post('/mapRegion', BackendPayloadManager.chunkMiddleware, (req, res) => {
     const mapRegion = new MapRegion( req.body );
     RegionDAO.createMapRegion( mapRegion ).then( mapRegion => {
         res.json( mapRegion );
@@ -152,7 +156,7 @@ APIRouter.get('/maps/:mapId', (req, res) => {
     });
 });
 
-APIRouter.post('/maps', (req, res) => {
+APIRouter.post('/maps', BackendPayloadManager.chunkMiddleware, (req, res) => {
     const map = new Map( req.body );
     MapDAO.createMap( map ).then( map => {
         res.json( map );
@@ -162,7 +166,7 @@ APIRouter.post('/maps', (req, res) => {
     });
 });
 
-APIRouter.put('/maps', (req, res) => {
+APIRouter.put('/maps', BackendPayloadManager.chunkMiddleware, (req, res) => {
     const map = new Map( req.body );
     MapDAO.updateMap( map ).then( map => {
         res.json( map );
@@ -190,10 +194,58 @@ APIRouter.delete('/maps/:mapId', (req, res) => {
     });
 });
 
+// ----- PolygonDAO ROUTES -----
+
+APIRouter.get('/polygons/:polygonId', (req, res) => {
+    PolygonDAO.getPolygonById( req.params.polygonId ).then( returnedPolygon => {
+        res.json( returnedPolygon );
+    })
+    .catch( err => {
+        res.status(500).json({error:err, message: 'Error with GET request to /polygons/:polygonId'});
+    });
+});
+
+APIRouter.get('/polygons/regionId/:regionId', (req, res) => {
+    PolygonDAO.getPolygonsByRegionId( req.params.regionId ).then( returnedPolygons => {
+        res.json( returnedPolygons );
+    })
+    .catch( err => {
+        res.status(500).json({error:err, message: 'Error with GET request to /polygons/regionId/:regionId'});
+    });
+});
+
+APIRouter.get('/polygons/mapId/:mapId', (req, res) => {
+    PolygonDAO.getPolygonsByMapId( req.params.mapId ).then( returnedPolygons => {
+        res.json( returnedPolygons );
+    })
+    .catch( err => {
+        res.status(500).json({error:err, message: 'Error with GET request to /polygons/regionId/:regionId'});
+    });
+});
+
+APIRouter.post('/polygons', BackendPayloadManager.chunkMiddleware, (req, res) => {
+    const polygon = new Polygon( req.body );
+    PolygonDAO.createPolygon( polygon ).then( createdPolygon => {
+        res.json( createdPolygon );
+    })
+    .catch( err => {
+        res.status(500).json({error:err, message: 'Error with POST request to /polygons'});
+    });
+});
+
+APIRouter.delete('/polygons', (req, res) => {
+    PolygonDAO.deleteAllPolygons().then( numAffectedRows => {
+        res.json( numAffectedRows );
+    })
+    .catch( err => {
+        res.status(500).json({error:err, message: 'Error with POST request to /polygons'});
+    });
+});
+
 // ----- OTHER ROUTES -----
 
 const upload = multer({ dest: 'uploads/' });
-APIRouter.post('/uploadFile', upload.single('uploadedFile'), (req, res) => {
+APIRouter.post('/uploadFile', BackendPayloadManager.chunkMiddleware, upload.single('uploadedFile'), (req, res) => {
     if (req.file) {
         res.json({ message: 'File uploaded successfully', filename: req.file.filename });
     } else {

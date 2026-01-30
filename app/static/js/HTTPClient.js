@@ -19,22 +19,22 @@ export default {
             .catch(handleError);
     },
 
-    post: (url, data) => {
+    post: (url, payload) => {
         return fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(data),
+            body: JSON.stringify(payload),
         })
             .then(processJSONResponse)
             .catch(handleError);
     },
 
-    put: (url, data) => {
+    put: (url, payload) => {
         return fetch(url, {
             method: 'PUT',
-            body: JSON.stringify(data),
+            body: JSON.stringify(payload),
             headers: {
                 'Content-Type': 'application/json',
             }

@@ -3,9 +3,9 @@
 ## To Add
 - Add "Borders" table to database that tells you what regions a region borders
 - Something to do with having to scroll up and down when deleting multiple maps at bottom
-- Make the type gamemode list toggleable
 - Add to database alternative spellings
 - Drag map to move it
+- Red circle around highlighted area after 5 seconds if the user cant find whats highlighted
 - Labels show off screen when clicking in Learn gamemode
 - Settings to add:
     - Toggle "auto enter" after every keystroke
@@ -13,35 +13,66 @@
     - Change level of detail in outlines (requires multiple datasets)
     - Toggle allowing alternate spellings
     - Disabled sounds
-- Show number of Correct regions separate from the counter in the top right (change that to something like "question number")
-- When taking more than 3 attempts in type (hard) gamemode, instead of just displaying the label is skipping it, make the user type the correct answer
+    - Multiple color schemes
 - Gamemodes:
+    - add "modifiers" to some gamemodes. ex: 
+        - "type":
+            - "select all" so you dont have to specify parent region
+            - remove parent from dropdown when you have typed all its child regions
+        - "type (hard)":
+            - Only 1 guess per prompt instead of 3
+            - Show first letter after first incorrect answer
+            - timed mode (~5 seconds per prompt)
+            - skip to next: press space or enter to go to next prompt (just say the name out loud)
     - "Borders": Name all surrounding regions
     - "Outline": Name region based on outline and surrounding regions
     - "Outline (Hard)": Name region based only on outline
-    - "undisabled": only available on maps that have disabled regions, where all disabled regions are switched to the "herring" state
-- Change Zoom levels
-- In click (disappear) gamemode, when you get a region that there are multiple of (meaning there are at least 2 parents) disable the regions with the same name that you've already clicked on
+    - travle but countyle
+    - "Drag & Drop": drag and drop county outline onto a blank map
 - Interactive map (type a name and all counties with name show up), option for similar sounding names with different spellings
 - Ability to edit existing maps to add/remove regions
-- "mark as correct" option for type (hard) if you mistype
 - Select a thumbnail for a created map
 - Add an admin page for things like editing non custom maps
-- Multiple color schemes
-- When using a map with different region types as a template, all regions are displayed the same as "enabeld" regions, and "outside" regions are not displayed in the viewport
-- right click multiple times to zoom further
-- create session storage for sorting & filtering maps selection
+- When using a map with different region types as a template, all regions are displayed the same as "enabled" regions, and "outside" regions are not displayed in the viewport
+- create session storage
+    - sorting & filtering maps selection
+- Other Physical features like rivers & lakes
+- Throttling & Debouncing
+- If enter is pressed with no parent selected, flash the parent dropdown
+- Ability to take a new .kml file from USCensusBureau and have it replace existing data
+    - Consider using Python for this
+
+- Unsure if I want to add
+    - "mark as correct" option for type (hard) if you mistype
+    - In click (disappear) gamemode, when you get a region that there are multiple of (meaning there are at least 2 parents) disable the regions with the same name that you've already clicked on
+    - When taking more than 3 attempts in type (hard) gamemode, instead of just displaying the label is skipping it, make the user type the correct answer
+    - Make the type gamemode list toggleable
 
 # Changelog
 
 ## Ongoing
 
+## Beta 1.2.260121
+
 ### Frontend
 - There are now sounds on input
+- Show prompt number next to number correct tally in some gamemodes
+- Instead of a zoom slider, right click multiple times to zoom further
+- New Gamemodes:
+    - Type (Invisible): Same as Type, but no outlines are given
+    - Type (Hard) (Invisible): Same as Type (Hard), but no outlines are given
+    - Type (Hard) (Invisibler): Same as Type (Hard) (Invisible), but the outlines disappear
+- Default county maps now have surrounding "outside" regions
 
 ### Backend/Technical
-
-### Bug Fixes
+- HTTP request payloads are now wrapped in a "Chunk" object before being send to the backend. If the payload is larger than 100kb then it is broken up and sent as multiple Chunks.
+A Chunk contains:
+    - a fragment of the payload
+    - a payload ID so fragments from the same payload can find eachother in the backend
+    - a chunk ID for its index within the group of fragments
+Once all Chunks are sent, a Sentinel Chunk is sent to tell the backend how many Chunks it should've received for a given payload. The backend will then piece these fragments together to recreate the full payload.
+- All API routes expecting a payload must use the new PayloadManager's Chunk middleware to interpret the incoming chunks
+- Coordinate points now stored as POLYGON objects instead of MULTIPOLYGON objects to allow for polygon specific data like "is_enclave" and "enclave_of_region_id"
 
 ## Beta 1.1.250825
 
@@ -78,3 +109,15 @@
 - When dragging from one element into another (both within the same parent) in the learn gamemode, if the parent region is also the name of a region (ex: washington state and washington county) then the entire parent region gets highlighted
 - List gamemodes display parent regions without regions of type "enabled" in list, even though they have no regions to type
 - If game ends within 2 seconds of clicking a region, the region stays clickable when reviewing map
+
+## Questions
+
+- Is it good practice to have a single primary key for an SQL table?
+
+- How is the max payload determined? Can I change it? Should I change it?
+
+- When should I compress data being sent over HTTP requests? Compressing takes more time & doesn't allow you to send more data
+
+- Are promises in the backend automatically compressed? How am i able to retrieve large payloads but not send them
+
+- What are the benefits to using typescript over javascript

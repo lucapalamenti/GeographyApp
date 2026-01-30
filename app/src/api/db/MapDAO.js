@@ -1,10 +1,10 @@
 const database = require('./databaseConnections.js');
 const util = require('./backend/util.js');
 
-const Map = require('./models/Map.js');
+const Map = require('./models/MMap.js');
 
 const FILENAME_PREFIX = "04-Map-";
-const COPY_TO_FILE = true;
+const COPY_TO_FILE = false;
 
 /**
  * SQL injection is possible
@@ -112,8 +112,7 @@ const deleteAllCustomMaps = async () => {
         DELETE mapRegion FROM mapRegion JOIN map
         ON mapRegion_map_id = map_id
         WHERE map_is_custom = 1;
-        `, [])
-        .then( rows => {
+        `, []).then( rows => {
             return rows.affectedRows;
     });
     return await database.query(`

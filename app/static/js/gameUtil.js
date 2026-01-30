@@ -1,7 +1,8 @@
 import util from "./util.js";
 
-import { html, tooltip, svg, input, selectParent, zoomSlider, showNames, endGameButton, gameEndPanel, noMapArea } from "./documentElements-game.js";
-import { SVG_WIDTH, SVG_HEIGHT } from "./variables.js";
+import { html, tooltip, svg, input, selectParent, showNames, endGameButton, gameEndPanel, noMapArea, promptTally } from "./documentElements-game.js";
+import { SVG_WIDTH, SVG_HEIGHT, SVG_ZOOM_START, SVG_ZOOM_INC, SVG_MAX_ZOOMS } from "./variables.js";
+import ParentChildMap from "./models/ParentChildMap.js";
 
 const audioPath = "../audio/";
 
@@ -12,10 +13,13 @@ let tooltipActive = false;
  * Returns a reference to the G element for the current region
  * @returns {HTMLElement}
  */
-const queryCurrentRegion = ( currentPrompt ) => { return svg.querySelector(`svg > #${currentPrompt.pID} #${currentPrompt.rID}`) };
+const queryCurrentRegion = ( currentPrompt ) => { return svg.querySelector(`svg g #${currentPrompt.pID} g #${currentPrompt.rID}`) };
 
-const playSound = ( filename ) => {
-    new Audio( `${audioPath}${filename}` ).play();
+const playSound = ( filename ) => { new Audio( `${audioPath}${filename}` ).play() };
+
+const setGuessesColor = ( guesses ) => {
+    // set css class given the number of guesses
+    // maybe this can be different for the invisible gamemodes, idk
 };
 
 /**
@@ -93,6 +97,7 @@ const showLabel = ( group, e, center, timeout ) => {
  * @param {Event} e 
  */
 const moveToolTip = ( e ) => {
+    tooltip.style.display = "block";
     tooltip.style.transform = `translate( calc( -50% + ${e.clientX}px ), calc( 60% + ${e.clientY + window.scrollY}px ) )`;
 }
 
@@ -111,36 +116,23 @@ const enableTooltip = () => {
 }
 
 /**
- * Returns the number of regions to prompt the user with
- * @param {Map<String,Array>} regionMap 
- */
-const getNumPrompts = ( regionMap ) => {
-    let sum = 0;
-    regionMap.forEach((regionNames, parent) => {
-        sum += regionNames.length;
-    });
-    return sum;
-};
-
-/**
  * Randomly shuffles an array
- * @param {Map<String,Array>} regionMap 
+ * @param {ParentChildMap} regionMap 
  * @returns {Array<Object>} looks like [{pID : "parent_name", pInput : "Parent Name", rID : "region_name", rInput : "Region Input"},{...}]
  */
 const shuffleRegionMap = ( regionMap ) => {
     const arr = [];
     // First add all [parent,region] pairs into the array
-    // Value comes before Key in the Map.forEach() method
-    regionMap.forEach(( regionNames, parent ) => {
-        for ( const name of regionNames ) {
+    for ( const parentName of regionMap.getParentNames() ) {
+        for ( const childName of regionMap.getChildNames( parentName ) ) {
             arr.push({
-                pID : parent,
-                pinput : util.idToInput( parent ),
-                rID : name,
-                rInput : util.idToInput( name )
+                pID : parentName,
+                pinput : util.idToInput( parentName ),
+                rID : childName,
+                rInput : util.idToInput( childName )
             });
         }
-    });
+    }
     // Then shuffle the array
     for ( let i = arr.length - 1; i >= 0; i-- ) {
         const j = Math.floor( Math.random() * i );
@@ -151,20 +143,24 @@ const shuffleRegionMap = ( regionMap ) => {
     return arr;
 };
 
+/**
+ * 
+ * @param {ParentChildMap} regionMap 
+ * @returns {Array<String>}
+ */
 const getOrderedParents = ( regionMap ) => {
     const ordered = [];
-    regionMap.forEach(( regionNames, parentName ) => {
-        // Only select parents with regions of type "enabled"
-        if ( svg.querySelector(`SVG > G#${parentName} G.enabled, SVG > G#${parentName} G.herring`) ) {
+    for ( const parentName of regionMap.getParentNames() ) {
+        if ( svg.querySelector(`SVG G > G#${parentName} > G.enabled G`) ) {
             ordered.push( parentName );
         }
-    });
+    }
     return ordered.sort();
 };
 
 /**
  * Populates the Select dropdown for gamemodes that need it
- * @param {Map<String,Array<String>} regionMap 
+ * @param {ParentChildMap} regionMap 
  */
 const populateSelect = ( regionMap ) => {
     const orderedParents = getOrderedParents( regionMap );
@@ -209,73 +205,84 @@ function fillTable() {
 // Right click to zoom
 svg.addEventListener( 'contextmenu', e => { e.preventDefault(); });
 svg.addEventListener( 'contextmenu', zoom );
+let zoomLevel = SVG_ZOOM_START;
 function zoom( e ) {
-    const zoomLevel = zoomSlider.value * 10;
-    document.querySelectorAll('.clickLabel').forEach( label => {
-        label.style.display = "none";
-    });
-    const rect = svg.getBoundingClientRect();
-    // X coordinate of zoom viewport
-    let startX = ( e.clientX - rect.left ) * SVG_WIDTH / rect.width - SVG_WIDTH / zoomLevel;
-    // Y coordinate of zoom viewport
-    let startY = ( e.clientY - rect.top ) * SVG_HEIGHT / rect.height - SVG_HEIGHT / zoomLevel;
-    // Adjust so zoom is not greater than original viewport
-    const ratioX = SVG_WIDTH * ( 1 - 2 / zoomLevel );
-    const ratioY = SVG_HEIGHT * ( 1 - 2 / zoomLevel );
-    startX = startX < 0 ? 0 : ( startX > ratioX ) ? ratioX : startX;
-    startY = startY < 0 ? 0 : ( startY > ratioY ) ? ratioY : startY;
+    // Only allow if you are not too far zoomed in
+    if ( zoomLevel <= SVG_ZOOM_START + SVG_ZOOM_INC * SVG_MAX_ZOOMS ) {
+        document.querySelectorAll('.clickLabel').forEach( label => {
+            label.style.display = "none";
+        });
+        const currentVB = svg.getAttribute('viewBox').split(' ').map( value => Number(value) );
+        const rect = svg.getBoundingClientRect();
+        // X coordinate of zoom viewport
+        let startX = currentVB[0] + ( e.clientX - rect.left ) * currentVB[2] / rect.width - currentVB[2] / zoomLevel;
+        // Y coordinate of zoom viewport
+        let startY = currentVB[1] + ( e.clientY - rect.top ) * currentVB[3] / rect.height - currentVB[3] / zoomLevel;
+        // Adjust so zoom is not greater than original viewport
+        const maxX = SVG_WIDTH * sumZooms();
+        const maxY = SVG_HEIGHT * sumZooms();
+        startX = startX < 0 ? 0 : ( startX > maxX ) ? maxX : startX;
+        startY = startY < 0 ? 0 : ( startY > maxY ) ? maxY : startY;
 
-    svg.setAttribute('viewBox', `${startX} ${startY} ${ SVG_WIDTH / zoomLevel * 2 } ${ SVG_HEIGHT / zoomLevel * 2 }`);
-    svg.classList.add(`zoom-${zoomSlider.value}`);
-    svg.removeEventListener( 'contextmenu', zoom );
-    zoomSlider.setAttribute( 'disabled', true );
-    showNames.setAttribute( 'disabled', true );
-    showNames.checked = false;
+        svg.setAttribute('viewBox', `${startX} ${startY} ${ currentVB[2] / zoomLevel * 2 } ${ currentVB[3] / zoomLevel * 2 }`);
+        showNames.setAttribute( 'disabled', true );
+        showNames.checked = false;
 
-    // Escape key to unzoom
-    document.addEventListener( 'keydown', unzoom );
-    input.focus();
+        // Escape key to unzoom
+        document.addEventListener( 'keydown', unzoom );
+        input.focus();
+        zoomLevel += SVG_ZOOM_INC;
+    }
 };
 // Escape to unzoom
 function unzoom( e ) {
     if ( e.key === 'Escape' ) {
-        svg.classList.remove(`zoom-${zoomSlider.value}`);
         svg.setAttribute('viewBox', "0 0 1600 900");
-        svg.addEventListener( 'contextmenu', zoom );
         document.querySelectorAll('.clickLabel').forEach( label => {
             label.style.display = "none";
         });
-        zoomSlider.removeAttribute( 'disabled' );
         showNames.removeAttribute( 'disabled' );
         document.removeEventListener( 'keydown', unzoom );
         input.focus();
+        zoomLevel = SVG_ZOOM_START;
     }
 };
-
-endGameButton.addEventListener('click', e => {
-    for ( const group of svg.querySelectorAll('g g g:not(.guesses0, .guesses1, .guesses2, .guesses3)') ) {
-        group.classList.remove('clickable');
-        group.classList.add('inactive');
+function sumZooms() {
+    let i = zoomLevel;
+    let rtn = 0;
+    while ( i >= SVG_ZOOM_START ) {
+        rtn += ( 1 - 2 / i );
+        i -= SVG_ZOOM_INC;
     }
-    endGame();
-});
+    return rtn;
+}
+
 /**
  * Run when finishing a game
  */
 const endGame = () => {
     gameEnded = true;
+    for ( const group of svg.querySelectorAll('g g g:not(.guesses0, .guesses1, .guesses2, .guesses3)') ) {
+        group.classList.remove('clickable');
+        group.classList.add('inactive');
+    }
+    svg.parentElement.style.display = "block";
     document.getElementById('bottom-game-bar').style.display = "none";
     input.setAttribute('disabled', true);
     html.classList.add('filter-dark');
+    promptTally.style.display = "none";
     gameEndPanel.style.display = "flex";
     for ( const label of document.querySelectorAll('.click-on') ) {
         label.textContent = "-";
     }
     fillTable();
     // Reappear colors at the end
+    svg.classList.remove("invisible-mode");
+    svg.classList.remove("invisible-mode-hard");
     svg.classList.add("showGuesses");
     console.log( "YOU WIN!" );
 }
+endGameButton.addEventListener('click', endGame);
 
 export default {
     queryCurrentRegion,
@@ -285,7 +292,6 @@ export default {
     showLabel,
     moveToolTip,
     enableTooltip,
-    getNumPrompts,
     shuffleRegionMap,
     getOrderedParents,
     populateSelect,

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" class="filter-dark">
 <head>
+    <title>Map Quiz</title>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,10 +13,8 @@
     <link rel="stylesheet" href="css/game.css"/>
     <link rel="stylesheet" href="css/gameArea.css"/>
     <link rel="stylesheet" href="css/gameSVG.css"/>
-
+    
     <script src="js/game.js" type="module"></script>
-
-    <title>Map Quiz</title>
 </head>
 <body>
     <div id="tooltip">Click on <strong class="click-on"></strong></div>
@@ -53,6 +52,18 @@
                 <input type="radio" name="gamemode" id="typeHard" value="Type (Hard)">
                 <label for="typeHard">Type (Hard)</label>
             </div>
+            <div class="input-label">
+                <input type="radio" name="gamemode" id="typeInvisible" value="Type (Invisible)">
+                <label for="typeInvisible">Type (Invisible)</label>
+            </div>
+            <div class="input-label">
+                <input type="radio" name="gamemode" id="typeHardInvisible" value="Type (Hard) (Invisible)">
+                <label for="typeHardInvisible">Type (Hard) (Invisible)</label>
+            </div>
+            <div class="input-label">
+                <input type="radio" name="gamemode" id="typeHardInvisibler" value="Type (Hard) (Invisibler)">
+                <label for="typeHardInvisibler">Type (Hard) (Invisibler)</label>
+            </div>
             <!-- <div class="input-label">
                 <input type="radio" name="gamemode" id="outline" value="outline">
                 <label for="outline">Outline</label>
@@ -76,16 +87,6 @@
             </nav>
         </form>
 
-        <!-- Shows after ending a game -->
-        <form id="game-end-panel" class="page-center flex-col">
-            <h3>Game Finished</h3>
-            <nav class="flex-row">
-                <button type="button" class="btn-green btn-fade" id="play-again-button">Play Again</button>
-                <button type="button" class="btn-turquoise btn-fade" id="review-button">Review Map</button>
-                <button type="button" class="btn-grey btn-fade" id="home-button">Home</button>
-            </nav>
-        </form>
-
         <div id="game-area">
             <!-- Top game bar -->
             <div class="game-bar" id="prompt-bar">
@@ -94,32 +95,31 @@
                     <strong class="click-on"></strong>
                     <input type="text">
                     <select name="parent" id="select-parent">
-                        <option value="" selected>Select State</option>
+                        <option value="" selected>Select Parent</option>
                     </select>
                 </div>
-                <p id="incorrectLabel"></p>
-                <p id="tally"></p>
+                <div class="flex-row">
+                    <p id="promptTally"></p>
+                    <div class="dotted-line"></div>
+                    <p id="tally"></p>
+                </div>
             </div>
             <!-- Used for all gamemodes with a map -->
-            <div class="container-1" id="svg-container">
-                <svg class="showGuesses" viewBox="0 0 1600 900" preserveAspectRatio="none">
-                    
-                </svg>
-            </div>
+            <svg class="container-1 showGuesses" viewBox="0 0 1600 900" preserveAspectRatio="none" id="svg-game">
+                <g id="main"></g>
+                <g id="enclaves"></g>
+            </svg>
             <!-- Game bar below map -->
             <div id="bottom-game-bar" class="game-bar flex-row">
+                <button id="game-settings-btn"></button>
                 <div class="input-label" id="showNames-container">
                     <input type="checkbox" id="showNames">
                     <label for="showNames">Show region names</label>
                 </div>
                 <div class="dotted-line"></div>
-                <div class="input-label">
-                    <label for="zoom-slider">Change zoom level</label>
-                    <input type="range" name="zoom" min="1" max="5" value="1" id="zoom-slider">
-                </div>
-                <div class="dotted-line"></div>
-                <button id="noList-end-button" class="btn-hover-effect">End Game</button>
+                <button id="end-button" class="btn-hover-effect">End Game</button>
             </div>
+
             <!-- Used for No Map gamemode -->
             <div class="container-1" id="no-map-area">
                 
@@ -136,6 +136,16 @@
                 </div>
             </div>
         </div>
+
+        <!-- Shows after ending a game -->
+        <form id="game-end-panel" class="page-center flex-col">
+            <h3>Game Finished</h3>
+            <nav class="flex-row">
+                <button type="button" class="btn-green btn-fade" id="play-again-button">Play Again</button>
+                <button type="button" class="btn-turquoise btn-fade" id="review-button">Review Map</button>
+                <button type="button" class="btn-grey btn-fade" id="home-button">Home</button>
+            </nav>
+        </form>
     </main>
     <!-- Polygon template ( it is necessary to copy polygons from inside an svg instead of creating new
          polygons in a js file, since a standard <polygon> element will be unrecognized ) -->

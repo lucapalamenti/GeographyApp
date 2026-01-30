@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <title>Create Map</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
@@ -11,8 +12,6 @@
     <link rel="stylesheet" href="css/create.css" />
 
     <script src="js/create.js" type="module"></script>
-
-    <title>Create Map</title>
 </head>
 <body>
     <header>
@@ -75,6 +74,8 @@
             </div>
             
             <svg viewBox="0 0 1600 900" preserveAspectRatio="none" id="templateMap" class="container-1">
+                <g id="main"></g>
+                <g id="enclaves"></g>
                 <rect id="map-outline"></rect>
             </svg>
         </div>

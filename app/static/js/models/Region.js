@@ -1,8 +1,10 @@
 export default class Region {
+    /** @type {Number} */
     region_id = null;
-    region_map_id = null;
+    /** @type {String} */
     region_name = null;
-    region_points = null;
+    /** @type {Number} */
+    region_parent_id = null;
 
     /**
      * Constructor given Region object data
@@ -10,9 +12,8 @@ export default class Region {
      */
     constructor ( data ) {
         this.region_id = data.region_id;
-        this.region_map_id = data.region_map_id;
         this.region_name = data.region_name;
-        this.region_points = data.region_points;
+        this.region_parent_id = data.region_parent_id;
     }
 
     /**
@@ -20,6 +21,6 @@ export default class Region {
      * @returns {Array<>}
      */
     getAllVariables() {
-        return [this.region_map_id, this.region_name, this.region_points];
+        return [this.region_id, this.region_name, this.region_parent_id];
     }
 };

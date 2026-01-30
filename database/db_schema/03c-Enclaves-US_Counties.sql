@@ -1,0 +1,17 @@
+UPDATE `polygon` SET `polygon_is_enclave` = true, `polygon_enclave_of_polygon_id` = 5632 WHERE `polygon_id` = 5547;
+UPDATE `polygon` SET `polygon_is_enclave` = true, `polygon_enclave_of_polygon_id` = 5601 WHERE `polygon_id` = 5625;
+UPDATE `polygon` SET `polygon_is_enclave` = true, `polygon_enclave_of_polygon_id` = 5516 WHERE `polygon_id` = 5626;
+UPDATE `polygon` SET `polygon_is_enclave` = true, `polygon_enclave_of_polygon_id` = 5518 WHERE `polygon_id` = 5629;
+UPDATE `polygon` SET `polygon_is_enclave` = true, `polygon_enclave_of_polygon_id` = 5560 WHERE `polygon_id` = 5631;
+UPDATE `polygon` SET `polygon_is_enclave` = true, `polygon_enclave_of_polygon_id` = 5548 WHERE `polygon_id` = 5632;
+UPDATE `polygon` SET `polygon_is_enclave` = true, `polygon_enclave_of_polygon_id` = 5604 WHERE `polygon_id` = 5638;
+UPDATE `polygon` SET `polygon_is_enclave` = true, `polygon_enclave_of_polygon_id` = 5601 WHERE `polygon_id` = 5640;
+UPDATE `polygon` SET `polygon_is_enclave` = true, `polygon_enclave_of_polygon_id` = 5595 WHERE `polygon_id` = 5642;
+UPDATE `polygon` SET `polygon_is_enclave` = true, `polygon_enclave_of_polygon_id` = 5595 WHERE `polygon_id` = 5643;
+UPDATE `polygon` SET `polygon_is_enclave` = true, `polygon_enclave_of_polygon_id` = 5565 WHERE `polygon_id` = 5644;
+UPDATE `polygon` SET `polygon_is_enclave` = true, `polygon_enclave_of_polygon_id` = 5619 WHERE `polygon_id` = 5647;
+UPDATE `polygon` SET `polygon_is_enclave` = true, `polygon_enclave_of_polygon_id` = 5599 WHERE `polygon_id` = 5653;
+UPDATE `polygon` SET `polygon_is_enclave` = true, `polygon_enclave_of_polygon_id` = 5599 WHERE `polygon_id` = 5654;
+UPDATE `polygon` SET `polygon_is_enclave` = true, `polygon_enclave_of_polygon_id` = 5524 WHERE `polygon_id` = 5655;
+UPDATE `polygon` SET `polygon_is_enclave` = true, `polygon_enclave_of_polygon_id` = 5524 WHERE `polygon_id` = 5658;
+UPDATE `polygon` SET `polygon_is_enclave` = true, `polygon_enclave_of_polygon_id` = 5553 WHERE `polygon_id` = 5660;

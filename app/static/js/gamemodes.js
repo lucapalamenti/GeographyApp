@@ -1,15 +1,18 @@
 import util from "./util.js";
 import gameUtil from "./gameUtil.js";
 
-import { svg, promptBar, input, promptLabel, noListArea, endGameButton, reviewMapButton, tally, zoomSlider, selectParent, showNames, noMapArea} from "./documentElements-game.js";
+import { svg, promptBar, input, promptLabel, noListArea, endGameButton, reviewMapButton, tally, promptTally, selectParent, showNames, noMapArea } from "./documentElements-game.js";
 import { ATTEMPT_COLORS, REPEAT_COLOR, MAX_GUESSES, ATTEMPT_SOUNDS } from "./variables.js";
+import ParentChildMap from "./models/ParentChildMap.js";
 
 let promptsArr;
 let currentPrompt = { pID : "", pInput : "", rID : "", rInput : "" };
 
-let numPrompts;
+let numPrompts = 0;
+let promptNumber = 1;
 let numCorrect = 0;
 let guesses = 0;
+let maxGuesses = MAX_GUESSES;
 
 /**
  * Run the "Learn" gamemode
@@ -32,7 +35,7 @@ function learn() {
 
 /**
  * Run the "Click" gamemode
- * @param {Map<String,Array<String>} regionMap 
+ * @param {ParentChildMap} regionMap 
  * @param {Boolean} disappear enable disappear mode
  */
 function click ( regionMap, disappear ) {
@@ -40,11 +43,10 @@ function click ( regionMap, disappear ) {
     // Format top gamebar
     promptLabel.textContent = "Click on";
     input.style.display = "none";
-    tally.textContent = `Correct: ${numCorrect}/${numPrompts = gameUtil.getNumPrompts( regionMap )}`;
     // Shuffle the prompts and display the first one on screen
     promptsArr = gameUtil.shuffleRegionMap( regionMap );
     currentPrompt = promptsArr.pop();
-    updateLabels();
+    updateLabels( regionMap, true );
     promptBar.style.display = "flex";
     // Setup tooltip to follow cursor
     gameUtil.enableTooltip();
@@ -65,7 +67,7 @@ function click ( regionMap, disappear ) {
                 gameUtil.regionDisappearTrigger( group, ATTEMPT_COLORS[3], true );
                 gameUtil.playSound( ATTEMPT_SOUNDS[3] );
                 // If too many guesses have been taken then highlight the correct answer
-                if ( guesses === MAX_GUESSES ) {
+                if ( guesses === maxGuesses ) {
                     const correctRegion = gameUtil.queryCurrentRegion( currentPrompt );
                     gameUtil.showLabel( correctRegion, e, true, true );
                     gameUtil.playSound( ATTEMPT_SOUNDS[4] );
@@ -81,20 +83,21 @@ function click ( regionMap, disappear ) {
         else group.classList.remove('clickable');
         
         group.classList.add(`guesses${guesses}`);
-        tally.textContent = `Correct: ${numCorrect}/${numPrompts}`;
+        currentPrompt = promptsArr.pop();
         // If there are no more prompts left
-        if ( !( currentPrompt = promptsArr.pop() ) )
+        if ( !currentPrompt )
             gameUtil.endGame();
         // Continue to next prompt
         else {
-            updateLabels();
+            promptNumber++;
             guesses = 0;
         }
+        updateLabels( regionMap, true );
     }
 }
 /**
  * Run the "Click (Disappear)" gamemode
- * @param {Map<String,Array<String>} regionMap 
+ * @param {ParentChildMap} regionMap 
  */
 function clickDisappear ( regionMap ) {
     click( regionMap, true );
@@ -111,16 +114,16 @@ function enableClicking() {
 
 /**
  * Runs with all typing gamemodes
- * @param {Map<String,Array<String>} regionMap 
+ * @param {ParentChildMap} regionMap 
  */
 function typeGamemodes( regionMap ) {
-    tally.textContent = `Correct: ${numCorrect}/${numPrompts = gameUtil.getNumPrompts( regionMap )}`;
+    updateLabels( regionMap, false );
     promptBar.style.display = "flex";
     input.focus();
 }
 /**
  * Runs with all gamemodes that show the list
- * @param {Map<String,Array<String>} regionMap 
+ * @param {ParentChildMap} regionMap 
  */
 function listGamemodes( regionMap ) {
     for ( const parentName of gameUtil.getOrderedParents( regionMap ) ) {
@@ -128,9 +131,9 @@ function listGamemodes( regionMap ) {
         h3.textContent = util.idToInput( parentName );
         const div = document.createElement('DIV');
         div.setAttribute('id', parentName);
-        for ( const name of regionMap.get( parentName ) ) {
+        for ( const childName of regionMap.getChildNames( parentName ) ) {
             const p = document.createElement('P');
-            p.setAttribute('id', name);
+            p.setAttribute('id', childName);
             div.appendChild( p );
         }
         noMapArea.appendChild( h3 );
@@ -139,7 +142,7 @@ function listGamemodes( regionMap ) {
 }
 /**
  * Runs the "Type" gamemode
- * @param {Map<String,Array<String>} regionMap
+ * @param {ParentChildMap} regionMap
  */
 function type( regionMap ) {
     gameUtil.populateSelect( regionMap );
@@ -147,6 +150,7 @@ function type( regionMap ) {
     listGamemodes( regionMap );
     noMapArea.style.display = "flex";
     promptLabel.textContent = "Name all regions";
+    promptTally.style.display = "none";
 
     input.addEventListener('keypress', e => {
         // If enter key is pressed
@@ -157,7 +161,7 @@ function type( regionMap ) {
                 let color = ATTEMPT_COLORS[3];
                 const myInput = util.inputToId( input.value );
                 // If the user input matches a region's name
-                if ( regionMap.get( selectParent.value ).includes( myInput ) ) {
+                if ( regionMap.hasChild( selectParent.value, myInput ) ) {
                     color = REPEAT_COLOR;
                     const group = svg.querySelector(`G#${selectParent.value} G G#${CSS.escape( myInput )}`);
                     // The user has not yet typed this region
@@ -185,7 +189,7 @@ function type( regionMap ) {
                     gameUtil.playSound( ATTEMPT_SOUNDS[3] );
                 }
                 gameUtil.pulseElementBG( input, "white", color );
-                tally.textContent = `Correct: ${numCorrect}/${numPrompts}`;
+                updateLabels( regionMap, false );
                 if ( numCorrect === numPrompts ) gameUtil.endGame();
             }
         }
@@ -193,7 +197,7 @@ function type( regionMap ) {
 }
 /**
  * Runs the "Type (Hard)" gamemode
- * @param {Map<String,Array<String>} regionMap
+ * @param {ParentChildMap} regionMap
  */
 function typeHard( regionMap ) {
     promptLabel.textContent = "Name the highlighted region";
@@ -214,7 +218,7 @@ function typeHard( regionMap ) {
                 if ( input.value.toLowerCase() === currentPrompt.rInput.toLowerCase() ) {
                     gameUtil.pulseElementBG( input, "white", ATTEMPT_COLORS[guesses] );
                     gameUtil.showLabel( currentGroup, null, true, true );
-                    gameUtil.playSound( ATTEMPT_SOUNDS[guesses] );
+                    gameUtil.playSound( ATTEMPT_SOUNDS[Math.min( guesses, 3 )] );
                     next();
                 // If input is incorrect
                 } else {
@@ -222,19 +226,19 @@ function typeHard( regionMap ) {
                     gameUtil.pulseElementBG( input, "white", ATTEMPT_COLORS[3] );
                     gameUtil.playSound( ATTEMPT_SOUNDS[3] );
                     // If too many guesses have been given
-                    if ( guesses === MAX_GUESSES ) {
+                    if ( guesses === maxGuesses ) {
                         gameUtil.showLabel( currentGroup, null, true, true );
                         gameUtil.playSound( ATTEMPT_SOUNDS[4] );
                         next();
                     }
                 }
-                tally.textContent = `Correct: ${numCorrect}/${numPrompts}`;
+                updateLabels( regionMap, false );
             }
         }
     });
     function next() {
         currentGroup.classList.remove('typeCurrent');
-        currentGroup.classList.add(`guesses${guesses}`);
+        currentGroup.classList.add(`guesses${Math.min( guesses, 3 )}`);
         if ( guesses === 0 ) numCorrect++;
         input.value = "";
         if ( !( currentPrompt = promptsArr.pop() ) ) {
@@ -242,6 +246,7 @@ function typeHard( regionMap ) {
         } else {
             currentGroup = gameUtil.queryCurrentRegion( currentPrompt );
             currentGroup.classList.add('typeCurrent');
+            promptNumber++;
             guesses = 0;
         }
     }
@@ -250,48 +255,75 @@ function typeHard( regionMap ) {
     });
 }
 /**
+ * Runs the "Type (Invisible)" gamemode
+ * @param {ParentChildMap} regionMap
+ */
+function typeInvisible( regionMap ) {
+    svg.classList.add('invisible-mode');
+    type( regionMap );
+}
+/**
+ * Runs the "Type (Hard) (Invisible)" gamemode
+ * @param {ParentChildMap} regionMap
+ */
+function typeHardInvisible( regionMap ) {
+    maxGuesses = Infinity;
+    svg.classList.add('invisible-mode');
+    typeHard( regionMap );
+}
+/**
+ * Runs the "Type (Hard) (Invisibler)" gamemode
+ * @param {ParentChildMap} regionMap
+ */
+function typeHardInvisibler( regionMap ) {
+    maxGuesses = Infinity;
+    svg.classList.add('invisible-mode-hard');
+    typeHard( regionMap );
+}
+/**
  * Runs the "Outline" gamemode
- * @param {Map<String,Array<String>} regionMap
+ * @param {ParentChildMap} regionMap
  */
 function outline( regionMap ) {
 
 }
 /**
  * Runs the "No Map" gamemode
- * @param {Map<String,Array<String>} regionMap
+ * @param {ParentChildMap} regionMap
  */
 function noMap( regionMap ) {
-    svg.parentNode.style.display = "none";
+    svg.style.display = "none";
     type( regionMap );
     endGameButton.addEventListener('click', e => {
-        svg.parentNode.style.display = "flex";
+        svg.style.display = "flex";
     });
 }
 /**
  * Runs the "No List" gamemode
- * @param {Map<String,Array<String>} regionMap
+ * @param {ParentChildMap} regionMap
  */
 function noList( regionMap ) {
     listGamemodes( regionMap );
     gameUtil.populateSelect( regionMap );
-    svg.parentNode.style.display = "none";
+    svg.style.display = "none";
     // Format top gamebar
     promptLabel.textContent = "Name all regions";
     tally.textContent = "Correct: ?";
     promptBar.style.display = "flex";
     showNames.setAttribute('disabled', true);
-    zoomSlider.setAttribute('disabled', true);
     input.focus();
 
     const missedRegions = new Map(), unknownRegions = new Map(), duplicateRegions = new Map();
     const maps = [ unknownRegions, duplicateRegions ];
-    regionMap.forEach(( regionNames, parent ) => {
-        missedRegions.set( parent, new Array() );
+    // Initialize all names as "missed regions" 
+    for ( const parentName of regionMap.getParentNames() ) {
+        missedRegions.set( parentName, [] );
         // Initialize all regions into missedRegions
-        for ( const name of regionNames ) {
-            missedRegions.get( parent ).push( name );
+        for ( const childName of regionMap.getChildNames( parentName ) ) {
+            missedRegions.get( parentName ).push( childName );
         }
-    });
+    }
+
     input.addEventListener('keypress', e => {
         if ( e.key === 'Enter' ) {
             const pValue = selectParent.value;
@@ -301,8 +333,8 @@ function noList( regionMap ) {
                 input.value = "";
                 gameUtil.playSound( ATTEMPT_SOUNDS[1] );
                 // If the user input matches a region's name
-                if ( regionMap.get( pValue ).includes( myInput ) ) {
-                    const group = svg.querySelector(`#${CSS.escape( myInput )}`);
+                if ( regionMap.hasChild( pValue, myInput ) ) {
+                    const group = svg.querySelector(`G#${selectParent.value} G G#${CSS.escape( myInput )}`);
                     // The user has not yet typed this region
                     if ( !group.classList.contains('typed') ) {
                         // Remove the region from missedRegions
@@ -356,19 +388,26 @@ function noList( regionMap ) {
                 regionAreas[i].appendChild( containerElement );
             });
         }
-        svg.parentNode.style.display = "flex";
+        updateLabels( regionMap, true )
+        svg.style.display = "flex";
         noMapArea.style.display = "flex";
         noListArea.style.display = "flex";
     });
 }
 
 /**
- * Updates all labels with the class 'click-on' to contain the current region
- * to click on
+ * Updates labels such as ones with the class 'click-on' to contain the current region
+ * and the top game bar's prompt count and correct tally
+ * @param {ParentChildMap} regionMap
  */
-function updateLabels() {
-    for ( const label of document.querySelectorAll('.click-on') ) {
-        label.textContent = ( currentPrompt.pID === "-" ) ? "-" : currentPrompt.rInput;
+function updateLabels( regionMap, showPrompt ) {
+    if ( numPrompts === 0 ) numPrompts = regionMap.numChildren();
+    promptTally.textContent = `Prompt ${promptNumber}/${numPrompts}`;
+    tally.textContent = `Correct: ${numCorrect}/${numPrompts}`;
+    if ( showPrompt ) {
+        for ( const label of document.querySelectorAll('.click-on') ) {
+            label.textContent = ( ( currentPrompt ? currentPrompt.pID : "-" ) === "-" ) ? "-" : currentPrompt.rInput;
+        }
     }
 }
 
@@ -378,6 +417,9 @@ export const gamemodeMap = {
     'Click (Disappear)': clickDisappear,
     'Type': type,
     'Type (Hard)': typeHard,
+    'Type (Invisible)': typeInvisible,
+    'Type (Hard) (Invisible)': typeHardInvisible,
+    'Type (Hard) (Invisibler)': typeHardInvisibler,
     'Outline': outline,
     'No Map': noMap,
     'No List': noList,
