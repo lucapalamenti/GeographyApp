@@ -41,6 +41,10 @@
 - If enter is pressed with no parent selected, flash the parent dropdown
 - Ability to take a new .kml file from USCensusBureau and have it replace existing data
     - Consider using Python for this
+- "Outside" regions look like "disabled" regions when reviewing map
+- Add a timed leaderboard for all gamemodes
+- use <mask> and maybe <path> to make holes
+- duplicate "unknown" regions show up multiple times in no list gamemode
 
 - Unsure if I want to add
     - "mark as correct" option for type (hard) if you mistype
@@ -51,6 +55,12 @@
 # Changelog
 
 ## Ongoing
+
+### Frontend
+
+### Backend/Technical
+
+### Bug Fixes
 
 ## Beta 1.2.260121
 
