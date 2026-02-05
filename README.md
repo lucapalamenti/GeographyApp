@@ -19,6 +19,7 @@
         - "type":
             - "select all" so you dont have to specify parent region
             - remove parent from dropdown when you have typed all its child regions
+            - if you type the wrong answer flash the region that you typed
         - "type (hard)":
             - Only 1 guess per prompt instead of 3
             - Show first letter after first incorrect answer
@@ -45,6 +46,14 @@
 - Add a timed leaderboard for all gamemodes
 - use <mask> and maybe <path> to make holes
 - duplicate "unknown" regions show up multiple times in no list gamemode
+- account creation
+- logging in/out capabilities
+- admin users vs standard users
+- standard users have limited number of custom maps
+- save leaderboard scores to an account
+- "see if you can beat the developer's time"
+- polygon new hampshire is missing a point
+- for type hard invisible since the outlines dont work well, bring the html G element to the bottom of the SVG so its outlines are layered on top
 
 - Unsure if I want to add
     - "mark as correct" option for type (hard) if you mistype
@@ -128,6 +137,7 @@ Once all Chunks are sent, a Sentinel Chunk is sent to tell the backend how many 
 
 - When should I compress data being sent over HTTP requests? Compressing takes more time & doesn't allow you to send more data
 
-- Are promises in the backend automatically compressed? How am i able to retrieve large payloads but not send them
+- benefits to using typescript over javascript
+- python over javscript for for api calls
 
-- What are the benefits to using typescript over javascript
+- For an application that is intended to be mobile compatible, if the page needs to have significantly different html, does it make more sense to have a separate files like mainPC.html & mainMobile.html or all in 1 file
