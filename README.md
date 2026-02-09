@@ -1,6 +1,7 @@
 # GeographyApp
 
 ## To Add
+- use <path> elements instead of <polygon>
 - Add "Borders" table to database that tells you what regions a region borders
 - Something to do with having to scroll up and down when deleting multiple maps at bottom
 - Add to database alternative spellings
@@ -44,7 +45,6 @@
     - Consider using Python for this
 - "Outside" regions look like "disabled" regions when reviewing map
 - Add a timed leaderboard for all gamemodes
-- use <mask> and maybe <path> to make holes
 - duplicate "unknown" regions show up multiple times in no list gamemode
 - account creation
 - logging in/out capabilities
