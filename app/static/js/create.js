@@ -1,6 +1,6 @@
 import APIClient from "./APIClient.js";
 import populateSVG from "./populateSVG.js";
-import util from "./util.js";
+import util from "./util/util.js";
 import createUtil from "./createUtil.js";
 
 import MapRegion from "./models/MapRegion.js";

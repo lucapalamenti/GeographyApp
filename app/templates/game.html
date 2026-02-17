@@ -105,10 +105,7 @@
                 </div>
             </div>
             <!-- Used for all gamemodes with a map -->
-            <svg class="container-1 showGuesses" viewBox="0 0 1600 900" preserveAspectRatio="none" id="svg-game">
-                <g id="main"></g>
-                <g id="enclaves"></g>
-            </svg>
+            <svg class="container-1 showGuesses" viewBox="0 0 1600 900" preserveAspectRatio="none" id="svg-game"></svg>
             <!-- Game bar below map -->
             <div id="bottom-game-bar" class="game-bar flex-row">
                 <button id="game-settings-btn"></button>
@@ -151,6 +148,11 @@
          polygons in a js file, since a standard <polygon> element will be unrecognized ) -->
     <template id="polygon-template">
         <svg><g><polygon/></g></svg>
+    </template>
+
+    <!-- Path template -->
+    <template id="path-template">
+        <svg><path></path></svg>
     </template>
 
     <!-- For displaying typed regions in No List gamemode -->

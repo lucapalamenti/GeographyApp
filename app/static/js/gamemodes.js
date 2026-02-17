@@ -1,4 +1,4 @@
-import util from "./util.js";
+import util from "./util/util.js";
 import gameUtil from "./gameUtil.js";
 
 import { svg, promptBar, input, promptLabel, noListArea, endGameButton, reviewMapButton, tally, promptTally, selectParent, showNames, noMapArea } from "./documentElements-game.js";

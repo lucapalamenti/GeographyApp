@@ -8,7 +8,7 @@
     display: none;
 }
 
-polygon {
+polygon, path {
     fill: rgb(230, 231, 137);
     stroke-width: 0.05%;
     stroke: black;

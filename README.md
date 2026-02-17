@@ -142,3 +142,5 @@ Once all Chunks are sent, a Sentinel Chunk is sent to tell the backend how many 
 - python over javscript for for api calls
 
 - For an application that is intended to be mobile compatible, if the page needs to have significantly different html, does it make more sense to have a separate files like mainPC.html & mainMobile.html or all in 1 file
+
+- in order to use SVG elements like <polygon> etc, i have to clone them from a template. is there a better way to do this?
