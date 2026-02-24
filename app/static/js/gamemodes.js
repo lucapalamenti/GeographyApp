@@ -24,8 +24,8 @@ function learn() {
     input.style.display = "none";
     promptBar.style.display = "flex";
     svg.addEventListener('click', e => {
-        const group = e.target.parentNode;
-        if ( group.parentElement !== svg && svg.querySelector(`svg > g g #${group.id}`) ) {
+        const group = e.target;
+        if ( group.parentElement !== svg && svg.querySelector(`SVG > G G PATH#${group.id}`) ) {
             gameUtil.showLabel( group, e, true, true );
             gameUtil.regionDisappearTrigger( group, ATTEMPT_COLORS[0], true, 1000, 1000 );
             gameUtil.playSound( ATTEMPT_SOUNDS[1] );
@@ -53,18 +53,18 @@ function click ( regionMap, disappear ) {
     // In disappear mode remove showGuesses so that the region color changes back to default
     if ( disappear ) svg.classList.remove("showGuesses");
     svg.addEventListener('click', e => {
-        const group = e.target.parentNode;
-        if ( group.classList.contains('clickable') ) {
+        const path = e.target;
+        if ( path.classList.contains('clickable') ) {
             // Correct region clicked
-            if ( group.getAttribute('id') === currentPrompt.rID ) {
+            if ( path.getAttribute('id') === currentPrompt.rID ) {
                 if ( guesses === 0 ) numCorrect++;
                 gameUtil.playSound( ATTEMPT_SOUNDS[guesses] );
-                next( group );
+                next( path );
             }
             // Incorrect region clicked
             else {
                 guesses++;
-                gameUtil.regionDisappearTrigger( group, ATTEMPT_COLORS[3], true );
+                gameUtil.regionDisappearTrigger( path, ATTEMPT_COLORS[3], true );
                 gameUtil.playSound( ATTEMPT_SOUNDS[3] );
                 // If too many guesses have been taken then highlight the correct answer
                 if ( guesses === maxGuesses ) {
@@ -74,15 +74,15 @@ function click ( regionMap, disappear ) {
                     next( correctRegion );
                 }
             }
-            gameUtil.showLabel( group, e, false, true );
+            gameUtil.showLabel( path, e, false, true );
         }
     });
-    function next( group ) {
+    function next( path ) {
         // In disappear mode regions fade back to original color
-        if ( disappear ) gameUtil.regionDisappearTrigger( group, ATTEMPT_COLORS[guesses], true );
-        else group.classList.remove('clickable');
+        if ( disappear ) gameUtil.regionDisappearTrigger( path, ATTEMPT_COLORS[guesses], true );
+        else path.classList.remove('clickable');
         
-        group.classList.add(`guesses${guesses}`);
+        path.classList.add(`guesses${guesses}`);
         currentPrompt = promptsArr.pop();
         // If there are no more prompts left
         if ( !currentPrompt )
@@ -107,8 +107,8 @@ function clickDisappear ( regionMap ) {
  */
 function enableClicking() {
     selectParent.setAttribute('hidden', true);
-    svg.querySelectorAll('g.enabled g, g.herring g').forEach( group => {
-        group.classList.add("clickable");
+    svg.querySelectorAll('G.enabled PATH, G.herring PATH').forEach( path => {
+        path.classList.add('clickable');
     });
 }
 
@@ -163,12 +163,12 @@ function type( regionMap ) {
                 // If the user input matches a region's name
                 if ( regionMap.hasChild( selectParent.value, myInput ) ) {
                     color = REPEAT_COLOR;
-                    const group = svg.querySelector(`G#${selectParent.value} G G#${CSS.escape( myInput )}`);
+                    const path = svg.querySelector(`G#${selectParent.value} G PATH#${CSS.escape( myInput )}`);
                     // The user has not yet typed this region
-                    if ( !group.classList.contains('typed') ) {
+                    if ( !path.classList.contains('typed') ) {
                         // Update map
-                        group.classList.add('typed');
-                        group.classList.add('guesses0');
+                        path.classList.add('typed');
+                        path.classList.add('guesses0');
                         // Update list
                         const correctNode = noMapArea.querySelector(`#${selectParent.value} #${myInput}`);
                         correctNode.textContent = util.idToInput( myInput );
@@ -181,7 +181,7 @@ function type( regionMap ) {
                     }
                     // The user has already typed this region
                     else {
-                        gameUtil.regionDisappearTrigger( group, REPEAT_COLOR, false, 0 );
+                        gameUtil.regionDisappearTrigger( path, REPEAT_COLOR, false, 0 );
                         gameUtil.pulseElementBG( noMapArea.querySelector(`#${selectParent.value} #${myInput}`), "rgb(75, 255, 75)", color );
                         gameUtil.playSound( ATTEMPT_SOUNDS[1] );
                     }
@@ -334,7 +334,7 @@ function noList( regionMap ) {
                 gameUtil.playSound( ATTEMPT_SOUNDS[1] );
                 // If the user input matches a region's name
                 if ( regionMap.hasChild( pValue, myInput ) ) {
-                    const group = svg.querySelector(`G#${selectParent.value} G G#${CSS.escape( myInput )}`);
+                    const group = svg.querySelector(`G#${selectParent.value} G PATH#${CSS.escape( myInput )}`);
                     // The user has not yet typed this region
                     if ( !group.classList.contains('typed') ) {
                         // Remove the region from missedRegions

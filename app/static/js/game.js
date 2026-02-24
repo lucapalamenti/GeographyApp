@@ -56,15 +56,14 @@ playAgainButton.addEventListener('click', () => {
 });
 
 reviewMapButton.addEventListener('click', () => {
-    svg.classList.add('reviewing');
     html.classList.remove('filter-dark');
     gameEndPanel.style.display = "none";
     gameUtil.enableTooltip();
     tooltip.removeChild( tooltip.firstChild );
     tooltip.style.fontWeight = "bold";
     svg.addEventListener('mousemove', e => {
-        if ( e.target.tagName === "polygon" ) {
-            tooltip.textContent = util.idToInput( e.target.parentElement.id );
+        if ( e.target.tagName === "path" ) {
+            tooltip.textContent = util.idToInput( e.target.id );
             tooltip.style.display = "block" ;
         } else {
             tooltip.style.display = "none" ;

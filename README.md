@@ -55,6 +55,7 @@
 - polygon new hampshire is missing a point
 - for type hard invisible since the outlines dont work well, bring the html G element to the bottom of the SVG so its outlines are layered on top
 - sort by "creation date"
+- ending game while region is still disapearing in click disapear gamemode, the region continues to fade slowly
 
 - Unsure if I want to add
     - "mark as correct" option for type (hard) if you mistype

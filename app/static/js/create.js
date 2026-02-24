@@ -98,7 +98,7 @@ showOutline.addEventListener('change', e => {
  * @param {MouseEvent} mouse 
  */
 function changeRegionType( mouse ) {
-    const region = mouse.target.parentElement;
+    const region = mouse.target;
     // Remove existing class from the region and add the new one
     region.classList.remove( region.classList[0] )
     region.classList.add( selectedType )

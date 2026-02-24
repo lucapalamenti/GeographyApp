@@ -13,7 +13,7 @@ let tooltipActive = false;
  * Returns a reference to the G element for the current region
  * @returns {HTMLElement}
  */
-const queryCurrentRegion = ( currentPrompt ) => { return svg.querySelector(`svg g #${currentPrompt.pID} g #${currentPrompt.rID}`) };
+const queryCurrentRegion = ( currentPrompt ) => { return svg.querySelector(`SVG G#${currentPrompt.pID} G PATH#${currentPrompt.rID}`) };
 
 const playSound = ( filename ) => { new Audio( `${audioPath}${filename}` ).play() };
 
@@ -23,29 +23,27 @@ const setGuessesColor = ( guesses ) => {
 };
 
 /**
- * Pulses a given group element a color
- * @param {SVGGElement} group 
+ * Pulses a given path element a color
+ * @param {SVGPathElement} group 
  * @param {String} color 
  * @param {Boolean} clickable 
  * @param {Number} hold
  * @param {Number} fade
  */
-const regionDisappearTrigger = ( group, color, clickable, hold = 1000, fade = 1000 ) => {
-    group.classList.remove('clickable');
-    group.querySelectorAll('POLYGON').forEach( polygon => {
-        polygon.style.transition = '';
-        polygon.style.fill = color;
-        // Hold for 'hold' milliseconds
+const regionDisappearTrigger = ( path, color, clickable, hold = 1000, fade = 1000 ) => {
+    path.classList.remove('clickable');
+    path.style.transition = '';
+    path.style.fill = color;
+    // Hold for 'hold' milliseconds
+    setTimeout( function() {
+        path.style.transition = 'fill 1s ease';
+        path.style.fill = '';
+        // Fade out for 'fade' milliseconds
         setTimeout( function() {
-            polygon.style.transition = 'fill 1s ease';
-            polygon.style.fill = '';
-            // Fade out for 'fade' milliseconds
-            setTimeout( function() {
-                polygon.style.transition = '';
-                if ( clickable && !gameEnded ) group.classList.add('clickable');
-            }, fade );
-        }, hold );
-    });
+            path.style.transition = '';
+            if ( clickable && !gameEnded ) path.classList.add('clickable');
+        }, fade );
+    }, hold );
 };
 
 /**
@@ -65,18 +63,18 @@ const pulseElementBG = ( element, colorOrig, colorPulse ) => {
 };
 
 /**
- * Displays a label with the given group's name
- * @param {SVGGElement} group 
+ * Displays a label with the given path's name
+ * @param {SVGPathElement} path 
  * @param {Event} e 
  * @param {Boolean} center 
  * @param {Boolean} timeout 
  */
-const showLabel = ( group, e, center, timeout ) => {
+const showLabel = ( path, e, center, timeout ) => {
     const p = document.createElement('P');
     p.classList.add('clickLabel');
-    p.textContent = util.idToInput( group.getAttribute('id') );
+    p.textContent = util.idToInput( path.getAttribute('id') );
     if ( center ) {
-        const rect = group.getBoundingClientRect();
+        const rect = path.getBoundingClientRect();
         p.style.transform = `translate( calc( -50% + ${rect.left + rect.width / 2 + scrollX}px ), calc( -50% + ${rect.top + rect.height / 2 + scrollY}px ) )`;
     } else {
         p.style.transform = `translate( calc( -50% + ${e.clientX}px ), calc( -120% + ${e.clientY + window.scrollY}px ) )`;
@@ -151,7 +149,7 @@ const shuffleRegionMap = ( regionMap ) => {
 const getOrderedParents = ( regionMap ) => {
     const ordered = [];
     for ( const parentName of regionMap.getParentNames() ) {
-        if ( svg.querySelector(`SVG G > G#${parentName} > G.enabled G`) ) {
+        if ( svg.querySelector(`SVG > G#${parentName} > G.enabled PATH`) ) {
             ordered.push( parentName );
         }
     }
@@ -180,9 +178,9 @@ const populateSelect = ( regionMap ) => {
 showNames.addEventListener('change', e => {
     // Show all names
     if ( e.target.checked ) {
-        document.querySelectorAll('G').forEach( group => {
-            if ( group.classList.contains('grey-out') ) return;
-            showLabel( group, e, true, false );
+        document.querySelectorAll('PATH').forEach( path => {
+            if ( path.classList.contains('grey-out') ) return;
+            showLabel( path, e, true, false );
         });
     }
     // Hide all names
@@ -262,9 +260,8 @@ function sumZooms() {
  */
 const endGame = () => {
     gameEnded = true;
-    for ( const group of svg.querySelectorAll('g g g:not(.guesses0, .guesses1, .guesses2, .guesses3)') ) {
-        group.classList.remove('clickable');
-        group.classList.add('inactive');
+    for ( const path of svg.querySelectorAll('G G PATH:not(.guesses0, .guesses1, .guesses2, .guesses3)') ) {
+        path.classList.remove('clickable');
     }
     svg.parentElement.style.display = "block";
     document.getElementById('bottom-game-bar').style.display = "none";
@@ -280,6 +277,7 @@ const endGame = () => {
     svg.classList.remove("invisible-mode");
     svg.classList.remove("invisible-mode-hard");
     svg.classList.add("showGuesses");
+    svg.classList.add('gameEnd');
     console.log( "YOU WIN!" );
 }
 endGameButton.addEventListener('click', endGame);
