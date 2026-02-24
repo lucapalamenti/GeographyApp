@@ -68,6 +68,10 @@
 ## Ongoing
 
 ### Frontend
+- Reworked region display mechanism
+    - <polygon> SVG elements have been replaced with <path> elements
+    - Multiple <polygon> elements can be represented as one <path> element
+    - <path> elements can have holes while <polygon> elements cannot
 
 ### Backend/Technical
 
