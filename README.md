@@ -55,6 +55,7 @@
 - polygon new hampshire is missing a point
 - for type hard invisible since the outlines dont work well, bring the html G element to the bottom of the SVG so its outlines are layered on top
 - sort by "creation date"
+- ending game while region is still disapearing in click disapear gamemode, the region continues to fade slowly
 
 - Unsure if I want to add
     - "mark as correct" option for type (hard) if you mistype
@@ -67,6 +68,10 @@
 ## Ongoing
 
 ### Frontend
+- Reworked region display mechanism
+    - <polygon> SVG elements have been replaced with <path> elements
+    - Multiple <polygon> elements can be represented as one <path> element
+    - <path> elements can have holes while <polygon> elements cannot
 
 ### Backend/Technical
 
@@ -142,3 +147,5 @@ Once all Chunks are sent, a Sentinel Chunk is sent to tell the backend how many 
 - python over javscript for for api calls
 
 - For an application that is intended to be mobile compatible, if the page needs to have significantly different html, does it make more sense to have a separate files like mainPC.html & mainMobile.html or all in 1 file
+
+- in order to use SVG elements like <polygon> etc, i have to clone them from a template. is there a better way to do this?

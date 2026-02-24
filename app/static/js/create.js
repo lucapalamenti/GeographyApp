@@ -1,6 +1,6 @@
 import APIClient from "./APIClient.js";
 import populateSVG from "./populateSVG.js";
-import util from "./util.js";
+import util from "./util/util.js";
 import createUtil from "./createUtil.js";
 
 import MapRegion from "./models/MapRegion.js";
@@ -98,7 +98,7 @@ showOutline.addEventListener('change', e => {
  * @param {MouseEvent} mouse 
  */
 function changeRegionType( mouse ) {
-    const region = mouse.target.parentElement;
+    const region = mouse.target;
     // Remove existing class from the region and add the new one
     region.classList.remove( region.classList[0] )
     region.classList.add( selectedType )

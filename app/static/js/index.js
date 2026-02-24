@@ -128,7 +128,7 @@ b1.addEventListener('click', async e => {
     //             polygon_id : null,
     //             polygon_region_id : region.region_id,
     //             polygon_is_enclave : false,
-    //             polygon_enclave_of_region_id : null,
+    //             polygon_enclave_of_polygon_id : null,
     //             polygon_points : new SQLPolygon({type:"Polygon",coordinates:polygon})
     //         });
     //         p = await APIClient.createPolygon( p );

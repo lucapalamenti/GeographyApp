@@ -49,7 +49,7 @@ const getPolygonsByMapId = async ( map_id ) => {
         JOIN region ON polygon_region_id = region_id
         JOIN mapRegion ON region_id = mapRegion_region_id
         WHERE mapRegion_map_id = ?
-        ORDER BY region_name;
+        ORDER BY polygon_id;
         `, [map_id])
         .then( rows => {
             return rows.map( row => {
@@ -64,11 +64,11 @@ const getPolygonsByMapId = async ( map_id ) => {
  * @returns {Polygon}
  */
 const createPolygon = async ( polygon ) => {
-    const { polygon_region_id, polygon_is_enclave, polygon_enclave_of_region_id, polygon_points } = polygon;
+    const { polygon_region_id, polygon_is_enclave, polygon_enclave_of_polygon_id, polygon_points } = polygon;
     const createdPolygon = await database.query(`
-        INSERT INTO polygon (polygon_region_id, polygon_is_enclave, polygon_enclave_of_region_id, polygon_points)
+        INSERT INTO polygon (polygon_region_id, polygon_is_enclave, polygon_enclave_of_polygon_id, polygon_points)
         VALUES (?, ?, ?, ST_GEOMFROMTEXT(?));
-        `, [polygon_region_id, polygon_is_enclave, polygon_enclave_of_region_id, polygon_points.toQueryString()])
+        `, [polygon_region_id, polygon_is_enclave, polygon_enclave_of_polygon_id, polygon_points.toQueryString()])
         .then( rows => {
             if ( rows.affectedRows === 1 ) {
                 return getPolygonById( rows.insertId );
