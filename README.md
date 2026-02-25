@@ -77,6 +77,8 @@
 ### Backend/Technical
 
 ### Bug Fixes
+- Region outlines in invisible outline gamemodes don't display properly, so they have been removed altogether
+- List of map regions not printing in alphabetical order
 
 ## Beta 1.2.260121
 

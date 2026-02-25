@@ -149,6 +149,7 @@ const shuffleRegionMap = ( regionMap ) => {
 const getOrderedParents = ( regionMap ) => {
     const ordered = [];
     for ( const parentName of regionMap.getParentNames() ) {
+        // If this parent has "enabled" regions
         if ( svg.querySelector(`SVG > G#${parentName} > G.enabled PATH`) ) {
             ordered.push( parentName );
         }

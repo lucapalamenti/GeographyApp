@@ -9,8 +9,8 @@ import Polygon from "./models/Polygon.js";
 
 const SVG_PADDING = 10; // Pixels
 
-const polygonTemplate = document.getElementById('polygon-template').content;
-const pathTemplate = document.getElementById('path-template').content;
+const gTemplate = document.getElementById('svg-g-template').content;
+const pathTemplate = document.getElementById('svg-path-template').content;
 
 /**
  * Load regions for a given map into an SVG element
@@ -109,7 +109,7 @@ export default async function populateSVG( map, svg ) {
  * @returns {SVGGElement}
  */
 function createGElement( id, classList ) {
-    let group = polygonTemplate.cloneNode( true ).querySelector('G');
+    let group = gTemplate.cloneNode( true ).querySelector('G');
     // Remove empty polygon element
     group.innerHTML = "";
     if ( id ) group.setAttribute('id', id);

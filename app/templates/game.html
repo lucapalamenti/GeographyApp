@@ -105,7 +105,9 @@
                 </div>
             </div>
             <!-- Used for all gamemodes with a map -->
-            <svg class="container-1 showGuesses" viewBox="0 0 1600 900" preserveAspectRatio="none" id="svg-game"></svg>
+            <svg class="container-1 showGuesses" viewBox="0 0 1600 900" preserveAspectRatio="none" id="svg-game">
+                <g id="pathOutlines" display="none"></g>
+            </svg>
             <!-- Game bar below map -->
             <div id="bottom-game-bar" class="game-bar flex-row">
                 <button id="game-settings-btn"></button>
@@ -144,14 +146,15 @@
             </nav>
         </form>
     </main>
-    <!-- Polygon template ( it is necessary to copy polygons from inside an svg instead of creating new
-         polygons in a js file, since a standard <polygon> element will be unrecognized ) -->
-    <template id="polygon-template">
-        <svg><g><polygon/></g></svg>
+    <!-- SVG-g template ( it is necessary to copy g elements from inside an svg instead of creating new
+         elements in a js file, since the HTML will not recognize the element ) -->
+    <template id="svg-g-template">
+        <svg><g></g></svg>
     </template>
 
-    <!-- Path template -->
-    <template id="path-template">
+    <!-- SVG-Path template ( it is necessary to copy path elements from inside an svg instead of creating new
+         elements in a js file, since the HTML will not recognize the element ) -->
+    <template id="svg-path-template">
         <svg><path></path></svg>
     </template>
 

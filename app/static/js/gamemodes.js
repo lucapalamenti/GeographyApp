@@ -13,6 +13,11 @@ let promptNumber = 1;
 let numCorrect = 0;
 let guesses = 0;
 let maxGuesses = MAX_GUESSES;
+let invisible = false;
+
+const pathOutlines = document.getElementById('pathOutlines');
+const gTemplate = document.getElementById('svg-g-template').content;
+const pathTemplate = document.getElementById('svg-path-template').content;
 
 /**
  * Run the "Learn" gamemode
@@ -209,6 +214,10 @@ function typeHard( regionMap ) {
     let currentGroup = gameUtil.queryCurrentRegion( currentPrompt );
     currentGroup.classList.add('typeCurrent');
 
+    // Save parent so we can move currentGroup back
+    let currentGParent;
+    switchCurrent();
+
     input.addEventListener('keypress', e => {
         // If enter key is pressed
         if ( e.key === 'Enter' ) {
@@ -237,6 +246,7 @@ function typeHard( regionMap ) {
         }
     });
     function next() {
+        currentGParent.appendChild( currentGroup );
         currentGroup.classList.remove('typeCurrent');
         currentGroup.classList.add(`guesses${Math.min( guesses, 3 )}`);
         if ( guesses === 0 ) numCorrect++;
@@ -249,9 +259,17 @@ function typeHard( regionMap ) {
             promptNumber++;
             guesses = 0;
         }
+        switchCurrent()
+    }
+    function switchCurrent() {
+        // Save parent so we can move currentGroup back
+        currentGParent = currentGroup.parentElement;
+        // Move currentGroup to bottom of SVG so its outline is displayed on top
+        svg.appendChild( currentGroup );
     }
     endGameButton.addEventListener('click', e => {
         currentGroup.classList.remove('typeCurrent');
+        currentGParent.appendChild( currentGroup );
     });
 }
 /**
@@ -259,6 +277,7 @@ function typeHard( regionMap ) {
  * @param {ParentChildMap} regionMap
  */
 function typeInvisible( regionMap ) {
+    invisibleGamemodes();
     svg.classList.add('invisible-mode');
     type( regionMap );
 }
@@ -267,6 +286,7 @@ function typeInvisible( regionMap ) {
  * @param {ParentChildMap} regionMap
  */
 function typeHardInvisible( regionMap ) {
+    invisibleGamemodes();
     maxGuesses = Infinity;
     svg.classList.add('invisible-mode');
     typeHard( regionMap );
@@ -276,10 +296,20 @@ function typeHardInvisible( regionMap ) {
  * @param {ParentChildMap} regionMap
  */
 function typeHardInvisibler( regionMap ) {
+    invisibleGamemodes();
     maxGuesses = Infinity;
     svg.classList.add('invisible-mode-hard');
     typeHard( regionMap );
 }
+/**
+ * Function runs for all gamemodes with invisible outlines
+ */
+function invisibleGamemodes() {
+    invisible = true;
+    pathOutlines.parentElement.appendChild( pathOutlines );
+    pathOutlines.setAttribute( 'display', 'block' ) ;
+}
+
 /**
  * Runs the "Outline" gamemode
  * @param {ParentChildMap} regionMap

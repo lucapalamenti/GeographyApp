@@ -52,3 +52,16 @@ path.typeCurrent {
 #svg-game.showGuesses g g path.guesses3 {
     fill: rgb(235, 89, 89);
 }
+
+#svg-game.showGuesses.invisible-mode g g path.guesses0 {
+    stroke: rgb(106, 235, 89);
+}
+#svg-game.showGuesses.invisible-mode g g path.guesses1 {
+    stroke: rgb(240, 219, 35);
+}
+#svg-game.showGuesses.invisible-mode g g path.guesses2 {
+    stroke: rgb(243, 148, 24);
+}
+#svg-game.showGuesses.invisible-mode g g path.guesses3 {
+    stroke: rgb(235, 89, 89);
+}
