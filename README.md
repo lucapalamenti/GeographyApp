@@ -73,6 +73,7 @@
     - <polygon> SVG elements have been replaced with <path> elements
     - Multiple <polygon> elements can be represented as one <path> element
     - <path> elements can have holes while <polygon> elements cannot
+- All region types will darken when hovered over. Using the css filter attribute instead of changing the color of every region type
 
 ### Backend/Technical
 

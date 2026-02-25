@@ -14,7 +14,7 @@ path {
     stroke: black;
 }
 
-path:hover {
+#svg-game:not(.invisible-mode) path:hover {
     filter: brightness( 0.9 );
 }
 path.clickable:active {
