@@ -14,15 +14,11 @@ path {
     stroke: black;
 }
 
-/* svg:has(g g g.enabled g.clickable:hover ) g g g.enabled g.clickable path {
-    fill: rgb(210, 211, 117);
-} */
-
-g.enabled path:hover {
-    fill: rgb(210, 211, 117);
+path:hover {
+    filter: brightness( 0.9 );
 }
-g.enabled path.clickable:active{
-    fill: rgb(190, 191, 97);
+path.clickable:active {
+    filter: brightness( 0.8 );
 }
 
 g.disabled path {
@@ -43,31 +39,16 @@ path.typeCurrent {
 #svg-game.gameEnd g g.enabled path {
     fill: grey;
 }
-#svg-game.gameEnd g g.enabled path:hover {
-    fill: rgb(115, 115, 115);
-}
 
 #svg-game.showGuesses g g path.guesses0 {
     fill: rgb(106, 235, 89);
 }
-#svg-game.showGuesses.gameEnd g g path.guesses0:hover {
-    fill: rgb(92, 204, 78);
-}
 #svg-game.showGuesses g g path.guesses1 {
     fill: rgb(240, 219, 35);
-}
-#svg-game.showGuesses.gameEnd g g path.guesses1:hover {
-    fill: rgb(204, 187, 30);
 }
 #svg-game.showGuesses g g path.guesses2 {
     fill: rgb(243, 148, 24);
 }
-#svg-game.showGuesses.gameEnd g g path.guesses2:hover {
-    fill: rgb(199, 121, 20);
-}
 #svg-game.showGuesses g g path.guesses3 {
     fill: rgb(235, 89, 89);
-}
-#svg-game.showGuesses.gameEnd g g path.guesses3:hover {
-    fill: rgb(197, 75, 75);
 }
