@@ -48,7 +48,7 @@ export default class ParentChildMap {
     }
 
     getChildNames( parentName ) {
-        return [...this.#map.get( parentName ).keys()];
+        return [...this.#map.get( parentName ).keys()].sort();
     }
 
     numChildren() {
