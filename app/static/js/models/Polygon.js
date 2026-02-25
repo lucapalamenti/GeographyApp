@@ -18,6 +18,7 @@ export default class Polygon {
      * @param {Polygon} data 
      */
     constructor ( data ) {
+        // console.log( data );
         this.polygon_id = data.polygon_id;
         this.polygon_region_id = data.polygon_region_id;
         this.polygon_is_enclave = data.polygon_is_enclave;
@@ -26,12 +27,15 @@ export default class Polygon {
     }
 
     /**
-     * 
+     * Given a list of Polygon elements that exist in the same map as 'this' polygon, return the order
+     * of the enclave relative to the other Polygons in this map. So if 'this' polygon is an enclave of
+     * a Polygon that doesn't exist in this map, then its order is 0
      * @param {Array<Polygon>} arr 
-     * @returns 
+     * @returns {Number}
      */
     getEnclaveOrder( arr ) {
-        return this.polygon_is_enclave ? 1 + new Polygon( objectBinarySearch( arr, "polygon_id", this.polygon_enclave_of_polygon_id ) ).getEnclaveOrder( arr ) : 0 ;
+        const p = objectBinarySearch( arr, "polygon_id", this.polygon_enclave_of_polygon_id );
+        return ( p && this.polygon_is_enclave ) ? 1 + new Polygon( p ).getEnclaveOrder( arr ) : 0 ;
     }
     
     /**
