@@ -219,7 +219,6 @@ function typeHard( regionMap ) {
     switchCurrent();
 
     input.addEventListener('keypress', e => {
-        // If enter key is pressed
         if ( e.key === 'Enter' ) {
             // Only check if the value & parent arent blank
             if ( input.value !== '' ) {
