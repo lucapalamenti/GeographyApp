@@ -79,6 +79,7 @@
 ### Bug Fixes
 - Region outlines in invisible outline gamemodes don't display properly, so they have been removed altogether
 - List of map regions not printing in alphabetical order
+- Gamemodes that prompt regions in order never select the region that's last alphabetically as the first prompt
 
 ## Beta 1.2.260121
 
