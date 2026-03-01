@@ -13,11 +13,6 @@ let promptNumber = 1;
 let numCorrect = 0;
 let guesses = 0;
 let maxGuesses = MAX_GUESSES;
-let invisible = false;
-
-const pathOutlines = document.getElementById('pathOutlines');
-const gTemplate = document.getElementById('svg-g-template').content;
-const pathTemplate = document.getElementById('svg-path-template').content;
 
 /**
  * Run the "Learn" gamemode
@@ -276,7 +271,6 @@ function typeHard( regionMap ) {
  * @param {ParentChildMap} regionMap
  */
 function typeInvisible( regionMap ) {
-    invisibleGamemodes();
     svg.classList.add('invisible-mode');
     type( regionMap );
 }
@@ -285,7 +279,6 @@ function typeInvisible( regionMap ) {
  * @param {ParentChildMap} regionMap
  */
 function typeHardInvisible( regionMap ) {
-    invisibleGamemodes();
     maxGuesses = Infinity;
     svg.classList.add('invisible-mode');
     typeHard( regionMap );
@@ -295,18 +288,9 @@ function typeHardInvisible( regionMap ) {
  * @param {ParentChildMap} regionMap
  */
 function typeHardInvisibler( regionMap ) {
-    invisibleGamemodes();
     maxGuesses = Infinity;
     svg.classList.add('invisible-mode-hard');
     typeHard( regionMap );
-}
-/**
- * Function runs for all gamemodes with invisible outlines
- */
-function invisibleGamemodes() {
-    invisible = true;
-    pathOutlines.parentElement.appendChild( pathOutlines );
-    pathOutlines.setAttribute( 'display', 'block' ) ;
 }
 
 /**
