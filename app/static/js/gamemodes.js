@@ -258,8 +258,8 @@ function typeHard( regionMap ) {
             currentGroup.classList.add('typeCurrent');
             promptNumber++;
             guesses = 0;
+            switchCurrent();
         }
-        switchCurrent()
     }
     function switchCurrent() {
         // Save parent so we can move currentGroup back
