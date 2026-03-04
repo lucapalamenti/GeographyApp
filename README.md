@@ -31,6 +31,9 @@
     - "Outline (Hard)": Name region based only on outline
     - travle but countyle
     - "Drag & Drop": drag and drop county outline onto a blank map
+    - Draw the county
+    - Draw the border given 2 bordering regions
+    - Highlight the border of neighboring county given a county (ex: highlight the part of Wake county's border where Durham county is)
 - Interactive map (type a name and all counties with name show up), option for similar sounding names with different spellings
 - Ability to edit existing maps to add/remove regions
 - Select a thumbnail for a created map
@@ -43,7 +46,6 @@
 - If enter is pressed with no parent selected, flash the parent dropdown
 - Ability to take a new .kml file from USCensusBureau and have it replace existing data
     - Consider using Python for this
-- "Outside" regions look like "disabled" regions when reviewing map
 - Add a timed leaderboard for all gamemodes
 - duplicate "unknown" regions show up multiple times in no list gamemode
 - account creation
@@ -80,6 +82,7 @@
 - Region outlines in invisible outline gamemodes don't display properly, so they have been removed altogether
 - List of map regions not printing in alphabetical order
 - Gamemodes that prompt regions in order never select the region that's last alphabetically as the first prompt
+- "Outside" regions are colored like "disabled" regions when reviewing map
 
 ## Beta 1.2.260121
 
