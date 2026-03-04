@@ -1,7 +1,6 @@
 # GeographyApp
 
 ## To Add
-- use <path> elements instead of <polygon>
 - Add "Borders" table to database that tells you what regions a region borders
 - Something to do with having to scroll up and down when deleting multiple maps at bottom
 - Add to database alternative spellings
