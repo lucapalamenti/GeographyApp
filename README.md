@@ -34,6 +34,7 @@
     - Draw the county
     - Draw the border given 2 bordering regions
     - Highlight the border of neighboring county given a county (ex: highlight the part of Wake county's border where Durham county is)
+    - Sudden Death: "Washington County"
 - Interactive map (type a name and all counties with name show up), option for similar sounding names with different spellings
 - Ability to edit existing maps to add/remove regions
 - Select a thumbnail for a created map
@@ -58,6 +59,7 @@
 - for type hard invisible since the outlines dont work well, bring the html G element to the bottom of the SVG so its outlines are layered on top
 - sort by "creation date"
 - ending game while region is still disapearing in click disapear gamemode, the region continues to fade slowly
+- Add "region_type" to schema. Ex: "State", "County", "Country", "Lake", "River", "Other"
 
 - Unsure if I want to add
     - "mark as correct" option for type (hard) if you mistype

@@ -201,6 +201,18 @@ function fillTable() {
     }
 }
 
+/**
+ * Moves an element in an SVG to the bottom by cascading all of its parents to the bottom
+ * @param {SVGElement} e 
+ */
+function moveToLastInSVG( e ) {
+    const parent = e.parentElement;
+    parent.appendChild( e );
+    if ( parent.tagName === "g") {
+        moveToLastInSVG( parent );
+    }
+}
+
 // Right click to zoom
 svg.addEventListener( 'contextmenu', e => { e.preventDefault(); });
 svg.addEventListener( 'contextmenu', zoom );
@@ -294,5 +306,6 @@ export default {
     shuffleRegionMap,
     getOrderedParents,
     populateSelect,
+    moveToLastInSVG,
     endGame
 }

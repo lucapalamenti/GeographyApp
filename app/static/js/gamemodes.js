@@ -208,10 +208,7 @@ function typeHard( regionMap ) {
 
     let currentGroup = gameUtil.queryCurrentRegion( currentPrompt );
     currentGroup.classList.add('typeCurrent');
-
-    // Save parent so we can move currentGroup back
-    let currentGParent;
-    switchCurrent();
+    gameUtil.moveToLastInSVG( currentGroup );
 
     input.addEventListener('keypress', e => {
         if ( e.key === 'Enter' ) {
@@ -240,7 +237,6 @@ function typeHard( regionMap ) {
         }
     });
     function next() {
-        currentGParent.appendChild( currentGroup );
         currentGroup.classList.remove('typeCurrent');
         currentGroup.classList.add(`guesses${Math.min( guesses, 3 )}`);
         if ( guesses === 0 ) numCorrect++;
@@ -252,18 +248,11 @@ function typeHard( regionMap ) {
             currentGroup.classList.add('typeCurrent');
             promptNumber++;
             guesses = 0;
-            switchCurrent();
+            gameUtil.moveToLastInSVG( currentGroup );
         }
-    }
-    function switchCurrent() {
-        // Save parent so we can move currentGroup back
-        currentGParent = currentGroup.parentElement;
-        // Move currentGroup to bottom of SVG so its outline is displayed on top
-        svg.appendChild( currentGroup );
     }
     endGameButton.addEventListener('click', e => {
         currentGroup.classList.remove('typeCurrent');
-        currentGParent.appendChild( currentGroup );
     });
 }
 /**

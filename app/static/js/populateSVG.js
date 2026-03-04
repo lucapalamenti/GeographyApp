@@ -128,6 +128,6 @@ function createGElement( id, classList ) {
  */
 function createPathElement( id ) {
     const path = pathTemplate.cloneNode(true).querySelector('PATH');
-    path.setAttribute('id', id)
+    path.setAttribute('id', id);
     return path;
 }
