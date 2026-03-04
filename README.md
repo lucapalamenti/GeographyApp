@@ -48,11 +48,10 @@
 - Ability to take a new .kml file from USCensusBureau and have it replace existing data
     - Consider using Python for this
 - Add a timed leaderboard for all gamemodes
-- duplicate "unknown" regions show up multiple times in no list gamemode
 - account creation
 - logging in/out capabilities
 - admin users vs standard users
-- standard users have limited number of custom maps
+- standard users should have limited number of custom maps
 - save leaderboard scores to an account
 - "see if you can beat the developer's time"
 - polygon new hampshire is missing a point
@@ -85,6 +84,7 @@
 - List of map regions not printing in alphabetical order
 - Gamemodes that prompt regions in order never select the region that's last alphabetically as the first prompt
 - "Outside" regions are colored like "disabled" regions when reviewing map
+- Typing duplicate "unknown" regions in No List gamemode causes them to show up multiple times
 
 ## Beta 1.2.260121
 
