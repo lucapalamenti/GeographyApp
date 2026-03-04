@@ -18,6 +18,8 @@ module.exports = class MapRegionPolygon {
     region_id = null;
     /** @type {String} */
     region_name = null;
+    /** @type {String} */
+    region_type = null;
     /** @type {Number} */
     region_parent_id = null;
 
@@ -53,6 +55,7 @@ module.exports = class MapRegionPolygon {
 
         this.region_id = data.region_id;
         this.region_name = data.region_name;
+        this.region_type = data.region_type;
         this.region_parent_id = data.region_parent_id;
 
         this.mapRegion_id = data.mapRegion_id;

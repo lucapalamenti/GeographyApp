@@ -57,7 +57,6 @@
 - for type hard invisible since the outlines dont work well, bring the html G element to the bottom of the SVG so its outlines are layered on top
 - sort by "creation date"
 - ending game while region is still disapearing in click disapear gamemode, the region continues to fade slowly
-- Add "region_type" to schema. Ex: "State", "County", "Country", "Lake", "River", "Other"
 
 - Unsure if I want to add
     - "mark as correct" option for type (hard) if you mistype
@@ -77,6 +76,7 @@
 - All region types will darken when hovered over. Using the css filter attribute instead of changing the color of every region type
 
 ### Backend/Technical
+- Add "region_type" to schema. Ex: "State", "County", "Country", "Lake", "River", "Other"
 
 ### Bug Fixes
 - Region outlines in invisible outline gamemodes don't display properly, so they have been removed altogether

@@ -1,9 +1,9 @@
 INSERT INTO `map` (`map_id`, `map_scale`, `map_name`, `map_thumbnail`, `map_primary_color_R`, `map_primary_color_G`, `map_primary_color_B`) VALUES (0, 15, 'Test Map', 'Test_Map_Thumbnail.png', 0,0,0);
 
-INSERT INTO `region` (`region_id`, `region_name`, `region_parent_id`) VALUES (1, 'Top Left', null);
-INSERT INTO `region` (`region_id`, `region_name`, `region_parent_id`) VALUES (2, 'Top Right', null);
-INSERT INTO `region` (`region_id`, `region_name`, `region_parent_id`) VALUES (3, 'Bottom Left', null);
-INSERT INTO `region` (`region_id`, `region_name`, `region_parent_id`) VALUES (4, 'Bottom Right', null);
+INSERT INTO `region` (`region_id`, `region_name`, `region_type`, `region_parent_id`) VALUES (1, 'Top Left', 'Other', null);
+INSERT INTO `region` (`region_id`, `region_name`, `region_type`, `region_parent_id`) VALUES (2, 'Top Right', 'Other', null);
+INSERT INTO `region` (`region_id`, `region_name`, `region_type`, `region_parent_id`) VALUES (3, 'Bottom Left', 'Other', null);
+INSERT INTO `region` (`region_id`, `region_name`, `region_type`, `region_parent_id`) VALUES (4, 'Bottom Right', 'Other', null);
 
 INSERT INTO `polygon` (`polygon_id`, `polygon_region_id`, `polygon_points`) VALUES (1, 1, ST_GEOMFROMTEXT('POLYGON((0 0,10 0,10 10,0 10,0 0))'));
 INSERT INTO `polygon` (`polygon_id`, `polygon_region_id`, `polygon_points`) VALUES (2, 1, ST_GEOMFROMTEXT('POLYGON((20 20,25 20,25 25,20 25,20 20))'));
