@@ -73,6 +73,7 @@
     - Multiple <polygon> elements can be represented as one <path> element
     - <path> elements can have holes while <polygon> elements cannot
 - All region types will darken when hovered over. Using the css filter attribute instead of changing the color of every region type
+- The parent select dropdown in Type gamemodes will say what region type you are selecting
 
 ### Backend/Technical
 - Add "region_type" to schema. Ex: "State", "County", "Country", "Lake", "River", "Other"

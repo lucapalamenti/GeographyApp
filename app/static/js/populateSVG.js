@@ -19,7 +19,6 @@ const pathTemplate = document.getElementById('svg-path-template').content;
  * @returns {ParentChildMap} a map where the keys are parent names and the values are arrays of region names. *The first element of the array is the 
  */
 export default async function populateSVG( map, svg ) {
-    const regionMap = new ParentChildMap();
     // Get all Polygons for this map and sort them by enclave order (ascending)
     let returnedPolygons = await APIClient.getPolygonsByMapId( map.map_id );
     returnedPolygons.sort( (a, b) => new Polygon( a ).getEnclaveOrder( returnedPolygons ) - new Polygon( b ).getEnclaveOrder( returnedPolygons ) );
@@ -44,6 +43,9 @@ export default async function populateSVG( map, svg ) {
     const xCenter = ( width / SVG_WIDTH < height / SVG_HEIGHT ) ? ( SVG_WIDTH - width - 2 * SVG_PADDING ) / 2 : 0;
     const yCenter = ( height / SVG_HEIGHT < width / SVG_WIDTH ) ? ( SVG_HEIGHT - height - 2 * SVG_PADDING ) / 2 : 0;
 
+    // Right now 3/5/2026 region_parent_id can be null because a region like "usa" or "polygon usa" dont exist, so the "parent id" for polygon states is null
+    const parentId = returnedPolygons[0].region_parent_id ? returnedPolygons[0].region_parent_id : 1;
+    const regionMap = new ParentChildMap( ( await APIClient.getRegionById( parentId ) ).region_type );
     for ( const polygon of returnedPolygons ) {
         const parentId = util.inputToId( polygon.mapRegion_parent );
         const regionId = util.inputToId( polygon.region_name );

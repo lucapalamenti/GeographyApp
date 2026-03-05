@@ -4,7 +4,7 @@ import populateSVG from "./populateSVG.js";
 import gameUtil from "./gameUtil.js";
 import util from "./util/util.js";
 
-import { html, svg, navBar, gamemodePanel, selectButton, gameEndPanel, playAgainButton, reviewMapButton, homeButton, bottomGameBar, tooltip } from "./documentElements-game.js";
+import { html, svg, navBar, gamemodePanel, selectButton, gameEndPanel, playAgainButton, reviewMapButton, homeButton, bottomGameBar, tooltip, parentType } from "./documentElements-game.js";
 import MMap from "./models/MMap.js";
 
 const query = window.location.search;
@@ -32,7 +32,7 @@ await APIClient.getMapById( map_id ).then( returnedMap => {
 const regionMap = await populateSVG( map, svg );
 
 let currentGamemode = null;
-selectButton.addEventListener('click', () => {
+selectButton.addEventListener('click', async () => {
     const gmInput = document.querySelector('INPUT[name="gamemode"]:checked');
     // If a gamemode radio button has been selected
     if ( gmInput ) {
@@ -41,7 +41,8 @@ selectButton.addEventListener('click', () => {
         gamemodePanel.style.visibility = "hidden";
         gamemodePanel.style.cursor = "default";
         bottomGameBar.style.display = "flex";
-        APIClient.getRegionParentsForMap( map_id ).then( parents => {
+        parentType.textContent = regionMap.relation;
+        await APIClient.getRegionParentsForMap( map_id ).then( parents => {
             // Call the method for the selected gamemode
             gamemodeMap[currentGamemode]( regionMap );
             const gamemodeLabel = document.createElement('P');

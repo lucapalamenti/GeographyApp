@@ -11,9 +11,12 @@ export default class ParentChildMap {
     //     }
     /** @type {Map<String,Map<String,Number>>} */
     #map = null;
+    /** @type {string} */
+    relation = null;
 
-    constructor () {
+    constructor ( relation ) {
         this.#map = new Map();
+        this.relation = relation;
     }
 
     addParent( name ) {
