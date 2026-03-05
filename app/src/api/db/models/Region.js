@@ -3,6 +3,8 @@ module.exports = class Region {
     region_id = null;
     /** @type {String} */
     region_name = null;
+    /** @type {String} */
+    region_type = null;
     /** @type {Number} */
     region_parent_id = null;
 
@@ -13,6 +15,7 @@ module.exports = class Region {
     constructor ( data ) {
         this.region_id = data.region_id;
         this.region_name = data.region_name;
+        this.region_type = data.region_type;
         this.region_parent_id = data.region_parent_id;
     }
 
@@ -21,7 +24,7 @@ module.exports = class Region {
      * @returns {Array<>}
      */
     getAllVariables() {
-        return [this.region_id, this.region_name, this.region_parent_id];
+        return [this.region_id, this.region_name, this.region_type, this.region_parent_id];
     }
 
     /**
