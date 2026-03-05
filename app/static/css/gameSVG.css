@@ -8,6 +8,10 @@
     display: none;
 }
 
+#svg-game.gameEnd g g path {
+    transition: fill 0s !important;
+}
+
 path {
     fill: rgb(230, 231, 137);
     stroke-width: 0.05%;

@@ -180,7 +180,6 @@ showNames.addEventListener('change', e => {
     // Show all names
     if ( e.target.checked ) {
         document.querySelectorAll('PATH').forEach( path => {
-            if ( path.classList.contains('grey-out') ) return;
             showLabel( path, e, true, false );
         });
     }
@@ -273,7 +272,7 @@ function sumZooms() {
  */
 const endGame = () => {
     gameEnded = true;
-    for ( const path of svg.querySelectorAll('G G PATH:not(.guesses0, .guesses1, .guesses2, .guesses3)') ) {
+    for ( const path of svg.querySelectorAll('PATH') ) {
         path.classList.remove('clickable');
     }
     svg.parentElement.style.display = "block";

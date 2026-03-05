@@ -56,7 +56,6 @@
 - polygon new hampshire is missing a point
 - for type hard invisible since the outlines dont work well, bring the html G element to the bottom of the SVG so its outlines are layered on top
 - sort by "creation date"
-- ending game while region is still disapearing in click disapear gamemode, the region continues to fade slowly
 
 - Unsure if I want to add
     - "mark as correct" option for type (hard) if you mistype
@@ -84,6 +83,7 @@
 - Gamemodes that prompt regions in order never select the region that's last alphabetically as the first prompt
 - "Outside" regions are colored like "disabled" regions when reviewing map
 - Typing duplicate "unknown" regions in No List gamemode causes them to show up multiple times
+- Ending game while region is still disappearing in Click (Disappear) gamemode causes the region background to continue fading
 
 ## Beta 1.2.260121
 
