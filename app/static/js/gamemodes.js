@@ -155,8 +155,8 @@ function type( regionMap ) {
     input.addEventListener('keypress', e => {
         // If enter key is pressed
         if ( e.key === 'Enter' ) {
-            // If input is valid
-            if ( input.value !== "" && selectParent.value !== '' ) {
+            // Check for valid input parameters
+            if ( gameUtil.inputCheck() ) {
                 // Initially set to 'incorrect' color
                 let color = ATTEMPT_COLORS[3];
                 const myInput = util.inputToId( input.value );
@@ -172,7 +172,7 @@ function type( regionMap ) {
                         // Update list
                         const correctNode = noMapArea.querySelector(`#${selectParent.value} #${myInput}`);
                         correctNode.textContent = util.idToInput( myInput );
-                        correctNode.style["background-color"] = "rgb(75, 255, 75)";
+                        correctNode.style["background-color"] = ATTEMPT_COLORS[0];
                         correctNode.style["border"] = "1px solid green";
                         input.value = "";
                         numCorrect++;
@@ -182,7 +182,7 @@ function type( regionMap ) {
                     // The user has already typed this region
                     else {
                         gameUtil.regionDisappearTrigger( path, REPEAT_COLOR, false, 0 );
-                        gameUtil.pulseElementBG( noMapArea.querySelector(`#${selectParent.value} #${myInput}`), "rgb(75, 255, 75)", color );
+                        gameUtil.pulseElementBG( noMapArea.querySelector(`#${selectParent.value} #${myInput}`), ATTEMPT_COLORS[0], color );
                         gameUtil.playSound( ATTEMPT_SOUNDS[1] );
                     }
                 } else {
@@ -329,8 +329,8 @@ function noList( regionMap ) {
     input.addEventListener('keypress', e => {
         if ( e.key === 'Enter' ) {
             const parentValue = selectParent.value;
-            // If input is valid
-            if ( input.value !== '' && parentValue !== '' ) {
+            // Check for valid input parameters
+            if ( gameUtil.inputCheck() ) {
                 const myInput = util.inputToId( input.value );
                 input.value = "";
                 gameUtil.playSound( ATTEMPT_SOUNDS[1] );
@@ -347,7 +347,7 @@ function noList( regionMap ) {
                         // Update list
                         const correctNode = noMapArea.querySelector(`#${parentValue} #${myInput}`);
                         correctNode.textContent = util.idToInput( myInput );
-                        correctNode.style["background-color"] = "rgb(75, 255, 75)";
+                        correctNode.style["background-color"] = ATTEMPT_COLORS[0];
                         correctNode.style["border"] = "1px solid green";
                         numCorrect++;
                     }

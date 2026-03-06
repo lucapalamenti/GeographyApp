@@ -38,12 +38,11 @@
 - Ability to edit existing maps to add/remove regions
 - Select a thumbnail for a created map
 - Add an admin page for things like editing non custom maps
-- When using a map with different region types as a template, all regions are displayed the same as "enabled" regions, and "outside" regions are not displayed in the viewport
+- When creating a map while using a map with different region types as a template, all regions are displayed the same as "enabled" regions, and "outside" regions are not displayed in the viewport
 - create session storage
     - sorting & filtering maps selection
 - Other Physical features like rivers & lakes
 - Throttling & Debouncing
-- If enter is pressed with no parent selected, flash the parent dropdown
 - Ability to take a new .kml file from USCensusBureau and have it replace existing data
     - Consider using Python for this
 - Add a timed leaderboard for all gamemodes
@@ -73,6 +72,7 @@
     - <path> elements can have holes while <polygon> elements cannot
 - All region types will darken when hovered over. Using the css filter attribute instead of changing the color of every region type
 - The parent select dropdown in Type gamemodes will say what region type you are selecting
+- The parent select dropdown in Type gamemodes will flash if the user populates the input box but doesn't select a parent
 
 ### Backend/Technical
 - Add "region_type" to schema. Ex: "State", "County", "Country", "Lake", "River", "Other"

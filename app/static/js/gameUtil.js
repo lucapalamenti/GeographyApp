@@ -1,7 +1,7 @@
 import util from "./util/util.js";
 
 import { html, tooltip, svg, input, selectParent, showNames, endGameButton, gameEndPanel, noMapArea, promptTally } from "./documentElements-game.js";
-import { SVG_WIDTH, SVG_HEIGHT, SVG_ZOOM_START, SVG_ZOOM_INC, SVG_MAX_ZOOMS } from "./variables.js";
+import { SVG_WIDTH, SVG_HEIGHT, SVG_ZOOM_START, SVG_ZOOM_INC, SVG_MAX_ZOOMS, ATTEMPT_COLORS, ATTEMPT_SOUNDS } from "./variables.js";
 import ParentChildMap from "./models/ParentChildMap.js";
 
 const audioPath = "../audio/";
@@ -49,7 +49,8 @@ const regionDisappearTrigger = ( path, color, clickable, hold = 1000, fade = 100
 /**
  * Pulses the background color of an element
  * @param {HTMLElement} element
- * @param {String} color the color to pulse to
+ * @param {String} colorOrig color to return to
+ * @param {String} colorPulse color to pulse to
  */
 const pulseElementBG = ( element, colorOrig, colorPulse ) => {
     element.style.transition = '';
@@ -212,6 +213,21 @@ function moveToLastInSVG( e ) {
     }
 }
 
+/**
+ * Checks if the input box is populated and the parent select dropdown is still default.
+ * Prompts user to select a parent if the input box is populated but no parent is selected
+ * @returns {Boolean} true if the input is valid, otherwise false
+ */
+function inputCheck() {
+    const inputExist = input.value !== "";
+    const parentSelected = selectParent.value !== "";
+    if ( inputExist && !parentSelected ) {
+        playSound( ATTEMPT_SOUNDS[1] );
+        pulseElementBG( selectParent, "white", ATTEMPT_COLORS[1] );
+    }
+    return inputExist && parentSelected;
+}
+
 // Right click to zoom
 svg.addEventListener( 'contextmenu', e => { e.preventDefault(); });
 svg.addEventListener( 'contextmenu', zoom );
@@ -306,5 +322,6 @@ export default {
     getOrderedParents,
     populateSelect,
     moveToLastInSVG,
+    inputCheck,
     endGame
 }
