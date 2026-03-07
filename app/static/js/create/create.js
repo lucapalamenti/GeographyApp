@@ -1,14 +1,14 @@
-import APIClient from "./APIClient.js";
-import populateSVG from "./populateSVG.js";
-import util from "./util/util.js";
+import APIClient from "../APIClient.js";
+import populateSVG from "../game/populateSVG.js";
+import util from "../util/util.js";
 import createUtil from "./createUtil.js";
 
-import MapRegion from "./models/MapRegion.js";
-import MMap from "./models/MMap.js";
+import MapRegion from "../models/MapRegion.js";
+import MMap from "../models/MMap.js";
 
 import { mapName, mapTemplate, mapColor, mapThumbnail, createButton, zoomSlider, showOutline, stateButtonsPanel, mapContainer, svg, mapOutline, loadingScreen, selectedList } from "./documentElements-create.js";
-import { SVG_WIDTH, SVG_HEIGHT, SVG_PADDING } from "./variables.js";
-import ParentChildMap from "./models/ParentChildMap.js";
+import { SVG_WIDTH, SVG_HEIGHT, SVG_PADDING } from "../variables.js";
+import ParentChildMap from "../models/ParentChildMap.js";
 
 // SOMETHING HERE IS NOT WORKING FOR MAP CREATION ----------------- ****************************************
 
