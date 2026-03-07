@@ -73,9 +73,7 @@
                 </div>
             </div>
             
-            <svg viewBox="0 0 1600 900" preserveAspectRatio="none" id="templateMap" class="container-1">
-                <g id="main"></g>
-                <g id="enclaves"></g>
+            <svg viewBox="0 0 1600 900" preserveAspectRatio="none" class="container-1" id="templateMap">
                 <rect id="map-outline"></rect>
             </svg>
         </div>
@@ -87,10 +85,16 @@
 
     <!-- Templates -->
 
-    <!-- Polygon template ( it is necessary to copy polygons from inside an svg instead of creating new
-         polygons in a js file, since a standard <polygon> element will be unrecognized ) -->
-    <template id="polygon-template">
-        <svg><g><polygon/></g></svg>
+    <!-- SVG-g template ( it is necessary to copy g elements from inside an svg instead of creating new
+         elements in a js file, since the HTML will not recognize the element ) -->
+    <template id="svg-g-template">
+        <svg><g></g></svg>
+    </template>
+
+    <!-- SVG-Path template ( it is necessary to copy path elements from inside an svg instead of creating new
+         elements in a js file, since the HTML will not recognize the element ) -->
+    <template id="svg-path-template">
+        <svg><path></path></svg>
     </template>
 
 </body>

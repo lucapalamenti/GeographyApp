@@ -1,8 +1,12 @@
 import { svg, mapOutline } from "./documentElements-create.js";
 import { SVG_WIDTH, SVG_HEIGHT, SVG_PADDING } from "../variables.js";
 
+/**
+ * Returns all Path elements that should be centered and visible on screen
+ * @returns {Array<SVGPathElement>}
+ */
 const getCenteredRegions = () => {
-    return svg.querySelectorAll('G G G.enabled G.enabled, G G G.enabled G.disabled, G G G.enabled G.herring');
+    return svg.querySelectorAll('PATH:is(.enabled, .disabled, .herring)');
 }
 
 /**
@@ -10,19 +14,12 @@ const getCenteredRegions = () => {
  */
 const findMinMax = () => {
     let mapMinX = Infinity, mapMaxX = 0, mapMinY = Infinity, mapMaxY = 0;
-    for ( const region of getCenteredRegions() ) {
-        let regionMinX = Infinity, regionMinY = Infinity;
-        for ( const polygon of region.children ) {
-            for ( const point of polygon.points ) {
-                if ( point.x < regionMinX ) regionMinX = point.x;
-                if ( point.y < regionMinY ) regionMinY = point.y;
-
-                if ( point.x > mapMaxX ) mapMaxX = point.x;
-                if ( point.y > mapMaxY ) mapMaxY = point.y;
-            }
-        };
-        if ( regionMinX < mapMinX ) mapMinX = regionMinX;
-        if ( regionMinY < mapMinY ) mapMinY = regionMinY;
+    for ( const path of getCenteredRegions() ) {
+        const svgRect = path.getBBox();
+        if ( svgRect.x < mapMinX ) mapMinX = svgRect.x;
+        if ( svgRect.x + svgRect.width > mapMaxX ) mapMaxX = svgRect.x + svgRect.width;
+        if ( svgRect.y < mapMinY ) mapMinY = svgRect.y;
+        if ( svgRect.y + svgRect.height > mapMaxY ) mapMaxY = svgRect.y + svgRect.height;
     }
     return {
         mapMinX : mapMinX,

@@ -1,40 +1,40 @@
-polygon {
+path {
     fill: rgb(230, 231, 137);
     stroke-width: 0.05%;
     stroke: black;
 }
-g g g g:has( polygon:hover ) polygon {
+g g path:hover {
     fill: rgb(210, 211, 117);
 }
 
-g g g g.enabled polygon {
+g g path.enabled {
     fill: rgb(106, 235, 89);
 }
-g g g g.enabled:has( polygon:hover ) polygon {
+g g path.enabled:hover {
     fill: rgb(86, 215, 69);
 }
 
-g g g g.disabled polygon {
+g g path.disabled {
     fill: grey;
     stroke-width: 0.05%;
 }
-g g g g.disabled:has( polygon:hover ) polygon {
+g g path.disabled:hover {
     fill: rgb(108, 108, 108);
 }
 
-g g g g.herring polygon {
+g g path.herring {
     fill: rgb(240, 219, 35);
     stroke-width: 0.05%;
 }
-g g g g.herring:has( polygon:hover ) polygon {
+g g path.herring:hover {
     fill: rgb(220, 199, 15);
 }
 
-g g g g.outside polygon {
+g g path.outside {
     fill: rgb(77, 77, 77);
     stroke-width: 0.05%;
 }
-g g g g.outside:has( polygon:hover ) polygon {
+g g path.outside:hover {
     fill: rgb(54, 54, 54);
 }
 
@@ -106,11 +106,11 @@ g g g g.outside:has( polygon:hover ) polygon {
     background-color: rgb(54, 54, 54);
 }
 
-svg.zoom-1 polygon { stroke-width: 0.25px; }
-svg.zoom-2 polygon { stroke-width: 0.20px; }
-svg.zoom-3 polygon { stroke-width: 0.16px; }
-svg.zoom-4 polygon { stroke-width: 0.13px; }
-svg.zoom-5 polygon { stroke-width: 0.10px; }
+svg.zoom-1 path { stroke-width: 0.25px; }
+svg.zoom-2 path { stroke-width: 0.20px; }
+svg.zoom-3 path { stroke-width: 0.16px; }
+svg.zoom-4 path { stroke-width: 0.13px; }
+svg.zoom-5 path { stroke-width: 0.10px; }
 
 #map-container {
     flex-direction: column;
@@ -166,6 +166,6 @@ svg.zoom-5 polygon { stroke-width: 0.10px; }
     font-weight: bold;
     font-style: italic;
     color:rgb(27, 133, 27);
-     -webkit-text-stroke: 1px white;
+    -webkit-text-stroke: 1px white;
     text-shadow: 5px 5px 10px black;
 }

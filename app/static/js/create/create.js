@@ -49,14 +49,15 @@ mapTemplate.addEventListener('change', async e => {
     selectedList.style.display = "none";
     mapContainer.style.display = "none";
     stateButtonsPanel.style.display = "none";
-    svg.querySelector('SVG > G#main').innerHTML = "";
-    svg.querySelector('SVG > G#enclaves').innerHTML = "";
+    for ( const region of svg.querySelectorAll( "PATH" ) ) {
+        region.remove();
+    }
     if ( mapTemplate.value >= 0 ) {
         // Get the chosen map and display it
         map = new MMap( await APIClient.getMapById( mapTemplate.value ) );
         regionMap = await populateSVG( map, svg );
-        for ( const group of svg.querySelectorAll('SVG G G G') ) {
-            group.addEventListener('mouseover', mouse => {
+        for ( const path of svg.querySelectorAll('PATH') ) {
+            path.addEventListener('mouseover', mouse => {
                 if ( mouse.button === 0 && dragging ) {
                     changeRegionType( mouse );
                 }
@@ -69,7 +70,7 @@ mapTemplate.addEventListener('change', async e => {
 
 svg.addEventListener('mousedown', mouse => {
     dragging = true;
-    if ( mouse.button === 0 && mouse.target.tagName === "polygon" ) {
+    if ( mouse.button === 0 && mouse.target.tagName === "path" ) {
         changeRegionType( mouse );
     }
 });
@@ -113,17 +114,17 @@ function displaySelection() {
     for ( const type of regionTypes ) {
         const sort = {};
         if ( type != "deselect" ) {
-            const regions = svg.querySelectorAll(`G G.enabled G.${type}`);
+            const regions = svg.querySelectorAll(`PATH.${type}`);
             if ( regions.length ) {
                 // Create type header
                 const h3 = document.createElement('H3');
                 h3.textContent = util.capitalizeFirst( type );
                 selectedList.appendChild(h3);
                 // Add regions to its parent's list
-                regions.forEach( region => {
-                    let parentGroupId = region.parentElement.parentElement.getAttribute('id');
+                regions.forEach( pathElement => {
+                    let parentGroupId = pathElement.parentElement.parentElement.id;
                     // If this parent doesnt yet have any selected regions, initialize its array
-                    sort[parentGroupId] = sort[parentGroupId] ? sort[parentGroupId].concat( region.getAttribute('id') ) : [region.getAttribute('id')];
+                    sort[parentGroupId] = sort[parentGroupId] ? sort[parentGroupId].concat( pathElement.id ) : [pathElement.id];
                 });
                 // Iterate through selected regions and desplay them
                 Object.entries( sort ).forEach( ([parentName, regionNames]) => {
@@ -153,7 +154,7 @@ function displaySelection() {
 
 createButton.addEventListener('click', async e => {
     e.preventDefault();
-    if ( mapName.value && mapTemplate.value && svg.querySelectorAll('G G G.enabled G.enabled').length > 1 ) {
+    if ( mapName.value && mapTemplate.value && svg.querySelectorAll('PATH.enabled').length > 1 ) {
         loadingScreen.style.display = "flex";
         await createCustomMap().then( map => {
             document.location = "../";
@@ -185,28 +186,15 @@ async function createCustomMap() {
     // For each region type
     for ( const typeName of regionTypes ) {
         // For each selected region of this type
-        for ( const regionGElement of svg.querySelectorAll(`G G G.enabled G.${typeName}`) ) {
-            const parentId = regionGElement.parentElement.parentElement.id;
-            const parentName = util.idToInput( parentId );
-            const regionName = util.idToInput( regionGElement.id );
-            const region_id = regionMap.getChild( parentId, regionGElement.id );
-            // const region_id = (await APIClient.getRegionByMapIdParentName( mapTemplate.value, parentName, regionName )).region_id;
-
-            let regionMinX = Infinity, regionMinY = Infinity;
-            for ( const polygon of regionGElement.children ) {
-                for ( const point of polygon.points ) {
-                    if ( point.x < regionMinX ) regionMinX = point.x;
-                    if ( point.y < regionMinY ) regionMinY = point.y;
-                }
-            };
-
+        for ( const pathElement of svg.querySelectorAll(`PATH.${typeName}`) ) {
+            const parentId = pathElement.parentElement.parentElement.id;
             // Create the mapRegion
             const mapRegion = new MapRegion({
                 mapRegion_map_id : mapData.map_id,
-                mapRegion_region_id : region_id,
-                mapRegion_parent : parentName,
-                mapRegion_offsetX : ( regionMinX - mapMinX ) / map.map_scale,
-                mapRegion_offsetY : ( regionMinY - mapMinY ) / map.map_scale,
+                mapRegion_region_id : regionMap.getChild( parentId, pathElement.id ),
+                mapRegion_parent : util.idToInput( parentId ),
+                mapRegion_offsetX : ( pathElement.getBBox().x - mapMinX ) / map.map_scale,
+                mapRegion_offsetY : ( pathElement.getBBox().y - mapMinY ) / map.map_scale,
                 mapRegion_scaleX : 1.0,
                 mapRegion_scaleY : 1.0,
                 mapRegion_type : typeName
