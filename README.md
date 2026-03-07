@@ -24,7 +24,7 @@
             - Only 1 guess per prompt instead of 3
             - Show first letter after first incorrect answer
             - timed mode (~5 seconds per prompt)
-            - skip to next: press space or enter to go to next prompt (just say the name out loud)
+            - skip to next: use arrow keys to cycle through prompts
     - "Borders": Name all surrounding regions
     - "Outline": Name region based on outline and surrounding regions
     - "Outline (Hard)": Name region based only on outline
@@ -85,6 +85,7 @@
 - "Outside" regions are colored like "disabled" regions when reviewing map
 - Typing duplicate "unknown" regions in No List gamemode causes them to show up multiple times
 - Ending game while region is still disappearing in Click (Disappear) gamemode causes the region background to continue fading
+- Completing a game in the No Map gamemode doesn't display the map for review
 
 ## Beta 1.2.260121
 

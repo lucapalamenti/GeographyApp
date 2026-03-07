@@ -229,7 +229,7 @@ function inputCheck() {
 }
 
 /**
- * Creates a circle pulse effect around a region when the
+ * Creates a circle pulse effect around a region when going to the next prompt
  * @param {SVGElement} e 
  */
 function pulseCircle( e ) {
@@ -244,7 +244,7 @@ const endGame = () => {
     for ( const path of svg.querySelectorAll('PATH') ) {
         path.classList.remove('clickable');
     }
-    svg.parentElement.style.display = "block";
+    svg.style.display = "block";
     document.getElementById('bottom-game-bar').style.display = "none";
     input.setAttribute('disabled', true);
     html.classList.add('filter-dark');
