@@ -1,5 +1,5 @@
 import { svg, input, showNames } from "./documentElements-game.js";
-import { SVG_WIDTH, SVG_HEIGHT, SVG_ZOOM_START, SVG_ZOOM_INC, SVG_MAX_ZOOMS } from "./variables.js";
+import { SVG_WIDTH, SVG_HEIGHT, SVG_ZOOM_START, SVG_ZOOM_INC, SVG_MAX_ZOOMS } from "../variables.js";
 
 // Right click to zoom
 svg.addEventListener( 'contextmenu', e => { e.preventDefault(); });

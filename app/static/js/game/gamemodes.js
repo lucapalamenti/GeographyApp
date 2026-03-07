@@ -1,10 +1,10 @@
-import util from "./util/util.js";
+import util from "../util/util.js";
 import gameUtil from "./gameUtil.js";
 import { unzoom } from "./mapManipulations.js";
 
 import { svg, promptBar, input, promptLabel, noListArea, endGameButton, reviewMapButton, tally, promptTally, selectParent, showNames, noMapArea } from "./documentElements-game.js";
-import { ATTEMPT_COLORS, REPEAT_COLOR, MAX_GUESSES, ATTEMPT_SOUNDS } from "./variables.js";
-import ParentChildMap from "./models/ParentChildMap.js";
+import { ATTEMPT_COLORS, REPEAT_COLOR, MAX_GUESSES, ATTEMPT_SOUNDS } from "../variables.js";
+import ParentChildMap from "../models/ParentChildMap.js";
 
 let promptsArr;
 let currentPrompt = { pID : "", pInput : "", rID : "", rInput : "" };

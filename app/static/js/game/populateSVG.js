@@ -1,11 +1,11 @@
-import APIClient from "./APIClient.js";
-import util from "./util/util.js";
+import APIClient from "../APIClient.js";
+import util from "../util/util.js";
 
-import MMap from "./models/MMap.js";
+import MMap from "../models/MMap.js";
 
-import { SVG_WIDTH, SVG_HEIGHT, FOCUS_STATES } from "./variables.js";
-import ParentChildMap from "./models/ParentChildMap.js";
-import Polygon from "./models/Polygon.js";
+import { SVG_WIDTH, SVG_HEIGHT, FOCUS_STATES } from "../variables.js";
+import ParentChildMap from "../models/ParentChildMap.js";
+import Polygon from "../models/Polygon.js";
 
 const SVG_PADDING = 10; // Pixels
 

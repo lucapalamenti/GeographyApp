@@ -1,10 +1,10 @@
-import util from "./util/util.js";
+import util from "../util/util.js";
 
 import { html, tooltip, svg, input, selectParent, showNames, endGameButton, gameEndPanel, noMapArea, promptTally } from "./documentElements-game.js";
-import { ATTEMPT_COLORS, ATTEMPT_SOUNDS } from "./variables.js";
-import ParentChildMap from "./models/ParentChildMap.js";
+import { ATTEMPT_COLORS, ATTEMPT_SOUNDS } from "../variables.js";
+import ParentChildMap from "../models/ParentChildMap.js";
 
-const audioPath = "../audio/";
+const audioPath = "../../audio/";
 
 let gameEnded = false;
 let tooltipActive = false;

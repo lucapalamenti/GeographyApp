@@ -1,11 +1,11 @@
-import APIClient from "./APIClient.js";
+import APIClient from "../APIClient.js";
 import { gamemodeMap } from "./gamemodes.js";
 import populateSVG from "./populateSVG.js";
 import gameUtil from "./gameUtil.js";
-import util from "./util/util.js";
+import util from "../util/util.js";
 
 import { html, svg, navBar, gamemodePanel, selectButton, gameEndPanel, playAgainButton, reviewMapButton, homeButton, bottomGameBar, tooltip, parentType } from "./documentElements-game.js";
-import MMap from "./models/MMap.js";
+import MMap from "../models/MMap.js";
 
 const query = window.location.search;
 let parameters = new URLSearchParams( query );
