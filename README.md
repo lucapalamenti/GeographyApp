@@ -73,6 +73,7 @@
 - All region types will darken when hovered over. Using the css filter attribute instead of changing the color of every region type
 - The parent select dropdown in Type gamemodes will say what region type you are selecting
 - The parent select dropdown in Type gamemodes will flash if the user populates the input box but doesn't select a parent
+- In Type (Hard) gamemodes the zoom is reset before moving on to the next prompt
 
 ### Backend/Technical
 - Add "region_type" to schema. Ex: "State", "County", "Country", "Lake", "River", "Other"

@@ -1,5 +1,6 @@
 import util from "./util/util.js";
 import gameUtil from "./gameUtil.js";
+import { unzoom } from "./mapManipulations.js";
 
 import { svg, promptBar, input, promptLabel, noListArea, endGameButton, reviewMapButton, tally, promptTally, selectParent, showNames, noMapArea } from "./documentElements-game.js";
 import { ATTEMPT_COLORS, REPEAT_COLOR, MAX_GUESSES, ATTEMPT_SOUNDS } from "./variables.js";
@@ -217,9 +218,7 @@ function typeHard( regionMap ) {
                 // If input is correct
                 if ( input.value.toLowerCase() === currentPrompt.rInput.toLowerCase() ) {
                     gameUtil.pulseElementBG( input, "white", ATTEMPT_COLORS[guesses] );
-                    gameUtil.showLabel( currentGroup, null, true, true );
-                    gameUtil.playSound( ATTEMPT_SOUNDS[Math.min( guesses, 3 )] );
-                    next();
+                    next( Math.min( guesses, 3 ) );
                 // If input is incorrect
                 } else {
                     guesses++;
@@ -227,16 +226,18 @@ function typeHard( regionMap ) {
                     gameUtil.playSound( ATTEMPT_SOUNDS[3] );
                     // If too many guesses have been given
                     if ( guesses === maxGuesses ) {
-                        gameUtil.showLabel( currentGroup, null, true, true );
-                        gameUtil.playSound( ATTEMPT_SOUNDS[4] );
-                        next();
+                        next( 4 );
                     }
                 }
                 updateLabels( regionMap, false );
             }
         }
     });
-    function next() {
+    function next( soundIndex ) {
+        unzoom( "Escape" );
+        gameUtil.showLabel( currentGroup, null, true, true );
+        gameUtil.playSound( ATTEMPT_SOUNDS[soundIndex] );
+
         currentGroup.classList.remove('typeCurrent');
         currentGroup.classList.add(`guesses${Math.min( guesses, 3 )}`);
         if ( guesses === 0 ) numCorrect++;
@@ -268,7 +269,7 @@ function typeInvisible( regionMap ) {
  * @param {ParentChildMap} regionMap
  */
 function typeHardInvisible( regionMap ) {
-    maxGuesses = Infinity;
+    // maxGuesses = Infinity;
     svg.classList.add('invisible-mode');
     typeHard( regionMap );
 }
@@ -277,7 +278,7 @@ function typeHardInvisible( regionMap ) {
  * @param {ParentChildMap} regionMap
  */
 function typeHardInvisibler( regionMap ) {
-    maxGuesses = Infinity;
+    // maxGuesses = Infinity;
     svg.classList.add('invisible-mode-hard');
     typeHard( regionMap );
 }
