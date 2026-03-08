@@ -25,10 +25,10 @@ function learn() {
     input.style.display = "none";
     promptBar.style.display = "flex";
     svg.addEventListener('click', e => {
-        const group = e.target;
-        if ( group.parentElement !== svg && svg.querySelector(`SVG > G G PATH#${group.id}`) ) {
-            gameUtil.showLabel( group, e, true, true );
-            gameUtil.regionDisappearTrigger( group, ATTEMPT_COLORS[0], true, 1000, 1000 );
+        const path = e.target;
+        if ( path.tagName === "path" && svg.querySelector(`SVG > G G PATH#${path.id}`) ) {
+            gameUtil.showLabel( path, e, true, true );
+            gameUtil.regionDisappearTrigger( path, ATTEMPT_COLORS[0], true, 1000, 1000 );
             gameUtil.playSound( ATTEMPT_SOUNDS[1] );
         }
     });

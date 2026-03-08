@@ -86,6 +86,7 @@
 - Typing duplicate "unknown" regions in No List gamemode causes them to show up multiple times
 - Ending game while region is still disappearing in Click (Disappear) gamemode causes the region background to continue fading
 - Completing a game in the No Map gamemode doesn't display the map for review
+- Click-dragging over multiple regions in the Learn gamemode throws an error
 
 ## Beta 1.2.260121
 
