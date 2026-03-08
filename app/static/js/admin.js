@@ -1,7 +1,7 @@
-const navBar = document.getElementById('nav-bar');
+import { navBar } from "./documentElements.js";
 
 window.onload = () => {
     const pageName = document.createElement("P");
-    pageName.textContent = "Administrator Panel";
+    pageName.textContent = "Admin Panel";
     navBar.appendChild( pageName );
 }

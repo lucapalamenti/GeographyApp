@@ -6,23 +6,29 @@ import createUtil from "./createUtil.js";
 import MapRegion from "../models/MapRegion.js";
 import MMap from "../models/MMap.js";
 
+import { navBar } from "../documentElements.js";
 import { mapName, mapTemplate, mapColor, mapThumbnail, createButton, zoomSlider, showOutline, stateButtonsPanel, mapContainer, svg, mapOutline, loadingScreen, selectedList } from "./documentElements-create.js";
 import { SVG_WIDTH, SVG_HEIGHT, SVG_PADDING } from "../variables.js";
 import ParentChildMap from "../models/ParentChildMap.js";
 
-// SOMETHING HERE IS NOT WORKING FOR MAP CREATION ----------------- ****************************************
+window.onload = async () => {
+    const pageName = document.createElement("P");
+    pageName.textContent = "Create";
+    navBar.appendChild( pageName );
 
-await APIClient.getMaps( "map_id > 0", "map_id" ).then( maps => {
-    // Populate "Choose Template" selection panel
-    maps.forEach( map => {
-        const option = document.createElement('OPTION');
-        option.textContent = map.map_name;
-        option.value = map.map_id;
-        mapTemplate.appendChild( option );
+    await APIClient.getMaps( "map_id > 0", "map_id" ).then( maps => {
+        // Populate "Choose Template" selection panel
+        maps.forEach( map => {
+            const option = document.createElement('OPTION');
+            option.textContent = map.map_name;
+            option.value = map.map_id;
+            mapTemplate.appendChild( option );
+        });
+    }).catch( err => {
+        console.error( err );
     });
-}).catch( err => {
-    console.error( err );
-});
+}
+
 
 const regionTypes = await APIClient.getMapRegionStates();
 regionTypes.push("deselect");
