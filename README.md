@@ -60,6 +60,7 @@
 - polygon new hampshire is missing a point
 - sort by "creation date"
 - Display maps as "block" (default), "compact", "wide"
+- only 1 gitignore is necessary
 
 # Changelog
 

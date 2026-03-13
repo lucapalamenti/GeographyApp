@@ -244,8 +244,16 @@ APIRouter.delete('/polygons', (req, res) => {
 
 // ----- OTHER ROUTES -----
 
-const upload = multer({ dest: 'uploads/' });
-APIRouter.post('/uploadFile', BackendPayloadManager.chunkMiddleware, upload.single('uploadedFile'), (req, res) => {
+const storage = multer.diskStorage({
+    destination: (req, file, callback) => {
+        callback( null, 'uploads/' );
+    },
+    filename: (req, file, callback) => {
+        callback( null, `${Date.now()}-${file.originalname}` );
+    }
+});
+const upload = multer({ storage });
+APIRouter.post('/uploadFile', upload.single('outlineData'), (req, res) => {
     if (req.file) {
         res.json({ message: 'File uploaded successfully', filename: req.file.filename });
     } else {

@@ -25,14 +25,13 @@
     </header>
     <main class="flex-col-center">
         <div id="main-area" class="container-2">
-            <div class="flex-row">
+            <form action="/api/uploadFile" enctype="multipart/form-data" method="post" class="flex-row-center">
                 <div class="input-label">
-                    <label for="map-thumbnail">Select a Thumbnail</label>
-                    <input type="file" accept="image/png,image/jpeg" id="map-thumbnail">
+                    <label for="map-thumbnail">File upload</label>
+                    <input type="file" accept="image/png,image/jpeg" name="outlineData" id="data-input">
                 </div>
-                <button id="" class="btn-grey">Upload</button>
-            </div>
-            
+                <button type="submit" class="btn-grey" id="upload-btn">Upload</button>
+            </form>
         </div>
     </main>
 </body>

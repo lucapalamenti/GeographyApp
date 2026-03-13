@@ -251,7 +251,7 @@ const uploadFile = async ( data ) => {
 
 const retrieveFile = async ( fileName ) => {
     try {
-        return await HTTPClient.get(`/uploads/${fileName}`);
+        return await HTTPClient.get(`${BASE_API_PATH}/uploads/${fileName}`);
     } catch (error) {
         return handleAuthError(error);
     }
