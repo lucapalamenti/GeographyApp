@@ -15,16 +15,21 @@
     - Disabled sounds
     - Multiple color schemes
 - Gamemodes:
-    - add "modifiers" to some gamemodes. ex: 
+    - add "modifiers" to some gamemodes. ex:
+        - "click (disappear)":
+            - when you get a region that there are multiple of (meaning there are at least 2 possible parents) disable the regions with the same name that you've already clicked on
         - "type":
             - "select all" so you dont have to specify parent region
             - remove parent from dropdown when you have typed all its child regions
             - if you type the wrong answer flash the region that you typed
+            - Make the list toggleable
         - "type (hard)":
             - Only 1 guess per prompt instead of 3
             - Show first letter after first incorrect answer
             - timed mode (~5 seconds per prompt)
             - skip to next: use arrow keys to cycle through prompts
+            - "mark as correct" option for type (hard) if you mistype
+            - When taking more than 3 attempts in type (hard) gamemode, instead of just displaying the label is skipping it, make the user type the correct answer
     - "Borders": Name all surrounding regions
     - "Outline": Name region based on outline and surrounding regions
     - "Outline (Hard)": Name region based only on outline
@@ -54,12 +59,7 @@
 - "see if you can beat the developer's time"
 - polygon new hampshire is missing a point
 - sort by "creation date"
-
-- Unsure if I want to add
-    - "mark as correct" option for type (hard) if you mistype
-    - In click (disappear) gamemode, when you get a region that there are multiple of (meaning there are at least 2 parents) disable the regions with the same name that you've already clicked on
-    - When taking more than 3 attempts in type (hard) gamemode, instead of just displaying the label is skipping it, make the user type the correct answer
-    - Make the type gamemode list toggleable
+- Display maps as "block" (default), "compact", "wide"
 
 # Changelog
 

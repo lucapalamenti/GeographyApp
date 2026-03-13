@@ -213,7 +213,7 @@ function typeHard( regionMap ) {
 
     input.addEventListener('keypress', e => {
         if ( e.key === 'Enter' ) {
-            // Only check if the value & parent arent blank
+            // Only check if the user has typed something in the input box
             if ( input.value !== '' ) {
                 // If input is correct
                 if ( input.value.toLowerCase() === currentPrompt.rInput.toLowerCase() ) {
