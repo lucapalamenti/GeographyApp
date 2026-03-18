@@ -242,7 +242,7 @@ const uploadFile = async ( data ) => {
     try {
         return await fetch(`${BASE_API_PATH}/uploadFile`, {
             method: 'POST',
-            body: data
+            body: new FormData( data )
         });
     } catch (error) {
         return handleAuthError(error);
