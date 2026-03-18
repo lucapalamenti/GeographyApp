@@ -14,7 +14,7 @@ UploadAPIRouter.use( express.json() );
 // });
 // const upload = multer({ storage });
 const upload = multer({ dest: 'uploads/' });
-UploadAPIRouter.post('/uploadFile', upload.single('outlineData'), (req, res) => {
+UploadAPIRouter.post('/thumbnail', upload.single('outlineData'), (req, res) => {
     if (req.file) {
         res.json({ message: 'File uploaded successfully', filename: req.file.filename });
     } else {

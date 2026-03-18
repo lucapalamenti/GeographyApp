@@ -13,6 +13,6 @@ router.use('/api', CustomAPIRouter);
 router.use('/api', MapAPIRouter);
 router.use('/api', PolygonAPIRouter);
 router.use('/api', RegionAPIRouter);
-router.use('/api', UploadAPIRouter);
+router.use('/api/upload', UploadAPIRouter);
 
 module.exports = router;

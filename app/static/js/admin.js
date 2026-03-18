@@ -7,9 +7,9 @@ window.onload = () => {
     navBar.appendChild( pageName );
 }
 
-const uploadFile = document.getElementById("upload-file-form");
-uploadFile.addEventListener("submit", async e => {
+const uploadThumbnail = document.getElementById("upload-file-form");
+uploadThumbnail.addEventListener("submit", async e => {
     e.preventDefault();
-    const response = await APIClient.uploadFile( e.target );
+    const response = await APIClient.uploadThumbnail( e.target );
     console.log( response.status );
 });

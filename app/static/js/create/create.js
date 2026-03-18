@@ -230,7 +230,7 @@ mapThumbnail.addEventListener('change', async e => {
         // file.name = ; Change when ready
         const formData = new FormData();
         formData.append('uploadedFile', file); // uploadedFile is a key
-        await APIClient.uploadFile( formData ).then( res => {
+        await APIClient.uploadThumbnail( formData ).then( res => {
             console.log( "File successfully uploaded." );
         }).catch( err => {
             console.error( err );
