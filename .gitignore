@@ -1,2 +1,12 @@
+# Root
 node_modules/
 .env
+
+# App
+/app/src/api/db/CustomDAO.js
+/app/src/api/db/backend/test
+/app/src/api/db/usableQueries.txt
+
+# Database
+/database/data/
+/database/db_schema/test
