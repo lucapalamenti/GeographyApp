@@ -41,7 +41,6 @@
     - Sudden Death: "Washington County"
 - Interactive map (type a name and all counties with name show up), option for similar sounding names with different spellings
 - Ability to edit existing maps to add/remove regions
-- Select a thumbnail for a created map
 - Add an admin page for things like editing non custom maps
 - When creating a map while using a map with different region types as a template, all regions are displayed the same as "enabled" regions, and "outside" regions are not displayed in the viewport
 - create session storage
@@ -49,7 +48,6 @@
 - Other Physical features like rivers & lakes
 - Throttling & Debouncing
 - Ability to take a new .kml file from USCensusBureau and have it replace existing data
-    - Consider using Python for this
 - Add a timed leaderboard for all gamemodes
 - account creation
 - logging in/out capabilities
@@ -60,13 +58,13 @@
 - polygon new hampshire is missing a point
 - sort by "creation date"
 - Display maps as "block" (default), "compact", "wide"
-- only 1 gitignore is necessary
 
 # Changelog
 
 ## Ongoing
 
 ### Frontend
+- Users can now upload a thumbnail for their custom maps
 - Reworked region display mechanism
     - <polygon> SVG elements have been replaced with <path> elements
     - Multiple <polygon> elements can be represented as one <path> element

@@ -7,9 +7,12 @@ import MapRegion from "../models/MapRegion.js";
 import MMap from "../models/MMap.js";
 
 import { navBar } from "../documentElements.js";
-import { mapName, mapTemplate, mapColor, mapThumbnail, createButton, zoomSlider, showOutline, stateButtonsPanel, mapContainer, svg, mapOutline, loadingScreen, selectedList } from "./documentElements-create.js";
+import { mapName, mapTemplate, mapColor, mapThumbnail, zoomSlider, showOutline, stateButtonsPanel, mapContainer, svg, mapOutline, loadingScreen, selectedList, createForm } from "./documentElements-create.js";
 import { SVG_WIDTH, SVG_HEIGHT, SVG_PADDING } from "../variables.js";
 import ParentChildMap from "../models/ParentChildMap.js";
+
+let regionTypes;
+let selectedType = "enabled";
 
 window.onload = async () => {
     const pageName = document.createElement("P");
@@ -27,12 +30,9 @@ window.onload = async () => {
     }).catch( err => {
         console.error( err );
     });
+    regionTypes = await APIClient.getMapRegionStates();
+    regionTypes.push("deselect");
 }
-
-
-const regionTypes = await APIClient.getMapRegionStates();
-regionTypes.push("deselect");
-let selectedType = "enabled";
 
 // Handle user selecting a new region type selector
 stateButtonsPanel.addEventListener('click', e => {
@@ -158,11 +158,12 @@ function displaySelection() {
     if ( selectedList.innerHTML === "" ) selectedList.style.display = "none";
 }
 
-createButton.addEventListener('click', async e => {
+createForm.addEventListener('submit', async e => {
     e.preventDefault();
     if ( mapName.value && mapTemplate.value && svg.querySelectorAll('PATH.enabled').length > 1 ) {
         loadingScreen.style.display = "flex";
-        await createCustomMap().then( map => {
+        // console.log( e.target.elements[3].files[0] ); return;
+        await createCustomMap( e ).then( map => {
             document.location = "../";
         }).catch( err => {
             console.error( err );
@@ -170,12 +171,20 @@ createButton.addEventListener('click', async e => {
     }
 });
 
-async function createCustomMap() {
+/**
+ * 
+ * @param {SubmitEvent} e 
+ */
+async function createCustomMap( e ) {
+    const thumbnailRes = await APIClient.uploadThumbnail( e.target ).catch( err => {
+        console.error( err );
+    });
     const mapData = new MMap({
+        // Why am i doing this API call??? I can have the API.createMap below return the map_id that this map is inserted with
         map_id : ( await APIClient.getMaps( "map_id > -1", 'map_id DESC' ) )[0].map_id + 1,
         map_scale : 1.0,
         map_name : mapName.value,
-        map_thumbnail : `${mapName.value.split(' ').join('_')}_Thumbnail.png`,
+        map_thumbnail : ( await thumbnailRes.json() ).filename,
         map_primary_color_R : parseInt( mapColor.value.substr(1,2), 16 ),
         map_primary_color_G : parseInt( mapColor.value.substr(3,2), 16 ),
         map_primary_color_B : parseInt( mapColor.value.substr(5,2), 16 ),
@@ -223,29 +232,6 @@ async function createCustomMap() {
         console.error( err );
     });
 }
-
-mapThumbnail.addEventListener('change', async e => {
-    const file = e.target.files[0];
-    if ( file ) {
-        // file.name = ; Change when ready
-        const formData = new FormData();
-        formData.append('uploadedFile', file); // uploadedFile is a key
-        await APIClient.uploadThumbnail( formData ).then( res => {
-            console.log( "File successfully uploaded." );
-        }).catch( err => {
-            console.error( err );
-        });
-    }
-});
-
-const retrieveBtn = document.getElementById('retrieve');
-retrieveBtn.addEventListener('click', async e => {
-    await APIClient.retrieveFile("photo1.png").then( res => {
-        console.log( res );
-    }).catch( err => {
-        console.error({message: "ERROR!", error: err});
-    });
-});
 
 // Right click to zoom
 svg.addEventListener( 'contextmenu', e => { e.preventDefault(); });

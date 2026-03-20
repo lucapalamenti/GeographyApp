@@ -7,8 +7,10 @@ const deleteAllMapsButton = document.getElementById('delete-all-maps-btn');
 const filterMapsSelect = document.getElementById('filter-maps');
 const sortMapsSelect = document.getElementById('sort-maps');
 
-// Populate screen with map buttons
-await populateMaps( getSelectedFilter(), getSelectedSort() );
+window.onload = async () => {
+    // Populate screen with map buttons
+    await populateMaps( getSelectedFilter(), getSelectedSort() );
+};
 
 /**
  * Retrieves maps from the database given given a table header to sort by
@@ -26,12 +28,11 @@ async function populateMaps( where, orderBy ) {
             const mapButtonLabel = mapButtonElement.querySelector('.map-button-label');
             const mapButtonTop = mapButtonElement.querySelector('.map-button-top');
             const mapButtonBottom = mapButtonElement.querySelector('.map-button-bottom');
-
             if ( map.map_is_custom ) mapButtonElement.classList.add("custom-map");
 
             mapButtonElement.id = map.map_id;
             mapButtonElement.href = '/game?mapId=' + map.map_id;
-            mapButtonElement.style["background-image"] = `url('../images/thumbnails/${map.map_thumbnail}'), url('../images/thumbnails/Test_Map_Thumbnail.png')`;
+            mapButtonElement.style["background-image"] = `url('/uploads/thumbnails/${map.map_thumbnail}')`;;
             mapButtonLabel.textContent = map.map_name;
             mapButtonTop.style["background-image"] = `linear-gradient( to top, rgba(${map.map_primary_color_R},${map.map_primary_color_G},${map.map_primary_color_B},0.5), rgba(${map.map_primary_color_R},${map.map_primary_color_G},${map.map_primary_color_B},0))`;
             mapButtonBottom.style["background-color"] = `rgba(${map.map_primary_color_R},${map.map_primary_color_G},${map.map_primary_color_B},0.5)`;

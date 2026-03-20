@@ -24,7 +24,7 @@
         </nav>
     </header>
     <main class="flex-col-center">
-        <form class="flex-col">
+        <form class="flex-col" id="create-form">
             <h3>Create Custom Map</h3>
             <div class="input-label">
                 <label for="map-name">Map Name</label>
@@ -42,9 +42,8 @@
             </div>
             <div class="input-label">
                 <label for="map-thumbnail">Select a Thumbnail</label>
-                <input type="file" accept="image/png,image/jpeg" id="map-thumbnail">
+                <input type="file" name="thumbnail" accept="image/png,image/jpeg" id="map-thumbnail">
             </div>
-            <button id="retrieve"></button>
             
             <nav class="flex-row">
                 <button type="submit" class="btn-green" id="create-button">Create</button>
