@@ -8,6 +8,7 @@ services:
       - ./app/src:/app/src
       - ./app/static:/app/static
       - ./app/templates:/app/templates
+      - ./app/uploads:/app/uploads
     env_file:
       - .env
 

@@ -11,20 +11,20 @@
     <link rel="stylesheet" href="css/header.css" />
     <link rel="stylesheet" href="css/create.css" />
 
-    <script src="js/create.js" type="module"></script>
+    <script src="js/create/create.js" type="module"></script>
 </head>
 <body>
     <header>
         <div class="flex-row">
             <h1>Map Quiz</h1>
         </div>
-        <nav>
+        <nav class="flex-row" id="nav-bar">
             <a href="../">Home</a>
             <strong>></strong>
         </nav>
     </header>
     <main class="flex-col-center">
-        <form class="flex-col">
+        <form class="flex-col" id="create-form">
             <h3>Create Custom Map</h3>
             <div class="input-label">
                 <label for="map-name">Map Name</label>
@@ -42,9 +42,8 @@
             </div>
             <div class="input-label">
                 <label for="map-thumbnail">Select a Thumbnail</label>
-                <input type="file" accept="image/png,image/jpeg" id="map-thumbnail">
+                <input type="file" name="thumbnail" accept="image/png,image/jpeg" id="map-thumbnail">
             </div>
-            <button id="retrieve"></button>
             
             <nav class="flex-row">
                 <button type="submit" class="btn-green" id="create-button">Create</button>
@@ -73,9 +72,7 @@
                 </div>
             </div>
             
-            <svg viewBox="0 0 1600 900" preserveAspectRatio="none" id="templateMap" class="container-1">
-                <g id="main"></g>
-                <g id="enclaves"></g>
+            <svg viewBox="0 0 1600 900" preserveAspectRatio="none" class="container-1" id="templateMap">
                 <rect id="map-outline"></rect>
             </svg>
         </div>
@@ -87,10 +84,16 @@
 
     <!-- Templates -->
 
-    <!-- Polygon template ( it is necessary to copy polygons from inside an svg instead of creating new
-         polygons in a js file, since a standard <polygon> element will be unrecognized ) -->
-    <template id="polygon-template">
-        <svg><g><polygon/></g></svg>
+    <!-- SVG-g template ( it is necessary to copy g elements from inside an svg instead of creating new
+         elements in a js file, since the HTML will not recognize the element ) -->
+    <template id="svg-g-template">
+        <svg><g></g></svg>
+    </template>
+
+    <!-- SVG-Path template ( it is necessary to copy path elements from inside an svg instead of creating new
+         elements in a js file, since the HTML will not recognize the element ) -->
+    <template id="svg-path-template">
+        <svg><path></path></svg>
     </template>
 
 </body>

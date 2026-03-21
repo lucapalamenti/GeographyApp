@@ -19,4 +19,8 @@ frontendRouter.get('/create', (req, res) => {
     res.sendFile(`${html_dir}create.html`);
 });
 
+frontendRouter.get('/admin', (req, res) => {
+    res.sendFile(`${html_dir}admin.html`);
+});
+
 module.exports = frontendRouter;

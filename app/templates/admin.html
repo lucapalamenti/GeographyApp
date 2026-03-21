@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Admin Panel</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+
+    <link rel="stylesheet" href="css/all.css" />
+    <link rel="stylesheet" href="css/header.css" />
+    <link rel="stylesheet" href="css/admin.css" />
+
+    <script src="js/admin.js" type="module"></script>
+</head>
+<body>
+    <header>
+        <div class="flex-row">
+            <h1>Map Quiz</h1>
+        </div>
+        <nav class="flex-row" id="nav-bar">
+            <a href="../">Home</a>
+            <strong>></strong>
+        </nav>
+    </header>
+    <main class="flex-col-center">
+        <div id="main-area" class="container-2">
+            <form enctype="multipart/form-data" class="flex-row-center" id="upload-file-form">
+                <div class="input-label">
+                    <label for="map-thumbnail">File upload</label>
+                    <input type="file" accept="image/png,image/jpeg" name="outlineData" id="data-input">
+                </div>
+                <button type="submit" class="btn-grey" id="upload-btn">Upload</button>
+            </form>
+        </div>
+    </main>
+</body>
+</html>

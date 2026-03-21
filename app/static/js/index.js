@@ -1,8 +1,5 @@
 import APIClient from "./APIClient.js";
 
-import Polygon from "./models/Polygon.js";
-import { SQLPolygon } from "./models/SQLGeometry.js";
-
 const mapSection = document.getElementById('map-section');
 const mapNavigation = document.getElementById('map-navigation');
 const deleteMapButton = document.getElementById('delete-map-btn');
@@ -10,8 +7,10 @@ const deleteAllMapsButton = document.getElementById('delete-all-maps-btn');
 const filterMapsSelect = document.getElementById('filter-maps');
 const sortMapsSelect = document.getElementById('sort-maps');
 
-// Populate screen with map buttons
-await populateMaps( getSelectedFilter(), getSelectedSort() );
+window.onload = async () => {
+    // Populate screen with map buttons
+    await populateMaps( getSelectedFilter(), getSelectedSort() );
+};
 
 /**
  * Retrieves maps from the database given given a table header to sort by
@@ -29,12 +28,11 @@ async function populateMaps( where, orderBy ) {
             const mapButtonLabel = mapButtonElement.querySelector('.map-button-label');
             const mapButtonTop = mapButtonElement.querySelector('.map-button-top');
             const mapButtonBottom = mapButtonElement.querySelector('.map-button-bottom');
-
             if ( map.map_is_custom ) mapButtonElement.classList.add("custom-map");
 
             mapButtonElement.id = map.map_id;
             mapButtonElement.href = '/game?mapId=' + map.map_id;
-            mapButtonElement.style["background-image"] = `url('../images/thumbnails/${map.map_thumbnail}'), url('../images/thumbnails/Test_Map_Thumbnail.png')`;
+            mapButtonElement.style["background-image"] = `url('/uploads/thumbnails/${map.map_thumbnail}')`;;
             mapButtonLabel.textContent = map.map_name;
             mapButtonTop.style["background-image"] = `linear-gradient( to top, rgba(${map.map_primary_color_R},${map.map_primary_color_G},${map.map_primary_color_B},0.5), rgba(${map.map_primary_color_R},${map.map_primary_color_G},${map.map_primary_color_B},0))`;
             mapButtonBottom.style["background-color"] = `rgba(${map.map_primary_color_R},${map.map_primary_color_G},${map.map_primary_color_B},0.5)`;
@@ -115,40 +113,4 @@ deleteAllMapsButton.addEventListener('click', async e => {
     await APIClient.deleteAllCustomMaps().then( deletedMaps => {
         window.location.reload();
     });
-});
-
-// The button that says OOOOOOOO
-const b1 = document.getElementById('b1');
-b1.addEventListener('click', async e => {
-    // const allRegions = await APIClient.getRegions();
-    // for ( const region of allRegions ) {
-    //     const coordinates = region.region_points["coordinates"];
-    //     for ( const polygon of coordinates ) {
-    //         let p = new Polygon({
-    //             polygon_id : null,
-    //             polygon_region_id : region.region_id,
-    //             polygon_is_enclave : false,
-    //             polygon_enclave_of_region_id : null,
-    //             polygon_points : new SQLPolygon({type:"Polygon",coordinates:polygon})
-    //         });
-    //         p = await APIClient.createPolygon( p );
-    //         console.log( p.polygon_id );
-    //     }
-    // }
-    // console.log( "done!" );
-    const p = await APIClient.printRegionInsertQuery();
-    console.log( p );
-});
-
-// Print statements button
-const b2 = document.getElementById('b2');
-b2.addEventListener('click', async e => {
-    await APIClient.custom();
-    console.log( "done!" );
-});
-
-const bDel = document.getElementById( 'delete-all-polygons' );
-bDel.addEventListener('click', async e => {
-    const numDelRows = await APIClient.deleteAllPolygons();
-    console.log( numDelRows, "polygons deleted" );
 });
