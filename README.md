@@ -67,7 +67,7 @@
 ### Backend/Technical
 ### Bug Fixes
 
-## Beta 1.2.260321
+## Beta 1.3.260321
 
 ### Frontend
 - Users can now upload a thumbnail for their custom maps
