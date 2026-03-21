@@ -64,6 +64,12 @@
 ## Ongoing
 
 ### Frontend
+### Backend/Technical
+### Bug Fixes
+
+## Beta 1.2.260321
+
+### Frontend
 - Users can now upload a thumbnail for their custom maps
 - Reworked region display mechanism
     - <polygon> SVG elements have been replaced with <path> elements
