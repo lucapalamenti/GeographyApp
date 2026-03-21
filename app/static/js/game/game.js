@@ -38,9 +38,9 @@ selectButton.addEventListener('click', async () => {
     if ( gmInput ) {
         html.classList.remove('filter-dark');
         currentGamemode = gmInput.value;
-        gamemodePanel.style.visibility = "hidden";
-        gamemodePanel.style.cursor = "default";
-        bottomGameBar.style.display = "flex";
+        gamemodePanel.style["visibility"] = "hidden";
+        gamemodePanel.style["cursor"] = "default";
+        bottomGameBar.style["display"] = "flex";
         parentType.textContent = regionMap.relation;
         await APIClient.getRegionParentsForMap( map_id ).then( parents => {
             // Call the method for the selected gamemode
