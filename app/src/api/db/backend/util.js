@@ -1,4 +1,6 @@
 const fs = require('fs');
+const fsp = require('fs/promises');
+const path = require('path');
 
 /**
  * Writes an SQL query to a file in the backend.
@@ -30,6 +32,39 @@ function copyQueryToFile( query, params, fileName ) {
     fs.appendFileSync(`./src/api/db/backend/test/queries/${fileName}.sql`, build.trim().concat('\n') );
 }
 
+/**
+ * Delete a file from a directory
+ * @param {string} directory 
+ * @param {string} filename 
+ */
+async function deleteFileFromDirectory( directory, filename ) {
+    try {
+        fsp.unlink( path.join( directory, filename ) );
+    } catch ( err ) {
+        console.error( `Error deleting file ${filename} in directory ${directory}`, err );
+    }
+}
+
+/**
+ * Deletes all files in the given directory
+ * @param {string} directory 
+ */
+async function deleteAllFilesInDirectory( directory ) {
+    try {
+        const files = await fsp.readdir( directory );
+        // Asynchronously delete each file
+        const promises = files.forEach( file => {
+            return fsp.unlink( path.join( directory, file ) );
+        });
+        // Wait for all promises to complete
+        await Promise.all( promises );
+    } catch ( err ) {
+        console.error( `Error deleting all files in ${directory}` );
+    }
+}
+
 module.exports = {
-    copyQueryToFile
+    copyQueryToFile,
+    deleteFileFromDirectory,
+    deleteAllFilesInDirectory
 };

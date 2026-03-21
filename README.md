@@ -76,6 +76,7 @@
 
 ### Backend/Technical
 - Add "region_type" to schema. Ex: "State", "County", "Country", "Lake", "River", "Other"
+- User thumbnails are deleted when deleting maps
 
 ### Bug Fixes
 - Region outlines in invisible outline gamemodes don't display properly, so they have been removed altogether
