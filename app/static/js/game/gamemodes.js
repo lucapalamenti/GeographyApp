@@ -160,7 +160,7 @@ function type( regionMap ) {
             if ( gameUtil.inputCheck() ) {
                 // Initially set to 'incorrect' color
                 let color = ATTEMPT_COLORS[3];
-                const myInput = util.inputToId( input.value );
+                const myInput = util.inputToId( input.value.trim() );
                 // If the user input matches a region's name
                 if ( regionMap.hasChild( selectParent.value, myInput ) ) {
                     color = REPEAT_COLOR;
@@ -216,7 +216,7 @@ function typeHard( regionMap ) {
             // Only check if the user has typed something in the input box
             if ( input.value !== '' ) {
                 // If input is correct
-                if ( input.value.toLowerCase() === currentPrompt.rInput.toLowerCase() ) {
+                if ( gameUtil.compareInputActual( input.value, currentPrompt.rInput ) ) {
                     gameUtil.pulseElementBG( input, "white", ATTEMPT_COLORS[guesses] );
                     next( Math.min( guesses, 3 ) );
                 // If input is incorrect
@@ -329,7 +329,7 @@ function noList( regionMap ) {
             const parentValue = selectParent.value;
             // Check for valid input parameters
             if ( gameUtil.inputCheck() ) {
-                const myInput = util.inputToId( input.value );
+                const myInput = util.inputToId( input.value.trim() );
                 input.value = "";
                 gameUtil.playSound( ATTEMPT_SOUNDS[1] );
                 // If the user input matches a region's name

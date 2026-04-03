@@ -67,6 +67,7 @@
 
 ### Frontend
 - If a thumbnail is not selected for a custom map then a default thumbnail is used
+- Input in Type gamemodes can now contain leading & trailing whitespace
 
 ### Backend/Technical
 ### Bug Fixes

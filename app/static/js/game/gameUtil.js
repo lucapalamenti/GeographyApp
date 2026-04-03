@@ -229,6 +229,16 @@ function inputCheck() {
 }
 
 /**
+ * Determines if the users input should be counted as correct for the actual region name
+ * @param {string} input 
+ * @param {string} actual 
+ * @returns {boolean}
+ */
+function compareInputActual( input, actual ) {
+    return input.trim().toLowerCase() === actual.toLowerCase();
+}
+
+/**
  * Creates a circle pulse effect around a region when going to the next prompt
  * @param {SVGElement} e 
  */
@@ -276,5 +286,6 @@ export default {
     populateSelect,
     moveToLastInSVG,
     inputCheck,
+    compareInputActual,
     endGame
 }
