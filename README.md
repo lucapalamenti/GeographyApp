@@ -66,6 +66,8 @@
 ## Ongoing
 
 ### Frontend
+- If a thumbnail is not selected for a custom map then a default thumbnail is used
+
 ### Backend/Technical
 ### Bug Fixes
 

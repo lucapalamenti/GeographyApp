@@ -32,7 +32,7 @@ async function populateMaps( where, orderBy ) {
 
             mapButtonElement.id = map.map_id;
             mapButtonElement.href = '/game?mapId=' + map.map_id;
-            mapButtonElement.style["background-image"] = `url('/uploads/thumbnails/${map.map_thumbnail}')`;;
+            mapButtonElement.style["background-image"] = `url('/uploads/thumbnails/${map.map_thumbnail}')`;
             mapButtonLabel.textContent = map.map_name;
             mapButtonTop.style["background-image"] = `linear-gradient( to top, rgba(${map.map_primary_color_R},${map.map_primary_color_G},${map.map_primary_color_B},0.5), rgba(${map.map_primary_color_R},${map.map_primary_color_G},${map.map_primary_color_B},0))`;
             mapButtonBottom.style["background-color"] = `rgba(${map.map_primary_color_R},${map.map_primary_color_G},${map.map_primary_color_B},0.5)`;

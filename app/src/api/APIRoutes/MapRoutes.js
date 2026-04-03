@@ -68,11 +68,15 @@ MapAPIRouter.delete('/maps/:mapId', async (req, res) => {
         return res.status(500).json({error:err, message: 'Error with DELETE request to /maps/:mapId'});
     });
 
-    // Once the map is successfully deleted we can delete the thumbnail
-    util.deleteFileFromDirectory("/app/uploads/thumbnails", returnedMap.map_thumbnail ).catch( err => {
-        // Log error but don't return error
-        console.error( `Couldn't delete thumbnail for map ${mapId}`, err )
-    });
+    // Stop from deleting default maps
+    if ( !returnedMap.map_thumbnail.startsWith( "default" ) ) {
+        // Once the map is successfully deleted we can delete the thumbnail
+        util.deleteFileFromDirectory("/app/uploads/thumbnails", returnedMap.map_thumbnail ).catch( err => {
+            // Log error but don't return error
+            console.error( `Couldn't delete thumbnail for map ${mapId}`, err )
+        });
+    }
+    
 
     res.json({message: `Map ${mapId} successfully deleted`});
 });

@@ -176,7 +176,10 @@ createForm.addEventListener('submit', async e => {
  * @param {SubmitEvent} e 
  */
 async function createCustomMap( e ) {
-    const thumbnailRes = await APIClient.uploadThumbnail( e.target ).catch( err => {
+    let thumbnail;
+    await APIClient.uploadThumbnail( e.target ).then( async res => {
+        thumbnail = ( res.status === 400 ) ? "default/Test_Map_Thumbnail.png" : ( await res.json() ).filename;
+    }).catch( err => {
         console.error( err );
     });
     const mapData = new MMap({
@@ -184,7 +187,7 @@ async function createCustomMap( e ) {
         map_id : ( await APIClient.getMaps( "map_id > -1", 'map_id DESC' ) )[0].map_id + 1,
         map_scale : 1.0,
         map_name : mapName.value,
-        map_thumbnail : ( await thumbnailRes.json() ).filename,
+        map_thumbnail : thumbnail,
         map_primary_color_R : parseInt( mapColor.value.substr(1,2), 16 ),
         map_primary_color_G : parseInt( mapColor.value.substr(3,2), 16 ),
         map_primary_color_B : parseInt( mapColor.value.substr(5,2), 16 ),
