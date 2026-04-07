@@ -180,7 +180,7 @@ const populateSelect = ( regionMap ) => {
 showNames.addEventListener('change', e => {
     // Show all names
     if ( e.target.checked ) {
-        document.querySelectorAll('PATH').forEach( path => {
+        document.querySelectorAll('G.enabled PATH').forEach( path => {
             showLabel( path, e, true, false );
         });
     }

@@ -60,6 +60,7 @@
 - Display maps as "block" (default), "compact", "wide"
 - Ability to speak into microphone
 - whitespace after input shouldnt make it incorrect
+- keyframes CSS
 
 # Changelog
 
@@ -68,6 +69,7 @@
 ### Frontend
 - If a thumbnail is not selected for a custom map then a default thumbnail is used
 - Input in Type gamemodes can now contain leading & trailing whitespace
+- "Show region names" button now only shows labels for "enabled" regions
 
 ### Backend/Technical
 ### Bug Fixes
