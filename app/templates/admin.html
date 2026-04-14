@@ -15,23 +15,26 @@
 </head>
 <body>
     <header>
-        <div class="flex-row">
+        <div class="flex-row gap-5">
             <h1>Map Quiz</h1>
         </div>
-        <nav class="flex-row" id="nav-bar">
+        <nav class="flex-row gap-5" id="nav-bar">
             <a href="../">Home</a>
             <strong>></strong>
         </nav>
     </header>
-    <main class="flex-col-center">
+    <main class="flex-col-center gap-5">
         <div id="main-area" class="container-2">
-            <form enctype="multipart/form-data" class="flex-row-center" id="upload-file-form">
+            <form enctype="multipart/form-data" class="flex-row-center gap-5" id="upload-file-form">
                 <div class="input-label">
                     <label for="map-thumbnail">File upload</label>
                     <input type="file" accept=".geojson" name="mapfile" id="data-input">
                 </div>
                 <button type="submit" class="btn-grey" id="upload-btn">Upload</button>
             </form>
+            <div>
+                
+            </div>
         </div>
     </main>
 </body>

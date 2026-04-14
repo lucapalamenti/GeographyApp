@@ -19,17 +19,17 @@
 <body>
     <div id="tooltip">Click on <strong class="click-on"></strong></div>
     <header>
-        <div class="flex-row">
+        <div class="flex-row gap-5">
             <h1>Map Quiz</h1>
         </div>
-        <nav class="flex-row" id="nav-bar">
+        <nav class="flex-row gap-5" id="nav-bar">
             <a href="../">Home</a>
             <strong>></strong>
         </nav>
     </header>
-    <main class="flex-col-center">
+    <main class="flex-col-center gap-5">
         <!-- Shows on load and when switching gamemodes -->
-        <form id="gamemode-panel" class="page-center flex-col">
+        <form id="gamemode-panel" class="page-center flex-col gap-5">
             <h3>Select Gamemode</h3>
             <div class="input-label">
                 <input type="radio" name="gamemode" id="learn" value="Learn">
@@ -81,7 +81,7 @@
                 <input type="radio" name="gamemode" id="noList" value="No List">
                 <label for="noList">No List</label>
             </div>
-            <nav class="flex-row">
+            <nav class="flex-row gap-5">
                 <button class="btn-green btn-fade" type="button">Select</button>
                 <a href="../" class="btn-grey btn-fade" type="button">Cancel</a>
             </nav>
@@ -90,7 +90,7 @@
         <div id="game-area">
             <!-- Top game bar -->
             <div class="game-bar" id="prompt-bar">
-                <div class="flex-row">
+                <div class="flex-row gap-5">
                     <p></p>
                     <strong class="click-on"></strong>
                     <input type="text">
@@ -98,7 +98,7 @@
                         <option value="" selected>Select <p id="parent-type"></p></option>
                     </select>
                 </div>
-                <div class="flex-row">
+                <div class="flex-row gap-5">
                     <p id="promptTally"></p>
                     <div class="dotted-line"></div>
                     <p id="tally"></p>
@@ -109,7 +109,7 @@
                 
             </svg>
             <!-- Game bar below map -->
-            <div id="bottom-game-bar" class="game-bar flex-row">
+            <div id="bottom-game-bar" class="game-bar flex-row gap-5">
                 <button id="game-settings-btn"></button>
                 <div class="input-label" id="showNames-container">
                     <input type="checkbox" id="showNames">
@@ -124,12 +124,12 @@
                 
             </div>
             <!-- Used for No List gamemode -->
-            <div class="flex-col-center container-1" id="no-list-area">
-                <div class="flex-col-center" id="endGame-area">
-                    <div class="flex-col-center" id="unknown-regions">
+            <div class="flex-col-center gap-5 container-1" id="no-list-area">
+                <div class="flex-col-center gap-5" id="endGame-area">
+                    <div class="flex-col-center gap-5" id="unknown-regions">
                         <h3>Unknown Regions</h3>
                     </div>
-                    <div class="flex-col-center" id="duplicate-regions">
+                    <div class="flex-col-center gap-5" id="duplicate-regions">
                         <h3>Duplicate Regions</h3>
                     </div>
                 </div>
@@ -137,9 +137,9 @@
         </div>
 
         <!-- Shows after ending a game -->
-        <form id="game-end-panel" class="page-center flex-col">
+        <form id="game-end-panel" class="page-center flex-col gap-5">
             <h3>Game Finished</h3>
-            <nav class="flex-row">
+            <nav class="flex-row gap-5">
                 <button type="button" class="btn-green btn-fade" id="play-again-button">Play Again</button>
                 <button type="button" class="btn-turquoise btn-fade" id="review-button">Review Map</button>
                 <button type="button" class="btn-grey btn-fade" id="home-button">Home</button>
@@ -163,9 +163,9 @@
 
     <!-- For displaying typed regions in No List gamemode -->
     <template id="endGame-regions-template">
-        <div class="flex-col-center">
+        <div class="flex-col-center gap-5">
             <h5></h5>
-            <div class="flex-row-center list-1">
+            <div class="flex-row-center gap-5 list-1">
 
             </div>
         </div>

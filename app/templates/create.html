@@ -15,16 +15,16 @@
 </head>
 <body>
     <header>
-        <div class="flex-row">
+        <div class="flex-row gap-5">
             <h1>Map Quiz</h1>
         </div>
-        <nav class="flex-row" id="nav-bar">
+        <nav class="flex-row gap-5" id="nav-bar">
             <a href="../">Home</a>
             <strong>></strong>
         </nav>
     </header>
-    <main class="flex-col-center">
-        <form class="flex-col" id="create-form">
+    <main class="flex-col-center gap-5">
+        <form class="flex-col gap-5" id="create-form">
             <h3>Create Custom Map</h3>
             <div class="input-label">
                 <label for="map-name">Map Name</label>
@@ -45,12 +45,12 @@
                 <input type="file" name="thumbnail" accept="image/png,image/jpeg" id="map-thumbnail">
             </div>
             
-            <nav class="flex-row">
+            <nav class="flex-row gap-5">
                 <button type="submit" class="btn-green" id="create-button">Create</button>
                 <a href="../" class="btn-grey">Cancel</a>
             </nav>
 
-            <aside id="state-buttons-panel" class="flex-col">
+            <aside id="state-buttons-panel" class="flex-col gap-5">
                 <button class="btn-icon" id="deselect-btn" type="button"><aside>Deselect</aside></button>
                 <button class="btn-icon btn-selected" id="enabled-btn" type="button"><aside>Enable</aside></button>
                 <button class="btn-icon" id="disabled-btn" type="button"><aside>Disable</aside></button>
