@@ -10,7 +10,7 @@ app.use( express.json({ limit: '10mb' }) );
 app.use( routes );
 app.use( "/uploads", express.static( path.join( process.cwd(), "uploads" ) ) );
 
-ensureDirectory( path.join( __dirname, "uploads", "thumbnails", "custom" ) );
+ensureDirectory( path.join(  "uploads", "thumbnails", "custom" ) );
 
 // Ask the server to listen for incoming connections
 app.listen( PORT, () => {
