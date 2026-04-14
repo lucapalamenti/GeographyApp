@@ -1,6 +1,6 @@
 import util from "../util/util.js";
 import gameUtil from "./gameUtil.js";
-import { unzoom } from "./mapManipulations.js";
+import { unzoom } from "../mapManipulations.js";
 
 import { svg, promptBar, input, promptLabel, noListArea, endGameButton, reviewMapButton, tally, promptTally, selectParent, showNames, noMapArea } from "./documentElements-game.js";
 import { ATTEMPT_COLORS, REPEAT_COLOR, MAX_GUESSES, ATTEMPT_SOUNDS } from "../variables.js";
@@ -234,7 +234,7 @@ function typeHard( regionMap ) {
         }
     });
     function next( soundIndex ) {
-        unzoom( "Escape" );
+        unzoom( "Escape", svg );
         gameUtil.showLabel( currentGroup, null, true, true );
         gameUtil.playSound( ATTEMPT_SOUNDS[soundIndex] );
 

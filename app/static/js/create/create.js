@@ -1,13 +1,14 @@
 import APIClient from "../APIClient.js";
-import populateSVG from "../game/populateSVG.js";
+import populateSVG from "../populateSVG.js";
 import util from "../util/util.js";
 import createUtil from "./createUtil.js";
+import { zoom } from "../mapManipulations.js";
 
 import MapRegion from "../models/MapRegion.js";
 import MMap from "../models/MMap.js";
 
 import { navBar } from "../documentElements.js";
-import { mapName, mapTemplate, mapColor, mapThumbnail, zoomSlider, showOutline, stateButtonsPanel, mapContainer, svg, mapOutline, loadingScreen, selectedList, createForm } from "./documentElements-create.js";
+import { mapName, mapTemplate, mapColor, showOutline, stateButtonsPanel, mapContainer, svg, mapOutline, loadingScreen, selectedList, createForm } from "./documentElements-create.js";
 import { SVG_WIDTH, SVG_HEIGHT, SVG_PADDING } from "../variables.js";
 import ParentChildMap from "../models/ParentChildMap.js";
 
@@ -80,6 +81,12 @@ svg.addEventListener('mousedown', mouse => {
         changeRegionType( mouse );
     }
 });
+// Right click to zoom, Escape to unzoom
+svg.addEventListener( 'contextmenu', e => {
+    e.preventDefault();
+    zoom( e, svg );
+});
+
 document.addEventListener('mouseup', e => {
     dragging = false;
     if ( createUtil.getCenteredRegions().length > 0 ) {
@@ -236,42 +243,3 @@ async function createCustomMap( e ) {
     });
 }
 
-// Right click to zoom
-svg.addEventListener( 'contextmenu', e => { e.preventDefault(); });
-svg.addEventListener( 'contextmenu', zoom );
-function zoom( e ) {
-    const zoomLevel = zoomSlider.value * 10;
-    document.querySelectorAll('.clickLabel').forEach( label => {
-        label.style.display = "none";
-    });
-    const rect = svg.getBoundingClientRect();
-    // X coordinate of zoom viewport
-    let startX = ( e.clientX - rect.left ) * SVG_WIDTH / rect.width - SVG_WIDTH / zoomLevel;
-    // Y coordinate of zoom viewport
-    let startY = ( e.clientY - rect.top ) * SVG_HEIGHT / rect.height - SVG_HEIGHT / zoomLevel;
-    // Adjust so zoom is not greater than original viewport
-    const ratioX = SVG_WIDTH * ( 1 - 2 / zoomLevel );
-    const ratioY = SVG_HEIGHT * ( 1 - 2 / zoomLevel );
-    startX = startX < 0 ? 0 : ( startX > ratioX ) ? ratioX : startX;
-    startY = startY < 0 ? 0 : ( startY > ratioY ) ? ratioY : startY;
-
-    svg.setAttribute('viewBox', `${startX} ${startY} ${ SVG_WIDTH / zoomLevel * 2 } ${ SVG_HEIGHT / zoomLevel * 2 }`);
-    svg.classList.add(`zoom-${zoomSlider.value}`);
-    svg.removeEventListener( 'contextmenu', zoom );
-    zoomSlider.setAttribute( 'disabled', true );
-
-    // Escape key to unzoom
-    document.addEventListener( 'keydown', unzoom );
-}
-function unzoom( e ) {
-    if ( e.key !== 'Escape' ) return;
-    svg.classList.remove(`zoom-${zoomSlider.value}`);
-    svg.setAttribute('viewBox', "0 0 1600 900");
-    svg.addEventListener( 'contextmenu', zoom );
-    document.querySelectorAll('.clickLabel').forEach( label => {
-        label.style.display = "none";
-    });
-    zoomSlider.removeAttribute( 'disabled' );
-
-    document.removeEventListener( 'keydown', unzoom );
-}

@@ -69,6 +69,7 @@
 - If a thumbnail is not selected for a custom map then a default thumbnail is used
 - Input in Type gamemodes can now contain leading & trailing whitespace
 - "Show region names" button now only shows labels for "enabled" regions
+- Updated zoom/unzoom functionality for map creation to match that of gameplay
 
 ### Backend/Technical
 ### Bug Fixes

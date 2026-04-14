@@ -1,11 +1,9 @@
 export const mapName = document.getElementById('map-name');
 export const mapTemplate = document.getElementById('select-template');
 export const mapColor = document.getElementById('map-color');
-export const mapThumbnail = document.getElementById('map-thumbnail');
 export const createForm = document.getElementById('create-form');
 export const createButton = document.getElementById('create-button');
 
-export const zoomSlider = document.getElementById('zoom-slider');
 export const showOutline = document.getElementById('show-outline');
 export const stateButtonsPanel = document.getElementById('state-buttons-panel');
 
