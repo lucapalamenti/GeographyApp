@@ -289,5 +289,4 @@ export default {
 
     uploadThumbnail,
     uploadFile,
-    retrieveFile
 }
