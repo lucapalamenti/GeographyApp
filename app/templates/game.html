@@ -15,18 +15,11 @@
     <link rel="stylesheet" href="css/gameSVG.css"/>
     
     <script src="js/game/game.js" type="module"></script>
+    <script src="js/components/header.js"></script>
 </head>
 <body>
     <div id="tooltip">Click on <strong class="click-on"></strong></div>
-    <header>
-        <div class="flex-row gap-5">
-            <h1>Map Quiz</h1>
-        </div>
-        <nav class="flex-row gap-5" id="nav-bar">
-            <a href="../">Home</a>
-            <strong>></strong>
-        </nav>
-    </header>
+    <app-header></app-header>
     <main class="flex-col-center gap-5">
         <!-- Shows on load and when switching gamemodes -->
         <form id="gamemode-panel" class="page-center flex-col gap-5">
