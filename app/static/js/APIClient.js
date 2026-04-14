@@ -249,9 +249,12 @@ const uploadThumbnail = async ( data ) => {
     }
 };
 
-const retrieveFile = async ( fileName ) => {
+const uploadFile = async ( data ) => {
     try {
-        return await HTTPClient.get(`${BASE_API_PATH}/upload/${fileName}`);
+        return await fetch(`${BASE_API_PATH}/upload/mapfile`, {
+            method: 'POST',
+            body: new FormData( data )
+        });
     } catch (error) {
         return handleAuthError(error);
     }
@@ -285,5 +288,6 @@ export default {
     deleteAllPolygons,
 
     uploadThumbnail,
+    uploadFile,
     retrieveFile
 }

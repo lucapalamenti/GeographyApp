@@ -59,7 +59,6 @@
 - sort by "creation date"
 - Display maps as "block" (default), "compact", "wide"
 - Ability to speak into microphone
-- whitespace after input shouldnt make it incorrect
 - keyframes CSS
 
 # Changelog

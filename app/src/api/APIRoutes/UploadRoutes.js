@@ -5,7 +5,7 @@ const path = require("path");
 const UploadAPIRouter = express.Router();
 UploadAPIRouter.use( express.json() );
 
-const storage = multer.diskStorage({
+const thumbnailStorage = multer.diskStorage({
     // directory to store in
     destination: ( req, file, callback ) => {
         callback( null, path.join(process.cwd(), "uploads", "thumbnails", "custom") );
@@ -15,7 +15,7 @@ const storage = multer.diskStorage({
         callback( null, `${Date.now()}-${file.originalname}` );
     }
 });
-const thumbnailUpload = multer({ storage });
+const thumbnailUpload = multer({ thumbnailStorage });
 
 UploadAPIRouter.post('/thumbnail', thumbnailUpload.single('thumbnail'), (req, res) => {
     if ( req.file ) {
@@ -26,9 +26,15 @@ UploadAPIRouter.post('/thumbnail', thumbnailUpload.single('thumbnail'), (req, re
     }
 });
 
-// const upload = multer({ dest: 'uploads/' });
-UploadAPIRouter.post('/shapefile', (req, res) => {
-
+const mapfileUpload = multer({ storage: multer.memoryStorage() });
+UploadAPIRouter.post('/mapfile', mapfileUpload.single('mapfile'), (req, res) => {
+    if ( req.file ) {
+        const content = req.file.buffer.toString();
+        console.log( content );
+        res.json({ message: "AAAAA" });
+    } else {
+        res.status(400).json({ message: 'No file uploaded' });
+    }
 });
 
 module.exports = UploadAPIRouter;

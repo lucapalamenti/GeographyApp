@@ -10,5 +10,8 @@ window.onload = () => {
 const uploadThumbnail = document.getElementById("upload-file-form");
 uploadThumbnail.addEventListener("submit", async e => {
     e.preventDefault();
-    const response = await APIClient.uploadThumbnail( e.target );
+    await APIClient.uploadFile( e.target ).then( async res => {
+        console.log( await res );
+    });
+    // console.log( (await response) );
 });
