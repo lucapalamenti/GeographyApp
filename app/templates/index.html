@@ -17,11 +17,11 @@
 <body>
     <app-header></app-header>
     <main class="flex-col-center gap-5">
-        <section class="flex-col-center gap-5" id="map-section">
+        <section id="map-section" class="flex-col-center gap-5">
             <nav class="flex-row gap-5">
                 <a href="create" class="btn-1 btn-hover-effect">Create Custom Map</a>
-                <button class="btn-1 btn-hover-effect" id="delete-map-btn">Delete Custom Map</button>
-                <button class="btn-1 btn-hover-effect" id="delete-all-maps-btn">Delete ALL Custom Maps</button>
+                <button id="delete-map-btn" class="btn-1 btn-hover-effect">Delete Custom Map</button>
+                <button id="delete-all-maps-btn" class="btn-1 btn-hover-effect">Delete ALL Custom Maps</button>
                 <a href="admin" class="btn-1 btn-hover-effect">Admin Panel</a>
             </nav>
             <div class="flex-row-center gap-5">
@@ -38,8 +38,8 @@
                     <option value="map_name DESC">Z -> A</option>
                 </select>
             </div>
-            <nav class="flex-row-center gap-5" id="map-navigation"></nav>
-            <h5 class="flex-col" id="delete-popup">Click on Custom Map to Delete</h5>
+            <nav id="map-navigation" class="flex-row-center gap-5"></nav>
+            <h5 id="delete-popup" class="flex-col">Click on Custom Map to Delete</h5>
         </section>
     </main>
 

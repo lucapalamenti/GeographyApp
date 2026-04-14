@@ -17,7 +17,7 @@
 <body>
     <app-header></app-header>
     <main class="flex-col-center gap-5">
-        <form class="flex-col gap-5" id="create-form">
+        <form id="create-form" class="flex-col gap-5">
             <h3>Create Custom Map</h3>
             <div class="input-label">
                 <label for="map-name">Map Name</label>
@@ -39,20 +39,20 @@
             </div>
             
             <nav class="flex-row gap-5">
-                <button type="submit" class="btn-green" id="create-button">Create</button>
+                <button type="submit" id="create-button" class="btn-green">Create</button>
                 <a href="../" class="btn-grey">Cancel</a>
             </nav>
 
             <aside id="state-buttons-panel" class="flex-col gap-5">
-                <button class="btn-icon" id="deselect-btn" type="button"><aside>Deselect</aside></button>
-                <button class="btn-icon btn-selected" id="enabled-btn" type="button"><aside>Enable</aside></button>
-                <button class="btn-icon" id="disabled-btn" type="button"><aside>Disable</aside></button>
-                <button class="btn-icon" id="herring-btn" type="button"><aside>Herring</aside></button>
-                <button class="btn-icon" id="outside-btn" type="button"><aside>Outside</aside></button>
+                <button type="button" id="deselect-btn" class="btn-icon"><aside>Deselect</aside></button>
+                <button type="button" id="enabled-btn" class="btn-icon btn-selected"><aside>Enable</aside></button>
+                <button type="button" id="disabled-btn" class="btn-icon"><aside>Disable</aside></button>
+                <button type="button" id="herring-btn" class="btn-icon"><aside>Herring</aside></button>
+                <button type="button" id="outside-btn" class="btn-icon"><aside>Outside</aside></button>
             </aside>
         </form>
 
-        <div class="" id="map-container" hidden>
+        <div hidden id="map-container" class="">
             <div id="top-map-bar" class="game-bar">
                 <div class="input-label">
                     <input type="checkbox" id="show-outline">
@@ -61,7 +61,7 @@
                 <div class="dotted-line"></div>
             </div>
             
-            <svg viewBox="0 0 1600 900" preserveAspectRatio="none" class="container-1" id="templateMap">
+            <svg viewBox="0 0 1600 900" preserveAspectRatio="none" id="templateMap" class="container-1">
                 <rect id="map-outline"></rect>
             </svg>
         </div>

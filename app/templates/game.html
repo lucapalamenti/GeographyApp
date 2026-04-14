@@ -75,14 +75,14 @@
                 <label for="noList">No List</label>
             </div>
             <nav class="flex-row gap-5">
-                <button class="btn-green btn-fade" type="button">Select</button>
-                <a href="../" class="btn-grey btn-fade" type="button">Cancel</a>
+                <button type="button" class="btn-green btn-fade">Select</button>
+                <a href="../" type="button" class="btn-grey btn-fade">Cancel</a>
             </nav>
         </form>
 
         <div id="game-area">
             <!-- Top game bar -->
-            <div class="game-bar" id="prompt-bar">
+            <div id="prompt-bar" class="game-bar">
                 <div class="flex-row gap-5">
                     <p></p>
                     <strong class="click-on"></strong>
@@ -98,13 +98,13 @@
                 </div>
             </div>
             <!-- Used for all gamemodes with a map -->
-            <svg viewBox="0 0 1600 900" preserveAspectRatio="none" class="container-1 showGuesses" id="svg-game">
+            <svg viewBox="0 0 1600 900" preserveAspectRatio="none" id="svg-game" class="container-1 showGuesses">
                 
             </svg>
             <!-- Game bar below map -->
             <div id="bottom-game-bar" class="game-bar flex-row gap-5">
                 <button id="game-settings-btn"></button>
-                <div class="input-label" id="showNames-container">
+                <div id="showNames-container" class="input-label">
                     <input type="checkbox" id="showNames">
                     <label for="showNames">Show region names</label>
                 </div>
@@ -113,16 +113,16 @@
             </div>
 
             <!-- Used for No Map gamemode -->
-            <div class="container-1" id="no-map-area">
+            <div id="no-map-area" class="container-1">
                 
             </div>
             <!-- Used for No List gamemode -->
-            <div class="flex-col-center gap-5 container-1" id="no-list-area">
-                <div class="flex-col-center gap-5" id="endGame-area">
-                    <div class="flex-col-center gap-5" id="unknown-regions">
+            <div id="no-list-area" class="flex-col-center gap-5 container-1">
+                <div id="endGame-area" class="flex-col-center gap-5">
+                    <div id="unknown-regions" class="flex-col-center gap-5">
                         <h3>Unknown Regions</h3>
                     </div>
-                    <div class="flex-col-center gap-5" id="duplicate-regions">
+                    <div id="duplicate-regions" class="flex-col-center gap-5">
                         <h3>Duplicate Regions</h3>
                     </div>
                 </div>
@@ -133,9 +133,9 @@
         <form id="game-end-panel" class="page-center flex-col gap-5">
             <h3>Game Finished</h3>
             <nav class="flex-row gap-5">
-                <button type="button" class="btn-green btn-fade" id="play-again-button">Play Again</button>
-                <button type="button" class="btn-turquoise btn-fade" id="review-button">Review Map</button>
-                <button type="button" class="btn-grey btn-fade" id="home-button">Home</button>
+                <button type="button" id="play-again-button" class="btn-green btn-fade">Play Again</button>
+                <button type="button" id="review-button" class="btn-turquoise btn-fade">Review Map</button>
+                <button type="button" id="home-button" class="btn-grey btn-fade">Home</button>
             </nav>
         </form>
     </main>
