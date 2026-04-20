@@ -61,11 +61,11 @@ const getPolygonsByMapId = async ( map_id ) => {
 /**
  * 
  * @param {Polygon} polygon 
- * @returns {Polygon}
+ * @returns {Promise<Polygon>}
  */
 const createPolygon = async ( polygon ) => {
     const { polygon_region_id, polygon_is_enclave, polygon_enclave_of_polygon_id, polygon_points } = polygon;
-    const createdPolygon = await database.query(`
+    return await database.query(`
         INSERT INTO polygon (polygon_region_id, polygon_is_enclave, polygon_enclave_of_polygon_id, polygon_points)
         VALUES (?, ?, ?, ST_GEOMFROMTEXT(?));
         `, [polygon_region_id, polygon_is_enclave, polygon_enclave_of_polygon_id, polygon_points.toQueryString()])
@@ -75,8 +75,6 @@ const createPolygon = async ( polygon ) => {
             }
             throw new Error("Polygon could not be created!");
     });
-    await createRegionPolygon( polygon_region_id, createdPolygon.polygon_id );
-    return createdPolygon;
 };
 
 /**
@@ -84,9 +82,6 @@ const createPolygon = async ( polygon ) => {
  * @returns {Number}
  */
 const deleteAllPolygons = async () => {
-    await database.query(`
-        DELETE FROM regionPolygon;
-        `, []);
     return await database.query(`
         DELETE FROM polygon;
         `, [])
@@ -109,24 +104,12 @@ const deletePolygon = async ( polygon_id ) => {
         });
 };
 
-const createRegionPolygon = async ( region_id, polygon_id ) => {
-    await database.query(`
-        INSERT INTO regionPolygon (regionPolygon_region_id, regionPolygon_polygon_id)
-        VALUES (?, ?);
-        `, [region_id, polygon_id])
-        .then( rows => {
-            if ( rows.affectedRows === 1 ) {
-                return;
-            }
-            deletePolygon( polygon_id );
-            throw new Error("regionPolygon could not be created!");
-    });
-};
 
 module.exports = {
     getPolygonById,
     getPolygonsByRegionId,
     getPolygonsByMapId,
     createPolygon,
+    deletePolygon,
     deleteAllPolygons
 };

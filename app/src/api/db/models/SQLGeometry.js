@@ -38,7 +38,7 @@ class SQLGeometry {
 
     /**
      * Wraps a geometry SQL query string in the ST_GEOMFROMTEXT format for SQL statements
-     * @returns an SQL query string
+     * @returns {string} an SQL query string
      */
     static toQueryStringWrapper( text ) {
         if ( new.target === SQLGeometry ) {
@@ -67,8 +67,21 @@ class SQLPoint extends SQLGeometry {
         this.coordinates = sqlPoint["coordinates"];
     }
 
+    /**
+     * Returns a query string for the coordinates in the format:
+     * POINT(0 0)
+     * @returns {string}
+     */
     toQueryString() {
-        return `POINT(${this.coordinates[0]},${this.coordinates[1]})`;
+        return `POINT(${this.coordinates[0]} ${this.coordinates[1]})`;
+    }
+
+    /**
+     * Returns the query string wrapped in "ST_GEOMFROMTEXT()"
+     * @returns {string}
+     */
+    toQueryStringWrapped() {
+        return SQLGeometry.toQueryStringWrapper( this.toQueryString() );
     }
 }
 
@@ -91,10 +104,25 @@ class SQLLineString extends SQLGeometry {
         this.coordinates = sqlLineString["coordinates"];
     }
 
+    /**
+     * Returns a query string for the coordinates in the format:
+     * LINESTRING(0 0,0 0)
+     * @returns {string}
+     */
     toQueryString() {
-        return SQLGeometry.toQueryStringWrapper( `LINESTRING(${
-            this.coordinates.map( point => { return point.join(" "); }).join(",")
-        })` );
+        return `LINESTRING(${
+            this.coordinates.map( point => {
+                return point.join(" ");
+            }).join(",")
+        })`;
+    }
+
+    /**
+     * Returns the query string wrapped in "ST_GEOMFROMTEXT()"
+     * @returns {string}
+     */
+    toQueryStringWrapped() {
+        return SQLGeometry.toQueryStringWrapper( this.toQueryString() );
     }
 }
 
@@ -102,7 +130,7 @@ class SQLLineString extends SQLGeometry {
  * Javascript representation of the SQL "POLYGON" data type
  */
 class SQLPolygon extends SQLGeometry {
-    /** @type {Array<Array<Number>>} */
+    /** @type {Array<Array<Array<Number>>>} */
     coordinates = null;
     
     /**
@@ -114,18 +142,28 @@ class SQLPolygon extends SQLGeometry {
             throw new TypeError( `Cannot initialize an SQLPolygon object of type "${sqlPolygon.type}"` );
         }
         super( "Polygon" );
-        this.coordinates = sqlPolygon["coordinates"][0];
+        this.coordinates = sqlPolygon["coordinates"];
     }
 
+    /**
+     * Returns a query string for the coordinates in the format:
+     * POLYGON((0 0,0 0),(0 0,0 0))
+     * @returns {string}
+     */
     toQueryString() {
         return `POLYGON((${
             this.coordinates.map( lineString => {
                 return lineString.map( point => {
-                    return point.join(" "); }).join(",");
-                }).join("),(")
+                    return point.join(" ");
+                }).join(",");
+            }).join("),(")
         }))`;
     }
 
+    /**
+     * Returns the query string wrapped in "ST_GEOMFROMTEXT()"
+     * @returns {string}
+     */
     toQueryStringWrapped() {
         return SQLGeometry.toQueryStringWrapper( this.toQueryString() );
     }

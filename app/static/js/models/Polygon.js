@@ -18,7 +18,6 @@ export default class Polygon {
      * @param {Polygon} data 
      */
     constructor ( data ) {
-        // console.log( data );
         this.polygon_id = data.polygon_id;
         this.polygon_region_id = data.polygon_region_id;
         this.polygon_is_enclave = data.polygon_is_enclave;
