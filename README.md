@@ -63,6 +63,8 @@
 - change mapRegion_parent to mapRegion_parent_id and JOIN tables when queried
 - change region_type to region_type_id and have a table for region type names
 - *** WRITE TEST CASES FOR SQLGEOMETRY CLASS
+- I could just do all POLYGON types as MULTIPOLYGON but is this ideal?
+- why is map_id not AUTO_INCREMENT??
 
 # Changelog
 
@@ -75,6 +77,8 @@
 - Updated zoom/unzoom functionality for map creation to match that of gameplay
 
 ### Backend/Technical
+- SVG map zooming now works with any size viewbox
+
 ### Bug Fixes
 - SQLPolygon class is incorrectly storing the "coordinates" attribute as a 2D array instead of a 3D array
 
