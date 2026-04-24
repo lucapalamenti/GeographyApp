@@ -4,6 +4,7 @@
  * @see {SQLPoint}
  * @see {SQLLineString}
  * @see {SQLPolygon}
+ * @see {SQLMultiPolygon}
  * 
  * @typedef {String} SQLGeometryType Valid values for SQLGeometry.type
  */
@@ -158,6 +159,51 @@ export class SQLPolygon extends SQLGeometry {
                 }).join(",");
             }).join("),(")
         }))`;
+    }
+
+    /**
+     * Returns the query string wrapped in "ST_GEOMFROMTEXT()"
+     * @returns {string}
+     */
+    toQueryStringWrapped() {
+        return SQLGeometry.toQueryStringWrapper( this.toQueryString() );
+    }
+}
+
+/**
+ * Javascript representation of the SQL "MULTIPOLYGON" data type
+ */
+export class SQLMultiPolygon extends SQLGeometry {
+    /** @type {Array<Array<Array<Array<Number>>>>} */
+    coordinates = null;
+    
+    /**
+     * Constructor given an SQL cell with the POLYGON data type
+     * @param {SQLMultiPolygon} sqlMultiPolygon 
+     */
+    constructor ( sqlMultiPolygon ) {
+        if ( sqlMultiPolygon.type !== "MultiPolygon" ) {
+            throw new TypeError( `Cannot initialize an SQLMultiPolygon object of type "${sqlMultiPolygon.type}"` );
+        }
+        super( "MultiPolygon" );
+        this.coordinates = sqlMultiPolygon["coordinates"];
+    }
+
+    /**
+     * Returns a query string for the coordinates in the format:
+     * MULTIPOLYGON(((0 0,0 0),(0 0,0 0)),((0 0, 0 0),(0 0,0 0)))
+     * @returns {string}
+     */
+    toQueryString() {
+        return `MULTIPOLYGON(((${
+            this.coordinates.map( polygon => {
+                return polygon.map( lineString => {
+                    return lineString.map( point => {
+                        return point.join(" ");
+                    }).join(",");
+                }).join("),(");
+            }).join("),(")
+        })))`;
     }
 
     /**
