@@ -1,4 +1,4 @@
-INSERT INTO `map` (`map_id`, `map_scale`, `map_name`, `map_thumbnail`, `map_primary_color_R`, `map_primary_color_G`, `map_primary_color_B`) VALUES (0, 15, 'Test Map', 'Test_Map_Thumbnail.png', 0,0,0);
+INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color_R`, `map_primary_color_G`, `map_primary_color_B`) VALUES (1, 'Test Map', 'default/Test_Map_Thumbnail.png', 200,100,50);
 
 INSERT INTO `region` (`region_id`, `region_name`, `region_type`, `region_parent_id`) VALUES (1, 'Top Left', 'Other', null);
 INSERT INTO `region` (`region_id`, `region_name`, `region_type`, `region_parent_id`) VALUES (2, 'Top Right', 'Other', null);

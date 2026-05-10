@@ -21,16 +21,15 @@ USE `geographyapp`;
 
 -- Dumping structure for table geographyapp.map
 CREATE TABLE IF NOT EXISTS `map` (
-  `map_id` int(10) NOT NULL,
-  `map_scale` decimal(10,6) NOT NULL DEFAULT 1.000000,
+  `map_id` int(10) NOT NULL AUTO_INCREMENT,
   `map_name` varchar(128) NOT NULL DEFAULT '',
   `map_thumbnail` varchar(256) DEFAULT '',
-  `map_primary_color_R` int(3) NOT NULL DEFAULT 255,
-  `map_primary_color_G` int(3) NOT NULL DEFAULT 255,
-  `map_primary_color_B` int(3) NOT NULL DEFAULT 255,
+  `map_primary_color_R` int(3) NOT NULL DEFAULT 0,
+  `map_primary_color_G` int(3) NOT NULL DEFAULT 0,
+  `map_primary_color_B` int(3) NOT NULL DEFAULT 0,
   `map_is_custom` bit(1) DEFAULT b'0',
-  PRIMARY KEY (`map_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+  PRIMARY KEY (`map_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 -- Data exporting was unselected.
 
@@ -79,7 +78,7 @@ CREATE TABLE IF NOT EXISTS `region` (
   PRIMARY KEY (`region_id`) USING BTREE,
   KEY `FK_region_region` (`region_parent_id`),
   CONSTRAINT `FK_region_region` FOREIGN KEY (`region_parent_id`) REFERENCES `region` (`region_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=3247 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 -- Data exporting was unselected.
 

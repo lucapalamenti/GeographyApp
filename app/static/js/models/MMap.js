@@ -4,8 +4,6 @@ const ROUND_PLACES = 6;
 export default class MMap {
     /** @type {Number} */
     map_id = null;
-    /** @type {Number} */
-    map_scale = null;
     /** @type {String} */
     map_name = null;
     /** @type {String} */
@@ -25,7 +23,6 @@ export default class MMap {
      */
     constructor ( data ) {
         this.map_id = data.map_id;
-        this.map_scale = Number( Number( data.map_scale ).toFixed( ROUND_PLACES ) );
         this.map_name = data.map_name;
         this.map_thumbnail = data.map_thumbnail;
         this.map_primary_color_R = data.map_primary_color_R;
@@ -39,6 +36,6 @@ export default class MMap {
      * @returns {Array<>}
      */
     getAllVariables() {
-        return [this.map_scale, this.map_name, this.map_thumbnail, this.map_primary_color_R, this.map_primary_color_G, this.map_primary_color_B, this.map_is_custom];
+        return [this.map_name, this.map_thumbnail, this.map_primary_color_R, this.map_primary_color_G, this.map_primary_color_B, this.map_is_custom];
     }
 };

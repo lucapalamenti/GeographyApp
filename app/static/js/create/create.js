@@ -190,9 +190,7 @@ async function createCustomMap( e ) {
         console.error( err );
     });
     const mapData = new MMap({
-        // Why am i doing this API call??? I can have the API.createMap below return the map_id that this map is inserted with
-        map_id : ( await APIClient.getMaps( "map_id > -1", 'map_id DESC' ) )[0].map_id + 1,
-        map_scale : 1.0,
+        map_id : null,
         map_name : mapName.value,
         map_thumbnail : thumbnail,
         map_primary_color_R : parseInt( mapColor.value.substr(1,2), 16 ),
@@ -233,10 +231,6 @@ async function createCustomMap( e ) {
             });
         }
     }
-    
-    const xFraction = ( mapMaxX - mapMinX ) / map.map_scale / ( SVG_WIDTH - SVG_PADDING );
-    const yFraction = ( mapMaxY - mapMinY ) / map.map_scale / ( SVG_HEIGHT - SVG_PADDING );
-    mapData.map_scale = ( 1 / Math.max( xFraction, yFraction ) ).toFixed(6);
 
     await APIClient.updateMap( mapData ).catch( err => {
         console.error( err );

@@ -1,8 +1,6 @@
 module.exports = class MMap {
     /** @type {Number} */
     map_id = null;
-    /** @type {Number} */
-    map_scale = null;
     /** @type {String} */
     map_name = null;
     /** @type {String} */
@@ -22,7 +20,6 @@ module.exports = class MMap {
      */
     constructor ( data ) {
         this.map_id = data.map_id;
-        this.map_scale = data.map_scale;
         this.map_name = data.map_name;
         this.map_thumbnail = data.map_thumbnail;
         this.map_primary_color_R = data.map_primary_color_R;
@@ -36,6 +33,6 @@ module.exports = class MMap {
      * @returns {Array<>}
      */
     getAllVariables() {
-        return [this.map_scale, this.map_name, this.map_thumbnail, this.map_primary_color_R, this.map_primary_color_G, this.map_primary_color_B, this.map_is_custom];
+        return [this.map_name, this.map_thumbnail, this.map_primary_color_R, this.map_primary_color_G, this.map_primary_color_B, this.map_is_custom];
     }
 };

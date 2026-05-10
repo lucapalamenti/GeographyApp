@@ -49,16 +49,16 @@ const getMapById = async ( map_id ) => {
  */
 const createMap = async ( map ) => {
     const query = `
-        INSERT INTO \`map\` (\`map_id\`, \`map_scale\`, \`map_name\`, \`map_thumbnail\`, \`map_primary_color_R\`, \`map_primary_color_G\`, \`map_primary_color_B\`, \`map_is_custom\`)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+        INSERT INTO \`map\` (\`map_name\`, \`map_thumbnail\`, \`map_primary_color_R\`, \`map_primary_color_G\`, \`map_primary_color_B\`, \`map_is_custom\`)
+        VALUES (?, ?, ?, ?, ?, ?);
         `;
-    const params = [map.map_id, ...map.getAllVariables()];
+    const params = [...map.getAllVariables()];
     return await database.query( query, params ).then( async rows => {
             if ( rows.affectedRows === 1 ) {
                 if ( COPY_TO_FILE ) {
                     util.copyQueryToFile( query, params, `${FILENAME_PREFIX}${map.map_name.split(' ').join('_')}` );
                 }
-                return getMapById( map.map_id );
+                return getMapById( rows.insertId );
             }
             throw new Error("Map could not be created!");
     });
@@ -71,7 +71,7 @@ const createMap = async ( map ) => {
 const updateMap = async ( map ) => {
     const query = `
         UPDATE \`Map\`
-        SET \`map_id\` = ?, \`map_scale\` = ?, \`map_name\` = ?, \`map_thumbnail\` = ?, \`map_primary_color_R\` = ?, \`map_primary_color_G\` = ?, \`map_primary_color_B\` = ?, \`map_is_custom\` = ?
+        SET \`map_id\` = ?, \`map_name\` = ?, \`map_thumbnail\` = ?, \`map_primary_color_R\` = ?, \`map_primary_color_G\` = ?, \`map_primary_color_B\` = ?, \`map_is_custom\` = ?
         WHERE \`map_id\` = ?;
         `;
     const params = [map.map_id, ...map.getAllVariables(), map.map_id];
