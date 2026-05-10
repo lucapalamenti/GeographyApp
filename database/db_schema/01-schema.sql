@@ -83,11 +83,11 @@ CREATE TABLE IF NOT EXISTS `region` (
 -- Data exporting was unselected.
 
 -- Dumping structure for table geographyapp.regionName
-CREATE TABLE IF NOT EXISTS `regionName` (
-  `regionName_id` int(10) NOT NULL AUTO_INCREMENT,
-  `regionName_name` varchar(128) NOT NULL,
-  PRIMARY KEY (`regionName_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=103 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+-- CREATE TABLE IF NOT EXISTS `regionName` (
+--   `regionName_id` int(10) NOT NULL AUTO_INCREMENT,
+--   `regionName_name` varchar(128) NOT NULL,
+--   PRIMARY KEY (`regionName_id`) USING BTREE
+-- ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 -- Data exporting was unselected.
 
