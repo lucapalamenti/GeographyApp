@@ -8,9 +8,11 @@ window.onload = () => {
 }
 
 const uploadThumbnail = document.getElementById("upload-file-form");
+const fileInput = document.getElementById("file-input");
 const fileStream = document.getElementById("file-stream");
 
-uploadThumbnail.addEventListener("change", e => {
+// When a file is added
+fileInput.addEventListener("change", e => {
     const file = e.target.files[0];
     if ( file ) {
         const reader = new FileReader();
@@ -29,7 +31,7 @@ uploadThumbnail.addEventListener("change", e => {
 uploadThumbnail.addEventListener("submit", async e => {
     e.preventDefault();
     await APIClient.uploadFile( e.target ).then( async res => {
-        console.log( await res );
+        console.log( await res.json() );
     });
     // console.log( (await response) );
 });

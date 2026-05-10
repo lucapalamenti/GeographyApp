@@ -1,7 +1,7 @@
 const database = require('./databaseConnections.js');
 const util = require('./backend/util.js');
 
-const Map = require('./models/MMap.js');
+const MMap = require('./models/MMap.js');
 
 const FILENAME_PREFIX = "04-Map-";
 const COPY_TO_FILE = false;
@@ -10,7 +10,7 @@ const COPY_TO_FILE = false;
  * SQL injection is possible
  * @param {String} where SQL query to SELECT * WHERE
  * @param {String} orderBy SQL query to ORDER BY
- * @returns 
+ * @returns {Promise<Array<MMap>>}
  */
 const getMaps = async ( where, orderBy ) => {
     const VALID_QUERIES = new Set(["map_id", "map_id DESC", "map_name", "map_name DESC"]);
@@ -20,7 +20,7 @@ const getMaps = async ( where, orderBy ) => {
             WHERE ${where}
             ORDER BY ${orderBy};
             `, []).then( rows => {
-                return rows.map( row => new Map( row ) );
+                return rows.map( row => new MMap( row ) );
         });
     } else {
         throw new Error("Input contained a restricted SQL query!");
@@ -29,23 +29,26 @@ const getMaps = async ( where, orderBy ) => {
 
 /**
  * @param {Number} map_id 
- * @returns {Map}
+ * @returns {Promise<MMap>}
  */
 const getMapById = async ( map_id ) => {
-    const rows = await database.query(`
-        SELECT * FROM map
-        WHERE map_id = ?;
-    `, [map_id]);
-    
-    if ( rows.length === 1 ) {
-        return new Map( rows[0] );
+    if ( map_id ) {
+        const rows = await database.query(`
+            SELECT * FROM map
+            WHERE map_id = ?;
+        `, [map_id]);
+        
+        if ( rows.length === 1 ) {
+            return new MMap( rows[0] );
+        }
+        throw new Error("Map not found!");
     }
-    throw new Error("Map not found!");
+    throw new Error("map_id cannot be null!");
 };
 
 /**
- * @param {Map} map 
- * @returns 
+ * @param {MMap} map 
+ * @returns {Promise<MMap>}
  */
 const createMap = async ( map ) => {
     const query = `
@@ -65,8 +68,8 @@ const createMap = async ( map ) => {
 };
 
 /**
- * @param {Map} map 
- * @returns 
+ * @param {MMap} map 
+ * @returns {Promise<MMap>}
  */
 const updateMap = async ( map ) => {
     const query = `

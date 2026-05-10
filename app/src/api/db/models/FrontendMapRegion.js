@@ -1,10 +1,6 @@
-import { SQLMultiPolygon } from "./SQLGeometry.js";
-
 const ROUND_PLACES = 6;
 
-export default class MapRegion {
-    /** @type {Number} */
-    mapRegion_id = null;
+module.exports = class FrontendMapRegion {
     /** @type {Number} */
     mapRegion_map_id = null;
     /** @type {Number} */
@@ -24,10 +20,9 @@ export default class MapRegion {
     
     /**
      * Constructor given MapRegion object data
-     * @param {MapRegion} data 
+     * @param {FrontendMapRegion} data 
      */
     constructor ( data ) {
-        this.mapRegion_id = data.mapRegion_id;
         this.mapRegion_map_id = data.mapRegion_map_id;
         this.mapRegion_region_id = data.mapRegion_region_id;
         this.mapRegion_parent = data.mapRegion_parent;

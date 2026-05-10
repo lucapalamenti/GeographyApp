@@ -78,6 +78,24 @@ select {
     justify-content: center;
     align-items: center;
 }
+.flex-row-between {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.flex-row-start {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: start;
+}
+.flex-row-between-start {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: start;
+}
 
 .flex-col {
     display: flex;
@@ -88,6 +106,12 @@ select {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+.flex-col-start {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
 }
 
 .dotted-line {

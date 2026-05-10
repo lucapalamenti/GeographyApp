@@ -2,7 +2,7 @@ const express = require('express');
 
 const MapDAO = require('../db/MapDAO.js');
 const BackendPayloadManager = require('../../middleware/BackendPayloadManager.js');
-const Map = require('../db/models/MMap.js');
+const MMap = require('../db/models/MMap.js');
 const util = require('../db/backend/util.js');
 
 const MapAPIRouter = express.Router();
@@ -27,9 +27,9 @@ MapAPIRouter.get('/maps/:mapId', (req, res) => {
 });
 
 MapAPIRouter.post('/maps', BackendPayloadManager.chunkMiddleware, (req, res) => {
-    const map = new Map( req.body );
-    MapDAO.createMap( map ).then( map => {
-        res.json( map );
+    const map = new MMap( req.body );
+    MapDAO.createMap( map ).then( returnedMap => {
+        res.json( returnedMap );
     })
     .catch( err => {
         res.status(500).json({error:err, message: 'Error with POST request to /maps'});
@@ -37,7 +37,7 @@ MapAPIRouter.post('/maps', BackendPayloadManager.chunkMiddleware, (req, res) => 
 });
 
 MapAPIRouter.put('/maps', BackendPayloadManager.chunkMiddleware, (req, res) => {
-    const map = new Map( req.body );
+    const map = new MMap( req.body );
     MapDAO.updateMap( map ).then( map => {
         res.json( map );
     })

@@ -2,12 +2,13 @@ import APIClient from "./APIClient.js";
 import util from "./util/util.js";
 
 import MMap from "./models/MMap.js";
+import MapRegion from "./models/MapRegion.js";
+import BackendMapRegion from "./models/BackendMapRegion.js";
 
 import { SVG_WIDTH, SVG_HEIGHT, FOCUS_STATES } from "./variables.js";
 import ParentChildMap from "./models/ParentChildMap.js";
-import Polygon from "./models/Polygon.js";
 
-const SVG_PADDING = 10; // Pixels
+const SVG_PADDING = 0.02; // 2 Percent margins
 
 const gTemplate = document.getElementById('svg-g-template').content;
 const pathTemplate = document.getElementById('svg-path-template').content;
@@ -19,38 +20,58 @@ const pathTemplate = document.getElementById('svg-path-template').content;
  * @returns {ParentChildMap} a map where the keys are parent names and the values are arrays of region names. *The first element of the array is the 
  */
 export default async function populateSVG( map, svg ) {
-    // Get all Polygons for this map and sort them by enclave order (ascending)
-    let returnedPolygons = await APIClient.getPolygonsByMapId( map.map_id );
-    returnedPolygons.sort( (a, b) => new Polygon( a ).getEnclaveOrder( returnedPolygons ) - new Polygon( b ).getEnclaveOrder( returnedPolygons ) );
+    // Get all mapRegions for this map 
+    let mapRegions = await APIClient.getRegionsByMapId( map.map_id );
     // Get width and height of map for centering on the page
-    let minX = Infinity, maxX = 0, minY = Infinity, maxY = 0;
-    for ( const polygon of returnedPolygons ) {
-        // Only update min/max x/y for states that must be focused on screen
-        if ( FOCUS_STATES.includes( polygon.mapRegion_type ) ) {
-            for ( const path of polygon.polygon_points.coordinates ) {
-                // Check each point [X,Y] for this path to see if it's a new min/max value
-                for ( let i = 0; i < path.length; i++ ) {
-                    let X = ( path[i][0] + polygon.mapRegion_offsetX ) * map.map_scale * polygon.mapRegion_scaleX;
-                    let Y = ( path[i][1] + polygon.mapRegion_offsetY ) * map.map_scale * polygon.mapRegion_scaleY;
-                    if ( X < minX ) minX = X;
-                    if ( X > maxX ) maxX = X;
-                    if ( Y < minY ) minY = Y;
-                    if ( Y > maxY ) maxY = Y;
-                }
-            }
-            
+    let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+    for ( let mapRegion of mapRegions ) {
+        if ( FOCUS_STATES.includes( mapRegion.mapRegion_type ) ) {
+            const thisMinX = mapRegion.region_points.minXValue();
+            if ( thisMinX < minX ) minX = thisMinX;
+            const thisMaxX = mapRegion.region_points.maxXValue();
+            if ( thisMaxX > maxX ) maxX = thisMaxX;
+            const thisMinY = mapRegion.region_points.minYValue();
+            if ( thisMinY < minY ) minY = thisMinY;
+            const thisMaxY = mapRegion.region_points.maxYValue();
+            if ( thisMaxY > maxY ) maxY = thisMaxY;
         }
     }
-    const width = maxX - minX, height = maxY - minY;
-    const xCenter = ( width / SVG_WIDTH < height / SVG_HEIGHT ) ? ( SVG_WIDTH - width - 2 * SVG_PADDING ) / 2 : 0;
-    const yCenter = ( height / SVG_HEIGHT < width / SVG_WIDTH ) ? ( SVG_HEIGHT - height - 2 * SVG_PADDING ) / 2 : 0;
+
+    // Flip these since the SVG (0,0) is top left
+    [minY, maxY] = [-maxY, -minY];
+
+    let mapWidth = ( maxX - minX );
+    let mapHeight = ( maxY - minY );
+    let startX = minX;
+    let startY = minY;
+    let svgWidth, svgHeight;
+    // // Width ratio is less than height ratio
+    // if ( mapWidth / SVG_WIDTH < mapHeight / SVG_HEIGHT ) {
+    //     svgWidth = mapHeight * SVG_WIDTH / SVG_HEIGHT;
+    //     svgHeight = mapHeight;
+    //     startX -= ( svgWidth - mapWidth ) / 2;
+    // }
+    // // Height ratio is less than width ratio
+    // else if ( mapHeight / SVG_HEIGHT < mapWidth / SVG_WIDTH ) {
+    //     svgWidth = mapWidth;
+    //     svgHeight = mapWidth * SVG_HEIGHT / SVG_WIDTH;
+    //     startY -= ( svgHeight - mapHeight ) / 2;
+    // }
+
+    // startX -= mapWidth * SVG_PADDING / 2;
+    // startY -= mapHeight * SVG_PADDING / 2;
+    // svgWidth *= 1 + SVG_PADDING;
+    // svgHeight *= 1 + SVG_PADDING;
+
+    // svg.setAttribute( 'viewBox', `${startX} ${startY} ${svgWidth} ${svgHeight}` );
+    svg.setAttribute( 'viewBox', `${startX} ${startY} ${mapWidth} ${mapHeight}` );
 
     // Right now 3/5/2026 region_parent_id can be null because a region like "usa" or "polygon usa" dont exist, so the "parent id" for polygon states is null
-    const parentId = returnedPolygons[0].region_parent_id ? returnedPolygons[0].region_parent_id : 1;
+    const parentId = mapRegions[0].region_parent_id ? mapRegions[0].region_parent_id : 1;
     const regionMap = new ParentChildMap( ( await APIClient.getRegionById( parentId ) ).region_type );
-    for ( const polygon of returnedPolygons ) {
-        const parentId = util.inputToId( polygon.mapRegion_parent );
-        const regionId = util.inputToId( polygon.region_name );
+    for ( const mapRegion of mapRegions ) {
+        const parentId = util.inputToId( mapRegion.mapRegion_parent );
+        const regionId = util.inputToId( mapRegion.region_name );
         // If there doesn't exist a group for the region's parent, create it
         let parentGroup = svg.querySelector(`:scope > #${parentId}`);
         if ( !parentGroup ) {
@@ -60,48 +81,18 @@ export default async function populateSVG( map, svg ) {
         }
         
         // If the parent group doesn't contain a group for the region type, create it
-        let typeGroup = parentGroup.querySelector(`.${polygon.mapRegion_type}`);
+        let typeGroup = parentGroup.querySelector(`.${mapRegion.mapRegion_type}`);
         if ( !typeGroup ) {
-            typeGroup = createGElement( "", [polygon.mapRegion_type] );
+            typeGroup = createGElement( "", [mapRegion.mapRegion_type] );
             parentGroup.appendChild( typeGroup );
         }
 
-        // If a PATH element for the current region doesn't exist, create it
-        let childPath = typeGroup.querySelector(`#${regionId}`);
-        if ( !childPath ) {
-            childPath = createPathElement( regionId );
-            typeGroup.appendChild( childPath );
+        let childPath = createPathElement( regionId );
+        typeGroup.appendChild( childPath );
+        if ( mapRegion.mapRegion_type === "enabled" ) {
+            regionMap.addChild( parentId, regionId, mapRegion.region_id );
         }
-        if ( polygon.mapRegion_type === "enabled" ) {
-            regionMap.addChild( parentId, regionId, polygon.polygon_region_id );
-        }
-        
-        for ( let path of polygon.polygon_points.coordinates ) {
-            // Convert each array index from [1,2] to "1,2" and apply scaling & offsets
-            for ( let i = 0; i < path.length; i++ ) {
-                const X = ( path[i][0] + Number( polygon.mapRegion_offsetX ) ) * map.map_scale * polygon.mapRegion_scaleX + SVG_PADDING + xCenter;
-                const Y = ( path[i][1] + Number( polygon.mapRegion_offsetY ) ) * map.map_scale * polygon.mapRegion_scaleY + SVG_PADDING + yCenter;
-                path[i] = `${X.toFixed(6)} ${Y.toFixed(6)}`;
-            }
-            // If this is the first polygon for this region
-            if ( childPath.getAttribute('d') === null ) {
-                childPath.setAttribute('d', `M${path.join(' L')}Z` );
-            } else {
-                const prev = childPath.getAttribute('d');
-                childPath.setAttribute('d', `${prev} M${path.join(' L')}Z` );
-            }
-            // If this polygon is an enclave
-            if ( polygon.polygon_is_enclave ) {
-                const outerPolygon = returnedPolygons.find( p => p.polygon_id === polygon.polygon_enclave_of_polygon_id );
-                if ( outerPolygon ) {
-                    const outerParentId = util.inputToId( outerPolygon.mapRegion_parent );
-                    const outerRegionId = util.inputToId( outerPolygon.region_name );
-                    const outerPolygonElement = svg.querySelector( `G#${outerParentId} G PATH#${outerRegionId}` );
-                    const prev = outerPolygonElement.getAttribute('d');
-                    outerPolygonElement.setAttribute('d', `${prev} M${path.reverse().join(' L')}Z` );
-                }
-            }
-        }
+        childPath.setAttribute('d', mapRegion.region_points.toPathDString());
     };
     return regionMap;
 }

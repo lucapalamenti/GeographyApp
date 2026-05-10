@@ -18,17 +18,37 @@
     <app-header></app-header>
     <main class="flex-col-center gap-5">
         <div id="main-area" class="container-2">
-            <form enctype="multipart/form-data" id="upload-file-form" class="flex-row-center gap-5">
-                <div class="input-label">
-                    <label for="map-thumbnail">File upload</label>
-                    <input type="file" accept=".geojson" name="mapfile" id="data-input">
+            <!-- Form for uploading a .geojson map file -->
+            <form enctype="multipart/form-data" id="upload-file-form" class="flex-col gap-5">
+                <div class="flex-row-between">
+                    <div class="input-label">
+                        <label for="mapfile">File upload</label>
+                        <input type="file" accept=".geojson" name="mapfile" id="file-input" required>
+                    </div>
+                    <button type="submit" id="upload-btn" class="btn-grey">Upload</button>
                 </div>
-                <button type="submit" id="upload-btn" class="btn-grey">Upload</button>
+                <div id="file-info" class="flex-row-start gap-5">
+                    <div class="flex-col">
+                        <h6>Feature Properties:</h6>
+                        <pre id="file-stream"></pre>
+                    </div>
+                    <div class="dotted-line"></div>
+                    <div class="flex-col">
+                        <h6>Select:</h6>
+                        <div class="input-label">
+                            <label for="region_type">Region type:</label>
+                            <input name="region_type" type="text" id="region_type" required>
+                        </div>
+                    </div>
+                </div>
             </form>
-            <div>
-                <pre id="file-stream"></pre>
-            </div>
         </div>
+        <section>
+            <button></button>
+            <div>
+                
+            </div>
+        </section>
     </main>
 </body>
 </html>

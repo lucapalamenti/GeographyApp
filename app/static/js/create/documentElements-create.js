@@ -1,5 +1,6 @@
 export const mapName = document.getElementById('map-name');
 export const mapTemplate = document.getElementById('select-template');
+export const mapThumbnail = document.getElementById('map-thumbnail');
 export const mapColor = document.getElementById('map-color');
 export const createForm = document.getElementById('create-form');
 export const createButton = document.getElementById('create-button');

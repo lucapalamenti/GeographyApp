@@ -62,9 +62,16 @@
 - keyframes CSS
 - change mapRegion_parent to mapRegion_parent_id and JOIN tables when queried
 - change region_type to region_type_id and have a table for region type names
-- *** WRITE TEST CASES FOR SQLGEOMETRY CLASS
+- *** WRITE TEST CASES FOR SQLGEOMETRY CLASS AND REMOVE toQueryStringWrapped() BECAUSE IT CAN BE ABSTRACTED
+- Abstract out coordinates field
+- Make abstract "toPathDString()" so populateSVG can work well
 - I could just do all POLYGON types as MULTIPOLYGON but is this ideal?
 - why is map_id not AUTO_INCREMENT??
+- Need to clean up strings that cant become query selectors like King_&_Queen_County
+- create a separate mapRegionDAO
+- Consider using a GEOMETRYCOLLECTION with single geometry objects in them
+- "generate all SQL files" button
+- look into "SRID (Spatial Reference ID): The optional second parameter (e.g., 4326 for WGS 84 GPS coordinates) specifies the coordinate system."
 
 # Changelog
 
@@ -77,6 +84,7 @@
 - Updated zoom/unzoom functionality for map creation to match that of gameplay
 
 ### Backend/Technical
+- Polygon database table replaced with region.region_points column of type GEOMETRY
 - SVG map zooming now works with any size viewbox
 
 ### Bug Fixes
@@ -181,3 +189,6 @@ Once all Chunks are sent, a Sentinel Chunk is sent to tell the backend how many 
 - For an application that is intended to be mobile compatible, if the page needs to have significantly different html, does it make more sense to have a separate files like mainPC.html & mainMobile.html or all in 1 file
 
 - in order to use SVG elements like <polygon> etc, i have to clone them from a template. is there a better way to do this?
+
+- Why does the frontend use ESM modules while the backend uses Common JS modules?
+    - Jest is only compatible with CJS. Is it worth writing tests?

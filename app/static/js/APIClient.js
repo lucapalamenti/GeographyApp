@@ -2,8 +2,8 @@ import HTTPClient from "./HTTPClient.js";
 
 import MMap from "./models/MMap.js";
 import MapRegion from "./models/MapRegion.js";
+import BackendMapRegion from "./models/BackendMapRegion.js"
 import Region from "./models/Region.js";
-import Polygon from "./models/Polygon.js";
 import { FrontendPayloadManager, PayloadChunk, SentinelChunk } from "./models/FrontendPayloadManager.js";
 
 const BASE_API_PATH = "./api";
@@ -130,10 +130,11 @@ const getMapRegion = async ( mapRegion_map_id, mapRegion_region_id ) => {
 
 /**
  * @param {Number} map_id 
- * @returns {Array<MapRegion>}
+ * @returns {Array<BackendMapRegion>}
  */
 const getRegionsByMapId = async ( map_id ) => {
-    return await clientHandler( HTTPClient.get, `${BASE_API_PATH}/regions/map/${map_id}` );
+    const res = await clientHandler( HTTPClient.get, `${BASE_API_PATH}/regions/map/${map_id}` );
+    return res.map( e => new BackendMapRegion( e ) );
 };
 
 const createRegion = async ( regionData ) => {
@@ -154,6 +155,12 @@ const getMapRegionStates = async () => {
 
 // ----- MapDAO CALLS -----
 
+/**
+ * 
+ * @param {string} where 
+ * @param {string} orderBy 
+ * @returns {Array<MMap>}
+ */
 const getMaps = async ( where, orderBy ) => {
     return await clientHandler( HTTPClient.get, `${BASE_API_PATH}/maplist/where/${where}/orderBy/${orderBy}` );
 };
@@ -161,7 +168,7 @@ const getMaps = async ( where, orderBy ) => {
 /**
  * 
  * @param {Number} map_id 
- * @returns {MMap}
+ * @returns {Promise<MMap>}
  */
 const getMapById = async ( map_id ) => {
     return await clientHandler( HTTPClient.get, `${BASE_API_PATH}/maps/${map_id}` );
@@ -170,7 +177,7 @@ const getMapById = async ( map_id ) => {
 /**
  * Creates a Map in the database
  * @param {MMap} map 
- * @returns 
+ * @returns {Promise<MMap>}
  */
 const createMap = async ( map ) => {
     return await clientHandler( HTTPClient.post, `${BASE_API_PATH}/maps`, map );
@@ -199,41 +206,6 @@ const deleteAllCustomMaps = async () => {
  */
 const deleteMap = async ( map_id ) => {
     return await clientHandler( HTTPClient.delete, `${BASE_API_PATH}/maps/${map_id}` );
-};
-
-// ----- PolygonDAO CALLS -----
-
-const getPolygonById = async ( polygon_id ) => {
-    return await clientHandler( HTTPClient.get, `${BASE_API_PATH}/polygons/${polygon_id}` );
-};
-
-/**
- * 
- * @param {Number} region_id 
- * @returns {Array<Polygon>}
- */
-const getPolygonsByRegionId = async ( region_id ) => {
-    return await clientHandler( HTTPClient.get, `${BASE_API_PATH}/polygons/regionId/${region_id}` );
-}
-
-/**
- * 
- * @param {Number} map_id 
- * @returns {Array<Polygon>}
- */
-const getPolygonsByMapId = async ( map_id ) => {
-    return await clientHandler( HTTPClient.get, `${BASE_API_PATH}/polygons/mapId/${map_id}` );
-}
-
-/**
- * @param {Polygon} polygon 
- */
-const createPolygon = async ( polygon ) => {
-    return await clientHandler( HTTPClient.post, `${BASE_API_PATH}/polygons`, polygon );
-}
-
-const deleteAllPolygons = async () => {
-    return await clientHandler( HTTPClient.delete, `${BASE_API_PATH}/polygons` );
 };
 
 // ----- OTHER -----
@@ -280,12 +252,6 @@ export default {
     updateMap,
     deleteAllCustomMaps,
     deleteMap,
-
-    getPolygonById,
-    getPolygonsByRegionId,
-    getPolygonsByMapId,
-    createPolygon,
-    deleteAllPolygons,
 
     uploadThumbnail,
     uploadFile,

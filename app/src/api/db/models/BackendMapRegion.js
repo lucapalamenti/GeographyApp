@@ -1,19 +1,8 @@
-const { SQLPolygon } = require("./SQLGeometry");
+const { SQLGeometry } = require("./SQLGeometry.js");
 
 const ROUND_PLACES = 6;
 
-module.exports = class MapRegionPolygon {
-    /** @type {Number} */
-    polygon_id = null;
-    /** @type {Number} */
-    polygon_region_id = null;
-    /** @type {Boolean} */
-    polygon_is_enclave = null;
-    /** @type {Number} */
-    polygon_enclave_of_polygon_id = null;
-    /** @type {SQLPolygon} */
-    polygon_points = null;
-
+module.exports = class BackendMapRegion {
     /** @type {Number} */
     region_id = null;
     /** @type {String} */
@@ -22,6 +11,8 @@ module.exports = class MapRegionPolygon {
     region_type = null;
     /** @type {Number} */
     region_parent_id = null;
+    /** @type {SQLGeometry} */
+    region_points = null;
 
     /** @type {Number} */
     mapRegion_id = null;
@@ -44,19 +35,14 @@ module.exports = class MapRegionPolygon {
     
     /**
      * Constructor given MapRegion object data
-     * @param {MapRegionPolygon} data 
+     * @param {BackendMapRegion} data 
      */
     constructor ( data ) {
-        this.polygon_id = data.polygon_id;
-        this.polygon_region_id = data.polygon_region_id;
-        this.polygon_is_enclave = Boolean( data.polygon_is_enclave );
-        this.polygon_enclave_of_polygon_id = data.polygon_enclave_of_polygon_id;
-        this.polygon_points = new SQLPolygon( data.polygon_points );
-
-        this.region_id = data.region_id;
+        this.region_id = data.region_id
         this.region_name = data.region_name;
         this.region_type = data.region_type;
         this.region_parent_id = data.region_parent_id;
+        this.region_points = SQLGeometry.createAnyType( data.region_points );
 
         this.mapRegion_id = data.mapRegion_id;
         this.mapRegion_map_id = data.mapRegion_map_id;
@@ -67,5 +53,22 @@ module.exports = class MapRegionPolygon {
         this.mapRegion_scaleX = Number( Number( data.mapRegion_scaleX ).toFixed( ROUND_PLACES ) );
         this.mapRegion_scaleY = Number( Number( data.mapRegion_scaleY ).toFixed( ROUND_PLACES ) );
         this.mapRegion_type = String( data.mapRegion_type );
+    }
+
+    /**
+     * Returns an Array of all the MapRegion's variables
+     * @returns {Array<>}
+     */
+    getAllVariables() {
+        return [
+            this.mapRegion_map_id,
+            this.mapRegion_region_id,
+            this.mapRegion_parent,
+            this.mapRegion_offsetX,
+            this.mapRegion_offsetY,
+            this.mapRegion_scaleX,
+            this.mapRegion_scaleY,
+            this.mapRegion_type
+        ];
     }
 }

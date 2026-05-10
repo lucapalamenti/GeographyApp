@@ -2,7 +2,9 @@
  * Abstract class for SQL Geometry data types.
  * Subclasses include:
  * @see {SQLPoint}
+ * @see {SQLMultiPoint}
  * @see {SQLLineString}
+ * @see {sqlMultiLineString}
  * @see {SQLPolygon}
  * @see {SQLMultiPolygon}
  * 
@@ -47,6 +49,29 @@ class SQLGeometry {
         }
         return `ST_GEOMFROMTEXT('${text}')`;
     }
+
+    /**
+     * 
+     * @param {SQLGeometry} sqlGeometry 
+     */
+    static createAnyType( sqlGeometry ) {
+        switch ( sqlGeometry.type  ) {
+            case "Point":
+                return new SQLPoint( sqlGeometry );
+            case "MultiPoint":
+                return new SQLMultiPoint( sqlGeometry );
+            case "LineString":
+                return new SQLLineString( sqlGeometry );
+            case "MultiLineString":
+                return new SQLMultiLineString( sqlGeometry );
+            case "Polygon":
+                return new SQLPolygon( sqlGeometry );
+            case "MultiPolygon":
+                return new SQLMultiPolygon( sqlGeometry );
+            default:
+                throw new TypeError( `Invalid SQLGeometry type - "${sqlGeometry.type}"` );
+        }
+    }
 }
 
 /**
@@ -57,7 +82,7 @@ class SQLPoint extends SQLGeometry {
     coordinates = null;
 
     /**
-     * Constructor given an SQL cell with the POINT data type
+     * Constructor given an object with the same strcuture as an SQL POINT
      * @param {SQLPoint} sqlPoint
      */
     constructor ( sqlPoint ) {
@@ -87,6 +112,47 @@ class SQLPoint extends SQLGeometry {
 }
 
 /**
+ * Javascript representation of the SQL "MULTIPOINT" data type
+ */
+class SQLMultiPoint extends SQLGeometry {
+    /** @type {Array<Array<Number>>} */
+    coordinates = null;
+
+    /**
+     * Constructor given an object with the same strcuture as an SQL MULTIPOINT
+     * @param {SQLMultiPoint} SQLMultiPoint 
+     */
+    constructor ( SQLMultiPoint ) {
+        if ( SQLMultiPoint.type !== "MultiPoint" ) {
+            throw new TypeError( `Cannot initialize an SQLMultiPoint object of type "${SQLMultiPoint.type}"` );
+        }
+        super( "MultiPoint" );
+        this.coordinates = SQLMultiPoint["coordinates"];
+    }
+
+    /**
+     * Returns a query string for the coordinates in the format:
+     * MULTIPOINT(0 0,0 0)
+     * @returns {string}
+     */
+    toQueryString() {
+        return `MULTIPOINT(${
+            this.coordinates.map( point => {
+                return point.join(" ");
+            }).join(",")
+        })`;
+    }
+
+    /**
+     * Returns the query string wrapped in "ST_GEOMFROMTEXT()"
+     * @returns {string}
+     */
+    toQueryStringWrapped() {
+        return SQLGeometry.toQueryStringWrapper( this.toQueryString() );
+    }
+}
+
+/**
  * Javascript representation of the SQL "LINESTRING" data type
  */
 class SQLLineString extends SQLGeometry {
@@ -94,7 +160,7 @@ class SQLLineString extends SQLGeometry {
     coordinates = null;
 
     /**
-     * Constructor given an SQL cell with the LINESTRING data type
+     * Constructor given an object with the same strcuture as an SQL LINESTRING
      * @param {SQLLineString} sqlLineString
      */
     constructor ( sqlLineString ) {
@@ -128,6 +194,49 @@ class SQLLineString extends SQLGeometry {
 }
 
 /**
+ * Javascript representation of the SQL "MULTILINESTRING" data type
+ */
+class SQLMultiLineString extends SQLGeometry {
+    /** @type {Array<Array<Array<Number>>>} */
+    coordinates = null;
+
+    /**
+     * Constructor given an object with the same strcuture as an SQL MULTILINESTRING
+     * @param {SQLMultiLineString} sqlMultiLineString
+     */
+    constructor ( sqlMultiLineString ) {
+        if ( sqlMultiLineString.type !== "MultiLineString" ) {
+            throw new TypeError( `Cannot initialize an SQLMultiLineString object of type "${sqlMultiLineString.type}"` );
+        }
+        super( "MultiLineString" );
+        this.coordinates = sqlMultiLineString["coordinates"];
+    }
+
+    /**
+     * Returns a query string for the coordinates in the format:
+     * MULTILINESTRING((0 0,0 0),(0 0,0 0))
+     * @returns {string}
+     */
+    toQueryString() {
+        return `MULTILINESTRING((${
+            this.coordinates.map( lineString => {
+                return lineString.map( point => {
+                    return point.join(" ");
+                }).join(",");
+            }).join("),(")
+        }))`;
+    }
+
+    /**
+     * Returns the query string wrapped in "ST_GEOMFROMTEXT()"
+     * @returns {string}
+     */
+    toQueryStringWrapped() {
+        return SQLGeometry.toQueryStringWrapper( this.toQueryString() );
+    }
+}
+
+/**
  * Javascript representation of the SQL "POLYGON" data type
  */
 class SQLPolygon extends SQLGeometry {
@@ -135,7 +244,7 @@ class SQLPolygon extends SQLGeometry {
     coordinates = null;
     
     /**
-     * Constructor given an SQL cell with the POLYGON data type
+     * Constructor given an object with the same strcuture as an SQL POLYGON
      * @param {SQLPolygon} sqlPolygon 
      */
     constructor ( sqlPolygon ) {
@@ -178,7 +287,7 @@ class SQLMultiPolygon extends SQLGeometry {
     coordinates = null;
     
     /**
-     * Constructor given an SQL cell with the POLYGON data type
+     * Constructor given an object with the same strcuture as an SQL MULTIPOLYGON
      * @param {SQLMultiPolygon} sqlMultiPolygon 
      */
     constructor ( sqlMultiPolygon ) {
@@ -216,8 +325,11 @@ class SQLMultiPolygon extends SQLGeometry {
 }
 
 module.exports = {
+    SQLGeometry,
     SQLPoint,
+    SQLMultiPoint,
     SQLLineString,
+    SQLMultiLineString,
     SQLPolygon,
     SQLMultiPolygon
 };

@@ -2,17 +2,21 @@
  * Abstract class for SQL Geometry data types.
  * Subclasses include:
  * @see {SQLPoint}
+ * @see {SQLMultiPoint}
  * @see {SQLLineString}
+ * @see {sqlMultiLineString}
  * @see {SQLPolygon}
  * @see {SQLMultiPolygon}
  * 
  * @typedef {String} SQLGeometryType Valid values for SQLGeometry.type
  */
-class SQLGeometry {
+export class SQLGeometry {
     /** @type {Array<SQLGeometryType>} */
-    static #types = ["Point", "MultiPoint", "LineString", "MultiLineString", "Polygon", "MultiPolygon", "GeometryCollection"];
+    static #types = ["Point", "MultiPoint", "LineString", "MultiLineString", "Polygon", "MultiPolygon"];
     /** @type {String} */
     type = null;
+
+    coordinates = null;
 
     /**
      * @param {SQLGeometryType} type 
@@ -38,6 +42,56 @@ class SQLGeometry {
     }
 
     /**
+     * Returns the minimum X value for this SQLGeometry object
+     * @returns {number}
+     */
+    minXValue( offset, scale ) {
+        if ( new.target === SQLGeometry ) {
+            throw new TypeError( "Cannot call minXValue() method on abstract SQLGeometry object directly" );
+        }
+    }
+
+    /**
+     * Returns the maximum X value for this SQLGeometry object
+     * @returns {number}
+     */
+    maxXValue() {
+        if ( new.target === SQLGeometry ) {
+            throw new TypeError( "Cannot call maxXValue() method on abstract SQLGeometry object directly" );
+        }
+    }
+
+    /**
+     * Returns the minimum Y value for this SQLGeometry object
+     * @returns {number}
+     */
+    minYValue() {
+        if ( new.target === SQLGeometry ) {
+            throw new TypeError( "Cannot call minYValue() method on abstract SQLGeometry object directly" );
+        }
+    }
+
+    /**
+     * Returns the maximum Y value for this SQLGeometry object
+     * @returns {number}
+     */
+    maxYValue() {
+        if ( new.target === SQLGeometry ) {
+            throw new TypeError( "Cannot call maxYValue() method on abstract SQLGeometry object directly" );
+        }
+    }
+    
+    /**
+     * Returns the equivalent <path> "d" attribute for this SQLGeometry object
+     * @returns {string}
+     */
+    toPathDString() {
+        if ( new.target === SQLGeometry ) {
+            throw new TypeError( "Cannot call toPathDString() method on abstract SQLGeometry object directly" );
+        }
+    }
+
+    /**
      * Wraps a geometry SQL query string in the ST_GEOMFROMTEXT format for SQL statements
      * @returns {string} an SQL query string
      */
@@ -46,6 +100,29 @@ class SQLGeometry {
             throw new Error( "Cannot call abstract function! Must be defined in subclass!" );
         }
         return `ST_GEOMFROMTEXT('${text}')`;
+    }
+    
+    /**
+     * 
+     * @param {SQLGeometry} sqlGeometry 
+     */
+    static createAnyType( sqlGeometry ) {
+        switch ( sqlGeometry.type  ) {
+            case "Point":
+                return new SQLPoint( sqlGeometry );
+            case "MultiPoint":
+                return new SQLMultiPoint( sqlGeometry );
+            case "LineString":
+                return new SQLLineString( sqlGeometry );
+            case "MultiLineString":
+                return new SQLMultiLineString( sqlGeometry );
+            case "Polygon":
+                return new SQLPolygon( sqlGeometry );
+            case "MultiPolygon":
+                return new SQLMultiPolygon( sqlGeometry );
+            default:
+                throw new TypeError( `Invalid SQLGeometry type - "${sqlGeometry.type}"` );
+        }
     }
 }
 
@@ -57,7 +134,7 @@ export class SQLPoint extends SQLGeometry {
     coordinates = null;
 
     /**
-     * Constructor given an SQL cell with the POINT data type
+     * Constructor given an object with the same strcuture as an SQL POINT
      * @param {SQLPoint} sqlPoint
      */
     constructor ( sqlPoint ) {
@@ -66,6 +143,26 @@ export class SQLPoint extends SQLGeometry {
         }
         super( "Point" );
         this.coordinates = sqlPoint["coordinates"];
+    }
+
+    minXValue() {
+        return this.coordinates[0];
+    }
+    
+    maxXValue() {
+        return this.coordinates[0];
+    }
+
+    minYValue() {
+        return this.coordinates[1];
+    }
+
+    maxYValue() {
+        return this.coordinates[1];
+    }
+
+    toPathDString() {
+        return `M${this.coordinates[0]} ${-1 * this.coordinates[1]} Z`;
     }
 
     /**
@@ -87,6 +184,87 @@ export class SQLPoint extends SQLGeometry {
 }
 
 /**
+ * Javascript representation of the SQL "MULTIPOINT" data type
+ */
+export class SQLMultiPoint extends SQLGeometry {
+    /** @type {Array<Array<Number>>} */
+    coordinates = null;
+
+    /**
+     * Constructor given an object with the same strcuture as an SQL MULTIPOINT
+     * @param {SQLMultiPoint} SQLMultiPoint 
+     */
+    constructor ( SQLMultiPoint ) {
+        if ( SQLMultiPoint.type !== "MultiPoint" ) {
+            throw new TypeError( `Cannot initialize an SQLMultiPoint object of type "${SQLMultiPoint.type}"` );
+        }
+        super( "MultiPoint" );
+        this.coordinates = SQLMultiPoint["coordinates"];
+    }
+    
+    minXValue() {
+        let minX = Infinity;
+        for ( const point of this.coordinates ) {
+            if ( point[0] < minX ) minX = point[0];
+        }
+        return minX;
+    }
+    
+    maxXValue() {
+        let maxX = -Infinity;
+        for ( const point of this.coordinates ) {
+            if ( point[0] > maxX ) maxX = point[0];
+        }
+        return maxX;
+    }
+
+    minYValue() {
+        let minY = Infinity;
+        for ( const point of this.coordinates ) {
+            if ( point[1] < minY ) minY = point[1];
+        }
+        return minY;
+    }
+
+    maxYValue() {
+        let maxY = -Infinity;
+        for ( const point of this.coordinates ) {
+            if ( point[1] > maxY ) maxY = point[1];
+        }
+        return maxY;
+    }
+
+    toPathDString() {
+        return `M${
+            this.coordinates.map( point => {
+                return `${point[0]} ${-1 * point[1]}`;
+            }).join(" Z M")
+        } Z`;
+    }
+
+    /**
+     * Returns a query string for the coordinates in the format:
+     * MULTIPOINT(0 0,0 0)
+     * @returns {string}
+     */
+    toQueryString() {
+        return `MULTIPOINT(${
+            this.coordinates.map( point => {
+                return point.join(" ");
+            }).join(",")
+        })`;
+    }
+
+    /**
+     * Returns the query string wrapped in "ST_GEOMFROMTEXT()"
+     * @returns {string}
+     */
+    toQueryStringWrapped() {
+        return SQLGeometry.toQueryStringWrapper( this.toQueryString() );
+    }
+}
+
+/**
  * Javascript representation of the SQL "LINESTRING" data type
  */
 export class SQLLineString extends SQLGeometry {
@@ -94,7 +272,7 @@ export class SQLLineString extends SQLGeometry {
     coordinates = null;
 
     /**
-     * Constructor given an SQL cell with the LINESTRING data type
+     * Constructor given an object with the same strcuture as an SQL LINESTRING
      * @param {SQLLineString} sqlLineString
      */
     constructor ( sqlLineString ) {
@@ -103,6 +281,46 @@ export class SQLLineString extends SQLGeometry {
         }
         super( "LineString" );
         this.coordinates = sqlLineString["coordinates"];
+    }
+    
+    minXValue() {
+        let minX = Infinity;
+        for ( const point of this.coordinates ) {
+            if ( point[0] < minX ) minX = point[0];
+        }
+        return minX;
+    }
+    
+    maxXValue() {
+        let maxX = -Infinity;
+        for ( const point of this.coordinates ) {
+            if ( point[0] > maxX ) maxX = point[0];
+        }
+        return maxX;
+    }
+
+    minYValue() {
+        let minY = Infinity;
+        for ( const point of this.coordinates ) {
+            if ( point[1] < minY ) minY = point[1];
+        }
+        return minY;
+    }
+
+    maxYValue() {
+        let maxY = -Infinity;
+        for ( const point of this.coordinates ) {
+            if ( point[1] > maxY ) maxY = point[1];
+        }
+        return maxY;
+    }
+
+    toPathDString() {
+        return `M${
+            this.coordinates.map( point => {
+                return `${point[0]} ${-1 * point[1]}`;
+            }).join(" L")
+        }`;
     }
 
     /**
@@ -128,6 +346,99 @@ export class SQLLineString extends SQLGeometry {
 }
 
 /**
+ * Javascript representation of the SQL "MULTILINESTRING" data type
+ */
+export class SQLMultiLineString extends SQLGeometry {
+    /** @type {Array<Array<Array<Number>>>} */
+    coordinates = null;
+
+    /**
+     * Constructor given an object with the same strcuture as an SQL MULTILINESTRING
+     * @param {SQLMultiLineString} sqlMultiLineString
+     */
+    constructor ( sqlMultiLineString ) {
+        if ( sqlMultiLineString.type !== "MultiLineString" ) {
+            throw new TypeError( `Cannot initialize an SQLMultiLineString object of type "${sqlMultiLineString.type}"` );
+        }
+        super( "MultiLineString" );
+        this.coordinates = sqlMultiLineString["coordinates"];
+    }
+    
+    minXValue() {
+        let minX = Infinity;
+        for ( const lineString of this.coordinates ) {
+            for ( const point of lineString ) {
+                if ( point[0] < minX ) minX = point[0];
+            }
+        }
+        return minX;
+    }
+    
+    maxXValue() {
+        let maxX = -Infinity;
+        for ( const lineString of this.coordinates ) {
+            for ( const point of lineString ) {
+                if ( point[0] > maxX ) maxX = point[0];
+            }
+        }
+        return maxX;
+    }
+
+    minYValue() {
+        let minY = Infinity;
+        for ( const lineString of this.coordinates ) {
+            for ( const point of lineString ) {
+                if ( point[1] < minY ) minY = point[1];
+            }
+        }
+        return minY;
+    }
+
+    maxYValue() {
+        let maxY = -Infinity;
+        for ( const lineString of this.coordinates ) {
+            for ( const point of lineString ) {
+                if ( point[1] > maxY ) maxY = point[1];
+            }
+        }
+        return maxY;
+    }
+
+    toPathDString() {
+        return `M${
+            this.coordinates.map( lineString => {
+                return lineString.map( point => {
+                    return `${point[0]} ${-1 * point[1]}`;
+                }).join(" L");
+            }).join(" M")
+        }`;
+    }
+
+    /**
+     * Returns a query string for the coordinates in the format:
+     * MULTILINESTRING((0 0,0 0),(0 0,0 0))
+     * @returns {string}
+     */
+    toQueryString() {
+        return `MULTILINESTRING((${
+            this.coordinates.map( lineString => {
+                return lineString.map( point => {
+                    return point.join(" ");
+                }).join(",");
+            }).join("),(")
+        }))`;
+    }
+
+    /**
+     * Returns the query string wrapped in "ST_GEOMFROMTEXT()"
+     * @returns {string}
+     */
+    toQueryStringWrapped() {
+        return SQLGeometry.toQueryStringWrapper( this.toQueryString() );
+    }
+}
+
+/**
  * Javascript representation of the SQL "POLYGON" data type
  */
 export class SQLPolygon extends SQLGeometry {
@@ -135,7 +446,7 @@ export class SQLPolygon extends SQLGeometry {
     coordinates = null;
     
     /**
-     * Constructor given an SQL cell with the POLYGON data type
+     * Constructor given an object with the same strcuture as an SQL POLYGON
      * @param {SQLPolygon} sqlPolygon 
      */
     constructor ( sqlPolygon ) {
@@ -144,6 +455,56 @@ export class SQLPolygon extends SQLGeometry {
         }
         super( "Polygon" );
         this.coordinates = sqlPolygon["coordinates"];
+    }
+    
+    minXValue() {
+        let minX = Infinity;
+        for ( const lineString of this.coordinates ) {
+            for ( const point of lineString ) {
+                if ( point[0] < minX ) minX = point[0];
+            }
+        }
+        return minX;
+    }
+    
+    maxXValue() {
+        let maxX = -Infinity;
+        for ( const lineString of this.coordinates ) {
+            for ( const point of lineString ) {
+                if ( point[0] > maxX ) maxX = point[0];
+            }
+        }
+        return maxX;
+    }
+
+    minYValue() {
+        let minY = Infinity;
+        for ( const lineString of this.coordinates ) {
+            for ( const point of lineString ) {
+                if ( point[1] < minY ) minY = point[1];
+            }
+        }
+        return minY;
+    }
+
+    maxYValue() {
+        let maxY = -Infinity;
+        for ( const lineString of this.coordinates ) {
+            for ( const point of lineString ) {
+                if ( point[1] > maxY ) maxY = point[1];
+            }
+        }
+        return maxY;
+    }
+
+    toPathDString() {
+        return `M${
+            this.coordinates.map( lineString => {
+                return lineString.map( point => {
+                    return `${point[0]} ${-1 * point[1]}`;
+                }).join(" L");
+            }).join(" M")
+        } Z`;
     }
 
     /**
@@ -178,7 +539,7 @@ export class SQLMultiPolygon extends SQLGeometry {
     coordinates = null;
     
     /**
-     * Constructor given an SQL cell with the POLYGON data type
+     * Constructor given an object with the same strcuture as an SQL MULTIPOLYGON
      * @param {SQLMultiPolygon} sqlMultiPolygon 
      */
     constructor ( sqlMultiPolygon ) {
@@ -187,6 +548,66 @@ export class SQLMultiPolygon extends SQLGeometry {
         }
         super( "MultiPolygon" );
         this.coordinates = sqlMultiPolygon["coordinates"];
+    }
+    
+    minXValue() {
+        let minX = Infinity;
+        for ( const polygon of this.coordinates ) {
+            for ( const lineString of polygon ) {
+                for ( const point of lineString ) {
+                    if ( point[0] < minX ) minX = point[0];
+                }
+            }
+        }
+        return minX;
+    }
+    
+    maxXValue() {
+        let maxX = -Infinity;
+        for ( const polygon of this.coordinates ) {
+            for ( const lineString of polygon ) {
+                for ( const point of lineString ) {
+                    if ( point[0] > maxX ) maxX = point[0];
+                }
+            }
+        }
+        return maxX;
+    }
+
+    minYValue() {
+        let minY = Infinity;
+        for ( const polygon of this.coordinates ) {
+            for ( const lineString of polygon ) {
+                for ( const point of lineString ) {
+                    if ( point[1] < minY ) minY = point[1];
+                }
+            }
+        }
+        return minY;
+    }
+
+    maxYValue() {
+        let maxY = -Infinity;
+        for ( const polygon of this.coordinates ) {
+            for ( const lineString of polygon ) {
+                for ( const point of lineString ) {
+                    if ( point[1] > maxY ) maxY = point[1];
+                }
+            }
+        }
+        return maxY;
+    }
+
+    toPathDString() {
+        return `M${
+            this.coordinates.map( polygon => {
+                return polygon.map( lineString => {
+                    return lineString.map( point => {
+                        return `${point[0]} ${-1 * point[1]}`;
+                    }).join(" L");
+                }).join(" M");
+            }).join(" Z M")
+        } Z`;
     }
 
     /**

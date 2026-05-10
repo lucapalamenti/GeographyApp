@@ -3,7 +3,7 @@ const express = require('express');
 const RegionDAO = require('../db/RegionDAO.js');
 const BackendPayloadManager = require('../../middleware/BackendPayloadManager.js');
 
-const MapRegion = require('../db/models/MapRegion.js');
+const FrontendMapRegion = require('../db/models/FrontendMapRegion.js');
 const Region = require('../db/models/Region.js');
 
 const RegionAPIRouter = express.Router();
@@ -78,7 +78,7 @@ RegionAPIRouter.get('/mapRegion/:mapId/:regionId', (req, res) => {
 });
 
 RegionAPIRouter.post('/regions', BackendPayloadManager.chunkMiddleware, (req, res) => {
-    const region =  new Region(req.body );
+    const region =  new FrontendMapRegion(req.body );
     RegionDAO.createRegion( region ).then( region => {
         res.json( region );
     })
@@ -88,7 +88,7 @@ RegionAPIRouter.post('/regions', BackendPayloadManager.chunkMiddleware, (req, re
 });
 
 RegionAPIRouter.post('/mapRegion', BackendPayloadManager.chunkMiddleware, (req, res) => {
-    const mapRegion = new MapRegion( req.body );
+    const mapRegion = new FrontendMapRegion( req.body );
     RegionDAO.createMapRegion( mapRegion ).then( mapRegion => {
         res.json( mapRegion );
     })

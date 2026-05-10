@@ -8,7 +8,7 @@ import MapRegion from "../models/MapRegion.js";
 import MMap from "../models/MMap.js";
 
 import { navBar } from "../documentElements.js";
-import { mapName, mapTemplate, mapColor, showOutline, stateButtonsPanel, mapContainer, svg, mapOutline, loadingScreen, selectedList, createForm } from "./documentElements-create.js";
+import { mapName, mapTemplate, mapColor, mapThumbnail, showOutline, stateButtonsPanel, mapContainer, svg, mapOutline, loadingScreen, selectedList, createForm } from "./documentElements-create.js";
 import { SVG_WIDTH, SVG_HEIGHT, SVG_PADDING } from "../variables.js";
 import ParentChildMap from "../models/ParentChildMap.js";
 
@@ -20,7 +20,7 @@ window.onload = async () => {
     pageName.textContent = "Create";
     navBar.appendChild( pageName );
 
-    await APIClient.getMaps( "map_id > 0", "map_id" ).then( maps => {
+    await APIClient.getMaps( "map_id > -1", "map_id" ).then( maps => {
         // Populate "Choose Template" selection panel
         maps.forEach( map => {
             const option = document.createElement('OPTION');
@@ -169,7 +169,6 @@ createForm.addEventListener('submit', async e => {
     e.preventDefault();
     if ( mapName.value && mapTemplate.value && svg.querySelectorAll('PATH.enabled').length > 1 ) {
         loadingScreen.style.display = "flex";
-        // console.log( e.target.elements[3].files[0] ); return;
         await createCustomMap( e ).then( map => {
             document.location = "../";
         }).catch( err => {
@@ -183,12 +182,17 @@ createForm.addEventListener('submit', async e => {
  * @param {SubmitEvent} e 
  */
 async function createCustomMap( e ) {
-    let thumbnail;
-    await APIClient.uploadThumbnail( e.target ).then( async res => {
-        thumbnail = ( res.status === 400 ) ? "default/Test_Map_Thumbnail.png" : ( await res.json() ).filename;
-    }).catch( err => {
-        console.error( err );
-    });
+    let thumbnail = "default/Test_Map_Thumbnail.png";
+    if ( mapThumbnail.files.length === 1 ) {
+        await APIClient.uploadThumbnail( e.target ).then( async res => {
+            res = await res.json();
+            thumbnail = res.filename;
+        }).catch( err => {
+            console.error( err );
+            return;
+        });
+    }
+    
     const mapData = new MMap({
         map_id : null,
         map_name : mapName.value,
@@ -198,10 +202,12 @@ async function createCustomMap( e ) {
         map_primary_color_B : parseInt( mapColor.value.substr(5,2), 16 ),
         map_is_custom : 1
     });
-    await APIClient.createMap( mapData ).catch( err => {
-        console.error( err );
+    // Create Map
+    await APIClient.createMap( mapData ).then( returnedMap => {
+        // Update map_id using retrieved Map
+        mapData.map_id = returnedMap.map_id
     });
-
+    
     // Find min and max X & Y values
     const minMax = createUtil.findMinMax();
     let mapMinX = minMax.mapMinX, mapMaxX = minMax.mapMaxX, mapMinY = minMax.mapMinY, mapMaxY = minMax.mapMaxY;
@@ -216,17 +222,17 @@ async function createCustomMap( e ) {
                 mapRegion_map_id : mapData.map_id,
                 mapRegion_region_id : regionMap.getChild( parentId, pathElement.id ),
                 mapRegion_parent : util.idToInput( parentId ),
-                mapRegion_offsetX : ( pathElement.getBBox().x - mapMinX ) / map.map_scale,
-                mapRegion_offsetY : ( pathElement.getBBox().y - mapMinY ) / map.map_scale,
+                mapRegion_offsetX : 0,
+                mapRegion_offsetY : 0,
                 mapRegion_scaleX : 1.0,
                 mapRegion_scaleY : 1.0,
                 mapRegion_type : typeName
             });
             await APIClient.createMapRegion( mapRegion ).then( returnedMapRegion => {}).catch( async err => {
-                await APIClient.deleteMap( mapData.map_id ).then( res => {
-                    console.log( "Map creation aborted, deleted all data." );
-                    return;
-                });
+                // await APIClient.deleteMap( mapData.map_id ).then( res => {
+                //     console.log( "Map creation aborted, deleted all data." );
+                //     return;
+                // });
                 console.error( err );
             });
         }
