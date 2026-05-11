@@ -16,6 +16,8 @@ class SQLGeometry {
     /** @type {String} */
     type = null;
 
+    coordinates = null;
+
     /**
      * @param {SQLGeometryType} type 
      */
@@ -40,18 +42,34 @@ class SQLGeometry {
     }
 
     /**
-     * Wraps a geometry SQL query string in the ST_GEOMFROMTEXT format for SQL statements
-     * @returns {string} an SQL query string
+     * Returns a query string for the coordinates of this SQLGeometry object
      */
-    static toQueryStringWrapper( text ) {
-        if ( new.target === SQLGeometry ) {
-            throw new Error( "Cannot call abstract function! Must be defined in subclass!" );
-        }
-        return `ST_GEOMFROMTEXT('${text}')`;
+    toQueryString() {
+        this.#subclassCheck( this.toQueryString );
     }
 
     /**
-     * 
+     * Returns the query string wrapped in "ST_GEOMFROMTEXT()" for SQL statements
+     * @returns {string}
+     */
+    toQueryStringWrapped() {
+        return `ST_GEOMFROMTEXT('${this.toQueryString()}')`;
+    }
+
+    /**
+     * Throws an error if this method is being called on an abstract SQLGeometry object 
+     * @param {undefined | () => any} method 
+     */
+    #subclassCheck( method ) {
+        if ( new.target === SQLGeometry ) {
+            const name = method === undefined ? "" : `${method.name}()`;
+            throw new Error( `Cannot call ${name} method on abstract SQLGeometry class!` );
+        }
+    }
+
+    /**
+     * Creates an SQLGeometry object from the given data. Must contain the "type" field of
+     * an SQLGeometry subclass
      * @param {SQLGeometry} sqlGeometry 
      */
     static createAnyType( sqlGeometry ) {
@@ -101,14 +119,6 @@ class SQLPoint extends SQLGeometry {
     toQueryString() {
         return `POINT(${this.coordinates[0]} ${this.coordinates[1]})`;
     }
-
-    /**
-     * Returns the query string wrapped in "ST_GEOMFROMTEXT()"
-     * @returns {string}
-     */
-    toQueryStringWrapped() {
-        return SQLGeometry.toQueryStringWrapper( this.toQueryString() );
-    }
 }
 
 /**
@@ -142,14 +152,6 @@ class SQLMultiPoint extends SQLGeometry {
             }).join(",")
         })`;
     }
-
-    /**
-     * Returns the query string wrapped in "ST_GEOMFROMTEXT()"
-     * @returns {string}
-     */
-    toQueryStringWrapped() {
-        return SQLGeometry.toQueryStringWrapper( this.toQueryString() );
-    }
 }
 
 /**
@@ -182,14 +184,6 @@ class SQLLineString extends SQLGeometry {
                 return point.join(" ");
             }).join(",")
         })`;
-    }
-
-    /**
-     * Returns the query string wrapped in "ST_GEOMFROMTEXT()"
-     * @returns {string}
-     */
-    toQueryStringWrapped() {
-        return SQLGeometry.toQueryStringWrapper( this.toQueryString() );
     }
 }
 
@@ -226,14 +220,6 @@ class SQLMultiLineString extends SQLGeometry {
             }).join("),(")
         }))`;
     }
-
-    /**
-     * Returns the query string wrapped in "ST_GEOMFROMTEXT()"
-     * @returns {string}
-     */
-    toQueryStringWrapped() {
-        return SQLGeometry.toQueryStringWrapper( this.toQueryString() );
-    }
 }
 
 /**
@@ -268,14 +254,6 @@ class SQLPolygon extends SQLGeometry {
                 }).join(",");
             }).join("),(")
         }))`;
-    }
-
-    /**
-     * Returns the query string wrapped in "ST_GEOMFROMTEXT()"
-     * @returns {string}
-     */
-    toQueryStringWrapped() {
-        return SQLGeometry.toQueryStringWrapper( this.toQueryString() );
     }
 }
 
@@ -313,14 +291,6 @@ class SQLMultiPolygon extends SQLGeometry {
                 }).join("),(");
             }).join("),(")
         })))`;
-    }
-
-    /**
-     * Returns the query string wrapped in "ST_GEOMFROMTEXT()"
-     * @returns {string}
-     */
-    toQueryStringWrapped() {
-        return SQLGeometry.toQueryStringWrapper( this.toQueryString() );
     }
 }
 

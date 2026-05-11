@@ -45,65 +45,46 @@ export class SQLGeometry {
      * Returns the minimum X value for this SQLGeometry object
      * @returns {number}
      */
-    minXValue( offset, scale ) {
-        if ( new.target === SQLGeometry ) {
-            throw new TypeError( "Cannot call minXValue() method on abstract SQLGeometry object directly" );
-        }
-    }
+    minXValue() { this.#subclassCheck( this.minXValue ); }
 
     /**
      * Returns the maximum X value for this SQLGeometry object
      * @returns {number}
      */
-    maxXValue() {
-        if ( new.target === SQLGeometry ) {
-            throw new TypeError( "Cannot call maxXValue() method on abstract SQLGeometry object directly" );
-        }
-    }
+    maxXValue() { this.#subclassCheck( this.maxXValue ); }
 
     /**
      * Returns the minimum Y value for this SQLGeometry object
      * @returns {number}
      */
-    minYValue() {
-        if ( new.target === SQLGeometry ) {
-            throw new TypeError( "Cannot call minYValue() method on abstract SQLGeometry object directly" );
-        }
-    }
+    minYValue() { this.#subclassCheck( this.minYValue ); }
 
     /**
      * Returns the maximum Y value for this SQLGeometry object
      * @returns {number}
      */
-    maxYValue() {
-        if ( new.target === SQLGeometry ) {
-            throw new TypeError( "Cannot call maxYValue() method on abstract SQLGeometry object directly" );
-        }
-    }
+    maxYValue() { this.#subclassCheck( this.maxYValue ); }
     
     /**
      * Returns the equivalent <path> "d" attribute for this SQLGeometry object
      * @returns {string}
      */
-    toPathDString() {
-        if ( new.target === SQLGeometry ) {
-            throw new TypeError( "Cannot call toPathDString() method on abstract SQLGeometry object directly" );
-        }
-    }
+    toPathDString() { this.#subclassCheck( this.toPathDString ); }
 
     /**
-     * Wraps a geometry SQL query string in the ST_GEOMFROMTEXT format for SQL statements
-     * @returns {string} an SQL query string
+     * Throws an error if this method is being called on an abstract SQLGeometry object 
+     * @param {undefined | () => any} method 
      */
-    static toQueryStringWrapper( text ) {
+    #subclassCheck( method ) {
         if ( new.target === SQLGeometry ) {
-            throw new Error( "Cannot call abstract function! Must be defined in subclass!" );
+            const name = method === undefined ? "" : `${method.name}()`;
+            throw new Error( `Cannot call ${name} method on abstract SQLGeometry class!` );
         }
-        return `ST_GEOMFROMTEXT('${text}')`;
     }
     
     /**
-     * 
+     * Creates an SQLGeometry object from the given data. Must contain the "type" field of
+     * an SQLGeometry subclass
      * @param {SQLGeometry} sqlGeometry 
      */
     static createAnyType( sqlGeometry ) {
@@ -163,23 +144,6 @@ export class SQLPoint extends SQLGeometry {
 
     toPathDString() {
         return `M${this.coordinates[0]} ${-1 * this.coordinates[1]} Z`;
-    }
-
-    /**
-     * Returns a query string for the coordinates in the format:
-     * POINT(0 0)
-     * @returns {string}
-     */
-    toQueryString() {
-        return `POINT(${this.coordinates[0]} ${this.coordinates[1]})`;
-    }
-
-    /**
-     * Returns the query string wrapped in "ST_GEOMFROMTEXT()"
-     * @returns {string}
-     */
-    toQueryStringWrapped() {
-        return SQLGeometry.toQueryStringWrapper( this.toQueryString() );
     }
 }
 
@@ -241,27 +205,6 @@ export class SQLMultiPoint extends SQLGeometry {
             }).join(" Z M")
         } Z`;
     }
-
-    /**
-     * Returns a query string for the coordinates in the format:
-     * MULTIPOINT(0 0,0 0)
-     * @returns {string}
-     */
-    toQueryString() {
-        return `MULTIPOINT(${
-            this.coordinates.map( point => {
-                return point.join(" ");
-            }).join(",")
-        })`;
-    }
-
-    /**
-     * Returns the query string wrapped in "ST_GEOMFROMTEXT()"
-     * @returns {string}
-     */
-    toQueryStringWrapped() {
-        return SQLGeometry.toQueryStringWrapper( this.toQueryString() );
-    }
 }
 
 /**
@@ -321,27 +264,6 @@ export class SQLLineString extends SQLGeometry {
                 return `${point[0]} ${-1 * point[1]}`;
             }).join(" L")
         }`;
-    }
-
-    /**
-     * Returns a query string for the coordinates in the format:
-     * LINESTRING(0 0,0 0)
-     * @returns {string}
-     */
-    toQueryString() {
-        return `LINESTRING(${
-            this.coordinates.map( point => {
-                return point.join(" ");
-            }).join(",")
-        })`;
-    }
-
-    /**
-     * Returns the query string wrapped in "ST_GEOMFROMTEXT()"
-     * @returns {string}
-     */
-    toQueryStringWrapped() {
-        return SQLGeometry.toQueryStringWrapper( this.toQueryString() );
     }
 }
 
@@ -413,29 +335,6 @@ export class SQLMultiLineString extends SQLGeometry {
             }).join(" M")
         }`;
     }
-
-    /**
-     * Returns a query string for the coordinates in the format:
-     * MULTILINESTRING((0 0,0 0),(0 0,0 0))
-     * @returns {string}
-     */
-    toQueryString() {
-        return `MULTILINESTRING((${
-            this.coordinates.map( lineString => {
-                return lineString.map( point => {
-                    return point.join(" ");
-                }).join(",");
-            }).join("),(")
-        }))`;
-    }
-
-    /**
-     * Returns the query string wrapped in "ST_GEOMFROMTEXT()"
-     * @returns {string}
-     */
-    toQueryStringWrapped() {
-        return SQLGeometry.toQueryStringWrapper( this.toQueryString() );
-    }
 }
 
 /**
@@ -505,29 +404,6 @@ export class SQLPolygon extends SQLGeometry {
                 }).join(" L");
             }).join(" M")
         } Z`;
-    }
-
-    /**
-     * Returns a query string for the coordinates in the format:
-     * POLYGON((0 0,0 0),(0 0,0 0))
-     * @returns {string}
-     */
-    toQueryString() {
-        return `POLYGON((${
-            this.coordinates.map( lineString => {
-                return lineString.map( point => {
-                    return point.join(" ");
-                }).join(",");
-            }).join("),(")
-        }))`;
-    }
-
-    /**
-     * Returns the query string wrapped in "ST_GEOMFROMTEXT()"
-     * @returns {string}
-     */
-    toQueryStringWrapped() {
-        return SQLGeometry.toQueryStringWrapper( this.toQueryString() );
     }
 }
 
@@ -608,30 +484,5 @@ export class SQLMultiPolygon extends SQLGeometry {
                 }).join(" M");
             }).join(" Z M")
         } Z`;
-    }
-
-    /**
-     * Returns a query string for the coordinates in the format:
-     * MULTIPOLYGON(((0 0,0 0),(0 0,0 0)),((0 0, 0 0),(0 0,0 0)))
-     * @returns {string}
-     */
-    toQueryString() {
-        return `MULTIPOLYGON(((${
-            this.coordinates.map( polygon => {
-                return polygon.map( lineString => {
-                    return lineString.map( point => {
-                        return point.join(" ");
-                    }).join(",");
-                }).join("),(");
-            }).join("),(")
-        })))`;
-    }
-
-    /**
-     * Returns the query string wrapped in "ST_GEOMFROMTEXT()"
-     * @returns {string}
-     */
-    toQueryStringWrapped() {
-        return SQLGeometry.toQueryStringWrapper( this.toQueryString() );
     }
 }
