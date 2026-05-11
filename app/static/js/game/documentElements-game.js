@@ -6,7 +6,7 @@ export const noListArea = document.getElementById('no-list-area');
 export const noMapArea = document.getElementById('no-map-area');
 
 export const promptBar = document.getElementById('prompt-bar');
-export const input = promptBar.querySelector('INPUT');
+export const input = document.getElementById('input-main');
 export const selectParent = document.getElementById('select-parent');
 export const parentType = document.getElementById('parent-type');
 export const promptLabel = promptBar.querySelector('P');
