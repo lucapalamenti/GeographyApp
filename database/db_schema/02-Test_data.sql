@@ -1,4 +1,5 @@
-INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color_R`, `map_primary_color_G`, `map_primary_color_B`) VALUES (1, 'Test Map', 'default/Test_Map_Thumbnail.png', 200,100,50);
+INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color_R`, `map_primary_color_G`, `map_primary_color_B`, `map_is_template`) VALUES
+(1, 'Test Map', 'default/Test_Map_Thumbnail.png', 200, 100, 50, 1);
 
 INSERT INTO `region` (`region_id`, `region_name`, `region_type`, `region_points`) VALUES
 (1, 'Point A', 'Test Geometry', ST_GEOMFROMTEXT('POINT(0 0)')),

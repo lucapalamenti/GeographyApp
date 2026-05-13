@@ -12,6 +12,8 @@ module.exports = class MMap {
     /** @type {Number} */
     map_primary_color_B = null;
     /** @type {Boolean} */
+    map_is_template = null;
+    /** @type {Boolean} */
     map_is_custom = null;
 
     /**
@@ -25,6 +27,7 @@ module.exports = class MMap {
         this.map_primary_color_R = data.map_primary_color_R;
         this.map_primary_color_G = data.map_primary_color_G;
         this.map_primary_color_B = data.map_primary_color_B;
+        this.map_is_template = data.map_is_template;
         this.map_is_custom = data.map_is_custom;
     }
 
@@ -33,6 +36,6 @@ module.exports = class MMap {
      * @returns {Array<>}
      */
     getAllVariables() {
-        return [this.map_name, this.map_thumbnail, this.map_primary_color_R, this.map_primary_color_G, this.map_primary_color_B, this.map_is_custom];
+        return [this.map_name, this.map_thumbnail, this.map_primary_color_R, this.map_primary_color_G, this.map_primary_color_B, this.map_is_template, this.map_is_custom];
     }
 };

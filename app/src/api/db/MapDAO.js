@@ -6,6 +6,8 @@ const MMap = require('./models/MMap.js');
 const FILENAME_PREFIX = "04-Map-";
 const COPY_TO_FILE = false;
 
+// ----- <<<<< GET/SELECT QUERIES >>>>> -----
+
 /**
  * SQL injection is possible
  * @param {String} where SQL query to SELECT * WHERE
@@ -47,12 +49,28 @@ const getMapById = async ( map_id ) => {
 };
 
 /**
+ * Returns all maps that are templates
+ * @returns {Promise<Array<MMap>>}
+ */
+const getTemplateMaps = async () => {
+    return await database.query(`
+        SELECT * FROM map
+        WHERE map_is_template = 1;
+        `)
+        .then( rows => {
+            return rows.map( row => new MMap( row ) );
+        });
+};
+
+// ----- <<<<< POST/INSERT QUERIES >>>>> -----
+
+/**
  * @param {MMap} map 
  * @returns {Promise<MMap>}
  */
 const createMap = async ( map ) => {
     const query = `
-        INSERT INTO \`map\` (\`map_name\`, \`map_thumbnail\`, \`map_primary_color_R\`, \`map_primary_color_G\`, \`map_primary_color_B\`, \`map_is_custom\`)
+        INSERT INTO \`map\` (\`map_name\`, \`map_thumbnail\`, \`map_primary_color_R\`, \`map_primary_color_G\`, \`map_primary_color_B\`, \`map_is_template\`, \`map_is_custom\`)
         VALUES (?, ?, ?, ?, ?, ?);
         `;
     const params = [...map.getAllVariables()];
@@ -67,6 +85,8 @@ const createMap = async ( map ) => {
     });
 };
 
+// ----- <<<<< PUT/UPDATE QUERIES >>>>> -----
+
 /**
  * @param {MMap} map 
  * @returns {Promise<MMap>}
@@ -74,7 +94,7 @@ const createMap = async ( map ) => {
 const updateMap = async ( map ) => {
     const query = `
         UPDATE \`Map\`
-        SET \`map_id\` = ?, \`map_name\` = ?, \`map_thumbnail\` = ?, \`map_primary_color_R\` = ?, \`map_primary_color_G\` = ?, \`map_primary_color_B\` = ?, \`map_is_custom\` = ?
+        SET \`map_id\` = ?, \`map_name\` = ?, \`map_thumbnail\` = ?, \`map_primary_color_R\` = ?, \`map_primary_color_G\` = ?, \`map_primary_color_B\` = ?, \`map_is_template\` = ?, \`map_is_custom\` = ?
         WHERE \`map_id\` = ?;
         `;
     const params = [map.map_id, ...map.getAllVariables(), map.map_id];
@@ -88,6 +108,8 @@ const updateMap = async ( map ) => {
             throw new Error("Map could not be updated!");
     });
 };
+
+// ----- <<<<< DELETE QUERIES >>>>> -----
 
 /**
  * @param {Number} map_id 

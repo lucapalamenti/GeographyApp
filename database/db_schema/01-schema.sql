@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS `map` (
   `map_primary_color_R` int(3) NOT NULL DEFAULT 0,
   `map_primary_color_G` int(3) NOT NULL DEFAULT 0,
   `map_primary_color_B` int(3) NOT NULL DEFAULT 0,
+  `map_is_template` bit(1) DEFAULT b'0',
   `map_is_custom` bit(1) DEFAULT b'0',
   PRIMARY KEY (`map_id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
