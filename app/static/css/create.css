@@ -22,14 +22,6 @@ g g path.disabled:hover {
     fill: rgb(108, 108, 108);
 }
 
-g g path.herring {
-    fill: rgb(240, 219, 35);
-    stroke-width: 0.05%;
-}
-g g path.herring:hover {
-    fill: rgb(220, 199, 15);
-}
-
 g g path.outside {
     fill: rgb(77, 77, 77);
     stroke-width: 0.05%;
@@ -96,14 +88,6 @@ g g path.outside:hover {
 
     &:hover {
         background-color: rgb(108, 108, 108);
-    }
-}
-
-#herring-btn {
-    background-color: rgb(240, 219, 35);
-
-    &:hover {
-        background-color: rgb(220, 199, 15);
     }
 }
 

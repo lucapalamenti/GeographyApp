@@ -6,11 +6,11 @@ import { SVG_WIDTH, SVG_HEIGHT, SVG_PADDING } from "../variables.js";
  * @returns {Array<SVGPathElement>}
  */
 const getCenteredRegions = () => {
-    return svg.querySelectorAll('PATH:is(.enabled, .disabled, .herring)');
+    return svg.querySelectorAll('PATH:is(.enabled, .disabled)');
 }
 
 /**
- * Find the minium and maximum X & Y values for all "enabled", "disabled, and "herring" regions
+ * Find the minium and maximum X & Y values for all "enabled" and "disabled" regions
  */
 const findMinMax = () => {
     let mapMinX = Infinity, mapMaxX = 0, mapMinY = Infinity, mapMaxY = 0;

@@ -86,6 +86,7 @@
 ### Backend/Technical
 - Polygon database table replaced with region.region_points column of type GEOMETRY
 - SVG map zooming now works with any size viewbox
+- Removed "Herring" region type
 
 ### Bug Fixes
 - SQLPolygon class is incorrectly storing the "coordinates" attribute as a 2D array instead of a 3D array

@@ -19,7 +19,11 @@ let maxGuesses = MAX_GUESSES;
  * Run the "Learn" gamemode
  */
 function learn() {
-    enableClicking();
+    selectParent.setAttribute('hidden', true);
+    // Make all regions clickable
+    svg.querySelectorAll('G G PATH, G G PATH').forEach( path => {
+        path.classList.add('clickable');
+    });
     reviewMapButton.style.display = "none";
     promptLabel.textContent = "Click on a region to see its name";
     input.style.display = "none";
@@ -40,7 +44,11 @@ function learn() {
  * @param {Boolean} disappear enable disappear mode
  */
 function click ( regionMap, disappear ) {
-    enableClicking();
+    selectParent.setAttribute('hidden', true);
+    // Make sure all "enabled" and regions are clickable
+    svg.querySelectorAll('G.enabled PATH').forEach( path => {
+        path.classList.add('clickable');
+    });
     // Format top gamebar
     promptLabel.textContent = "Click on";
     input.style.display = "none";
@@ -102,15 +110,6 @@ function click ( regionMap, disappear ) {
  */
 function clickDisappear ( regionMap ) {
     click( regionMap, true );
-}
-/**
- * Makes sure all regions that should be clickable have the class "clickable"
- */
-function enableClicking() {
-    selectParent.setAttribute('hidden', true);
-    svg.querySelectorAll('G.enabled PATH, G.herring PATH').forEach( path => {
-        path.classList.add('clickable');
-    });
 }
 
 /**
