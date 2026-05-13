@@ -50,60 +50,69 @@ g g path.outside:hover {
     position: absolute;
     transform: translate( calc(-50% - 50px) );
     display: none;
-}
-#state-buttons-panel aside {
-    display: none;
-}
-#state-buttons-panel button {
-    position: relative;
-}
-#state-buttons-panel button:hover aside {
-    position: absolute;
-    top: 0;
-    left: -100%;
-    transform: translate(calc(-100% + 15px), -2px);
-    display: block;
-    background-color: rgb(31, 151, 71);
-    border: 3px solid rgb(28, 134, 64);
-    border-radius: 5px;
-    padding: 1px;
-    padding-right: 5px;
-    padding-left: 5px;
+
+    button {
+        position: relative;
+
+        &:hover aside {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            transform: translate(calc(-100% + 15px), -2px);
+            display: block;
+            background-color: rgb(31, 151, 71);
+            border: 3px solid rgb(28, 134, 64);
+            border-radius: 5px;
+            padding: 1px;
+            padding-right: 5px;
+            padding-left: 5px;
+        }
+
+        /* For tooltips */
+        aside {
+            display: none;
+        }
+    }
 }
 
 #enabled-btn {
     background-color: rgb(106, 235, 89);
-}
-#enabled-btn:hover {
-    background-color: rgb(86, 215, 69);
+    
+    &:hover {
+        background-color: rgb(86, 215, 69);
+    }
 }
 
 #deselect-btn {
     background-color: rgb(230, 231, 137);
-}
-#deselect-btn:hover {
-    background-color: rgb(210, 211, 117);
+
+    &:hover {
+        background-color: rgb(210, 211, 117);
+    }
 }
 
 #disabled-btn {
     background-color: grey;
-}
-#disabled-btn:hover {
-    background-color: rgb(108, 108, 108);
+
+    &:hover {
+        background-color: rgb(108, 108, 108);
+    }
 }
 
 #herring-btn {
     background-color: rgb(240, 219, 35);
-}
-#herring-btn:hover {
-    background-color: rgb(220, 199, 15);
+
+    &:hover {
+        background-color: rgb(220, 199, 15);
+    }
 }
 
 #outside-btn {
     background-color: rgb(77, 77, 77);
-}
-#outside-btn:hover {
-    background-color: rgb(54, 54, 54);
+
+    &:hover {
+        background-color: rgb(54, 54, 54);
+    }
 }
 
 svg.zoom-1 path { stroke-width: 0.25px; }
@@ -117,11 +126,12 @@ svg.zoom-5 path { stroke-width: 0.10px; }
     align-items: center;
     width: 90%;
     max-width: 1200px;
+
+    input[type="range"] {
+        width: 150px;
+    }
 }
 
-#map-container input[type="range"] {
-    width: 150px;
-}
 
 #top-map-bar {
     width: 100%;
@@ -140,16 +150,16 @@ svg.zoom-5 path { stroke-width: 0.10px; }
     align-items: center;
     gap: 0;
     margin-bottom: 50px;
-}
 
-#selected-list h5 {
-    color: rgb(16, 97, 43);
-}
+    h5 {
+        color: rgb(16, 97, 43);
+    }
 
-#selected-list div {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
+    div {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+    }
 }
 
 #loading-screen {

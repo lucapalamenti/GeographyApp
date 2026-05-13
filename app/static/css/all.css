@@ -131,12 +131,14 @@ select {
 
 .list-1 {
     flex-wrap: wrap;
-}
-.list-1 p {
-    padding: 3px;
-}
-.list-1 p:nth-child(even) {
-    font-weight: bold;
+
+    p {
+        padding: 3px;
+
+        &:nth-child(even) {
+            font-weight: bold;
+        }
+    }
 }
 
 .filter-dark::before {
@@ -167,26 +169,26 @@ form {
     border-radius: 15px;
     padding: 10px;
     background-color: rgb(31, 151, 71);
-}
 
-form h3 {
-    border-bottom: 3px solid rgb(28, 134, 64);
-}
+    h3 {
+        border-bottom: 3px solid rgb(28, 134, 64);
+    }
 
-form nav {
-    justify-content: end;
-}
+    nav {
+        justify-content: end;
 
-form nav button, form nav a {
-    border-radius: 5px;
-    padding: 8px;
-    color: black;
-    cursor: pointer;
-}
+        button, a {
+            border-radius: 5px;
+            padding: 8px;
+            color: black;
+            cursor: pointer;
+        }
+    }
 
-form .input-label input[type="text"] {
-    padding: 2px;
-    padding-left: 5px;
+    .input-label input[type="text"] {
+        padding: 2px;
+        padding-left: 5px;
+    }
 }
 
 /* ----- <<<<< BUTTONS >>>>> ----- */

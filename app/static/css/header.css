@@ -1,21 +1,22 @@
 header {
     color: black !important;
-}
 
-header div {
-    padding: 2px;
-    background-color: rgb(31, 151, 71);
-}
+    div {
+        padding: 2px;
+        background-color: rgb(31, 151, 71);
+    }
 
-header nav {
-    padding: 2px;
-    background-color: rgb(28, 134, 64);
-}
+    nav {
+        padding: 2px;
+        background-color: rgb(28, 134, 64);
 
-header nav a {
-    text-decoration: none;
-    cursor: pointer;
-}
-header nav a:hover {
-    text-decoration: underline ;
+        a {
+            text-decoration: none;
+            cursor: pointer;
+
+            &:hover {
+                text-decoration: underline ;
+            }
+        }
+    }
 }

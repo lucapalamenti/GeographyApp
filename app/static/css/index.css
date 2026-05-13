@@ -21,18 +21,22 @@
     background-color: aliceblue;
     background-size: 100%;
     box-shadow: 3px 5px 6px black;
+    
+    &:hover {
+        box-shadow: 2px 4px 6px black;
+
+        h4 {
+            text-decoration: underline;
+        }
+    }
 }
-.map-button-container:hover {
-    box-shadow: 2px 4px 6px black;
-}
-.map-button-container:hover h4 {
-    text-decoration: underline;
-}
+
 #map-section.delete-toggle .map-button-container.custom-map:hover {
     filter:opacity(50%);
-}
-#map-section.delete-toggle .map-button-container.custom-map:hover .x-bg {
-    display: block;
+    
+    .x-bg {
+        display: block;
+    }
 }
 
 .map-button-top {

@@ -1,71 +1,81 @@
-#svg-game.invisible-mode:not(.gameEnd) g g.enabled path:not(.typed, .typeCurrent, .guesses0, .guesses1, .guesses2, .guesses3) {
-    /* fill:  !important; */
-    stroke: rgb(230, 231, 137);
-    /* Make this as small as possibles */
-    stroke-width: 0.1%;
-}
-#svg-game.invisible-mode-hard:not(.gameEnd) g g path:not(.typed, .typeCurrent) {
-    display: none;
-}
+#svg-game {
+    &:not(.invisible-mode) path:hover {
+        filter: brightness( 0.9 );
+    }
+    &.invisible-mode:not(.gameEnd) g g.enabled path:not(.typed, .typeCurrent, .guesses0, .guesses1, .guesses2, .guesses3) {
+        /* fill:  !important; */
+        stroke: rgb(230, 231, 137);
+        /* Make this as small as possibles */
+        stroke-width: 0.1%;
+    }
+    &.invisible-mode-hard:not(.gameEnd) g g path:not(.typed, .typeCurrent) {
+        display: none;
+    }
 
-#svg-game.gameEnd g g path {
-    transition: fill 0s !important;
-}
+    &.gameEnd {
+        g g path {
+            transition: fill 0s !important;
+        }
+        g g.enabled path {
+            fill: grey;
+        }
+        g g.disabled path {
+            fill: rgb(100, 100, 100);
+        }
+        g g.outside path {
+            fill: rgb(77, 77, 77);
+        }
+    }
 
-path {
-    fill: rgb(230, 231, 137);
-    stroke-width: 0.05%;
-    stroke: black;
-}
+    &.showGuesses {
+        g g {
+            path.guesses0 {
+                fill: rgb(106, 235, 89);
+            }
+            path.guesses1 {
+                fill: rgb(240, 219, 35);
+            }
+            path.guesses2 {
+                fill: rgb(243, 148, 24);
+            }
+            path.guesses3 {
+                fill: rgb(235, 89, 89);
+            }
+        }
+        &.invisible-mode g g {
+            path.guesses0 {
+                stroke: rgb(106, 235, 89);
+            }
+            path.guesses1 {
+                stroke: rgb(240, 219, 35);
+            }
+            path.guesses2 {
+                stroke: rgb(243, 148, 24);
+            }
+            path.guesses3 {
+                stroke: rgb(235, 89, 89);
+            }
+        }
+    }
 
-#svg-game:not(.invisible-mode) path:hover {
-    filter: brightness( 0.9 );
-}
-path.clickable:active {
-    filter: brightness( 0.8 );
-}
+    path {
+        fill: rgb(230, 231, 137);
+        stroke-width: 0.05%;
+        stroke: black;
 
-g.disabled path {
-    fill: grey;
-}
-#svg-game.gameEnd g.disabled path {
-    fill: rgb(100, 100, 100);
-}
+        &.clickable:hover {
+            filter: brightness( 0.9 );
+        }
+        &.clickable:active {
+            filter: brightness( 0.8 );
+        }
 
-g.outside path {
-    fill: rgb(77, 77, 77);
-}
+        &.typeCurrent {
+            fill: rgb(0, 255, 213);
+        }
+    }
 
-path.typeCurrent {
-    fill: rgb(0, 255, 213);
-}
-
-#svg-game.gameEnd g g.enabled path {
-    fill: grey;
-}
-
-#svg-game.showGuesses g g path.guesses0 {
-    fill: rgb(106, 235, 89);
-}
-#svg-game.showGuesses g g path.guesses1 {
-    fill: rgb(240, 219, 35);
-}
-#svg-game.showGuesses g g path.guesses2 {
-    fill: rgb(243, 148, 24);
-}
-#svg-game.showGuesses g g path.guesses3 {
-    fill: rgb(235, 89, 89);
-}
-
-#svg-game.showGuesses.invisible-mode g g path.guesses0 {
-    stroke: rgb(106, 235, 89);
-}
-#svg-game.showGuesses.invisible-mode g g path.guesses1 {
-    stroke: rgb(240, 219, 35);
-}
-#svg-game.showGuesses.invisible-mode g g path.guesses2 {
-    stroke: rgb(243, 148, 24);
-}
-#svg-game.showGuesses.invisible-mode g g path.guesses3 {
-    stroke: rgb(235, 89, 89);
+    g g.disabled path {
+        fill: grey;
+    }
 }
