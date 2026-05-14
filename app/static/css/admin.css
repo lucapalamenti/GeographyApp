@@ -1,3 +1,23 @@
 #main-area button {
     padding: 5px;
 }
+
+#button-panel {
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.dropdown {
+    width: 75%;
+    cursor: pointer;
+    background-color: var(--green-1);
+    border: 5px solid var(--green-2);
+    border-radius: 10px;
+    padding: 5px;
+
+    svg {
+        width: 15px;
+        fill: black;
+    }
+}

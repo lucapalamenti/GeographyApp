@@ -3,12 +3,12 @@ header {
 
     div {
         padding: 2px;
-        background-color: rgb(31, 151, 71);
+        background-color: var(--green-1);
     }
 
     nav {
         padding: 2px;
-        background-color: rgb(28, 134, 64);
+        background-color: var(--green-2);
 
         a {
             text-decoration: none;

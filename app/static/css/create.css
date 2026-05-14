@@ -52,8 +52,8 @@ g g path.outside:hover {
             left: -100%;
             transform: translate(calc(-100% + 15px), -2px);
             display: block;
-            background-color: rgb(31, 151, 71);
-            border: 3px solid rgb(28, 134, 64);
+            background-color: var(--green-1);
+            border: 3px solid var(--green-2);
             border-radius: 5px;
             padding: 1px;
             padding-right: 5px;

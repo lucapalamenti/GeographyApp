@@ -55,7 +55,7 @@
     height:25%;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
-    background-color: rgb(31, 151, 71);
+    background-color: var(--green-1);
 }
 
 .map-button-label {

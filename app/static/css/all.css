@@ -1,3 +1,8 @@
+:root {
+    --green-1 : rgb(31, 151, 71);
+    --green-2 : rgb(28, 134, 64);
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -115,16 +120,16 @@ select {
 }
 
 .dotted-line {
-    border: 1px dashed rgb(28, 134, 64);
+    border: 1px dashed var(--green-2);
 }
 
 .container-1 {
-    background-color: rgb(31, 151, 71);
-    border: 8px solid rgb(28, 134, 64);
+    background-color: var(--green-1);
+    border: 8px solid var(--green-2);
 }
 .container-2 {
-    background-color: rgb(31, 151, 71);
-    border: 8px solid rgb(28, 134, 64);
+    background-color: var(--green-1);
+    border: 8px solid var(--green-2);
     border-radius: 10px;
     padding: 10px;
 }
@@ -152,9 +157,9 @@ select {
 }
 
 .game-bar {
-    border: 3px solid rgb(28, 134, 64);
+    border: 3px solid var(--green-2);
     padding: 5px;
-    background-color: rgb(31, 151, 71);
+    background-color: var(--green-1);
 }
 
 .gap-5 {
@@ -165,13 +170,13 @@ select {
 
 form {
     gap: 3px;
-    border: 5px solid rgb(28, 134, 64);
+    border: 5px solid var(--green-2);
     border-radius: 15px;
     padding: 10px;
-    background-color: rgb(31, 151, 71);
+    background-color: var(--green-1);
 
     h3 {
-        border-bottom: 3px solid rgb(28, 134, 64);
+        border-bottom: 3px solid var(--green-2);
     }
 
     nav {

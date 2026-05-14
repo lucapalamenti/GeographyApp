@@ -1,7 +1,7 @@
 #game-area {
     width: 80%;
     max-width: 1300px;
-    background-color: rgb(31, 151, 71);
+    background-color: var(--green-1);
 }
 
 #prompt-bar {
@@ -46,10 +46,10 @@
 #tooltip {
     display: none;
     position: absolute;
-    border: 2px solid rgb(28, 134, 64);
+    border: 2px solid var(--green-2);
     border-radius: 5px;
     padding: 5px;
-    background-color: rgb(31, 151, 71);
+    background-color: var(--green-1);
     font-size: 1rem;
 }
 
@@ -116,7 +116,7 @@
 
     h3 {
         color: rgb(16, 97, 43);
-        border-bottom: 2px solid rgb(28, 134, 64);
+        border-bottom: 2px solid var(--green-2);
     }
 
     h5 {
