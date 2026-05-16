@@ -32,7 +32,7 @@ async function clientHandler( apiMethod, url, payload = null ) {
         // Chunkify ALL payloads, not just big ones
         if ( payload ) {
             // Make sure payload is a string
-            if ( typeof payload == "object" ) payload = JSON.stringify( payload );
+            if ( typeof payload !== "string" ) payload = JSON.stringify( payload );
             const groupId = FrontendPayloadManager.requestGroup();
             let chunkId = 0;
             /** @type {Array<Promise>} */
@@ -221,9 +221,9 @@ const uploadThumbnail = async ( data ) => {
     }
 };
 
-const uploadFile = async ( data ) => {
+const uploadFile_geojson = async ( data ) => {
     try {
-        return await fetch(`${BASE_API_PATH}/upload/mapfile`, {
+        return await fetch(`${BASE_API_PATH}/upload/mapfile/geojson`, {
             method: 'POST',
             body: new FormData( data )
         });
@@ -231,6 +231,26 @@ const uploadFile = async ( data ) => {
         return handleAuthError(error);
     }
 };
+
+const uploadFile_kml = async ( data ) => {
+    try {
+        return await fetch(`${BASE_API_PATH}/upload/mapfile/kml`, {
+            method: 'POST',
+            body: new FormData( data )
+        });
+    } catch (error) {
+        return handleAuthError(error);
+    }
+};
+
+/**
+ * 
+ * @param {string} kmlString 
+ * @returns {JSON} Feature Collection Properties
+ */
+const kml2geojson = async ( kmlString ) => {
+    return await clientHandler( HTTPClient.post, `${BASE_API_PATH}/upload/togeojson/kml`, kmlString );
+}
 
 export default {
     custom,
@@ -254,5 +274,7 @@ export default {
     deleteMap,
 
     uploadThumbnail,
-    uploadFile,
+    uploadFile_geojson,
+    uploadFile_kml,
+    kml2geojson
 }
