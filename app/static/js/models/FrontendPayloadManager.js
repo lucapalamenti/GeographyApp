@@ -5,7 +5,7 @@
  */
 export class FrontendPayloadManager {
     /** Maximum size in bytes for a single payload fragment */
-    static MAX_PAYLOAD_SIZE = 100000;
+    static MAX_PAYLOAD_SIZE = 10_000_000;
     /** An array of group IDs for all payloads currently transporting to the backend
      * @type {Array<PayloadGroupId>} */
     static #cluster = [];
