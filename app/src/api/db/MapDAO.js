@@ -71,7 +71,7 @@ const getTemplateMaps = async () => {
 const createMap = async ( map ) => {
     const query = `
         INSERT INTO \`map\` (\`map_name\`, \`map_thumbnail\`, \`map_primary_color_R\`, \`map_primary_color_G\`, \`map_primary_color_B\`, \`map_is_template\`, \`map_is_custom\`)
-        VALUES (?, ?, ?, ?, ?, ?);
+        VALUES (?, ?, ?, ?, ?, ?, ?);
         `;
     const params = [...map.getAllVariables()];
     return await database.query( query, params ).then( async rows => {
