@@ -78,7 +78,7 @@ RegionAPIRouter.get('/mapRegion/:mapId/:regionId', (req, res) => {
 });
 
 RegionAPIRouter.post('/regions', BackendPayloadManager.chunkMiddleware, (req, res) => {
-    const region =  new FrontendMapRegion(req.body );
+    const region =  new FrontendMapRegion( req.body );
     RegionDAO.createRegion( region ).then( region => {
         res.json( region );
     })
