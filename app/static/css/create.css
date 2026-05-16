@@ -136,7 +136,7 @@ svg.zoom-5 path { stroke-width: 0.10px; }
     margin-bottom: 50px;
 
     h5 {
-        color: rgb(16, 97, 43);
+        color: var(--green-4);
     }
 
     div {

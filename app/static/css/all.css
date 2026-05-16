@@ -1,6 +1,8 @@
 :root {
     --green-1 : rgb(31, 151, 71);
     --green-2 : rgb(28, 134, 64);
+    --green-3 : rgb(36, 170, 81);
+    --green-4 : rgb(16, 97, 43);
 }
 
 * {
@@ -64,6 +66,10 @@ select {
 }
 
 /* Utility Classes */
+
+[hidden] {
+    display: none !important;
+}
 
 .page-center {
     z-index: 1;
@@ -168,7 +174,7 @@ select {
 
 /* ----- <<<<< FORM >>>>> ----- */
 
-form {
+.form-1 {
     gap: 3px;
     border: 5px solid var(--green-2);
     border-radius: 15px;
@@ -255,6 +261,6 @@ button {
     background-repeat: no-repeat;
 }
 
-.btn-fade {
+.bg-fade {
     transition: background-color 0.25s;
 }

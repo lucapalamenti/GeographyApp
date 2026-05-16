@@ -22,7 +22,7 @@
     <app-header></app-header>
     <main class="flex-col-center gap-5">
         <!-- Shows on load and when switching gamemodes -->
-        <form id="gamemode-panel" class="page-center flex-col gap-5">
+        <form id="gamemode-panel" class="page-center flex-col form-1 gap-5">
             <h3>Select Gamemode</h3>
             <div class="input-label">
                 <input type="radio" name="gamemode" id="learn" value="Learn">
@@ -75,8 +75,8 @@
                 <label for="noList">No List</label>
             </div>
             <nav class="flex-row gap-5">
-                <button type="button" class="btn-green btn-fade">Select</button>
-                <a href="../" type="button" class="btn-grey btn-fade">Cancel</a>
+                <button type="button" class="btn-green bg-fade">Select</button>
+                <a href="../" type="button" class="btn-grey bg-fade">Cancel</a>
             </nav>
         </form>
 
@@ -130,12 +130,12 @@
         </div>
 
         <!-- Shows after ending a game -->
-        <form id="game-end-panel" class="page-center flex-col gap-5">
+        <form id="game-end-panel" class="page-center flex-col gap-5 form-1">
             <h3>Game Finished</h3>
             <nav class="flex-row gap-5">
-                <button type="button" id="play-again-button" class="btn-green btn-fade">Play Again</button>
-                <button type="button" id="review-button" class="btn-turquoise btn-fade">Review Map</button>
-                <button type="button" id="home-button" class="btn-grey btn-fade">Home</button>
+                <button type="button" id="play-again-button" class="btn-green bg-fade">Play Again</button>
+                <button type="button" id="review-button" class="btn-turquoise bg-fade">Review Map</button>
+                <button type="button" id="home-button" class="btn-grey bg-fade">Home</button>
             </nav>
         </form>
     </main>
