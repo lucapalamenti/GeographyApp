@@ -3,8 +3,8 @@ const express = require('express');
 const RegionDAO = require('../db/RegionDAO.js');
 const BackendPayloadManager = require('../../middleware/BackendPayloadManager.js');
 
-const FrontendMapRegion = require('../db/models/FrontendMapRegion.js');
-const Region = require('../db/models/Region.js');
+const FrontendMapRegion = require('../models/FrontendMapRegion.js');
+const Region = require('../models/Region.js');
 
 const RegionAPIRouter = express.Router();
 RegionAPIRouter.use( express.json() );

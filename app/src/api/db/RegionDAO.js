@@ -1,10 +1,10 @@
 const database = require('./databaseConnections.js');
 const MapDAO = require('./MapDAO.js');
-const util = require('./backend/util.js');
+const util = require('../util/util.js');
 
-const BackendMapRegion = require('./models/BackendMapRegion.js');
-const FrontendMapRegion = require('./models/FrontendMapRegion.js');
-const Region = require('./models/Region.js');
+const BackendMapRegion = require('../models/BackendMapRegion.js');
+const FrontendMapRegion = require('../models/FrontendMapRegion.js');
+const Region = require('../models/Region.js');
 
 const FILENAME_PREFIX = "04-Map-";
 const COPY_TO_FILE = false;

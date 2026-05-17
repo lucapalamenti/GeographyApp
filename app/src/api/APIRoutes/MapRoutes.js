@@ -2,8 +2,8 @@ const express = require('express');
 
 const MapDAO = require('../db/MapDAO.js');
 const BackendPayloadManager = require('../../middleware/BackendPayloadManager.js');
-const MMap = require('../db/models/MMap.js');
-const util = require('../db/backend/util.js');
+const MMap = require('../models/MMap.js');
+const util = require('../util/util.js');
 
 const MapAPIRouter = express.Router();
 MapAPIRouter.use( express.json() );

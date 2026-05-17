@@ -5,9 +5,9 @@ const path = require("path");
 const MapDAO = require('../db/MapDAO.js');
 const RegionDAO = require('../db/RegionDAO.js');
 
-const MMap = require('../db/models/MMap.js');
-const { SQLGeometry, SQLPolygon, SQLMultiPolygon } = require('../db/models/SQLGeometry.js');
-const FrontendMapRegion = require('../db/models/FrontendMapRegion.js');
+const MMap = require('../models/MMap.js');
+const { SQLGeometry, SQLPolygon, SQLMultiPolygon } = require('../models/SQLGeometry.js');
+const FrontendMapRegion = require('../models/FrontendMapRegion.js');
 
 const UploadAPIRouter = express.Router();
 UploadAPIRouter.use( express.json() );

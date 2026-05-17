@@ -4,8 +4,7 @@ node_modules/
 
 # App
 /app/src/api/db/CustomDAO.js
-/app/src/api/db/backend/test
-/app/src/api/db/usableQueries.txt
+/app/src/api/test
 /app/uploads/thumbnails/custom
 
 # Database
