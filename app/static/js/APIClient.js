@@ -245,11 +245,12 @@ const uploadFile_kml = async ( data ) => {
 
 /**
  * 
- * @param {string} kmlString 
+ * @param {string} data 
+ * @param {"kml"} extension
  * @returns {JSON} Feature Collection Properties
  */
-const kml2geojson = async ( kmlString ) => {
-    return await clientHandler( HTTPClient.post, `${BASE_API_PATH}/upload/togeojson/kml`, kmlString );
+const convert2geojson = async ( data, extension ) => {
+    return await clientHandler( HTTPClient.post, `${BASE_API_PATH}/upload/togeojson/${extension}`, data );
 }
 
 export default {
@@ -276,5 +277,5 @@ export default {
     uploadThumbnail,
     uploadFile_geojson,
     uploadFile_kml,
-    kml2geojson
+    convert2geojson
 }
