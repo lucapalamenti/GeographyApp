@@ -71,6 +71,7 @@ class SQLGeometry {
      * Creates an SQLGeometry object from the given data. Must contain the "type" field of
      * an SQLGeometry subclass
      * @param {SQLGeometry} sqlGeometry 
+     * @returns {SQLGeometry}
      */
     static createAnyType( sqlGeometry ) {
         switch ( sqlGeometry.type  ) {
