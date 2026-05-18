@@ -247,7 +247,7 @@ const uploadFile_kml = async ( data ) => {
  * 
  * @param {string} data 
  * @param {"kml"} extension
- * @returns {JSON} Feature Collection Properties
+ * @returns {import("./models/FeatureCollection.js").FeatureProperties} Feature Collection Properties
  */
 const convert2geojson = async ( data, extension ) => {
     return await clientHandler( HTTPClient.post, `${BASE_API_PATH}/upload/togeojson/${extension}`, data );
