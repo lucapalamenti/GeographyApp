@@ -102,4 +102,19 @@ UploadAPIRouter.post('/mapfile', mapfileUpload.single('mapfile'), async (req, re
     });
 });
 
+UploadAPIRouter.post('/togeojson/:extension', BackendPayloadManager.chunkMiddleware, async (req, res) => {
+    let geojson;
+    const ext = req.params.extension;
+    switch ( ext ) {
+        case "kml":
+            const kmlDocumentNode = new DOMParser().parseFromString( req.body, "text/xml" );
+            geojson = kml( kmlDocumentNode );
+            break;
+        default:
+            res.status(400).json({ message: `The given file extension "${ext}" cannot be converted to geojson!` });
+            return;
+    }
+    res.json( geojson.features[0].properties );
+});
+
 module.exports = UploadAPIRouter;
