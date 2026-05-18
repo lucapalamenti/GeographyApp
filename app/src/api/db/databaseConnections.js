@@ -1,5 +1,8 @@
 const mariadb = require('mariadb');
 
+/**
+ * @type {import('mariadb').Pool}
+ */
 let pool;
 
 exports.getDatabaseConnection = () => {
