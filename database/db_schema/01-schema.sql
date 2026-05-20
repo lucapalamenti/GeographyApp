@@ -80,7 +80,7 @@ CREATE TABLE IF NOT EXISTS `region` (
 -- Dumping structure for table geographyapp.tempData
 CREATE TABLE IF NOT EXISTS `tempData` (
   `tempData_id` smallint(6) DEFAULT NULL,
-  `tempData_data` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`tempData_data`))
+  `tempData_data` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 -- Data exporting was unselected.
