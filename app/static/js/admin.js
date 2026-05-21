@@ -7,81 +7,47 @@ window.onload = () => {
     navBar.appendChild( pageName );
 }
 
-const geojsonDropdownHeader = document.querySelector("#geojson-dropdown HEADER");
-const geojsonDropdownBody = document.getElementById("geojson-dropdown-body");
-const geojsonArrowSVG = document.querySelector("#geojson-dropdown SVG");
-const geojsonForm = document.getElementById("geojson-form");
-const geojsonFileInput = document.getElementById("geojson-file-input");
-const geojsonPreview = document.getElementById("geojson-preview");
+const fileDropdownHeader = document.querySelector("#file-dropdown HEADER");
+const dropdownBody = document.getElementById("dropdown-body");
+const arrowSVG = fileDropdownHeader.querySelector("SVG");
+const uploadForm = document.getElementById("upload-form");
+const fileInput = document.getElementById("file-input");
+const preview = document.getElementById("preview");
+
+const map_name = document.getElementById("map_name");
+const region_type = document.getElementById("region_type");
+const region_name_key = document.getElementById("region_name_key");
+const region_parent_name_key = document.getElementById("region_parent_name_key");
 
 // Handles opening & closing the geojson file upload dropdown
-geojsonDropdownHeader.addEventListener("click", e => {
-    toggleDropdown( geojsonDropdownHeader, geojsonArrowSVG, geojsonDropdownBody );
+fileDropdownHeader.addEventListener("click", e => {
+    toggleDropdown( fileDropdownHeader, arrowSVG, dropdownBody );
 });
 
 // When a geojson file is added
-geojsonFileInput.addEventListener("change", e => {
+fileInput.addEventListener("change", async e => {
     const file = e.target.files[0];
     if ( file ) {
-        const reader = new FileReader();
-        reader.onload = ( event ) => {
-            try {
-                const json = JSON.parse( event.target.result );
-                geojsonPreview.innerHTML = JSON.stringify( json["features"][0]["properties"], null, 2 );
-            } catch ( err ) {
-                console.error( "Invalid JSON file!", err );
-            }
-        };
-        reader.readAsText( file );
+        await APIClient.processMapfile( uploadForm ).then( async res => {
+            const properties = await res.json();
+            console.log( properties );
+            preview.innerHTML = JSON.stringify( properties, null, 2 );
+        });
     }
 });
 
-geojsonForm.addEventListener("submit", async e => {
+uploadForm.addEventListener("submit", async e => {
     e.preventDefault();
-    await APIClient.uploadFile_geojson( e.target ).then( async res => {
-        console.log( await res.json() );
-    });
-    // console.log( (await response) );
-});
-
-const kmlDropdownHeader = document.querySelector("#kml-dropdown HEADER");
-const kmlDropdownBody = document.getElementById("kml-dropdown-body");
-const kmlArrowSVG = document.querySelector("#kml-dropdown SVG");
-const kmlForm = document.getElementById("kml-form");
-const kmlFileInput = document.getElementById("kml-file-input");
-const kmlPreview = document.getElementById("kml-preview");
-
-// Handles opening & closing the kml file upload dropdown
-kmlDropdownHeader.addEventListener("click", e => {
-    toggleDropdown( kmlDropdownHeader, kmlArrowSVG, kmlDropdownBody );
-});
-
-// When a kml file is added
-kmlFileInput.addEventListener("change", async e => {
-    const file = e.target.files[0];
-    if ( file ) {
-        const reader = new FileReader();
-        reader.onload = async ( event ) => {
-            try {
-                const contents = JSON.stringify( event.target.result );
-                const kmlFeatureCollection = await APIClient.kml2geojson( contents );
-                // const dom = new DOMParser().parseFromString( event.target.result, 'text/xml' );
-                // const geojsonFeatureCollection = kml(dom);
-                // kmlPreview.innerHTML = JSON.stringify( geojsonFeatureCollection["features"][0]["properties"], null, 2 );
-            } catch ( err ) {
-                console.error( "Invalid JSON file!", err );
-            }
-        };
-        reader.readAsText( file );
+    const data = {
+        map_name : map_name.value,
+        region_type : region_type.value,
+        region_name_key : region_name_key.value,
+        region_parent_name_key : region_parent_name_key.value
     }
-});
-
-kmlForm.addEventListener("submit", async e => {
-    e.preventDefault();
-    await APIClient.uploadFile_kml( e.target ).then( async res => {
-        console.log( await res.json() );
+    await APIClient.createTemplateMap( data ).then( async res => {
+        console.log( res );
+        
     });
-    // console.log( (await response) );
 });
 
 /**

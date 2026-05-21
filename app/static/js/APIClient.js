@@ -221,9 +221,9 @@ const uploadThumbnail = async ( data ) => {
     }
 };
 
-const uploadFile_geojson = async ( data ) => {
+const processMapfile = async ( data ) => {
     try {
-        return await fetch(`${BASE_API_PATH}/upload/mapfile/geojson`, {
+        return await fetch(`${BASE_API_PATH}/upload/mapfile/process`, {
             method: 'POST',
             body: new FormData( data )
         });
@@ -232,26 +232,9 @@ const uploadFile_geojson = async ( data ) => {
     }
 };
 
-const uploadFile_kml = async ( data ) => {
-    try {
-        return await fetch(`${BASE_API_PATH}/upload/mapfile/kml`, {
-            method: 'POST',
-            body: new FormData( data )
-        });
-    } catch (error) {
-        return handleAuthError(error);
-    }
+const createTemplateMap = async ( data ) => {
+    return await clientHandler( HTTPClient.post, `${BASE_API_PATH}/upload/mapfile/create`, data );
 };
-
-/**
- * 
- * @param {string} data 
- * @param {"kml"} extension
- * @returns {import("./models/FeatureCollection.js").FeatureProperties} Feature Collection Properties
- */
-const convert2geojson = async ( data, extension ) => {
-    return await clientHandler( HTTPClient.post, `${BASE_API_PATH}/upload/togeojson/${extension}`, data );
-}
 
 export default {
     custom,
@@ -275,7 +258,6 @@ export default {
     deleteMap,
 
     uploadThumbnail,
-    uploadFile_geojson,
-    uploadFile_kml,
-    convert2geojson
+    processMapfile,
+    createTemplateMap
 }
