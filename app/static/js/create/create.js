@@ -20,7 +20,7 @@ window.onload = async () => {
     pageName.textContent = "Create";
     navBar.appendChild( pageName );
 
-    await APIClient.getMaps( "map_id > -1", "map_id" ).then( maps => {
+    await APIClient.getMaps( "map_is_template = 1", "map_id" ).then( maps => {
         // Populate "Choose Template" selection panel
         maps.forEach( map => {
             const option = document.createElement('OPTION');
