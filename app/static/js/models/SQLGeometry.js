@@ -105,6 +105,12 @@ export class SQLGeometry {
                 throw new TypeError( `Invalid SQLGeometry type - "${sqlGeometry.type}"` );
         }
     }
+
+    /**
+     * Converts a string to the coordinates array for the SQLGeometry object
+     * @param {string} string 
+     */
+    static string2Coordinates( string ) { this.#subclassCheck( this.string2Coordinates ); }
 }
 
 /**
@@ -115,7 +121,7 @@ export class SQLPoint extends SQLGeometry {
     coordinates = null;
 
     /**
-     * Constructor given an object with the same strcuture as an SQL POINT
+     * Constructor given an object with the same structure as an SQL POINT
      * @param {SQLPoint} sqlPoint
      */
     constructor ( sqlPoint ) {
@@ -145,6 +151,15 @@ export class SQLPoint extends SQLGeometry {
     toPathDString() {
         return `M${this.coordinates[0]} ${-1 * this.coordinates[1]} Z`;
     }
+
+    /**
+     * 
+     * @param {string} string 
+     * @returns 
+     */
+    static string2Coordinates( string ) {
+        return string.split( "," ).slice(0, 2);
+    }
 }
 
 /**
@@ -155,7 +170,7 @@ export class SQLMultiPoint extends SQLGeometry {
     coordinates = null;
 
     /**
-     * Constructor given an object with the same strcuture as an SQL MULTIPOINT
+     * Constructor given an object with the same structure as an SQL MULTIPOINT
      * @param {SQLMultiPoint} SQLMultiPoint 
      */
     constructor ( SQLMultiPoint ) {
@@ -215,7 +230,7 @@ export class SQLLineString extends SQLGeometry {
     coordinates = null;
 
     /**
-     * Constructor given an object with the same strcuture as an SQL LINESTRING
+     * Constructor given an object with the same structure as an SQL LINESTRING
      * @param {SQLLineString} sqlLineString
      */
     constructor ( sqlLineString ) {
@@ -275,7 +290,7 @@ export class SQLMultiLineString extends SQLGeometry {
     coordinates = null;
 
     /**
-     * Constructor given an object with the same strcuture as an SQL MULTILINESTRING
+     * Constructor given an object with the same structure as an SQL MULTILINESTRING
      * @param {SQLMultiLineString} sqlMultiLineString
      */
     constructor ( sqlMultiLineString ) {
@@ -345,7 +360,7 @@ export class SQLPolygon extends SQLGeometry {
     coordinates = null;
     
     /**
-     * Constructor given an object with the same strcuture as an SQL POLYGON
+     * Constructor given an object with the same structure as an SQL POLYGON
      * @param {SQLPolygon} sqlPolygon 
      */
     constructor ( sqlPolygon ) {
@@ -405,6 +420,10 @@ export class SQLPolygon extends SQLGeometry {
             }).join(" M")
         } Z`;
     }
+
+    static string2Coordinates( string ) {
+        
+    }
 }
 
 /**
@@ -415,7 +434,7 @@ export class SQLMultiPolygon extends SQLGeometry {
     coordinates = null;
     
     /**
-     * Constructor given an object with the same strcuture as an SQL MULTIPOLYGON
+     * Constructor given an object with the same structure as an SQL MULTIPOLYGON
      * @param {SQLMultiPolygon} sqlMultiPolygon 
      */
     constructor ( sqlMultiPolygon ) {

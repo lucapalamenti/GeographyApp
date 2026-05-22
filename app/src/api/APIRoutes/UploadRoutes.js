@@ -1,13 +1,19 @@
 const express = require('express');
 const multer = require('multer');
-const path = require("path");
+const Path = require("path");
+const { DOMParser } = require('@xmldom/xmldom');
+const { kml } = require("@tmcw/togeojson");
 
 const MapDAO = require('../db/MapDAO.js');
 const RegionDAO = require('../db/RegionDAO.js');
+const TempDataDAO = require('../db/TempDataDAO.js');
+const BackendPayloadManager = require('../../middleware/BackendPayloadManager.js');
 
 const MMap = require('../models/MMap.js');
 const { SQLGeometry, SQLPolygon, SQLMultiPolygon } = require('../models/SQLGeometry.js');
 const FrontendMapRegion = require('../models/FrontendMapRegion.js');
+const { FeatureCollection } = require('../models/FeatureCollection.js');
+const TemplateMap = require('../models/TemplateMap.js');
 
 const UploadAPIRouter = express.Router();
 UploadAPIRouter.use( express.json() );
@@ -15,7 +21,7 @@ UploadAPIRouter.use( express.json() );
 const thumbnailStorage = multer.diskStorage({
     // directory to store in
     destination: ( req, file, callback ) => {
-        callback( null, path.join(process.cwd(), "uploads", "thumbnails", "custom") );
+        callback( null, Path.join(process.cwd(), "uploads", "thumbnails", "custom") );
     },
     // name of file
     filename: ( req, file, callback ) => {
@@ -35,26 +41,61 @@ UploadAPIRouter.post('/thumbnail', thumbnailUpload.single('thumbnail'), (req, re
     }
 });
 
+// ----- <<<<< MAPFILE >>>>> -----
+
 const mapfileUpload = multer({ storage: multer.memoryStorage() });
-UploadAPIRouter.post('/mapfile', mapfileUpload.single('mapfile'), async (req, res) => {
-    // Check that a valid geojson file was uploaded
+UploadAPIRouter.post('/mapfile/process', mapfileUpload.single('mapfile'), async (req, res) => {
+    // Check that a file was uploaded
     if ( !req.file ) {
         res.status(400).json({ message: 'No file uploaded' });
         return;
     }
-    const geojson = JSON.parse( req.file.buffer.toString() );
-    const region_type = req.body["region_type"];
+    
+    let geojson;
+
+    const fileExt = req.file.originalname.split( "." ).pop();
+    switch ( fileExt ) {
+        case "geojson":
+            geojson = JSON.parse( req.file.buffer.toString() );
+            break;
+        case "kml":
+            const kmlDocumentNode = new DOMParser().parseFromString( req.file.buffer.toString(), "text/xml" );
+            geojson = kml( kmlDocumentNode );
+            break;
+        default:
+            res.status(400).json({ message: `The given file extension "${fileExt}" cannot be converted to geojson!` });
+            return;
+    }
+    await TempDataDAO.createTempData( geojson );
+    // res.json( geojson.features[0].properties );
+    res.json( geojson );
+});
+
+UploadAPIRouter.post('/mapfile/create', BackendPayloadManager.chunkMiddleware, async (req, res) => {
+    // Validate that the required parameters are given
+    const fieldData = new TemplateMap( req.body );
+    try {
+        fieldData.verifyState();
+    } catch ( err ) {
+        res.status(200).json({ message: 'All required TemplateMap fields are not populated!' });
+        return;
+    }
+
+    const obj = await TempDataDAO.extractTempData();
+    res.status(200).json( obj ); return;
+    const geojson = new FeatureCollection( await TempDataDAO.extractTempData() );
+
     // Check for invalid region type (its not a key in the feature properties)
-    if ( !geojson["features"][0]["properties"][region_type] ) {
-        res.status(400).json({ message: 'Invalid region_type given' });
+    if ( !geojson.getProperties()[fieldData.region_name_key] ) {
+        res.status(400).json({ message: 'Invalid region_name_key given' });
         return;
     }
     
     const regionResponses = geojson["features"].map( feature => {
         // Create a Region from each feature
         return RegionDAO.createRegion({
-            region_name : feature["properties"][region_type],
-            region_type : region_type,
+            region_name : feature.properties[fieldData.region_name_key],
+            region_type : fieldData.region_type,
             region_parent_id : null,
             region_points : SQLGeometry.createAnyType( feature["geometry"] )
         });
@@ -69,11 +110,12 @@ UploadAPIRouter.post('/mapfile', mapfileUpload.single('mapfile'), async (req, re
     // Create a map for the new data to be seen in
     const map = await MapDAO.createMap( new MMap({
         map_id : null,
-        map_name : "Connecticut Municipalities",
-        map_thumbnail : "default/Test_Map_Thumbnail.png",
+        map_name : fieldData.map_name,
+        map_thumbnail : "default/Template_Map_Thumbnail.png",
         map_primary_color_R : 0,
         map_primary_color_G : 0,
         map_primary_color_B : 0,
+        map_is_template : true,
         map_is_custom : true
     }) ).catch( err => {
         res.status(400).json({ message: "Couldn't create map", err });
@@ -83,7 +125,7 @@ UploadAPIRouter.post('/mapfile', mapfileUpload.single('mapfile'), async (req, re
         return RegionDAO.createMapRegion( new FrontendMapRegion({
             mapRegion_map_id : map.map_id,
             mapRegion_region_id : region.region_id,
-            mapRegion_parent : "Connecticut",
+            mapRegion_parent : fieldData.getRegionParentNameKey(),
             mapRegion_offsetX : 0.000000,
             mapRegion_offsetY : 0.000000,
             mapRegion_scaleX : 1.000000,
@@ -96,25 +138,10 @@ UploadAPIRouter.post('/mapfile', mapfileUpload.single('mapfile'), async (req, re
         res.status(400).json({ message: "Couldn't create mapRegions for map", err });
     });
 
-    res.json({
+    res.status(200).json({
         responses : objectResponses,
         mapRegions : creationResponses
     });
-});
-
-UploadAPIRouter.post('/togeojson/:extension', BackendPayloadManager.chunkMiddleware, async (req, res) => {
-    let geojson;
-    const ext = req.params.extension;
-    switch ( ext ) {
-        case "kml":
-            const kmlDocumentNode = new DOMParser().parseFromString( req.body, "text/xml" );
-            geojson = kml( kmlDocumentNode );
-            break;
-        default:
-            res.status(400).json({ message: `The given file extension "${ext}" cannot be converted to geojson!` });
-            return;
-    }
-    res.json( geojson.features[0].properties );
 });
 
 module.exports = UploadAPIRouter;
