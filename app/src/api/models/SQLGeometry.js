@@ -101,7 +101,7 @@ class SQLPoint extends SQLGeometry {
     coordinates = null;
 
     /**
-     * Constructor given an object with the same strcuture as an SQL POINT
+     * Constructor given an object with the same structure as an SQL POINT
      * @param {SQLPoint} sqlPoint
      */
     constructor ( sqlPoint ) {
@@ -130,7 +130,7 @@ class SQLMultiPoint extends SQLGeometry {
     coordinates = null;
 
     /**
-     * Constructor given an object with the same strcuture as an SQL MULTIPOINT
+     * Constructor given an object with the same structure as an SQL MULTIPOINT
      * @param {SQLMultiPoint} SQLMultiPoint 
      */
     constructor ( SQLMultiPoint ) {
@@ -163,7 +163,7 @@ class SQLLineString extends SQLGeometry {
     coordinates = null;
 
     /**
-     * Constructor given an object with the same strcuture as an SQL LINESTRING
+     * Constructor given an object with the same structure as an SQL LINESTRING
      * @param {SQLLineString} sqlLineString
      */
     constructor ( sqlLineString ) {
@@ -196,7 +196,7 @@ class SQLMultiLineString extends SQLGeometry {
     coordinates = null;
 
     /**
-     * Constructor given an object with the same strcuture as an SQL MULTILINESTRING
+     * Constructor given an object with the same structure as an SQL MULTILINESTRING
      * @param {SQLMultiLineString} sqlMultiLineString
      */
     constructor ( sqlMultiLineString ) {
@@ -231,7 +231,7 @@ class SQLPolygon extends SQLGeometry {
     coordinates = null;
     
     /**
-     * Constructor given an object with the same strcuture as an SQL POLYGON
+     * Constructor given an object with the same structure as an SQL POLYGON
      * @param {SQLPolygon} sqlPolygon 
      */
     constructor ( sqlPolygon ) {
@@ -266,7 +266,7 @@ class SQLMultiPolygon extends SQLGeometry {
     coordinates = null;
     
     /**
-     * Constructor given an object with the same strcuture as an SQL MULTIPOLYGON
+     * Constructor given an object with the same structure as an SQL MULTIPOLYGON
      * @param {SQLMultiPolygon} sqlMultiPolygon 
      */
     constructor ( sqlMultiPolygon ) {
