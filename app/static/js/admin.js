@@ -1,6 +1,6 @@
 import APIClient from "./APIClient.js";
 import { navBar } from "./documentElements.js";
-import { parse } from "./kml2geojson.js";
+import { FeatureCollection } from "./models/FeatureCollection.js"
 
 window.onload = () => {
     const pageName = document.createElement("P");
@@ -29,21 +29,10 @@ fileDropdownHeader.addEventListener("click", e => {
 fileInput.addEventListener("change", async e => {
     const file = e.target.files[0];
     if ( file ) {
-
-        const reader = new FileReader();
-        reader.onload = () => {
-            const fileString = reader.result;
-            const parser = new DOMParser();
-            const json = parse( parser.parseFromString( fileString, "text/xml" ) );
-            console.log( json );
-        };
-        reader.readAsText(file);
-
         await APIClient.processMapfile( uploadForm ).then( async res => {
-            const properties = await res.json();
-            console.log( properties );
-            
-            // preview.innerHTML = JSON.stringify( properties, null, 2 );
+            const featureCollection = new FeatureCollection( await res.json() );
+            console.log( featureCollection );
+            preview.innerHTML = JSON.stringify( featureCollection.getProperties(), null, 2 );
         });
     }
 });
@@ -58,7 +47,6 @@ uploadForm.addEventListener("submit", async e => {
     }
     await APIClient.createTemplateMap( data ).then( async res => {
         console.log( res );
-        
     });
 });
 

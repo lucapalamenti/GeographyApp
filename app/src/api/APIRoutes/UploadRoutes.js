@@ -1,13 +1,13 @@
 const express = require('express');
 const multer = require('multer');
 const Path = require("path");
-const { DOMParser } = require('@xmldom/xmldom');
-const { kml } = require("@tmcw/togeojson");
+const { JSDOM } = require('jsdom');
 
 const MapDAO = require('../db/MapDAO.js');
 const RegionDAO = require('../db/RegionDAO.js');
 const TempDataDAO = require('../db/TempDataDAO.js');
 const BackendPayloadManager = require('../../middleware/BackendPayloadManager.js');
+const Kml2Geojson = require('../util/kml2geojson.js');
 
 const MMap = require('../models/MMap.js');
 const { SQLGeometry, SQLPolygon, SQLMultiPolygon } = require('../models/SQLGeometry.js');
@@ -59,8 +59,9 @@ UploadAPIRouter.post('/mapfile/process', mapfileUpload.single('mapfile'), async 
             geojson = JSON.parse( req.file.buffer.toString() );
             break;
         case "kml":
-            const kmlDocumentNode = new DOMParser().parseFromString( req.file.buffer.toString(), "text/xml" );
-            geojson = kml( kmlDocumentNode );
+            const dom = new JSDOM( req.file.buffer.toString(), {contentType: "text/xml"} );
+            const kmlDocumentNode = dom.window.document;
+            geojson = Kml2Geojson.parse( kmlDocumentNode );
             break;
         default:
             res.status(400).json({ message: `The given file extension "${fileExt}" cannot be converted to geojson!` });
@@ -81,8 +82,6 @@ UploadAPIRouter.post('/mapfile/create', BackendPayloadManager.chunkMiddleware, a
         return;
     }
 
-    const obj = await TempDataDAO.extractTempData();
-    res.status(200).json( obj ); return;
     const geojson = new FeatureCollection( await TempDataDAO.extractTempData() );
 
     // Check for invalid region type (its not a key in the feature properties)
