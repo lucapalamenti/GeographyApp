@@ -105,12 +105,6 @@ export class SQLGeometry {
                 throw new TypeError( `Invalid SQLGeometry type - "${sqlGeometry.type}"` );
         }
     }
-
-    /**
-     * Converts a string to the coordinates array for the SQLGeometry object
-     * @param {string} string 
-     */
-    static string2Coordinates( string ) { this.#subclassCheck( this.string2Coordinates ); }
 }
 
 /**
@@ -153,12 +147,19 @@ export class SQLPoint extends SQLGeometry {
     }
 
     /**
-     * 
-     * @param {string} string 
-     * @returns 
+     * Takes an array of SQLPoint objects and merges them into an SQLMultiPoint object
+     * @param {Array<SQLPoint>} sqlPointArray 
+     * @returns {SQLMultiPoint}
      */
-    static string2Coordinates( string ) {
-        return string.split( "," ).slice(0, 2);
+    static mergeSQLPointObjects( sqlPointArray ) {
+        const coordinates = [];
+        for ( const sqlPoint of sqlPointArray ) {
+            coordinates.push( sqlPoint.coordinates );
+        }
+        return new SQLMultiPoint({
+            type : "MultiPoint",
+            coordinates : coordinates
+        });
     }
 }
 
@@ -279,6 +280,22 @@ export class SQLLineString extends SQLGeometry {
                 return `${point[0]} ${-1 * point[1]}`;
             }).join(" L")
         }`;
+    }
+
+    /**
+     * Takes an array of SQLLineString objects and merges them into an SQLMultiLineString object
+     * @param {Array<SQLLineString>} sqlLineStringArray 
+     * @returns {SQLMultiLineString}
+     */
+    static mergeSQLLineStringObjects( sqlLineStringArray ) {
+        const coordinates = [];
+        for ( const sqlLineString of sqlLineStringArray ) {
+            coordinates.push( sqlLineString.coordinates );
+        }
+        return new SQLMultiLineString({
+            type : "MultiLineString",
+            coordinates : coordinates
+        });
     }
 }
 
@@ -421,8 +438,20 @@ export class SQLPolygon extends SQLGeometry {
         } Z`;
     }
 
-    static string2Coordinates( string ) {
-        
+    /**
+     * Takes an array of SQLPolygon objects and merges them into an SQLMultiPolygon object
+     * @param {Array<SQLPolygon>} sqlPolygonArray 
+     * @returns {SQLMultiPolygon}
+     */
+    static mergeSQLPolygonObjects( sqlPolygonArray ) {
+        const coordinates = [];
+        for ( const sqlPolygon of sqlPolygonArray ) {
+            coordinates.push( sqlPolygon.coordinates );
+        }
+        return new SQLMultiPolygon({
+            type : "MultiPolygon",
+            coordinates : coordinates
+        });
     }
 }
 
