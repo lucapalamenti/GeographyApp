@@ -60,8 +60,7 @@ UploadAPIRouter.post('/mapfile/process', mapfileUpload.single('mapfile'), async 
             break;
         case "kml":
             const dom = new JSDOM( req.file.buffer.toString(), {contentType: "text/xml"} );
-            const kmlDocumentNode = dom.window.document;
-            geojson = Kml2Geojson.parse( kmlDocumentNode );
+            geojson = Kml2Geojson.parse( dom.window.document );
             break;
         default:
             res.status(400).json({ message: `The given file extension "${fileExt}" cannot be converted to geojson!` });
@@ -124,7 +123,7 @@ UploadAPIRouter.post('/mapfile/create', BackendPayloadManager.chunkMiddleware, a
         return RegionDAO.createMapRegion( new FrontendMapRegion({
             mapRegion_map_id : map.map_id,
             mapRegion_region_id : region.region_id,
-            mapRegion_parent : fieldData.getRegionParentNameKey(),
+            mapRegion_parent : null,
             mapRegion_offsetX : 0.000000,
             mapRegion_offsetY : 0.000000,
             mapRegion_scaleX : 1.000000,
