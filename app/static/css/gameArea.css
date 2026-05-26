@@ -23,13 +23,6 @@
     display: none;
 }
 
-#svg-game {
-    width: 100%;
-    height: 100%;
-    display: block;
-    background-color: rgb(141, 209, 226);
-}
-
 .clickLabel {
     position: absolute;
     border: 2px solid black;
@@ -137,11 +130,4 @@
     &:hover {
         filter: brightness(0.80);
     }
-}
-
-@media screen and (max-width : 600px) {
-    #game-area {
-        width: 100%;
-        resize: none;
-    } 
 }

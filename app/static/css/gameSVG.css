@@ -1,4 +1,9 @@
 #svg-game {
+    width: 100%;
+    height: 100%;
+    display: block;
+    background-color: rgb(141, 209, 226);
+    
     &:not(.invisible-mode) path:hover {
         filter: brightness( 0.9 );
     }
