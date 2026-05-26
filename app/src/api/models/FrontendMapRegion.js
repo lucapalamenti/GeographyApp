@@ -49,4 +49,20 @@ module.exports = class FrontendMapRegion {
             this.mapRegion_type
         ];
     }
+
+    /**
+     * Returns an Array of all the MapRegion's variables EXCEPT mapRegion_parent
+     * @returns {Array<>}
+     */
+    getVariablesNoParent() {
+        return [
+            this.mapRegion_map_id,
+            this.mapRegion_region_id,
+            this.mapRegion_offsetX,
+            this.mapRegion_offsetY,
+            this.mapRegion_scaleX,
+            this.mapRegion_scaleY,
+            this.mapRegion_type
+        ];
+    }
 }

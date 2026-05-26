@@ -182,11 +182,20 @@ const getMapRegionParent = async ( mapRegion_region_id ) => {
  * @returns {Promise<BackendMapRegion>}
  */
 const createMapRegion = async ( mapRegion ) => {
-    const query = `
-        INSERT INTO \`mapRegion\` (\`mapRegion_map_id\`, \`mapRegion_region_id\`, \`mapRegion_parent\`, \`mapRegion_offsetX\`, \`mapRegion_offsetY\`, \`mapRegion_scaleX\`, \`mapRegion_scaleY\`, \`mapRegion_type\`)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?);
-        `;
-    const params = [...mapRegion.getAllVariables()];
+    let query = "", params = [];
+    if ( mapRegion.mapRegion_parent ) {
+        query = `
+            INSERT INTO mapRegion (mapRegion_map_id, mapRegion_region_id, mapRegion_parent, mapRegion_offsetX, mapRegion_offsetY, mapRegion_scaleX, mapRegion_scaleY, mapRegion_type)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+            `;
+        params = [...mapRegion.getAllVariables()];
+    } else {
+        query = `
+            INSERT INTO mapRegion (mapRegion_map_id, mapRegion_region_id, mapRegion_offsetX, mapRegion_offsetY, mapRegion_scaleX, mapRegion_scaleY, mapRegion_type)
+            VALUES (?, ?, ?, ?, ?, ?, ?);
+            `;
+        params = [...mapRegion.getVariablesNoParent()];
+    }
     return await database.query( query, params ).then( async rows => {
             if ( rows.affectedRows === 1 ) {
                 if ( COPY_TO_FILE ) {
