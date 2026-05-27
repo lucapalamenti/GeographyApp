@@ -1,5 +1,5 @@
 path {
-    fill: rgb(230, 231, 137);
+    fill: var(--svg-land-enabled);
     stroke-width: 0.05%;
     stroke: black;
 }
@@ -76,7 +76,7 @@ g g path.outside:hover {
 }
 
 #deselect-btn {
-    background-color: rgb(230, 231, 137);
+    background-color: var(--svg-land-enabled);
 
     &:hover {
         background-color: rgb(210, 211, 117);
@@ -124,7 +124,7 @@ svg.zoom-5 path { stroke-width: 0.10px; }
 }
 
 #templateMap {
-    background-color: rgb(141, 209, 226);
+    background-color: var(--svg-ocean);
 }
 
 #selected-list {

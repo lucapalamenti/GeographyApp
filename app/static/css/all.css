@@ -3,6 +3,9 @@
     --green-2 : rgb(28, 134, 64);
     --green-3 : rgb(36, 170, 81);
     --green-4 : rgb(16, 97, 43);
+
+    --svg-ocean : rgb(141, 209, 226);
+    --svg-land-enabled : rgb(230, 231, 137);
 }
 
 * {

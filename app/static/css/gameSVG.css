@@ -2,14 +2,14 @@
     width: 100%;
     height: 100%;
     display: block;
-    background-color: rgb(141, 209, 226);
+    background-color: var(--svg-ocean);
     
     &:not(.invisible-mode) path:hover {
         filter: brightness( 0.9 );
     }
     &.invisible-mode:not(.gameEnd) g g.enabled path:not(.typed, .typeCurrent, .guesses0, .guesses1, .guesses2, .guesses3) {
         /* fill:  !important; */
-        stroke: rgb(230, 231, 137);
+        stroke: var(--svg-land-enabled);
         /* Make this as small as possibles */
         stroke-width: 0.1%;
     }
@@ -64,7 +64,7 @@
     }
 
     path {
-        fill: rgb(230, 231, 137);
+        fill: var(--svg-land-enabled);
         stroke-width: 0.05%;
         stroke: black;
 
