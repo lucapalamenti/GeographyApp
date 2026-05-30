@@ -3,7 +3,6 @@ import util from "./util/util.js";
 
 import MMap from "./models/MMap.js";
 import MapRegion from "./models/MapRegion.js";
-import BackendMapRegion from "./models/BackendMapRegion.js";
 
 import { SVG_WIDTH, SVG_HEIGHT, FOCUS_STATES } from "./variables.js";
 import ParentChildMap from "./models/ParentChildMap.js";

@@ -76,3 +76,12 @@ button {
         }
     }
 }
+
+#map-preview {
+    border: 5px solid var(--green-1);
+    background-color: var(--svg-ocean);
+    
+    path {
+        fill: var(--svg-land-enabled);
+    }
+}

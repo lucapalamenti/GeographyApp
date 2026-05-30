@@ -29,11 +29,13 @@ fileDropdownHeader.addEventListener("click", e => {
 fileInput.addEventListener("change", async e => {
     const file = e.target.files[0];
     if ( file ) {
-        await APIClient.processMapfile( uploadForm ).then( async res => {
-            const featureCollection = new FeatureCollection( await res.json() );
-            console.log( featureCollection );
-            preview.innerHTML = JSON.stringify( featureCollection.getProperties(), null, 2 );
+        let featureCollection = await APIClient.processMapfile( uploadForm ).then( async res => {
+            const fc = new FeatureCollection( await res.json() );
+            preview.innerHTML = JSON.stringify( fc.getProperties(), null, 2 );
+            return fc;
         });
+        console.log( featureCollection );
+        
     }
 });
 
