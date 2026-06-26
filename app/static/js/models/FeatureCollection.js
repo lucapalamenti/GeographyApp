@@ -21,6 +21,58 @@ export class FeatureCollection {
     getProperties() {
         return this.features[0].properties;
     }
+
+    /**
+     * Returns the minimum X value among all Features in this FeatureCollection
+     * @returns {number}
+     */
+    minXValue() {
+        let minX = Infinity;
+        for ( const feature of this.features ) {
+            const val = feature.geometry.minXValue();
+            if ( val < minX ) minX = val;
+        }
+        return minX;
+    }
+
+    /**
+     * Returns the maximum X value among all Features in this FeatureCollection
+     * @returns {number}
+     */
+    maxXValue() {
+        let maxX = -Infinity;
+        for ( const feature of this.features ) {
+            const val = feature.geometry.maxXValue();
+            if ( val > maxX ) maxX = val;
+        }
+        return maxX;
+    }
+
+    /**
+     * Returns the minimum Y value among all Features in this FeatureCollection
+     * @returns {number}
+     */
+    minYValue() {
+        let minY = Infinity;
+        for ( const feature of this.features ) {
+            const val = feature.geometry.minYValue();
+            if ( val < minY ) minY = val;
+        }
+        return minY;
+    }
+
+    /**
+     * Returns the maximum Y value among all Features in this FeatureCollection
+     * @returns {number}
+     */
+    maxYValue() {
+        let maxY = -Infinity;
+        for ( const feature of this.features ) {
+            const val = feature.geometry.maxYValue();
+            if ( val > maxY ) maxY = val;
+        }
+        return maxY;
+    }
 }
 
 /**
