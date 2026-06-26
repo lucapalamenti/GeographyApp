@@ -19,6 +19,7 @@ const pathTemplate = document.getElementById('svg-path-template').content;
  * @returns {ParentChildMap} a map where the keys are parent names and the values are arrays of region names. *The first element of the array is the 
  */
 export default async function populateSVG( map, svg ) {
+    svg.replaceChildren();
     // Get all mapRegions for this map 
     let mapRegions = await APIClient.getRegionsByMapId( map.map_id );
     // Get width and height of map for centering on the page

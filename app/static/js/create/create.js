@@ -56,13 +56,11 @@ mapTemplate.addEventListener('change', async e => {
     selectedList.style.display = "none";
     mapContainer.style.display = "none";
     stateButtonsPanel.style.display = "none";
-    for ( const region of svg.querySelectorAll( "PATH" ) ) {
-        region.remove();
-    }
     if ( mapTemplate.value >= 0 ) {
         // Get the chosen map and display it
         map = new MMap( await APIClient.getMapById( mapTemplate.value ) );
         regionMap = await populateSVG( map, svg );
+        svg.appendChild( mapOutline );
         for ( const path of svg.querySelectorAll('PATH') ) {
             path.addEventListener('mouseover', mouse => {
                 if ( mouse.button === 0 && dragging ) {
