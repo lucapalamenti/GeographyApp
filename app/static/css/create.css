@@ -146,6 +146,12 @@ svg.zoom-5 path { stroke-width: 0.10px; }
     }
 }
 
+.icon-selected {
+    background-image: url("../images/check.png");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+}
+
 #loading-screen {
     position: fixed;
     top: 0;

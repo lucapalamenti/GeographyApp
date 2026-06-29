@@ -39,10 +39,10 @@ window.onload = async () => {
 stateButtonsPanel.addEventListener('click', e => {
     if ( e.target.tagName === "BUTTON" ) {
         // If the user selects a new button
-        if ( !e.target.classList.contains('btn-selected') ) {
-            stateButtonsPanel.querySelector(`#${selectedType}-btn`).classList.remove('btn-selected');
+        if ( !e.target.classList.contains('icon-selected') ) {
+            stateButtonsPanel.querySelector(`#${selectedType}-btn`).classList.remove('icon-selected');
             selectedType = e.target.id.substring( 0, e.target.id.length - 4 );
-            stateButtonsPanel.querySelector(`#${selectedType}-btn`).classList.add('btn-selected');
+            stateButtonsPanel.querySelector(`#${selectedType}-btn`).classList.add('icon-selected');
         }
     }
 });

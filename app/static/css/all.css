@@ -216,7 +216,7 @@ button {
     background-color: rgb(96, 204, 69);
 }
 .btn-green:hover {
-    background-color: rgb(80, 168, 58);
+    filter: brightness( 0.8 );
 }
 
 .btn-turquoise {
@@ -224,7 +224,7 @@ button {
     background-color: rgb(69, 204, 136);
 }
 .btn-turquoise:hover {
-    background-color: rgb(56, 163, 110);
+    filter: brightness( 0.8 );
 }
 
 .btn-grey {
@@ -233,7 +233,10 @@ button {
     color: black;
 }
 .btn-grey:hover {
-    background-color: rgb(173, 173, 173);
+    filter: brightness( 0.8 );
+}
+.btn-grey:active {
+    filter: brightness( 0.6 );
 }
 
 .btn-icon {
@@ -258,14 +261,11 @@ button {
     left: 1px;
 }
 
-.btn-selected {
-    background-image: url("../images/check.png");
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-}
-
-.bg-fade {
-    transition: background-color 0.25s;
+.hover-fade:hover {
+    transition: filter 0.25s;
+    &:active {
+        transition: none;
+    }
 }
 
 /* @media screen and (max-width : 600px) {
