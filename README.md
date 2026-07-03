@@ -72,6 +72,7 @@
 - Consider using a GEOMETRYCOLLECTION with single geometry objects in them
 - "generate all SQL files" button
 - look into "SRID (Spatial Reference ID): The optional second parameter (e.g., 4326 for WGS 84 GPS coordinates) specifies the coordinate system."
+- Add @typedef's for each SQLGeometry coordinate type
 
 # Changelog
 

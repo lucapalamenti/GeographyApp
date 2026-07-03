@@ -77,11 +77,32 @@ button {
     }
 }
 
+#load-map-btn {
+    background-color: var(--green-1);
+    border: 2px solid var(--green-4);
+    border-radius: 10px;
+    color: var(--green-4);
+}
+
+.btn-selected {
+    color: white;
+    border: 3px solid white;
+}
+
 #map-preview {
     border: 5px solid var(--green-1);
     background-color: var(--svg-ocean);
     
     path {
         fill: var(--svg-land-enabled);
+        stroke: black;
+        stroke-width: 0.1%;
+
+        &:hover {
+            filter: brightness( 0.9 );
+        }
+        &:active {
+            filter: brightness( 0.8 );
+        }
     }
 }

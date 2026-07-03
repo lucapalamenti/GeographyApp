@@ -62,13 +62,25 @@
                             </div>
                         </div>
                         <div class="dotted-line"></div>
-                        <svg id="map-preview">
+                        <section id="map-section" class="flex-col">
+                            <svg id="map-preview">
 
-                        </svg>
+                            </svg>
+                            <div class="flex-row-center">
+                                <button type="button" id="move-west-btn" class="btn-grey hover-fade">Move Region to West</button>
+                                <button type="button" id="move-east-btn" class="btn-grey hover-fade">Move Region to East</button>
+                            </div>
+                        </section>
                     </form>
                 </section>
             </div>
         </div>
     </main>
+    
+    <!-- SVG-Path template ( it is necessary to copy path elements from inside an svg instead of creating new
+         elements in a js file, since the HTML will not recognize the element ) -->
+    <template id="svg-path-template">
+        <svg><path></path></svg>
+    </template>
 </body>
 </html>
