@@ -94,4 +94,20 @@ export class Feature {
         this.properties = data.properties;
         this.geometry = SQLGeometry.createAnyType( data.geometry );
     }
+
+    /**
+     * If this Feature has coordinates on both sides of 180 degrees longitude, then
+     * make sure all X values are negative by subtracting 360 from all positive X values.
+     */
+    westify() {
+        this.geometry.westify( this.geometry.coordinates );
+    }
+
+    /**
+     * If this Feature has coordinates on both sides of 180 degrees longitude, then
+     * make sure all X values are positive by adding 360 to all negative X values.
+     */
+    eastify() {
+        this.geometry.eastify( this.geometry.coordinates );
+    }
 }

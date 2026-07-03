@@ -64,6 +64,38 @@ export class SQLGeometry {
      * @returns {number}
      */
     maxYValue() { this.#subclassCheck( this.maxYValue ); }
+
+    /**
+     * If this Feature has coordinates on both sides of 180 degrees longitude, then
+     * make sure all X values are negative by subtracting 360 from all positive X values.
+     * @param {*} coords 
+     */
+    westify( coords ) {
+        this.#subclassCheck( this.westify );
+        if ( Array.isArray( coords[0] ) ) {
+            for ( const subCoords of coords ) {
+                this.westify( subCoords );
+            }
+        } else if ( coords[0] > 0 ) {
+            coords[0] -= 360;
+        }
+    }
+
+    /**
+     * If this Feature has coordinates on both sides of 180 degrees longitude, then
+     * make sure all X values are positive by adding 360 to all negative X values.
+     * @param {*} coords 
+     */
+    eastify( coords ) {
+        this.#subclassCheck( this.eastify );
+        if ( Array.isArray( coords[0] ) ) {
+            for ( const subCoords of coords ) {
+                this.eastify( subCoords );
+            }
+        } else if ( coords[0] < 0 ) {
+            coords[0] += 360;
+        }
+    }
     
     /**
      * Returns the equivalent <path> "d" attribute for this SQLGeometry object
@@ -140,6 +172,26 @@ export class SQLPoint extends SQLGeometry {
 
     maxYValue() {
         return this.coordinates[1];
+    }
+
+    /**
+     * @override
+     * Since Points cant be on both sides of a line, simply reflect the X value if it's on the line
+     */
+    westify() {
+        if ( this.coordinates[0] === 180 ) {
+            this.coordinates[0] = -180;
+        }
+    }
+
+    /**
+     * @override
+     * Since Points cant be on both sides of a line, simply reflect the X value if it's on the line
+     */
+    eastify() {
+        if ( this.coordinates[0] === -180 ) {
+            this.coordinates[0] = 180;
+        }
     }
 
     toPathDString() {
