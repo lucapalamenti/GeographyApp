@@ -10,9 +10,7 @@ const MAX_STRING_SIZE = 1_000_000;
  * @param {Object} tempData_data 
  */
 const createTempData = async ( tempData_data ) => {
-    await database.query(`
-        DELETE FROM tempData;
-        `, []);
+    await deleteTempData();
 
     let string = JSON.stringify( tempData_data );
     let id = 1;
@@ -37,13 +35,18 @@ const extractTempData = async () => {
         `, []).then( rows => {
             return rows.map( row => row.tempData_data );
         });
-    await database.query(`
-        DELETE FROM tempData;
-        `, []);
+    await deleteTempData();
     return JSON.parse( tempData_data_rows.join( "" ) );
 };
 
+const deleteTempData = async () => {
+    await database.query(`
+        DELETE FROM tempData;
+        `, []);
+}
+
 module.exports = {
     createTempData,
-    extractTempData
+    extractTempData,
+    deleteTempData
 };
