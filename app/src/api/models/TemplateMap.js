@@ -1,3 +1,5 @@
+const { FeatureCollection } = require("./FeatureCollection");
+
 module.exports = class TemplateMap {
     /** @type {string} */
     map_name = null;
@@ -7,6 +9,8 @@ module.exports = class TemplateMap {
     region_name_key = null;
     /** @type {string | undefined} */
     #region_parent_name_key = null;
+    /** @type {FeatureCollection} */
+    new_feature_collection = null;
 
     /**
      * 
@@ -17,6 +21,7 @@ module.exports = class TemplateMap {
         this.region_type = data.region_type;
         this.region_name_key = data.region_name_key;
         this.#region_parent_name_key = data.region_parent_name_key;
+        this.new_feature_collection = data.new_feature_collection;
     }
 
     getRegionParentNameKey() {

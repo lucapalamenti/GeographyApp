@@ -81,7 +81,8 @@ uploadForm.addEventListener("submit", async e => {
         map_name : map_name.value,
         region_type : region_type.value,
         region_name_key : region_name_key.value,
-        region_parent_name_key : region_parent_name_key.value
+        region_parent_name_key : region_parent_name_key.value,
+        new_feature_collection : featureCollection
     }
     await APIClient.createTemplateMap( data ).then( async res => {
         console.log( res );

@@ -67,7 +67,6 @@ UploadAPIRouter.post('/mapfile/process', mapfileUpload.single('mapfile'), async 
             return;
     }
     await TempDataDAO.createTempData( geojson );
-    // res.json( geojson.features[0].properties );
     res.json( geojson );
 });
 
@@ -81,7 +80,15 @@ UploadAPIRouter.post('/mapfile/create', BackendPayloadManager.chunkMiddleware, a
         return;
     }
 
-    const geojson = new FeatureCollection( await TempDataDAO.extractTempData() );
+    let geojson = fieldData.new_feature_collection;
+    // Use TempData if no new data is provided
+    if ( !geojson ) {
+        geojson = new FeatureCollection( await TempDataDAO.extractTempData() );
+    } else {
+        geojson = new FeatureCollection( geojson );
+        TempDataDAO.deleteTempData();
+    }
+    
 
     // Check for invalid region type (its not a key in the feature properties)
     if ( !geojson.getProperties()[fieldData.region_name_key] ) {
