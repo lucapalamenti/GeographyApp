@@ -21,16 +21,14 @@ module.exports = class TemplateMap {
         this.region_type = data.region_type;
         this.region_name_key = data.region_name_key;
         this.#region_parent_name_key = data.region_parent_name_key;
-        this.new_feature_collection = data.new_feature_collection;
+        this.new_feature_collection = new FeatureCollection( data.new_feature_collection );
+
+        if ( !this.map_name || !this.region_type || !this.region_name_key ) {
+            throw new Error( 'All required TemplateMap fields are not populated!' );
+        }
     }
 
     getRegionParentNameKey() {
         return this.#region_parent_name_key ? this.#region_parent_name_key : "Earth";
-    }
-
-    verifyState() {
-        if ( !this.map_name || !this.region_type || !this.region_name_key ) {
-            throw new Error( 'All required TemplateMap fields are not populated!' );
-        }
     }
 }

@@ -77,14 +77,6 @@ CREATE TABLE IF NOT EXISTS `region` (
 
 -- Data exporting was unselected.
 
--- Dumping structure for table geographyapp.tempData
-CREATE TABLE IF NOT EXISTS `tempData` (
-  `tempData_id` smallint(6) DEFAULT NULL,
-  `tempData_data` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
-
--- Data exporting was unselected.
-
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;

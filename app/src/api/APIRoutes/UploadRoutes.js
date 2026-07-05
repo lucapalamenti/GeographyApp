@@ -5,7 +5,6 @@ const { JSDOM } = require('jsdom');
 
 const MapDAO = require('../db/MapDAO.js');
 const RegionDAO = require('../db/RegionDAO.js');
-const TempDataDAO = require('../db/TempDataDAO.js');
 const BackendPayloadManager = require('../../middleware/BackendPayloadManager.js');
 const Kml2Geojson = require('../util/kml2geojson.js');
 
@@ -66,37 +65,29 @@ UploadAPIRouter.post('/mapfile/process', mapfileUpload.single('mapfile'), async 
             res.status(400).json({ message: `The given file extension "${fileExt}" cannot be converted to geojson!` });
             return;
     }
-    await TempDataDAO.createTempData( geojson );
     res.json( geojson );
 });
 
 UploadAPIRouter.post('/mapfile/create', BackendPayloadManager.chunkMiddleware, async (req, res) => {
     // Validate that the required parameters are given
-    const fieldData = new TemplateMap( req.body );
+    let fieldData;
     try {
-        fieldData.verifyState();
+        fieldData = new TemplateMap( req.body );
     } catch ( err ) {
         res.status(200).json({ message: 'All required TemplateMap fields are not populated!' });
-        return;
     }
 
-    let geojson = fieldData.new_feature_collection;
-    // Use TempData if no new data is provided
-    if ( !geojson ) {
-        geojson = new FeatureCollection( await TempDataDAO.extractTempData() );
-    } else {
-        geojson = new FeatureCollection( geojson );
-        TempDataDAO.deleteTempData();
-    }
-    
+    let featureCollection = fieldData.new_feature_collection;
 
     // Check for invalid region type (its not a key in the feature properties)
-    if ( !geojson.getProperties()[fieldData.region_name_key] ) {
+    if ( !featureCollection.getProperties()[fieldData.region_name_key] ) {
         res.status(400).json({ message: 'Invalid region_name_key given' });
         return;
     }
-    
-    const regionResponses = geojson["features"].map( feature => {
+
+
+    // Confirm that all Region and Polygon objects were successfully created
+    const objectResponses = await Promise.all( featureCollection.features.map( feature => {
         // Create a Region from each feature
         return RegionDAO.createRegion({
             region_name : feature.properties[fieldData.region_name_key],
@@ -104,10 +95,7 @@ UploadAPIRouter.post('/mapfile/create', BackendPayloadManager.chunkMiddleware, a
             region_parent_id : null,
             region_points : SQLGeometry.createAnyType( feature["geometry"] )
         });
-    });
-
-    // Confirm that all Region and Polygon objects were successfully created
-    const objectResponses = await Promise.all( regionResponses ).catch( err => {
+    })).catch( err => {
         res.status(400).json({ message: "Couldn't create Regions from file", err });
     });
     if ( !objectResponses ) return;
@@ -126,7 +114,7 @@ UploadAPIRouter.post('/mapfile/create', BackendPayloadManager.chunkMiddleware, a
         res.status(400).json({ message: "Couldn't create map", err });
     });
 
-    const mapRegionResponses = objectResponses.map( region => {
+    const creationResponses = await Promise.all( objectResponses.map( region => {
         return RegionDAO.createMapRegion( new FrontendMapRegion({
             mapRegion_map_id : map.map_id,
             mapRegion_region_id : region.region_id,
@@ -137,9 +125,7 @@ UploadAPIRouter.post('/mapfile/create', BackendPayloadManager.chunkMiddleware, a
             mapRegion_scaleY : 1.000000,
             mapRegion_type : "enabled"
         }) );
-    });
-
-    const creationResponses = await Promise.all( mapRegionResponses ).catch( err => {
+    })).catch( err => {
         res.status(400).json({ message: "Couldn't create mapRegions for map", err });
     });
 
