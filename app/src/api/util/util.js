@@ -53,11 +53,12 @@ async function deleteAllFilesInDirectory( directory ) {
     try {
         const files = await fsp.readdir( directory );
         // Asynchronously delete each file
-        const promises = files.forEach( file => {
-            return fsp.unlink( path.join( directory, file ) );
-        });
-        // Wait for all promises to complete
-        await Promise.all( promises );
+        if ( files.length !== 0 ) {
+            // Wait for all promises to complete
+            await Promise.all( files.forEach( file => {
+                return fsp.unlink( path.join( directory, file ) );
+            }));
+        }
     } catch ( err ) {
         console.error( `Error deleting all files in ${directory}` );
     }
