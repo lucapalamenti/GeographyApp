@@ -215,28 +215,16 @@ button {
     border: 3px solid rgb(19, 92, 44);
     background-color: rgb(96, 204, 69);
 }
-.btn-green:hover {
-    filter: brightness( 0.8 );
-}
 
 .btn-turquoise {
     border: 3px solid rgb(19, 92, 70);
     background-color: rgb(69, 204, 136);
-}
-.btn-turquoise:hover {
-    filter: brightness( 0.8 );
 }
 
 .btn-grey {
     background-color: rgb(216, 216, 216);
     border: 3px solid rgb(124, 124, 124);
     color: black;
-}
-.btn-grey:hover {
-    filter: brightness( 0.8 );
-}
-.btn-grey:active {
-    filter: brightness( 0.6 );
 }
 
 .btn-icon {
@@ -262,18 +250,12 @@ button {
 }
 
 .hover-fade:hover {
+    filter: brightness( 0.8 );
     transition: filter 0.25s;
     &:active {
+        filter: brightness( 0.6 );
         transition: none;
     }
-}
-
-.hover-darken1:hover {
-    filter: brightness( 0.9 );
-}
-
-.hover-darken2:hover {
-    filter: brightness( 0.8 );
 }
 
 /* @media screen and (max-width : 600px) {
