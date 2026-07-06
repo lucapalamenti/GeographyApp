@@ -19,14 +19,15 @@ const mapPreview = document.getElementById("map-preview");
 
 const moveWestBtn = document.getElementById("move-west-btn");
 const moveEastBtn = document.getElementById("move-east-btn");
+const deleteBtn = document.getElementById("delete-btn");
+const modificationButtons = [ moveWestBtn, moveEastBtn, deleteBtn ];
 
 const map_name = document.getElementById("map_name");
 const region_type = document.getElementById("region_type");
 const region_name_key = document.getElementById("region_name_key");
 const region_parent_name_key = document.getElementById("region_parent_name_key");
 
-let westToggle = false
-let eastToggle = false;
+let selectedBtn;
 
 /** @type {FeatureCollection} */
 let featureCollection;
@@ -52,28 +53,33 @@ fileInput.addEventListener("change", async e => {
 mapPreview.addEventListener("click", e => {
     if ( e.target.tagName === "path" ) {
         let f = featureCollection.features[e.target.id];
-        if ( westToggle ) {
-            f.westify();
-        } else if ( eastToggle ) {
-            f.eastify();
+        switch ( selectedBtn ) {
+            case moveWestBtn:
+                f.westify();
+                break;
+            case moveEastBtn:
+                f.eastify();
+                break;
+            case deleteBtn:
+                featureCollection.removeFeature( e.target.id );
+                break;
         }
         populateSVGfc( featureCollection, mapPreview );
     }
 });
 
-moveWestBtn.addEventListener("click", e => {
-    westToggle = true;
-    moveWestBtn.classList.add( "btn-selected" );
-    eastToggle = false;
-    moveEastBtn.classList.remove( "btn-selected" );
-});
+moveWestBtn.addEventListener("click", selectButton );
+moveEastBtn.addEventListener("click", selectButton);
+deleteBtn.addEventListener("click", selectButton);
 
-moveEastBtn.addEventListener("click", e => {
-    westToggle = false;
-    moveWestBtn.classList.remove( "btn-selected" );
-    eastToggle = true;
-    moveEastBtn.classList.add( "btn-selected" );
-});
+function selectButton( e ) {
+    const button = e.target;
+    for ( const btn of modificationButtons ) {
+        btn.classList.remove( "btn-selected" );
+    }
+    button.classList.add( "btn-selected" );
+    selectedBtn = button;
+}
 
 uploadForm.addEventListener("submit", async e => {
     e.preventDefault();

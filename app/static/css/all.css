@@ -212,19 +212,24 @@ button {
 }
 
 .btn-green {
-    border: 3px solid rgb(19, 92, 44);
     background-color: rgb(96, 204, 69);
+    border: 3px solid rgb(19, 92, 44);
 }
 
 .btn-turquoise {
-    border: 3px solid rgb(19, 92, 70);
     background-color: rgb(69, 204, 136);
+    border: 3px solid rgb(19, 92, 70);
 }
 
 .btn-grey {
     background-color: rgb(216, 216, 216);
     border: 3px solid rgb(124, 124, 124);
     color: black;
+}
+
+.btn-red {
+    background-color: rgb(185, 12, 12);
+    border: 3px solid rgb(112, 1, 1);
 }
 
 .btn-icon {

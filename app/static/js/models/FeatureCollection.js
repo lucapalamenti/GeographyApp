@@ -23,6 +23,14 @@ export class FeatureCollection {
     }
 
     /**
+     * Removes the Feature at the given index
+     * @param {number} index 
+     */
+    removeFeature( index ) {
+        this.features.splice( index, 1 );
+    }
+
+    /**
      * Returns the minimum X value among all Features in this FeatureCollection
      * @returns {number}
      */
