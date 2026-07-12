@@ -2,6 +2,7 @@ import APIClient from "./APIClient.js";
 import { navBar } from "./documentElements.js";
 import { FeatureCollection } from "./models/FeatureCollection.js"
 import populateSVGfc from "./populateSVGfc.js";
+import { zoom, unzoom } from "./mapManipulations.js";
 
 window.onload = () => {
     const pageName = document.createElement("P");
@@ -65,6 +66,15 @@ mapPreview.addEventListener("click", e => {
                 break;
         }
         populateSVGfc( featureCollection, mapPreview );
+    }
+});
+mapPreview.addEventListener("contextmenu", e => {
+    e.preventDefault();
+    zoom( e, mapPreview );
+});
+mapPreview.addEventListener("keydown", key => {
+    if ( key.key === "Escape" ) {
+        unzoom( e, mapPreview );
     }
 });
 
