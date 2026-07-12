@@ -106,3 +106,54 @@ button {
         }
     }
 }
+
+#map-modifiers {
+    display: grid;
+    grid:
+        'west west west   east   east east . largeStep largeStep smallStep smallStep' 1fr
+        '.    .    delete delete .    .    . largeStep largeStep smallStep smallStep' 1fr
+        '.    .    .      .      .    .    . .         shrink    grow      .'
+        / 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+}
+
+.directional-panel {
+    display: grid;
+    grid:
+        'north east'
+        'west south';
+    aspect-ratio: 1;
+    rotate: 45deg;
+    padding: 20px;
+    .north { grid-area: north; }
+    .east {
+        grid-area: east;
+        rotate: 90deg;
+    }
+    .south {
+        grid-area: south;
+        rotate: 180deg;
+    }
+    .west {
+        grid-area: west;
+        rotate: 270deg;
+    }
+    & > button {
+        background-image: url("../images/arrow.svg");
+    }
+}
+
+#move-west-btn { grid-area: west; }
+#move-east-btn { grid-area: east; }
+#delete-btn { grid-area: delete; }
+#large-step-panel {
+    grid-area: largeStep;
+    & > button {
+        background-image: url("../images/doubleArrow.svg");
+    }
+}
+#small-step-panel {
+    grid-area: smallStep;
+    padding: 30px;
+}
+#shrink-btn { grid-area: shrink; }
+#grow-btn { grid-area: grow; }

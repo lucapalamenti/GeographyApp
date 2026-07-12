@@ -63,15 +63,28 @@
                         </div>
                         <div class="dotted-line"></div>
                         <section id="map-section" class="flex-col">
-                            <svg id="map-preview">
+                            <svg id="map-preview" viewBox="0 0 1600 900">
 
                             </svg>
-                            <div class="flex-row-center">
+                            <!-- Map modification buttons -->
+                            <div id="map-modifiers">
                                 <button type="button" id="move-west-btn" class="btn-grey hover-fade">Move Region to West</button>
                                 <button type="button" id="move-east-btn" class="btn-grey hover-fade">Move Region to East</button>
-                            </div>
-                            <div class="flex-row-center">
                                 <button type="button" id="delete-btn" class="btn-red hover-fade">Delete Region</button>
+                                <div id="large-step-panel" class="directional-panel">
+                                    <button type="button" id="large-step-north" class="btn-turquoise hover-fade north"></button>
+                                    <button type="button" id="large-step-east"  class="btn-turquoise hover-fade east"></button>
+                                    <button type="button" id="large-step-south" class="btn-turquoise hover-fade south"></button>
+                                    <button type="button" id="large-step-west"  class="btn-turquoise hover-fade west"></button>
+                                </div>
+                                <div id="small-step-panel" class="directional-panel">
+                                    <button type="button" id="small-step-north" class="btn-turquoise hover-fade north"></button>
+                                    <button type="button" id="small-step-east"  class="btn-turquoise hover-fade east"></button>
+                                    <button type="button" id="small-step-south" class="btn-turquoise hover-fade south"></button>
+                                    <button type="button" id="small-step-west"  class="btn-turquoise hover-fade west"></button>
+                                </div>
+                                <button type="button" id="shrink-btn" class="btn-grey hover-fade">Shrink</button>
+                                <button type="button" id="grow-btn" class="btn-grey hover-fade">Grow</button>
                             </div>
                         </section>
                     </form>
