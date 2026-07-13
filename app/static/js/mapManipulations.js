@@ -15,7 +15,7 @@ export function zoom( e, svg ) {
             label.style.display = "none";
         });
         const currentVB = svg.getAttribute('viewBox').split(' ').map( value => Number(value) );
-        if ( !originalVB ) originalVB = currentVB;
+        if ( zoomLevel === SVG_ZOOM_START ) originalVB = currentVB;
 
         const rect = svg.getBoundingClientRect();
         

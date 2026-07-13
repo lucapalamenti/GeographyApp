@@ -84,6 +84,7 @@
 - Input in Type gamemodes can now contain leading & trailing whitespace
 - "Show region names" button now only shows labels for "enabled" regions
 - Updated zoom/unzoom functionality for map creation to match that of gameplay
+- Unzooming doesnt work properly when the SVG dimensions change while zoomed
 
 ### Backend/Technical
 - Polygon database table replaced with region.region_points column of type GEOMETRY

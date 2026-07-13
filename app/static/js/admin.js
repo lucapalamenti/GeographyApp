@@ -63,6 +63,7 @@ mapPreview.addEventListener("click", e => {
                 break;
             case deleteBtn:
                 featureCollection.removeFeature( e.target.id );
+                unzoom( "Escape", mapPreview );
                 break;
         }
         populateSVGfc( featureCollection, mapPreview );
