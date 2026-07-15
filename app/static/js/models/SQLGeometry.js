@@ -13,10 +13,13 @@
 export class SQLGeometry {
     /** @type {Array<SQLGeometryType>} */
     static #types = ["Point", "MultiPoint", "LineString", "MultiLineString", "Polygon", "MultiPolygon"];
-    /** @type {String} */
+    /** @type {string} */
     type = null;
 
     coordinates = null;
+    /** Depth of the coordinates array for this SQLGeometry
+     * @type {number} */
+    depth = null;
 
     /**
      * @param {SQLGeometryType} type 
@@ -66,34 +69,48 @@ export class SQLGeometry {
     maxYValue() { this.#subclassCheck( this.maxYValue ); }
 
     /**
-     * If this Feature has coordinates on both sides of 180 degrees longitude, then
+     * If this Geometry has coordinates on both sides of 180 degrees longitude, then
      * make sure all X values are negative by subtracting 360 from all positive X values.
-     * @param {*} coords 
      */
-    westify( coords ) {
+    westify() {
         this.#subclassCheck( this.westify );
-        if ( Array.isArray( coords[0] ) ) {
-            for ( const subCoords of coords ) {
-                this.westify( subCoords );
+        // Use depth - 2 so that the returned array is 2D
+        /** @type {Array<Array<number>>} */
+        const coords = this.coordinates.flat( this.depth - 2 );
+        for ( const pair of coords ) {
+            if ( pair[0] > 0 ) {
+                pair[0] -= 360;
             }
-        } else if ( coords[0] > 0 ) {
-            coords[0] -= 360;
         }
     }
 
     /**
-     * If this Feature has coordinates on both sides of 180 degrees longitude, then
+     * If this Geometry has coordinates on both sides of 180 degrees longitude, then
      * make sure all X values are positive by adding 360 to all negative X values.
-     * @param {*} coords 
      */
-    eastify( coords ) {
+    eastify() {
         this.#subclassCheck( this.eastify );
-        if ( Array.isArray( coords[0] ) ) {
-            for ( const subCoords of coords ) {
-                this.eastify( subCoords );
+        // Use depth - 2 so that the returned array is 2D
+        /** @type {Array<Array<number>>} */
+        const coords = this.coordinates.flat( this.depth - 2 );
+        for ( const pair of coords ) {
+            if ( pair[0] < 0 ) {
+                pair[0] += 360;
             }
-        } else if ( coords[0] < 0 ) {
-            coords[0] += 360;
+        }
+    }
+
+    /**
+     * Translates this Geometry by a given horizontal and vertical amount
+     * @param {*} dx x degrees
+     * @param {*} dy y degrees
+     */
+    translate( dx, dy ) {
+        this.#subclassCheck( this.largeStep );
+        const coords = this.coordinates.flat( this.depth - 2 );
+        for ( const pair of coords ) {
+            pair[0] += dx;
+            pair[1] += dy;
         }
     }
     
@@ -145,6 +162,8 @@ export class SQLGeometry {
 export class SQLPoint extends SQLGeometry {
     /** @type {Array<Number>} */
     coordinates = null;
+    
+    depth = 1;
 
     /**
      * Constructor given an object with the same structure as an SQL POINT
@@ -163,6 +182,7 @@ export class SQLPoint extends SQLGeometry {
     }
     
     maxXValue() {
+        
         return this.coordinates[0];
     }
 
@@ -221,6 +241,8 @@ export class SQLPoint extends SQLGeometry {
 export class SQLMultiPoint extends SQLGeometry {
     /** @type {Array<Array<Number>>} */
     coordinates = null;
+
+    depth = 2;
 
     /**
      * Constructor given an object with the same structure as an SQL MULTIPOINT
@@ -281,6 +303,8 @@ export class SQLMultiPoint extends SQLGeometry {
 export class SQLLineString extends SQLGeometry {
     /** @type {Array<Array<Number>>} */
     coordinates = null;
+
+    depth = 2;
 
     /**
      * Constructor given an object with the same structure as an SQL LINESTRING
@@ -358,6 +382,8 @@ export class SQLMultiLineString extends SQLGeometry {
     /** @type {Array<Array<Array<Number>>>} */
     coordinates = null;
 
+    depth = 3;
+
     /**
      * Constructor given an object with the same structure as an SQL MULTILINESTRING
      * @param {SQLMultiLineString} sqlMultiLineString
@@ -427,6 +453,8 @@ export class SQLMultiLineString extends SQLGeometry {
 export class SQLPolygon extends SQLGeometry {
     /** @type {Array<Array<Array<Number>>>} */
     coordinates = null;
+
+    depth = 3;
     
     /**
      * Constructor given an object with the same structure as an SQL POLYGON
@@ -513,6 +541,8 @@ export class SQLPolygon extends SQLGeometry {
 export class SQLMultiPolygon extends SQLGeometry {
     /** @type {Array<Array<Array<Array<Number>>>>} */
     coordinates = null;
+
+    depth = 4;
     
     /**
      * Constructor given an object with the same structure as an SQL MULTIPOLYGON

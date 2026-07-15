@@ -49,7 +49,7 @@ export function zoom( e, svg ) {
  * @param {SVGElement} svg
  */
 export function unzoom( e, svg ) {
-    if ( e.key === 'Escape' || e === 'Escape' ) {
+    if ( ( e.key === 'Escape' || e === 'Escape' ) && originalVB ) {
         svg.setAttribute('viewBox', originalVB.join(" ") );
         // originalVB = [];
         document.querySelectorAll('.clickLabel').forEach( label => {
