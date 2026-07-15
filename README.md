@@ -74,6 +74,8 @@
 - look into "SRID (Spatial Reference ID): The optional second parameter (e.g., 4326 for WGS 84 GPS coordinates) specifies the coordinate system."
 - Add @typedef's for each SQLGeometry coordinate type
 - Handlebars partials to serve partial html and combine into complete html
+- scrollwheel zoom
+- zoom sensitivity
 
 # Changelog
 
