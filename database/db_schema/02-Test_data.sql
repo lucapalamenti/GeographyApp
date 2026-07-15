@@ -19,7 +19,7 @@ INSERT INTO `region` (`region_id`, `region_name`, `region_type`, `region_points`
 (15, 'MultiPolygon C', 'Test Geometry', ST_GEOMFROMTEXT('MULTIPOLYGON(((150 0,165 0,165 15,150 15,150 0),(155 5,155 10,160 10,160 5,155 5)),((150 25,160 25,160 35,150 35,150 25)))'));
 
 INSERT INTO `mapRegion` (`mapRegion_map_id`, `mapRegion_Region_id`, `mapRegion_parent`) VALUES
-(1, 1, 'Point', ),
+(1, 1, 'Point'),
 (1, 2, 'MultiPoint'),
 (1, 3, 'MultiPoint'),
 (1, 4, 'LineString'),
