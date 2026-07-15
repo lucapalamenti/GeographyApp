@@ -220,10 +220,6 @@ async function createCustomMap( e ) {
                 mapRegion_map_id : mapData.map_id,
                 mapRegion_region_id : regionMap.getChild( parentId, pathElement.id ),
                 mapRegion_parent : util.idToInput( parentId ),
-                mapRegion_offsetX : 0,
-                mapRegion_offsetY : 0,
-                mapRegion_scaleX : 1.0,
-                mapRegion_scaleY : 1.0,
                 mapRegion_type : typeName
             });
             await APIClient.createMapRegion( mapRegion ).then( returnedMapRegion => {}).catch( async err => {

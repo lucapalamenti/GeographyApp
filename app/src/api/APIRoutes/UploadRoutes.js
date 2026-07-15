@@ -119,10 +119,6 @@ UploadAPIRouter.post('/mapfile/create', BackendPayloadManager.chunkMiddleware, a
             mapRegion_map_id : map.map_id,
             mapRegion_region_id : region.region_id,
             mapRegion_parent : null,
-            mapRegion_offsetX : 0.000000,
-            mapRegion_offsetY : 0.000000,
-            mapRegion_scaleX : 1.000000,
-            mapRegion_scaleY : 1.000000,
             mapRegion_type : "enabled"
         }) );
     })).catch( err => {

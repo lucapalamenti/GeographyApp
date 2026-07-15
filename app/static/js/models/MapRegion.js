@@ -11,14 +11,6 @@ export default class MapRegion {
     mapRegion_region_id = null;
     /** @type {String} */
     mapRegion_parent = null;
-    /** @type {Number} */
-    mapRegion_offsetX = null;
-    /** @type {Number} */
-    mapRegion_offsetY = null;
-    /** @type {Number} */
-    mapRegion_scaleX = null;
-    /** @type {Number} */
-    mapRegion_scaleY = null;
     /** @type {String} */
     mapRegion_type = null;
     
@@ -31,10 +23,6 @@ export default class MapRegion {
         this.mapRegion_map_id = data.mapRegion_map_id;
         this.mapRegion_region_id = data.mapRegion_region_id;
         this.mapRegion_parent = data.mapRegion_parent;
-        this.mapRegion_offsetX = Number( Number( data.mapRegion_offsetX ).toFixed( ROUND_PLACES ) );
-        this.mapRegion_offsetY = Number( Number( data.mapRegion_offsetY ).toFixed( ROUND_PLACES ) );
-        this.mapRegion_scaleX = Number( Number( data.mapRegion_scaleX ).toFixed( ROUND_PLACES ) );
-        this.mapRegion_scaleY = Number( Number( data.mapRegion_scaleY ).toFixed( ROUND_PLACES ) );
         this.mapRegion_type = String( data.mapRegion_type );
     }
 
@@ -47,10 +35,6 @@ export default class MapRegion {
             this.mapRegion_map_id,
             this.mapRegion_region_id,
             this.mapRegion_parent,
-            this.mapRegion_offsetX,
-            this.mapRegion_offsetY,
-            this.mapRegion_scaleX,
-            this.mapRegion_scaleY,
             this.mapRegion_type
         ];
     }

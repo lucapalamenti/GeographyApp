@@ -18,19 +18,19 @@ INSERT INTO `region` (`region_id`, `region_name`, `region_type`, `region_points`
 (14, 'MultiPolygon B', 'Test Geometry', ST_GEOMFROMTEXT('MULTIPOLYGON(((130 0,145 0,145 15,130 15,130 0),(135 5,135 10,140 10,140 5,135 5)))')),
 (15, 'MultiPolygon C', 'Test Geometry', ST_GEOMFROMTEXT('MULTIPOLYGON(((150 0,165 0,165 15,150 15,150 0),(155 5,155 10,160 10,160 5,155 5)),((150 25,160 25,160 35,150 35,150 25)))'));
 
-INSERT INTO `mapRegion` (`mapRegion_map_id`, `mapRegion_Region_id`, `mapRegion_parent`, `mapRegion_offsetX`, `mapRegion_offsetY`, `mapRegion_scaleX`, `mapRegion_scaleY`) VALUES
-(1, 1, 'Point', 0, 0, 1, 1),
-(1, 2, 'MultiPoint', 0, 0, 1, 1),
-(1, 3, 'MultiPoint', 0, 0, 1, 1),
-(1, 4, 'LineString', 0, 0, 1, 1),
-(1, 5, 'LineString', 0, 0, 1, 1),
-(1, 6, 'LineString', 0, 0, 1, 1),
-(1, 7, 'MultiLineString', 0, 0, 1, 1),
-(1, 8, 'MultiLineString', 0, 0, 1, 1),
-(1, 9, 'MultiLineString', 0, 0, 1, 1),
-(1, 10, 'Polygon', 0, 0, 1, 1),
-(1, 11, 'Polygon', 0, 0, 1, 1),
-(1, 12, 'Polygon', 0, 0, 1, 1),
-(1, 13, 'MultiPolygon', 0, 0, 1, 1),
-(1, 14, 'MultiPolygon', 0, 0, 1, 1),
-(1, 15, 'MultiPolygon', 0, 0, 1, 1);
+INSERT INTO `mapRegion` (`mapRegion_map_id`, `mapRegion_Region_id`, `mapRegion_parent`) VALUES
+(1, 1, 'Point', ),
+(1, 2, 'MultiPoint'),
+(1, 3, 'MultiPoint'),
+(1, 4, 'LineString'),
+(1, 5, 'LineString'),
+(1, 6, 'LineString'),
+(1, 7, 'MultiLineString'),
+(1, 8, 'MultiLineString'),
+(1, 9, 'MultiLineString'),
+(1, 10, 'Polygon'),
+(1, 11, 'Polygon'),
+(1, 12, 'Polygon'),
+(1, 13, 'MultiPolygon'),
+(1, 14, 'MultiPolygon'),
+(1, 15, 'MultiPolygon');

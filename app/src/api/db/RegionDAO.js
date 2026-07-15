@@ -185,13 +185,13 @@ const createMapRegion = async ( mapRegion ) => {
     let query = "", params = [];
     if ( mapRegion.mapRegion_parent ) {
         query = `
-            INSERT INTO mapRegion (mapRegion_map_id, mapRegion_region_id, mapRegion_parent, mapRegion_offsetX, mapRegion_offsetY, mapRegion_scaleX, mapRegion_scaleY, mapRegion_type)
+            INSERT INTO mapRegion (mapRegion_map_id, mapRegion_region_id, mapRegion_parent, mapRegion_type)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?);
             `;
         params = [...mapRegion.getAllVariables()];
     } else {
         query = `
-            INSERT INTO mapRegion (mapRegion_map_id, mapRegion_region_id, mapRegion_offsetX, mapRegion_offsetY, mapRegion_scaleX, mapRegion_scaleY, mapRegion_type)
+            INSERT INTO mapRegion (mapRegion_map_id, mapRegion_region_id, mapRegion_type)
             VALUES (?, ?, ?, ?, ?, ?, ?);
             `;
         params = [...mapRegion.getVariablesNoParent()];
