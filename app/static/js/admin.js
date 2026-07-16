@@ -26,7 +26,6 @@ const modificationButtons = [ moveWestBtn, moveEastBtn, deleteBtn ];
 const map_name = document.getElementById("map_name");
 const region_type = document.getElementById("region_type");
 const region_name_key = document.getElementById("region_name_key");
-const region_parent_name_key = document.getElementById("region_parent_name_key");
 
 let selectedBtn;
 
@@ -98,12 +97,11 @@ uploadForm.addEventListener("submit", async e => {
         map_name : map_name.value,
         region_type : region_type.value,
         region_name_key : region_name_key.value,
-        region_parent_name_key : region_parent_name_key.value,
         new_feature_collection : featureCollection
     }
     await APIClient.createTemplateMap( data ).then( async res => {
         console.log( res );
-    });
+    });region_parent_name_key
 });
 
 /**
