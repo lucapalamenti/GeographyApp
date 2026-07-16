@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS `mapRegion` (
 CREATE TABLE IF NOT EXISTS `region` (
   `region_id` int(10) NOT NULL AUTO_INCREMENT,
   `region_name` varchar(128) NOT NULL DEFAULT '',
-  `region_type` varchar(128) NOT NULL DEFAULT 'Other',
+  `region_type` varchar(128) DEFAULT NULL,
   `region_parent_id` int(10) DEFAULT NULL,
   `region_points` geometry NOT NULL,
   PRIMARY KEY (`region_id`) USING BTREE,

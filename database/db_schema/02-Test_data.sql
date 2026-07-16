@@ -2,7 +2,7 @@ INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color_R`,
 (1, 'Test Map', 'default/Test_Map_Thumbnail.png', 200, 100, 50, 1);
 
 INSERT INTO `region` (`region_id`, `region_name`, `region_type`, `region_points`) VALUES
-(1, 'Earth', 'Solar System', ST_GEOMFROMTEXT('POLYGON((-180 90,180 90,180 -90,-180 90,-180 90))')),
+(1, 'Earth', 'Planet', ST_GEOMFROMTEXT('POLYGON((-180 90,180 90,180 -90,-180 90,-180 90))')),
 (2, 'Point A', 'Test Geometry', ST_GEOMFROMTEXT('POINT(0 0)')),
 (3, 'MultiPoint A', 'Test Geometry', ST_GEOMFROMTEXT('MULTIPOINT(10 0)')),
 (4, 'MultiPoint B', 'Test Geometry', ST_GEOMFROMTEXT('MULTIPOINT(15 0,15 5,15 10)')),
