@@ -101,7 +101,7 @@ uploadForm.addEventListener("submit", async e => {
     }
     await APIClient.createTemplateMap( data ).then( async res => {
         console.log( res );
-    });region_parent_name_key
+    });
 });
 
 /**
