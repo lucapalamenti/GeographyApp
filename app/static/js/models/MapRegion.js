@@ -25,17 +25,4 @@ export default class MapRegion {
         this.mapRegion_parent = data.mapRegion_parent;
         this.mapRegion_type = String( data.mapRegion_type );
     }
-
-    /**
-     * Returns an Array of all the MapRegion's variables
-     * @returns {Array<>}
-     */
-    getAllVariables() {
-        return [
-            this.mapRegion_map_id,
-            this.mapRegion_region_id,
-            this.mapRegion_parent,
-            this.mapRegion_type
-        ];
-    }
 }

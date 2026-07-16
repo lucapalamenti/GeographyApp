@@ -1,28 +1,24 @@
 const { SQLGeometry } = require("./SQLGeometry.js");
 
-const ROUND_PLACES = 6;
-
 module.exports = class BackendMapRegion {
-    /** @type {Number} */
+    /** @type {number} */
     region_id = null;
-    /** @type {String} */
+    /** @type {string} */
     region_name = null;
-    /** @type {String} */
+    /** @type {string} */
     region_type = null;
-    /** @type {Number} */
+    /** @type {number} */
     region_parent_id = null;
     /** @type {SQLGeometry} */
     region_points = null;
 
-    /** @type {Number} */
+    /** @type {number} */
     mapRegion_id = null;
-    /** @type {Number} */
+    /** @type {number} */
     mapRegion_map_id = null;
-    /** @type {Number} */
+    /** @type {number} */
     mapRegion_region_id = null;
-    /** @type {String} */
-    mapRegion_parent = null;
-    /** @type {String} */
+    /** @type {string} */
     mapRegion_type = null;
     
     /**
@@ -39,20 +35,6 @@ module.exports = class BackendMapRegion {
         this.mapRegion_id = data.mapRegion_id;
         this.mapRegion_map_id = data.mapRegion_map_id;
         this.mapRegion_region_id = data.mapRegion_region_id;
-        this.mapRegion_parent = data.mapRegion_parent;
         this.mapRegion_type = String( data.mapRegion_type );
-    }
-
-    /**
-     * Returns an Array of all the MapRegion's variables
-     * @returns {Array<>}
-     */
-    getAllVariables() {
-        return [
-            this.mapRegion_map_id,
-            this.mapRegion_region_id,
-            this.mapRegion_parent,
-            this.mapRegion_type
-        ];
     }
 }

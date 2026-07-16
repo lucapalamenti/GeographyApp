@@ -185,8 +185,8 @@ const createMapRegion = async ( mapRegion ) => {
     let query = "", params = [];
     if ( mapRegion.mapRegion_parent ) {
         query = `
-            INSERT INTO mapRegion (mapRegion_map_id, mapRegion_region_id, mapRegion_parent, mapRegion_type)
-            VALUES (?, ?, ?, ?);
+            INSERT INTO mapRegion (mapRegion_map_id, mapRegion_region_id, mapRegion_type)
+            VALUES (?, ?, ?);
             `;
         params = [...mapRegion.getAllVariables()];
     } else {

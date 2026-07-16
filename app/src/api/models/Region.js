@@ -25,14 +25,6 @@ module.exports = class Region {
     }
 
     /**
-     * Returns an Array of all the Region's variables
-     * @returns {Array<>}
-     */
-    getAllVariables() {
-        return [this.region_id, this.region_name, this.region_type, this.region_parent_id];
-    }
-
-    /**
      * Returns the SQL insert statement for this Region object
      * @returns {String}
      */

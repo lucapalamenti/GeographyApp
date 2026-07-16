@@ -33,12 +33,4 @@ export default class MMap {
         this.map_is_template = data.map_is_template;
         this.map_is_custom = data.map_is_custom;
     }
-
-    /**
-     * Returns an Array of all the MMap's variables
-     * @returns {Array<>}
-     */
-    getAllVariables() {
-        return [this.map_name, this.map_thumbnail, this.map_primary_color_R, this.map_primary_color_G, this.map_primary_color_B, this.map_is_template, this.map_is_custom];
-    }
 };

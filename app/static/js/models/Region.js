@@ -23,12 +23,4 @@ export default class Region {
         this.region_parent_id = data.region_parent_id;
         this.region_points = data.region_points;
     }
-
-    /**
-     * Returns an Array of all the Region's variables
-     * @returns {Array<>}
-     */
-    getAllVariables() {
-        return [this.region_id, this.region_name, this.region_type, this.region_parent_id];
-    }
 };
