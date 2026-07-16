@@ -39,7 +39,6 @@ CREATE TABLE IF NOT EXISTS `mapRegion` (
   `mapRegion_id` int(10) NOT NULL AUTO_INCREMENT,
   `mapRegion_map_id` int(10) NOT NULL DEFAULT 0,
   `mapRegion_region_id` int(10) NOT NULL DEFAULT 0,
-  `mapRegion_parent` varchar(64) NOT NULL DEFAULT 'Earth',
   `mapRegion_type` enum('enabled','disabled','outside') NOT NULL DEFAULT 'enabled',
   PRIMARY KEY (`mapRegion_id`) USING BTREE,
   KEY `FK_mapRegion_map` (`mapRegion_map_id`) USING BTREE,
