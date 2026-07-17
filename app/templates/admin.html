@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="css/admin.css" />
 
     <script src="js/admin/admin.js" type="module"></script>
+    <script src="js/admin/fileUpload.js" type="module"></script>
+    <script src="js/admin/setRegionParent.js" type="module"></script>
     <script src="js/components/header.js"></script>
 </head>
 <body>
@@ -94,7 +96,23 @@
                         <polygon points="12.5,10 12.5,40 37.5,25 12.5,10"></polygon>
                     </svg>
                 </header>
-                <section id="set-parent-dropdown-body" hidden class="flex-col dropdown-body gap-5">
+                <form id="set-parent-dropdown-body" hidden class="flex-col dropdown-body gap-5">
+                    <div class="flex-row-between">
+                        <div class="input-label">
+                            <label for="region-id-start">Region ID Start</label>
+                            <input name="region-id-start" type="number" id="region-id-start" required>
+                        </div>
+                        <div class="input-label">
+                            <label for="region-id-end">Region ID End</label>
+                            <input name="region-id-end" type="number" id="region-id-end" required>
+                        </div>
+                        <div class="input-label">
+                            <label for="parent-region-id">Parent Region ID</label>
+                            <input name="parent-region-id" type="number" id="parent-region-id" required>
+                        </div>
+                    </div>
+                    <button type="submit" id="set-parent-btn" class="btn-grey hover-fade">Set Parent</button>
+                </form>
             </div>
         </div>
     </main>

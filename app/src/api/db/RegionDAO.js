@@ -118,6 +118,25 @@ const createRegion = async ( region ) => {
 };
 
 /**
+ * Update the region_parent_id field for a range of Region objects 
+ * with region_id's from startId to endId inclusive
+ * @param {*} startId 
+ * @param {*} endId 
+ * @param {*} region_parent_id 
+ */
+const setRegionParentId_range = async ( startId, endId, region_parent_id ) => {
+    const query = `
+        UPDATE region
+        SET region_parent_id = ?
+        WHERE region_id >= BETWEEN ? AND ?;
+        `;
+    const params = [region_parent_id, startId, endId];
+    return await database.query( query, params ).catch( err => {
+        console.log( err );
+    })
+};
+
+/**
  * Deletes the region with the given region_id
  * @param {number} region_id 
  * @returns {Promise<>}
