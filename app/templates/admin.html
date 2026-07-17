@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="css/header.css" />
     <link rel="stylesheet" href="css/admin.css" />
 
-    <script src="js/admin.js" type="module"></script>
+    <script src="js/admin/admin.js" type="module"></script>
     <script src="js/components/header.js"></script>
 </head>
 <body>
@@ -26,7 +26,7 @@
                         <polygon points="12.5,10 12.5,40 37.5,25 12.5,10"></polygon>
                     </svg>
                 </header>
-                <section id="dropdown-body" hidden class="flex-col dropdown-body gap-5">
+                <section id="file-upload-dropdown-body" hidden class="flex-col dropdown-body gap-5">
                     <form id="upload-form" class="flex-col gap-5">
                         <div class="flex-row-between">
                             <div class="input-label">
@@ -85,6 +85,16 @@
                         </section>
                     </form>
                 </section>
+            </div>
+            <!-- Set Region Parent dropdown -->
+            <div id="set-parent-dropdown" class="dropdown">
+                <header>
+                    <h4>Set Region Parent</h4>
+                    <svg viewBox="0 0 50 50">
+                        <polygon points="12.5,10 12.5,40 37.5,25 12.5,10"></polygon>
+                    </svg>
+                </header>
+                <section id="file-upload-dropdown-body" hidden class="flex-col dropdown-body gap-5">
             </div>
         </div>
     </main>

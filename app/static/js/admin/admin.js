@@ -1,8 +1,8 @@
-import APIClient from "./APIClient.js";
-import { navBar } from "./documentElements.js";
-import { FeatureCollection } from "./models/FeatureCollection.js"
-import populateSVGfc from "./populateSVGfc.js";
-import { zoom, unzoom } from "./mapManipulations.js";
+import APIClient from "../APIClient.js";
+import { navBar } from "../documentElements.js";
+import { FeatureCollection } from "../models/FeatureCollection.js"
+import populateSVGfc from "../populateSVGfc.js";
+import { zoom, unzoom } from "../mapManipulations.js";
 
 window.onload = () => {
     const pageName = document.createElement("P");
@@ -11,7 +11,7 @@ window.onload = () => {
 }
 
 const fileDropdownHeader = document.querySelector("#file-dropdown HEADER");
-const dropdownBody = document.getElementById("dropdown-body");
+const fileUploadDropdownBody = document.getElementById("file-upload-dropdown-body");
 const arrowSVG = fileDropdownHeader.querySelector("SVG");
 const uploadForm = document.getElementById("upload-form");
 const fileInput = document.getElementById("file-input");
@@ -34,7 +34,7 @@ let featureCollection;
 
 // Handles opening & closing the geojson file upload dropdown
 fileDropdownHeader.addEventListener("click", e => {
-    toggleDropdown( fileDropdownHeader, arrowSVG, dropdownBody );
+    toggleDropdown( fileDropdownHeader, arrowSVG, fileUploadDropdownBody );
 });
 
 // When a geojson file is added
@@ -105,7 +105,7 @@ uploadForm.addEventListener("submit", async e => {
 });
 
 /**
- * 
+ * Handles opening & closing dropdown menus
  * @param {HTMLElement} header 
  * @param {HTMLElement} svg 
  * @param {HTMLElement} body 
