@@ -58,6 +58,7 @@
 - polygon new hampshire is missing a point
 - sort by "creation date"
 - Display maps as "block" (default), "compact", "wide"
+-
 
 # Changelog
 
