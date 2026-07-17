@@ -23,8 +23,8 @@ USE `geographyapp`;
 CREATE TABLE IF NOT EXISTS `map` (
   `map_id` int(10) NOT NULL,
   `map_scale` decimal(10,6) NOT NULL DEFAULT 1.000000,
-  `map_name` varchar(100) NOT NULL DEFAULT '',
-  `map_thumbnail` tinytext DEFAULT '',
+  `map_name` varchar(128) NOT NULL DEFAULT '',
+  `map_thumbnail` varchar(256) DEFAULT '',
   `map_primary_color_R` int(3) NOT NULL DEFAULT 255,
   `map_primary_color_G` int(3) NOT NULL DEFAULT 255,
   `map_primary_color_B` int(3) NOT NULL DEFAULT 255,
@@ -73,7 +73,8 @@ CREATE TABLE IF NOT EXISTS `polygon` (
 -- Dumping structure for table geographyapp.region
 CREATE TABLE IF NOT EXISTS `region` (
   `region_id` int(10) NOT NULL AUTO_INCREMENT,
-  `region_name` varchar(128) NOT NULL DEFAULT '0',
+  `region_name` varchar(128) NOT NULL DEFAULT '',
+  `region_type` varchar(128) NOT NULL DEFAULT '',
   `region_parent_id` int(10) DEFAULT NULL,
   PRIMARY KEY (`region_id`) USING BTREE,
   KEY `FK_region_region` (`region_parent_id`),

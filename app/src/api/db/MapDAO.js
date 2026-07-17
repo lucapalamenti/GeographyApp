@@ -32,15 +32,15 @@ const getMaps = async ( where, orderBy ) => {
  * @returns {Map}
  */
 const getMapById = async ( map_id ) => {
-    return await database.query(`
+    const rows = await database.query(`
         SELECT * FROM map
         WHERE map_id = ?;
-        `, [map_id]).then( rows => {
-            if ( rows.length === 1 ) {
-                return new Map( rows[0] );
-            }
-            throw new Error("Map not found!");
-    });
+    `, [map_id]);
+    
+    if ( rows.length === 1 ) {
+        return new Map( rows[0] );
+    }
+    throw new Error("Map not found!");
 };
 
 /**
@@ -94,34 +94,28 @@ const deleteMap = async ( map_id ) => {
     await database.query(`
         DELETE FROM mapRegion
         WHERE mapRegion_map_id = ?;
-        `, [map_id])
-        .then( rows => {
-            return rows.affectedRows;
-        });
+    `, [map_id]);
+
     return await database.query(`
         DELETE FROM map
         WHERE map_id = ?;
-        `, [map_id])
-        .then( rows => {
-            return rows.affectedRows;
-    });
+    `, [map_id]).affectedRows;
 };
 
+/**
+ * Deletes all custom maps 
+ * @returns {number} the number of custom maps that were deleted
+ */
 const deleteAllCustomMaps = async () => {
     await database.query(`
         DELETE mapRegion FROM mapRegion JOIN map
         ON mapRegion_map_id = map_id
         WHERE map_is_custom = 1;
-        `, []).then( rows => {
-            return rows.affectedRows;
-    });
+    `, []);
     return await database.query(`
         DELETE FROM map
         WHERE map_is_custom = 1;
-        `, [])
-        .then( rows => {
-            return rows.affectedRows;
-    });
+    `, []).affectedRows;
 }
 
 module.exports = {

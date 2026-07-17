@@ -219,7 +219,7 @@ const getPolygonsByRegionId = async ( region_id ) => {
 /**
  * 
  * @param {Number} map_id 
- * @returns {Array<>}
+ * @returns {Array<Polygon>}
  */
 const getPolygonsByMapId = async ( map_id ) => {
     return await clientHandler( HTTPClient.get, `${BASE_API_PATH}/polygons/mapId/${map_id}` );
@@ -238,11 +238,11 @@ const deleteAllPolygons = async () => {
 
 // ----- OTHER -----
 
-const uploadFile = async ( data ) => {
+const uploadThumbnail = async ( data ) => {
     try {
-        return await fetch(`${BASE_API_PATH}/uploadFile`, {
+        return await fetch(`${BASE_API_PATH}/upload/thumbnail`, {
             method: 'POST',
-            body: data
+            body: new FormData( data )
         });
     } catch (error) {
         return handleAuthError(error);
@@ -251,7 +251,7 @@ const uploadFile = async ( data ) => {
 
 const retrieveFile = async ( fileName ) => {
     try {
-        return await HTTPClient.get(`/uploads/${fileName}`);
+        return await HTTPClient.get(`${BASE_API_PATH}/upload/${fileName}`);
     } catch (error) {
         return handleAuthError(error);
     }
@@ -284,6 +284,6 @@ export default {
     createPolygon,
     deleteAllPolygons,
 
-    uploadFile,
+    uploadThumbnail,
     retrieveFile
 }

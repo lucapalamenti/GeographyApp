@@ -1,71 +1,71 @@
-#svg-game.invisible-mode:not(.reviewing) g g g.enabled g:not(.typed, .typeCurrent, .guesses0, .guesses1, .guesses2, .guesses3) polygon {
+#svg-game.invisible-mode:not(.gameEnd) g g.enabled path:not(.typed, .typeCurrent, .guesses0, .guesses1, .guesses2, .guesses3) {
     /* fill:  !important; */
     stroke: rgb(230, 231, 137);
     /* Make this as small as possibles */
     stroke-width: 0.1%;
 }
-#svg-game.invisible-mode-hard:not(.reviewing) g g g g:not(.typed, .typeCurrent) polygon {
+#svg-game.invisible-mode-hard:not(.gameEnd) g g path:not(.typed, .typeCurrent) {
     display: none;
 }
 
-polygon {
+#svg-game.gameEnd g g path {
+    transition: fill 0s !important;
+}
+
+path {
     fill: rgb(230, 231, 137);
     stroke-width: 0.05%;
     stroke: black;
 }
 
-/* svg:has(g g g.enabled g.clickable:hover ) g g g.enabled g.clickable polygon {
-    fill: rgb(210, 211, 117);
-} */
-
-g.enabled g.clickable:has(polygon:hover) polygon, g.herring g.clickable:hover polygon {
-    fill: rgb(210, 211, 117);
+#svg-game:not(.invisible-mode) path:hover {
+    filter: brightness( 0.9 );
 }
-g.enabled g.clickable:has(polygon:active) polygon, g.herring g.clickable:active polygon {
-    fill: rgb(190, 191, 97);
+path.clickable:active {
+    filter: brightness( 0.8 );
 }
 
-g.disabled g polygon {
+g.disabled path {
     fill: grey;
 }
+#svg-game.gameEnd g.disabled path {
+    fill: rgb(100, 100, 100);
+}
 
-g.outside g polygon {
+g.outside path {
     fill: rgb(77, 77, 77);
 }
 
-g.typeCurrent polygon {
+path.typeCurrent {
     fill: rgb(0, 255, 213);
 }
 
-#svg-game.showGuesses g.guesses0 polygon {
-    fill: rgb(106, 235, 89);
-}
-#svg-game.showGuesses g.guesses1 polygon {
-    fill: rgb(240, 219, 35);
-}
-#svg-game.showGuesses g.guesses2 polygon {
-    fill: rgb(243, 148, 24);
-}
-#svg-game.showGuesses g.guesses3 polygon {
-    fill: rgb(235, 89, 89);
-}
-
-svg g g g.inactive polygon {
+#svg-game.gameEnd g g.enabled path {
     fill: grey;
 }
 
-#svg-game.reviewing g g g g.inactive:has( polygon:hover ) polygon {
-    fill: rgb(108, 108, 108);
+#svg-game.showGuesses g g path.guesses0 {
+    fill: rgb(106, 235, 89);
 }
-#svg-game.reviewing g g g g.guesses0:has( polygon:hover ) polygon {
-    fill: rgb(92, 204, 78);
+#svg-game.showGuesses g g path.guesses1 {
+    fill: rgb(240, 219, 35);
 }
-#svg-game.reviewing g g g g.guesses1:has( polygon:hover ) polygon {
-    fill: rgb(204, 187, 30);
+#svg-game.showGuesses g g path.guesses2 {
+    fill: rgb(243, 148, 24);
 }
-#svg-game.reviewing g g g g.guesses2:has( polygon:hover ) polygon {
-    fill: rgb(199, 121, 20);
+#svg-game.showGuesses g g path.guesses3 {
+    fill: rgb(235, 89, 89);
 }
-#svg-game.reviewing g g g g.guesses3:has( polygon:hover ) polygon {
-    fill: rgb(197, 75, 75);
+
+#svg-game.showGuesses.invisible-mode g g path.guesses0 {
+    stroke: rgb(106, 235, 89);
+}
+#svg-game.showGuesses.invisible-mode g g path.guesses1 {
+    stroke: rgb(240, 219, 35);
+}
+#svg-game.showGuesses.invisible-mode g g path.guesses2 {
+    stroke: rgb(243, 148, 24);
+}
+#svg-game.showGuesses.invisible-mode g g path.guesses3 {
+    stroke: rgb(235, 89, 89);
 }

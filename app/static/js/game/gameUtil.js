@@ -1,0 +1,280 @@
+import util from "../util/util.js";
+
+import { html, tooltip, svg, input, selectParent, showNames, endGameButton, gameEndPanel, noMapArea, promptTally } from "./documentElements-game.js";
+import { ATTEMPT_COLORS, ATTEMPT_SOUNDS } from "../variables.js";
+import ParentChildMap from "../models/ParentChildMap.js";
+
+const audioPath = "../../audio/";
+
+let gameEnded = false;
+let tooltipActive = false;
+
+/**
+ * Returns a reference to the G element for the current region
+ * @returns {HTMLElement}
+ */
+const queryCurrentRegion = ( currentPrompt ) => { return svg.querySelector(`SVG G#${currentPrompt.pID} G PATH#${currentPrompt.rID}`) };
+
+const playSound = ( filename ) => { new Audio( `${audioPath}${filename}` ).play() };
+
+const setGuessesColor = ( guesses ) => {
+    // set css class given the number of guesses
+    // maybe this can be different for the invisible gamemodes, idk
+};
+
+/**
+ * Pulses a given path element a color
+ * @param {SVGPathElement} group 
+ * @param {String} color 
+ * @param {Boolean} clickable 
+ * @param {Number} hold
+ * @param {Number} fade
+ */
+const regionDisappearTrigger = ( path, color, clickable, hold = 1000, fade = 1000 ) => {
+    path.classList.remove('clickable');
+    path.style.transition = '';
+    path.style.fill = color;
+    // Hold for 'hold' milliseconds
+    setTimeout( function() {
+        path.style.transition = 'fill 1s ease';
+        path.style.fill = '';
+        // Fade out for 'fade' milliseconds
+        setTimeout( function() {
+            path.style.transition = '';
+            if ( clickable && !gameEnded ) path.classList.add('clickable');
+        }, fade );
+    }, hold );
+};
+
+/**
+ * Pulses the background color of an element
+ * @param {HTMLElement} element
+ * @param {String} colorOrig color to return to
+ * @param {String} colorPulse color to pulse to
+ */
+const pulseElementBG = ( element, colorOrig, colorPulse ) => {
+    element.style.transition = '';
+    element.style.backgroundColor = colorPulse;
+    setTimeout(() => {
+        element.style.transition = 'background-color 1s ease';
+        element.style.backgroundColor = colorOrig;
+        setTimeout(() => {
+        }, 1000);
+    }, 10 );
+};
+
+/**
+ * Displays a label with the given path's name
+ * @param {SVGPathElement} path 
+ * @param {Event} e 
+ * @param {Boolean} center 
+ * @param {Boolean} timeout 
+ */
+const showLabel = ( path, e, center, timeout ) => {
+    const p = document.createElement('P');
+    p.classList.add('clickLabel');
+    p.textContent = util.idToInput( path.getAttribute('id') );
+    if ( center ) {
+        const rect = path.getBoundingClientRect();
+        p.style.transform = `translate( calc( -50% + ${rect.left + rect.width / 2 + scrollX}px ), calc( -50% + ${rect.top + rect.height / 2 + scrollY}px ) )`;
+    } else {
+        p.style.transform = `translate( calc( -50% + ${e.clientX}px ), calc( -120% + ${e.clientY + window.scrollY}px ) )`;
+    }
+    p.addEventListener('contextmenu', e => { e.preventDefault() });
+    tooltip.before( p );
+
+    if ( timeout ) {
+        // Show for 1.5 seconds
+        setTimeout( function() {
+            tooltip.parentNode.removeChild( p );
+        }, 1500 );
+    }
+};
+
+/**
+ * Moves tooltip with cursor
+ * @param {Event} e 
+ */
+const moveToolTip = ( e ) => {
+    tooltip.style.display = "block";
+    tooltip.style.transform = `translate( calc( -50% + ${e.clientX}px ), calc( 60% + ${e.clientY + window.scrollY}px ) )`;
+}
+
+/**
+ * Enables the tooltip to follow mouse
+ */
+const enableTooltip = () => {
+    if ( !tooltipActive ) {
+        tooltipActive = true;
+        svg.addEventListener('mousemove', moveToolTip);
+        svg.addEventListener('scroll', moveToolTip);
+        svg.addEventListener('mouseout', e => {
+            tooltip.style.display = "none" ;
+        });
+    }
+}
+
+/**
+ * Randomly shuffles an array
+ * @param {ParentChildMap} regionMap 
+ * @returns {Array<Object>} looks like [{pID : "parent_name", pInput : "Parent Name", rID : "region_name", rInput : "Region Input"},{...}]
+ */
+const shuffleRegionMap = ( regionMap ) => {
+    const arr = [];
+    // First add all [parent,region] pairs into the array
+    for ( const parentName of regionMap.getParentNames() ) {
+        for ( const childName of regionMap.getChildNames( parentName ) ) {
+            arr.push({
+                pID : parentName,
+                pinput : util.idToInput( parentName ),
+                rID : childName,
+                rInput : util.idToInput( childName )
+            });
+        }
+    }
+    // Then shuffle the array
+    for ( let i = arr.length - 1; i >= 0; i-- ) {
+        const j = Math.floor( Math.random() * (i + 1) );
+        const temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+    return arr;
+};
+
+/**
+ * 
+ * @param {ParentChildMap} regionMap 
+ * @returns {Array<String>}
+ */
+const getOrderedParents = ( regionMap ) => {
+    const ordered = [];
+    for ( const parentName of regionMap.getParentNames() ) {
+        // If this parent has "enabled" regions
+        if ( svg.querySelector(`SVG > G#${parentName} > G.enabled PATH`) ) {
+            ordered.push( parentName );
+        }
+    }
+    return ordered.sort();
+};
+
+/**
+ * Populates the Select dropdown for gamemodes that need it
+ * @param {ParentChildMap} regionMap 
+ */
+const populateSelect = ( regionMap ) => {
+    const orderedParents = getOrderedParents( regionMap );
+    for ( const name of orderedParents ) {
+        const option = document.createElement('OPTION');
+        option.value = name.toLowerCase();
+        option.innerText = util.idToInput( name );
+        selectParent.appendChild( option );
+    }
+    // Auto select the parent if there is only one with enabled regions
+    if ( orderedParents.length === 1 ) {
+        selectParent.selectedIndex = 1;
+        selectParent.setAttribute('disabled', true);
+    }
+};
+
+showNames.addEventListener('change', e => {
+    // Show all names
+    if ( e.target.checked ) {
+        document.querySelectorAll('PATH').forEach( path => {
+            showLabel( path, e, true, false );
+        });
+    }
+    // Hide all names
+    else {
+        document.querySelectorAll('.clickLabel').forEach( label => {
+            label.parentNode.removeChild( label );
+        });
+    }
+});
+
+/**
+ * Populates all cells in the table with the formatted version of their id
+ */
+function fillTable() {
+    for ( const cell of noMapArea.querySelectorAll('P') ) {
+        cell.textContent = util.idToInput( cell.id );
+    }
+}
+
+/**
+ * Moves an element in an SVG to the bottom by cascading all of its parents to the bottom
+ * @param {SVGElement} e 
+ */
+function moveToLastInSVG( e ) {
+    const parent = e.parentElement;
+    parent.appendChild( e );
+    if ( parent.tagName === "g") {
+        moveToLastInSVG( parent );
+    }
+}
+
+/**
+ * Checks if the input box is populated and the parent select dropdown is still default.
+ * Prompts user to select a parent if the input box is populated but no parent is selected
+ * @returns {Boolean} true if the input is valid, otherwise false
+ */
+function inputCheck() {
+    const inputExist = input.value !== "";
+    const parentSelected = selectParent.value !== "";
+    if ( inputExist && !parentSelected ) {
+        playSound( ATTEMPT_SOUNDS[1] );
+        pulseElementBG( selectParent, "white", ATTEMPT_COLORS[1] );
+    }
+    return inputExist && parentSelected;
+}
+
+/**
+ * Creates a circle pulse effect around a region when going to the next prompt
+ * @param {SVGElement} e 
+ */
+function pulseCircle( e ) {
+
+}
+
+/**
+ * Run when finishing a game
+ */
+const endGame = () => {
+    gameEnded = true;
+    for ( const path of svg.querySelectorAll('PATH') ) {
+        path.classList.remove('clickable');
+    }
+    svg.style.display = "block";
+    document.getElementById('bottom-game-bar').style.display = "none";
+    input.setAttribute('disabled', true);
+    html.classList.add('filter-dark');
+    promptTally.style.display = "none";
+    gameEndPanel.style.display = "flex";
+    for ( const label of document.querySelectorAll('.click-on') ) {
+        label.textContent = "-";
+    }
+    fillTable();
+    // Reappear colors at the end
+    svg.classList.remove("invisible-mode");
+    svg.classList.remove("invisible-mode-hard");
+    svg.classList.add("showGuesses");
+    svg.classList.add('gameEnd');
+    console.log( "YOU WIN!" );
+}
+endGameButton.addEventListener('click', endGame);
+
+export default {
+    queryCurrentRegion,
+    playSound,
+    regionDisappearTrigger,
+    pulseElementBG,
+    showLabel,
+    moveToolTip,
+    enableTooltip,
+    shuffleRegionMap,
+    getOrderedParents,
+    populateSelect,
+    moveToLastInSVG,
+    inputCheck,
+    endGame
+}

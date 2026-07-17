@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="css/gameArea.css"/>
     <link rel="stylesheet" href="css/gameSVG.css"/>
     
-    <script src="js/game.js" type="module"></script>
+    <script src="js/game/game.js" type="module"></script>
 </head>
 <body>
     <div id="tooltip">Click on <strong class="click-on"></strong></div>
@@ -82,8 +82,8 @@
                 <label for="noList">No List</label>
             </div>
             <nav class="flex-row">
-                <button class="btn-green" type="button">Select</button>
-                <a href="../" class="btn-grey" type="button">Cancel</a>
+                <button class="btn-green btn-fade" type="button">Select</button>
+                <a href="../" class="btn-grey btn-fade" type="button">Cancel</a>
             </nav>
         </form>
 
@@ -95,7 +95,7 @@
                     <strong class="click-on"></strong>
                     <input type="text">
                     <select name="parent" id="select-parent">
-                        <option value="" selected>Select Parent</option>
+                        <option value="" selected>Select <p id="parent-type"></p></option>
                     </select>
                 </div>
                 <div class="flex-row">
@@ -105,9 +105,8 @@
                 </div>
             </div>
             <!-- Used for all gamemodes with a map -->
-            <svg class="container-1 showGuesses" viewBox="0 0 1600 900" preserveAspectRatio="none" id="svg-game">
-                <g id="main"></g>
-                <g id="enclaves"></g>
+            <svg viewBox="0 0 1600 900" preserveAspectRatio="none" class="container-1 showGuesses" id="svg-game">
+                
             </svg>
             <!-- Game bar below map -->
             <div id="bottom-game-bar" class="game-bar flex-row">
@@ -147,10 +146,19 @@
             </nav>
         </form>
     </main>
-    <!-- Polygon template ( it is necessary to copy polygons from inside an svg instead of creating new
-         polygons in a js file, since a standard <polygon> element will be unrecognized ) -->
-    <template id="polygon-template">
-        <svg><g><polygon/></g></svg>
+
+    <!-- Templates -->
+
+    <!-- SVG-g template ( it is necessary to copy g elements from inside an svg instead of creating new
+         elements in a js file, since the HTML will not recognize the element ) -->
+    <template id="svg-g-template">
+        <svg><g></g></svg>
+    </template>
+
+    <!-- SVG-Path template ( it is necessary to copy path elements from inside an svg instead of creating new
+         elements in a js file, since the HTML will not recognize the element ) -->
+    <template id="svg-path-template">
+        <svg><path></path></svg>
     </template>
 
     <!-- For displaying typed regions in No List gamemode -->

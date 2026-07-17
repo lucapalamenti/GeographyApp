@@ -8,7 +8,7 @@ module.exports = class Polygon {
     /** @type {Boolean} */
     polygon_is_enclave = null;
     /** @type {Number} */
-    polygon_enclave_of_region_id = null;
+    polygon_enclave_of_polygon_id = null;
     /** @type {SQLPolygon} */
     polygon_points = null;
 
@@ -20,7 +20,7 @@ module.exports = class Polygon {
         this.polygon_id = data.polygon_id;
         this.polygon_region_id = data.polygon_region_id;
         this.polygon_is_enclave = data.polygon_is_enclave;
-        this.polygon_enclave_of_region_id = data.polygon_enclave_of_region_id;
+        this.polygon_enclave_of_polygon_id = data.polygon_enclave_of_polygon_id;
         this.polygon_points = new SQLPolygon( data.polygon_points );
     } 
     
@@ -29,7 +29,7 @@ module.exports = class Polygon {
      * @returns {Array<>}
      */
     getAllVariables() {
-        return [this.polygon_region_id, this.polygon_is_enclave, this.polygon_enclave_of_region_id, this.polygon_points];
+        return [this.polygon_region_id, this.polygon_is_enclave, this.polygon_enclave_of_polygon_id, this.polygon_points];
     }
 
     /**
@@ -37,6 +37,6 @@ module.exports = class Polygon {
      * @returns {String}
      */
     insertStatement() {
-        return `INSERT INTO \`polygon\` (\`polygon_id\`, \`polygon_region_id\`, \`polygon_is_enclave\`, \`polygon_enclave_of_region_id\`, \`polygon_points\`) VALUES (${this.polygon_id}, ${this.polygon_region_id}, ${this.polygon_is_enclave}, ${this.polygon_enclave_of_region_id}, ${this.polygon_points.toQueryStringWrapped()});`;
+        return `INSERT INTO \`polygon\` (\`polygon_id\`, \`polygon_region_id\`, \`polygon_is_enclave\`, \`polygon_enclave_of_polygon_id\`, \`polygon_points\`) VALUES (${this.polygon_id}, ${this.polygon_region_id}, ${this.polygon_is_enclave}, ${this.polygon_enclave_of_polygon_id}, ${this.polygon_points.toQueryStringWrapped()});`;
     }
 };
