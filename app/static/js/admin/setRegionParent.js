@@ -14,7 +14,7 @@ setParentDropdownHeader.addEventListener("click", e => {
 });
 
 // Submits the Set Region Parent form
-setParentButton.addEventListener("click", e => {
+setParentButton.addEventListener("click", async e => {
     e.preventDefault();
     const start = Number( regionIdStart.value );
     const end = Number( regionIdEnd.value );
