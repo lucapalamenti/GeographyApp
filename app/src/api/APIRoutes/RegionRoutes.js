@@ -96,6 +96,16 @@ RegionAPIRouter.post('/mapRegion', BackendPayloadManager.chunkMiddleware, (req, 
         res.status(500).json({error:err, message: 'Error with POST request to /mapRegion'});
     });
 });
+RegionAPIRouter.put('/regions/setParent/:start/:end/:parentId', async (req, res) => {
+    const startId = Number( req.params.start );
+    const endId = Number( req.params.end );
+    const region_parent_id = Number( req.params.parentId );
+    await RegionDAO.setRegionParentId_range( startId, endId, region_parent_id ).then( affectedRows => {
+        res.json({ affectedRows: affectedRows });
+    }).catch( err => {
+        res.status(500).json({error:err, message: 'Error with PUT request to /regions/setParent/:start/:end/:parentId'});
+    });
+});
 
 RegionAPIRouter.delete('/regions/map/:mapId', (req, res) => {
     RegionDAO.deleteRegionsFromMap( req.params.mapId ).then( affectedRows => {

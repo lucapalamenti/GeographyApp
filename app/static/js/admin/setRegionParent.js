@@ -18,5 +18,6 @@ setParentButton.addEventListener("click", e => {
     e.preventDefault();
     const start = Number( regionIdStart.value );
     const end = Number( regionIdEnd.value );
-    const parentId = Number( parentRegionId.value );
+    const region_parent_id = Number( parentRegionId.value );
+    await APIClient.setRegionParentId_range( start, end, region_parent_id );
 });

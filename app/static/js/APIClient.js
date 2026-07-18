@@ -15,7 +15,10 @@ const handleAuthError = ( error ) => {
     }
     // Payload Too Large error
     if (error.status === 413 ) {
-        
+        console.log({
+            message: "Payload too large!!",
+            error: error
+        });
     }
     throw error;
 };
@@ -141,6 +144,18 @@ const createRegion = async ( regionData ) => {
     return await clientHandler( HTTPClient.post, `${BASE_API_PATH}/regions`, regionData );
 };
 
+/**
+ * Update the region_parent_id field for a range of Region objects 
+ * with region_id's from startId to endId inclusive
+ * @param {number} startId 
+ * @param {number} endId 
+ * @param {number} region_parent_id 
+ * @returns {number} the number of affected Regions
+ */
+const setRegionParentId_range = async ( startId, endId, region_parent_id ) => {
+    return await clientHandler( HTTPClient.put, `${BASE_API_PATH}/regions/setParent/${startId}/${endId}/${region_parent_id}` );
+}
+
 const createMapRegion = async ( mapRegionData ) => {
     return await clientHandler( HTTPClient.post, `${BASE_API_PATH}/mapRegion`, mapRegionData );
 };
@@ -247,6 +262,7 @@ export default {
     getMapRegion,
     getRegionParentsForMap,
     createRegion,
+    setRegionParentId_range,
     createMapRegion,
     getMapRegionStates,
 

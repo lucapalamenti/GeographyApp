@@ -120,20 +120,26 @@ const createRegion = async ( region ) => {
 /**
  * Update the region_parent_id field for a range of Region objects 
  * with region_id's from startId to endId inclusive
- * @param {*} startId 
- * @param {*} endId 
- * @param {*} region_parent_id 
+ * @param {number} startId 
+ * @param {number} endId 
+ * @param {number} region_parent_id
+ * @returns {Promise<number>} the number of affected Regions
  */
 const setRegionParentId_range = async ( startId, endId, region_parent_id ) => {
-    const query = `
-        UPDATE region
-        SET region_parent_id = ?
-        WHERE region_id >= BETWEEN ? AND ?;
+    try {
+        await getRegionById( region_parent_id );
+        const query = `
+            UPDATE region
+            SET region_parent_id = ?
+            WHERE region_id BETWEEN ? AND ?;
         `;
-    const params = [region_parent_id, startId, endId];
-    return await database.query( query, params ).catch( err => {
-        console.log( err );
-    })
+        const params = [region_parent_id, startId, endId];
+        return await database.query( query, params ).then( rows => {
+            return rows.affectedRows;
+        });
+    } catch ( err ) {
+        return { error : err };
+    }
 };
 
 /**
@@ -254,6 +260,7 @@ module.exports = {
     getRegionParentsForMap,
     getMapRegionParent,
     createRegion,
+    setRegionParentId_range,
     deleteRegion,
     createMapRegion,
     getMapRegionStates
