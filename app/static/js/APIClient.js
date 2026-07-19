@@ -120,10 +120,6 @@ const getRegionById = async ( region_id ) => {
     return await clientHandler( HTTPClient.get, `${BASE_API_PATH}/regions/${region_id}` );
 };
 
-const getRegionByMapIdParentName = async ( mapRegion_map_id, mapRegion_parent, region_name ) => {
-    return await clientHandler( HTTPClient.get, `${BASE_API_PATH}/regions/${mapRegion_map_id}/${mapRegion_parent}/${region_name}` );
-}
-
 const getMapRegion = async ( mapRegion_map_id, mapRegion_region_id ) => {
     return await clientHandler( HTTPClient.get, `${BASE_API_PATH}/mapRegion/${mapRegion_map_id}/${mapRegion_region_id}` );
 };
@@ -254,7 +250,6 @@ export default {
     
     getRegions,
     getRegionById,
-    getRegionByMapIdParentName,
     getRegionsByMapId,
     getMapRegion,
     createRegion,

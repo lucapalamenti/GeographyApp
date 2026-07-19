@@ -54,7 +54,6 @@ let regionMap;
 mapTemplate.addEventListener('change', async e => {
     mapOutline.style.display = "none";
     selectedList.style.display = "none";
-    mapContainer.style.display = "none";
     stateButtonsPanel.style.display = "none";
     if ( mapTemplate.value >= 0 ) {
         // Get the chosen map and display it
@@ -69,7 +68,9 @@ mapTemplate.addEventListener('change', async e => {
             });
         }
         stateButtonsPanel.style.display = "flex";
-        mapContainer.style.display = "flex";
+        mapContainer.hidden = false;
+    } else {
+        mapContainer.hidden = true;
     }
 });
 
@@ -198,6 +199,7 @@ async function createCustomMap( e ) {
         map_primary_color_R : parseInt( mapColor.value.substr(1,2), 16 ),
         map_primary_color_G : parseInt( mapColor.value.substr(3,2), 16 ),
         map_primary_color_B : parseInt( mapColor.value.substr(5,2), 16 ),
+        map_is_template : 0,
         map_is_custom : 1
     });
     // Create Map
@@ -219,7 +221,6 @@ async function createCustomMap( e ) {
             const mapRegion = new MapRegion({
                 mapRegion_map_id : mapData.map_id,
                 mapRegion_region_id : regionMap.getChild( parentId, pathElement.id ),
-                mapRegion_parent : util.idToInput( parentId ),
                 mapRegion_type : typeName
             });
             await APIClient.createMapRegion( mapRegion ).then( returnedMapRegion => {}).catch( async err => {

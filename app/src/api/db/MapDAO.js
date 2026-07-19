@@ -43,7 +43,6 @@ const getMaps = async ( filter, sort, DESC ) => {
     // Ascending or descending?
     if ( DESC === "DESC" ) query = query.concat( "DESC" );
     query = query.concat( ";" );
-    console.log( query );
     return await database.query( query, []).then( rows => {
             return rows.map( row => new MMap( row ) );
     });

@@ -44,25 +44,6 @@ const getRegionById = async ( region_id ) => {
 
 /**
  * 
- * @param {*} regionData 
- * @returns {Promise<BackendMapRegion>}
- */
-const getRegionByMapIdParentName = async ( regionData ) => {
-    const { mapRegion_map_id, mapRegion_parent, region_name } = regionData;
-    return await database.query(`
-        SELECT * FROM mapRegion JOIN region
-        ON mapRegion_region_id = region_id
-        WHERE mapRegion_map_id = ? AND mapRegion_parent = ? AND region_name = ?;
-        `, [mapRegion_map_id, mapRegion_parent, region_name]).then( rows => {
-            if ( rows.length === 1 ) {
-                return rows[0];
-            }
-            throw new Error("Region not found!");
-    });
-};
-
-/**
- * 
  * @param {number} mapRegion_map_id 
  * @returns {Promise<Array<BackendMapRegion>>}
  */
@@ -172,20 +153,11 @@ const getMapRegion = async ( mapRegion_map_id, mapRegion_region_id ) => {
  * @returns {Promise<BackendMapRegion>}
  */
 const createMapRegion = async ( mapRegion ) => {
-    let query = "", params = [];
-    if ( mapRegion.mapRegion_parent ) {
-        query = `
-            INSERT INTO mapRegion (mapRegion_map_id, mapRegion_region_id, mapRegion_type)
-            VALUES (?, ?, ?);
-            `;
-        params = [...mapRegion.getAllVariables()];
-    } else {
-        query = `
-            INSERT INTO mapRegion (mapRegion_map_id, mapRegion_region_id, mapRegion_type)
-            VALUES (?, ?, ?);
-            `;
-        params = [...mapRegion.getVariablesNoParent()];
-    }
+    const query = `
+        INSERT INTO mapRegion (mapRegion_map_id, mapRegion_region_id, mapRegion_type)
+        VALUES (?, ?, ?);
+        `;
+    const params = [mapRegion.mapRegion_map_id, mapRegion.mapRegion_region_id, mapRegion.mapRegion_type];
     return await database.query( query, params ).then( async rows => {
             if ( rows.affectedRows === 1 ) {
                 if ( COPY_TO_FILE ) {
@@ -219,7 +191,6 @@ const getMapRegionStates = async () => {
 module.exports = {
     getRegions,
     getRegionById,
-    getRegionByMapIdParentName,
     getRegionsByMapId,
     getMapRegion,
     createRegion,

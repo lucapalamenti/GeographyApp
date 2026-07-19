@@ -109,7 +109,7 @@ UploadAPIRouter.post('/mapfile/create', BackendPayloadManager.chunkMiddleware, a
         map_primary_color_G : 0,
         map_primary_color_B : 0,
         map_is_template : true,
-        map_is_custom : true
+        map_is_custom : false
     }) ).catch( err => {
         res.status(400).json({ message: "Couldn't create map", err });
     });
@@ -118,7 +118,6 @@ UploadAPIRouter.post('/mapfile/create', BackendPayloadManager.chunkMiddleware, a
         return RegionDAO.createMapRegion( new FrontendMapRegion({
             mapRegion_map_id : map.map_id,
             mapRegion_region_id : region.region_id,
-            mapRegion_parent : null,
             mapRegion_type : "enabled"
         }) );
     })).catch( err => {
