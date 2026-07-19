@@ -9,17 +9,16 @@ const sortMapsSelect = document.getElementById('sort-maps');
 
 window.onload = async () => {
     // Populate screen with map buttons
-    await populateMaps( getSelectedFilter(), getSelectedSort() );
+    await populateMaps();
 };
 
 /**
  * Retrieves maps from the database given given a table header to sort by
- * @param {String} orderBy SQL query to ORDER BY
  */
-async function populateMaps( where, orderBy ) {
+async function populateMaps() {
     // First empty the map navigation container
     mapNavigation.innerHTML = "";
-    await APIClient.getMaps( where, orderBy ).then( returnedMaps => {
+    await APIClient.getMaps( getSelectedFilter(), getSelectedSort(), getSelectedOrder() ).then( returnedMaps => {
         const mapButtonTemplate = document.getElementById('map-button-template');
         for ( const map of returnedMaps ) {
             const mapButtonInstance = mapButtonTemplate.content.cloneNode(true);
@@ -48,7 +47,10 @@ function getSelectedFilter() {
     return filterMapsSelect.options[filterMapsSelect.selectedIndex].value;
 }
 function getSelectedSort() {
-    return sortMapsSelect.options[sortMapsSelect.selectedIndex].value;
+    return sortMapsSelect.options[sortMapsSelect.selectedIndex].value.split(" ")[0];
+}
+function getSelectedOrder() {
+    return sortMapsSelect.options[sortMapsSelect.selectedIndex].value.split(" ")[1];
 }
 
 filterMapsSelect.addEventListener('change', async option => {

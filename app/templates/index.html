@@ -26,16 +26,16 @@
             </nav>
             <div class="flex-row-center gap-5">
                 <select name="filter-maps" id="filter-maps">
-                    <option value="map_id > -1">Filter Maps</option>
-                    <option value="map_is_custom = 0">Default Only</option>
-                    <option value="map_is_custom = 1">Custom Only</option>
+                    <option value="all">Filter Maps</option>
+                    <option value="default">Default Only</option>
+                    <option value="custom">Custom Only</option>
                 </select>
                 <select name="sort-maps" id="sort-maps">
-                    <option value="map_id">Sort Maps</option>
-                    <option value="map_id DESC">Newest</option>
-                    <option value="map_id">Oldest</option>
-                    <option value="map_name">A -> Z</option>
-                    <option value="map_name DESC">Z -> A</option>
+                    <option value="id">Sort Maps</option>
+                    <option value="id DESC">Newest</option>
+                    <option value="id">Oldest</option>
+                    <option value="name">A -> Z</option>
+                    <option value="name DESC">Z -> A</option>
                 </select>
             </div>
             <nav id="map-navigation" class="flex-row-center gap-5"></nav>

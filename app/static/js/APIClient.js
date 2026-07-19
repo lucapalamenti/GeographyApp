@@ -168,12 +168,13 @@ const getMapRegionStates = async () => {
 
 /**
  * 
- * @param {string} where 
- * @param {string} orderBy 
+ * @param {"all" | "default" | "custom" | "template"} filter 
+ * @param {"id" | "name"} sort
+ * @param {boolean} DESC order results asending if false, descending if true 
  * @returns {Array<MMap>}
  */
-const getMaps = async ( where, orderBy ) => {
-    return await clientHandler( HTTPClient.get, `${BASE_API_PATH}/maplist/where/${where}/orderBy/${orderBy}` );
+const getMaps = async ( filter, sort, DESC ) => {
+    return await clientHandler( HTTPClient.get, `${BASE_API_PATH}/maps/type/${filter}/sort/${sort}/desc/${DESC}` );
 };
 
 /**

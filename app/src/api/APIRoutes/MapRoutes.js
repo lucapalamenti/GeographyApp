@@ -8,8 +8,9 @@ const util = require('../util/util.js');
 const MapAPIRouter = express.Router();
 MapAPIRouter.use( express.json() );
 
-MapAPIRouter.get('/maplist/where/:where/orderBy/:orderBy', (req, res) => {
-    MapDAO.getMaps( req.params.where, req.params.orderBy ).then( maps => {
+MapAPIRouter.get('/maps/type/:type/sort/:sort/desc/:desc', (req, res) => {
+    const p = req.params;
+    MapDAO.getMaps( p.type, p.sort, p.desc ).then( maps => {
         res.json( maps );
     })
     .catch( err => {

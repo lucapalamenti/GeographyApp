@@ -93,6 +93,7 @@
 - SVG map zooming now works with any size viewbox
 - Removed "Herring" region type
 - Error when attempting to delete all thumbnails for custom maps when there are none
+- Rework to GET API for filtering & sorting maps
 
 ### Bug Fixes
 - SQLPolygon class is incorrectly storing the "coordinates" attribute as a 2D array instead of a 3D array

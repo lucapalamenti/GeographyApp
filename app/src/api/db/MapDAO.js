@@ -6,27 +6,47 @@ const MMap = require('../models/MMap.js');
 const FILENAME_PREFIX = "04-Map-";
 const COPY_TO_FILE = false;
 
+const VALID_SORT_QUERIES = new Set(["map_id", "map_id DESC", "map_name", "map_name DESC"]);
+
 // ----- <<<<< GET/SELECT QUERIES >>>>> -----
 
 /**
- * SQL injection is possible
- * @param {String} where SQL query to SELECT * WHERE
- * @param {String} orderBy SQL query to ORDER BY
+ * 
+ * @param {"all" | "default" | "custom" | "template"} filter 
+ * @param {"id" | "name"} sort
+ * @param {"DESC"} DESC order results descending if present
  * @returns {Promise<Array<MMap>>}
  */
-const getMaps = async ( where, orderBy ) => {
-    const VALID_QUERIES = new Set(["map_id", "map_id DESC", "map_name", "map_name DESC"]);
-    if ( VALID_QUERIES.has( orderBy ) ) {
-        return await database.query(`
-            SELECT * FROM map
-            WHERE ${where}
-            ORDER BY ${orderBy};
-            `, []).then( rows => {
-                return rows.map( row => new MMap( row ) );
-        });
-    } else {
-        throw new Error("Input contained a restricted SQL query!");
+const getMaps = async ( filter, sort, DESC ) => {
+    let query = "SELECT * FROM map\n";
+    // Append filter clause
+    switch ( filter ) {
+        case "all":
+            query = query.concat( "WHERE map_is_template = 0\n" );
+            break;
+        case "default":
+            query = query.concat( "WHERE map_is_template = 0 AND map_is_custom = 0\n" );
+            break;
+        case "custom":
+            query = query.concat( "WHERE map_is_template = 0 AND map_is_custom = 1\n" );
+            break;
+        case "template":
+            query = query.concat( "WHERE map_is_template = 1\n" );
+            break;
     }
+    // Append sort clause
+    switch ( sort ) {
+        case "id":
+        case "name":
+            query = query.concat( "ORDER BY map_", sort, " " );
+    }
+    // Ascending or descending?
+    if ( DESC === "DESC" ) query = query.concat( "DESC" );
+    query = query.concat( ";" );
+    console.log( query );
+    return await database.query( query, []).then( rows => {
+            return rows.map( row => new MMap( row ) );
+    });
 };
 
 /**
@@ -46,20 +66,6 @@ const getMapById = async ( map_id ) => {
         throw new Error("Map not found!");
     }
     throw new Error("map_id cannot be null!");
-};
-
-/**
- * Returns all maps that are templates
- * @returns {Promise<Array<MMap>>}
- */
-const getTemplateMaps = async () => {
-    return await database.query(`
-        SELECT * FROM map
-        WHERE map_is_template = 1;
-        `)
-        .then( rows => {
-            return rows.map( row => new MMap( row ) );
-        });
 };
 
 // ----- <<<<< POST/INSERT QUERIES >>>>> -----
