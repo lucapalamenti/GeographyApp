@@ -2,6 +2,7 @@ import HTTPClient from "./HTTPClient.js";
 
 import MMap from "./models/MMap.js";
 import MapRegion from "./models/MapRegion.js";
+import MapData from "./models/MapData.js"
 import BackendMapRegion from "./models/BackendMapRegion.js"
 import Region from "./models/Region.js";
 import { FrontendPayloadManager, PayloadChunk, SentinelChunk } from "./models/FrontendPayloadManager.js";
@@ -123,21 +124,16 @@ const getRegionByMapIdParentName = async ( mapRegion_map_id, mapRegion_parent, r
     return await clientHandler( HTTPClient.get, `${BASE_API_PATH}/regions/${mapRegion_map_id}/${mapRegion_parent}/${region_name}` );
 }
 
-const getRegionParentsForMap = async ( mapRegion_map_id ) => {
-    return await clientHandler( HTTPClient.get, `${BASE_API_PATH}/mapRegion/parents/${mapRegion_map_id}` );
-};
-
 const getMapRegion = async ( mapRegion_map_id, mapRegion_region_id ) => {
     return await clientHandler( HTTPClient.get, `${BASE_API_PATH}/mapRegion/${mapRegion_map_id}/${mapRegion_region_id}` );
 };
 
 /**
  * @param {Number} map_id 
- * @returns {Array<BackendMapRegion>}
+ * @returns {MapData}
  */
 const getRegionsByMapId = async ( map_id ) => {
-    const res = await clientHandler( HTTPClient.get, `${BASE_API_PATH}/regions/map/${map_id}` );
-    return res.map( e => new BackendMapRegion( e ) );
+    return new MapData( await clientHandler( HTTPClient.get, `${BASE_API_PATH}/regions/map/${map_id}` ) );
 };
 
 const createRegion = async ( regionData ) => {
@@ -260,7 +256,6 @@ export default {
     getRegionByMapIdParentName,
     getRegionsByMapId,
     getMapRegion,
-    getRegionParentsForMap,
     createRegion,
     setRegionParentId_range,
     createMapRegion,

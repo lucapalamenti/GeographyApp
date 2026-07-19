@@ -21,10 +21,10 @@ const pathTemplate = document.getElementById('svg-path-template').content;
 export default async function populateSVG( map, svg ) {
     svg.replaceChildren();
     // Get all mapRegions for this map 
-    let mapRegions = await APIClient.getRegionsByMapId( map.map_id );
+    let mapData = await APIClient.getRegionsByMapId( map.map_id );
     // Get width and height of map for centering on the page
     let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
-    for ( let mapRegion of mapRegions ) {
+    for ( const mapRegion of mapData.mapRegions ) {
         if ( FOCUS_STATES.includes( mapRegion.mapRegion_type ) ) {
             const thisMinX = mapRegion.region_points.minXValue();
             if ( thisMinX < minX ) minX = thisMinX;
@@ -66,11 +66,9 @@ export default async function populateSVG( map, svg ) {
     // svg.setAttribute( 'viewBox', `${startX} ${startY} ${svgWidth} ${svgHeight}` );
     svg.setAttribute( 'viewBox', `${startX} ${startY} ${mapWidth} ${mapHeight}` );
 
-    // Right now 3/5/2026 region_parent_id can be null because a region like "usa" or "polygon usa" dont exist, so the "parent id" for polygon states is null
-    const parentId = mapRegions[0].region_parent_id ? mapRegions[0].region_parent_id : 1;
-    const regionMap = new ParentChildMap( ( await APIClient.getRegionById( parentId ) ).region_type );
-    for ( const mapRegion of mapRegions ) {
-        const parentId = util.inputToId( mapRegion.mapRegion_parent );
+    const regionMap = new ParentChildMap( mapData.parentRegions[0].region_type );
+    for ( const mapRegion of mapData.mapRegions ) {
+        const parentId = util.inputToId( mapData.getParentRegion( mapRegion.region_parent_id ).region_name );
         const regionId = util.inputToId( mapRegion.region_name );
         // If there doesn't exist a group for the region's parent, create it
         let parentGroup = svg.querySelector(`:scope > #${parentId}`);

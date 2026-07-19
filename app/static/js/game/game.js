@@ -43,13 +43,11 @@ selectButton.addEventListener('click', async () => {
         gamemodePanel.style["cursor"] = "default";
         bottomGameBar.style["display"] = "flex";
         parentType.textContent = regionMap.relation;
-        await APIClient.getRegionParentsForMap( map_id ).then( parents => {
-            // Call the method for the selected gamemode
-            gamemodeMap[currentGamemode]( regionMap );
-            const gamemodeLabel = document.createElement('P');
-            gamemodeLabel.textContent = currentGamemode;
-            navBar.appendChild( gamemodeLabel );
-        });
+        // Call the method for the selected gamemode
+        gamemodeMap[currentGamemode]( regionMap );
+        const gamemodeLabel = document.createElement('P');
+        gamemodeLabel.textContent = currentGamemode;
+        navBar.appendChild( gamemodeLabel );
     }
 });
 

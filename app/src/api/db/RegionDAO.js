@@ -81,24 +81,6 @@ const getRegionsByMapId = async ( mapRegion_map_id ) => {
 
 /**
  * 
- * @param {number} mapRegion_map_id 
- * @returns {Promise<Array<string>>}
- */
-const getRegionParentsForMap = async ( mapRegion_map_id ) => {
-    return await database.query(`
-        SELECT DISTINCT mapRegion_parent FROM mapRegion
-        WHERE mapRegion_map_id = ?;
-        `, [mapRegion_map_id]).then( rows => {
-            const parents = [];
-            rows.forEach( row => {
-                parents.push( row.mapRegion_parent );
-            });
-            return parents;
-    });
-};
-
-/**
- * 
  * @param {Region} region 
  * @returns {Promise<Region>}
  */
@@ -186,23 +168,6 @@ const getMapRegion = async ( mapRegion_map_id, mapRegion_region_id ) => {
 };
 
 /**
- * 
- * @param {Number} mapRegion_region_id 
- * @returns {Promise<String>}
- */
-const getMapRegionParent = async ( mapRegion_region_id ) => {
-    return await database.query(`
-        SELECT * FROM mapRegion
-        WHERE mapRegion_region_id = ?;
-        `, [mapRegion_region_id]).then( rows => {
-            if ( rows.length ) {
-                return new BackendMapRegion( rows[0] ).mapRegion_parent;
-            }
-            throw new Error("MapRegion not found!");
-        });
-};
-
-/**
  * @param {FrontendMapRegion} mapRegion
  * @returns {Promise<BackendMapRegion>}
  */
@@ -257,8 +222,6 @@ module.exports = {
     getRegionByMapIdParentName,
     getRegionsByMapId,
     getMapRegion,
-    getRegionParentsForMap,
-    getMapRegionParent,
     createRegion,
     setRegionParentId_range,
     deleteRegion,
