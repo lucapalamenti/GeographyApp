@@ -160,6 +160,17 @@ const getMapRegionStates = async () => {
     return await clientHandler( HTTPClient.get, `${BASE_API_PATH}/mapRegion/states` );
 }
 
+/**
+ * Update the region_parent_id field for a range of Region objects 
+ * with region_id's from startId to endId inclusive
+ * @param {number} startId 
+ * @param {number} endId 
+ * @returns {number} the number of affected Regions
+ */
+const deleteRegion_range = async ( startId, endId ) => {
+    return await clientHandler( HTTPClient.delete, `${BASE_API_PATH}/regions/start/${startId}/end/${endId}` );
+}
+
 // ----- MapDAO CALLS -----
 
 /**
@@ -255,6 +266,7 @@ export default {
     createRegion,
     setRegionParentId_range,
     createMapRegion,
+    deleteRegion_range,
     getMapRegionStates,
 
     getMaps,

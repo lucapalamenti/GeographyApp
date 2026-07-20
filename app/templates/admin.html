@@ -13,7 +13,7 @@
 
     <script src="js/admin/admin.js" type="module"></script>
     <script src="js/admin/fileUpload.js" type="module"></script>
-    <script src="js/admin/setRegionParent.js" type="module"></script>
+    <script src="js/admin/regionActions.js" type="module"></script>
     <script src="js/components/header.js"></script>
 </head>
 <body>
@@ -89,29 +89,30 @@
                 </section>
             </div>
             <!-- Set Region Parent dropdown -->
-            <div id="set-parent-dropdown" class="dropdown">
+            <div id="region-actions-dropdown" class="dropdown">
                 <header>
-                    <h4>Set Region Parent</h4>
+                    <h4>Region Actions</h4>
                     <svg viewBox="0 0 50 50">
                         <polygon points="12.5,10 12.5,40 37.5,25 12.5,10"></polygon>
                     </svg>
                 </header>
-                <form id="set-parent-dropdown-body" hidden class="flex-col dropdown-body gap-5">
+                <form id="region-actions-dropdown-body" hidden class="flex-col dropdown-body gap-5">
                     <div class="flex-row-between">
                         <div class="input-label">
                             <label for="region-id-start">Region ID Start</label>
-                            <input name="region-id-start" type="number" id="region-id-start" required>
+                            <input name="region-id-start" type="number" id="region-id-start">
                         </div>
                         <div class="input-label">
                             <label for="region-id-end">Region ID End</label>
-                            <input name="region-id-end" type="number" id="region-id-end" required>
+                            <input name="region-id-end" type="number" id="region-id-end">
                         </div>
                         <div class="input-label">
                             <label for="parent-region-id">Parent Region ID</label>
-                            <input name="parent-region-id" type="number" id="parent-region-id" required>
+                            <input name="parent-region-id" type="number" id="parent-region-id">
                         </div>
                     </div>
                     <button type="submit" id="set-parent-btn" class="btn-grey hover-fade">Set Parent</button>
+                    <button type="submit" id="delete-region-btn" class="btn-grey hover-fade">Delete Region</button>
                 </form>
             </div>
         </div>

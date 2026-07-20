@@ -91,6 +91,18 @@ RegionAPIRouter.put('/regions/setParent/:start/:end/:parentId', async (req, res)
     });
 });
 
+RegionAPIRouter.delete('/regions/start/:start/end/:end', (req, res) => {
+    console.log( req.params );
+    const startId = Number( req.params.start );
+    const endId = Number( req.params.end );
+    RegionDAO.deleteRegion_range( startId, endId ).then( affectedRows => {
+        res.json({ affectedRows : affectedRows.affectedRows });
+    })
+    .catch( err => {
+        res.status(500).json({error:err, message: 'Error with DELETE request to /regions/map/:mapId'});
+    });
+});
+
 RegionAPIRouter.delete('/regions/map/:mapId', (req, res) => {
     RegionDAO.deleteRegionsFromMap( req.params.mapId ).then( affectedRows => {
         res.json( affectedRows );

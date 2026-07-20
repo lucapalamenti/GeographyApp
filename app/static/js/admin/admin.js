@@ -6,8 +6,6 @@ window.onload = () => {
     navBar.appendChild( pageName );
 }
 
-
-
 /**
  * Handles opening & closing dropdown menus
  * @param {HTMLElement} header 

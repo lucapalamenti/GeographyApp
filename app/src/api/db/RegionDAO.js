@@ -89,6 +89,8 @@ const createRegion = async ( region ) => {
  * @returns {Promise<number>} the number of affected Regions
  */
 const setRegionParentId_range = async ( startId, endId, region_parent_id ) => {
+    if ( isNaN( startId ) ) startId = 0;
+    if ( isNaN( endId ) ) endId = Number.MAX_SAFE_INTEGER;
     try {
         await getRegionById( region_parent_id );
         const query = `
@@ -116,6 +118,35 @@ const deleteRegion = async ( region_id ) => {
         WHERE region_id = ?;
         `, [region_id]).catch( err => {
             throw new Error("Region could not be deleted!");
+        });
+};
+
+/**
+ * Deletes all Regions with region_id between startId and endId
+ * @param {number} startId 
+ * @param {number} endId 
+ * @returns {Promise<>}
+ */
+const deleteRegion_range = async ( startId, endId ) => {
+    if ( isNaN( startId ) ) startId = 0;
+    if ( isNaN( endId ) ) endId = Number.MAX_SAFE_INTEGER;
+    await deleteMapRegion_range( startId, endId );
+    return await database.query(`
+        DELETE FROM region
+        WHERE region_id BETWEEN ? AND ?;
+        `, [startId, endId]).catch( err => {
+            throw new Error("Regions could not be deleted!");
+        });
+};
+
+const deleteMapRegion_range = async ( startId, endId ) => {
+    if ( isNaN( startId ) ) startId = 0;
+    if ( isNaN( endId ) ) endId = Number.MAX_SAFE_INTEGER;
+    return await database.query(`
+        DELETE FROM mapRegion
+        WHERE mapRegion_region_id BETWEEN ? AND ?;
+        `, [startId, endId]).catch( err => {
+            throw new Error("Regions could not be deleted!");
         });
 };
 
@@ -196,6 +227,7 @@ module.exports = {
     createRegion,
     setRegionParentId_range,
     deleteRegion,
+    deleteRegion_range,
     createMapRegion,
     getMapRegionStates
 };
