@@ -14,6 +14,7 @@
     <script src="js/admin/admin.js" type="module"></script>
     <script src="js/admin/fileUpload.js" type="module"></script>
     <script src="js/admin/regionActions.js" type="module"></script>
+    <script src="js/admin/generateFiles.js" type="module"></script>
     <script src="js/components/header.js"></script>
 </head>
 <body>
@@ -21,7 +22,7 @@
     <main class="flex-col-center gap-5">
         <div id="button-panel" class="flex-col-center gap-5">
             <!-- File Upload dropdown -->
-            <div id="file-dropdown" class="dropdown">
+            <div id="file-upload-dropdown" class="dropdown">
                 <header>
                     <h4>File Upload</h4>
                     <svg viewBox="0 0 50 50">
@@ -88,7 +89,7 @@
                     </form>
                 </section>
             </div>
-            <!-- Set Region Parent dropdown -->
+            <!-- Region Actions dropdown -->
             <div id="region-actions-dropdown" class="dropdown">
                 <header>
                     <h4>Region Actions</h4>
@@ -113,6 +114,18 @@
                     </div>
                     <button type="submit" id="set-parent-btn" class="btn-grey hover-fade">Set Parent</button>
                     <button type="submit" id="delete-region-btn" class="btn-grey hover-fade">Delete Region</button>
+                </form>
+            </div>
+            <!-- Set Region Parent dropdown -->
+            <div id="generate-files-dropdown" class="dropdown">
+                <header>
+                    <h4>Generate Files</h4>
+                    <svg viewBox="0 0 50 50">
+                        <polygon points="12.5,10 12.5,40 37.5,25 12.5,10"></polygon>
+                    </svg>
+                </header>
+                <form id="generate-files-dropdown-body" hidden class="flex-col dropdown-body gap-5">
+                    <button type="submit" id="generate-files-all-btn" class="btn-grey hover-fade">All Data</button>
                 </form>
             </div>
         </div>

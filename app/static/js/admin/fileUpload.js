@@ -4,7 +4,7 @@ import { FeatureCollection } from "../models/FeatureCollection.js"
 import populateSVGfc from "../populateSVGfc.js";
 import { zoom, unzoom } from "../mapManipulations.js";
 
-const fileDropdownHeader = document.querySelector("#file-dropdown HEADER");
+const fileUploadDropdownHeader = document.querySelector("#file-upload-dropdown HEADER");
 const fileUploadDropdownBody = document.getElementById("file-upload-dropdown-body");
 const uploadForm = document.getElementById("upload-form");
 const fileInput = document.getElementById("file-input");
@@ -26,8 +26,8 @@ let selectedBtn;
 let featureCollection;
 
 // Handles opening & closing the geojson file upload dropdown
-fileDropdownHeader.addEventListener("click", e => {
-    toggleDropdown( fileDropdownHeader, fileUploadDropdownBody );
+fileUploadDropdownHeader.addEventListener("click", e => {
+    toggleDropdown( fileUploadDropdownHeader, fileUploadDropdownBody );
 });
 
 mapPreview.addEventListener("click", e => {
