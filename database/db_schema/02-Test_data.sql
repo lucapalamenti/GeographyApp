@@ -1,5 +1,5 @@
 INSERT INTO `map` (`map_id`, `map_name`, `map_thumbnail`, `map_primary_color_R`, `map_primary_color_G`, `map_primary_color_B`, `map_is_template`) VALUES
-(1, 'Test Map', 'default/Test_Map_Thumbnail.png', 200, 100, 50, 1);
+(1, 'Test Template', 'default/Test_Map_Thumbnail.png', 200, 100, 50, 1);
 
 INSERT INTO `region` (`region_id`, `region_name`, `region_type`, `region_points`) VALUES
 (1, 'Earth', 'Planet', ST_GEOMFROMTEXT('POLYGON((-180 90,180 90,180 -90,-180 90,-180 90))')),
