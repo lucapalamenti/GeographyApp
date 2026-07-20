@@ -255,6 +255,14 @@ const createTemplateMap = async ( data ) => {
     return await clientHandler( HTTPClient.post, `${BASE_API_PATH}/upload/mapfile/create`, data );
 };
 
+/**
+ * Generate file with SQL INSERT statements for existing database data 
+ * @returns {}
+ */
+const generateFiles = async () => {
+    return await clientHandler( HTTPClient.post, `${BASE_API_PATH}/generateFiles`);
+}
+
 export default {
     custom,
     printRegionInsertQuery,
