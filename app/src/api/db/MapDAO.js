@@ -13,7 +13,7 @@ const VALID_SORT_QUERIES = new Set(["map_id", "map_id DESC", "map_name", "map_na
 /**
  * 
  * @param {"all" | "default" | "custom" | "template"} filter 
- * @param {"id" | "name"} sort
+ * @param {"id" | "name" | "is_template"} sort
  * @param {"DESC"} DESC order results descending if present
  * @returns {Promise<Array<MMap>>}
  */
@@ -38,6 +38,7 @@ const getMaps = async ( filter, sort, DESC ) => {
     switch ( sort ) {
         case "id":
         case "name":
+        case "is_template":
             query = query.concat( "ORDER BY map_", sort, " " );
     }
     // Ascending or descending?

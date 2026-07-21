@@ -13,4 +13,5 @@ genFilesDropdownHeader.addEventListener("click", e => {
 
 genFilesAllDataBtn.addEventListener("click", e => {
     e.preventDefault();
+    APIClient.generateFiles();
 });

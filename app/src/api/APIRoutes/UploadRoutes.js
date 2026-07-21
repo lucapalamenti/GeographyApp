@@ -2,6 +2,7 @@ const express = require('express');
 const multer = require('multer');
 const Path = require("path");
 const { JSDOM } = require('jsdom');
+const fs = require('fs');
 
 const MapDAO = require('../db/MapDAO.js');
 const RegionDAO = require('../db/RegionDAO.js');
@@ -128,6 +129,21 @@ UploadAPIRouter.post('/mapfile/create', BackendPayloadManager.chunkMiddleware, a
         responses : objectResponses,
         mapRegions : creationResponses
     });
+});
+
+UploadAPIRouter.post('/generateFiles', async (req, res) => {
+    MapDAO.getMaps( "template", "is_template", "DESC" ).then( returnedMaps => {
+        const filename = `./src/api/generatedFiles/03-maps.sql`;
+        fs.appendFileSync( filename, MMap.INSERT_STATEMENT_STARTER );
+        for ( const map of returnedMaps ) {
+            fs.appendFileSync( filename, map.insertStatementLn_valuesOnly() );
+        }
+        console.log( `Generated INSERT statements for ${returnedMaps.length} map rows. Created file "${filename}"` );
+    });
+    // RegionDAO.getRegions().then( returnedRegions => {
+    //     const filename = `./src/api/generatedFiles/03-maps.sql`;
+    // });
+    res.json({ message : "done" });
 });
 
 module.exports = UploadAPIRouter;

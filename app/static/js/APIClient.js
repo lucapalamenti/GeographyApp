@@ -260,7 +260,7 @@ const createTemplateMap = async ( data ) => {
  * @returns {}
  */
 const generateFiles = async () => {
-    return await clientHandler( HTTPClient.post, `${BASE_API_PATH}/generateFiles`);
+    return await clientHandler( HTTPClient.post, `${BASE_API_PATH}/upload/generateFiles`);
 }
 
 export default {
@@ -286,5 +286,6 @@ export default {
 
     uploadThumbnail,
     processMapfile,
-    createTemplateMap
+    createTemplateMap,
+    generateFiles
 }

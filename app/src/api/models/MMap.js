@@ -16,6 +16,8 @@ module.exports = class MMap {
     /** @type {Boolean} */
     map_is_custom = null;
 
+    static INSERT_STATEMENT_STARTER = `INSERT INTO \`map\` (\`map_id\`, \`map_name\`, \`map_thumbnail\`, \`map_primary_color_R\`, \`map_primary_color_G\`, \`map_primary_color_B\`, \`map_is_template\`, \`map_is_custom\`) VALUES \n`;
+
     /**
      * Constructor given Map object data
      * @param {MMap} data 
@@ -38,4 +40,17 @@ module.exports = class MMap {
     getAllVariables() {
         return [this.map_name, this.map_thumbnail, this.map_primary_color_R, this.map_primary_color_G, this.map_primary_color_B, this.map_is_template, this.map_is_custom];
     }
-};
+
+    insertStatement() {
+        return `INSERT INTO \`map\` (\`map_id\`, \`map_name\`, \`map_thumbnail\`, \`map_primary_color_R\`, \`map_primary_color_G\`, \`map_primary_color_B\`, \`map_is_template\`, \`map_is_custom\`) VALUES (${this.map_id}, "${this.map_name}", "${this.map_thumbnail}", ${this.map_primary_color_R}, ${this.map_primary_color_G}, ${this.map_primary_color_B}, ${Number( this.map_is_template )}, ${Number( this.map_is_custom )})`;
+    }
+    insertStatementLn() {
+        return `${this.insertStatement()}\n`;
+    }
+    insertStatement_valuesOnly() {
+        return `(${this.map_id}, "${this.map_name}", "${this.map_thumbnail}", ${this.map_primary_color_R}, ${this.map_primary_color_G}, ${this.map_primary_color_B}, ${Number( this.map_is_template )}, ${Number( this.map_is_custom )}),`
+    }
+    insertStatementLn_valuesOnly() {
+        return `${this.insertStatement_valuesOnly()}\n`;
+    }
+};  
