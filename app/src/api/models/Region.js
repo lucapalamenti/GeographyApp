@@ -12,6 +12,8 @@ module.exports = class Region {
     /** @type {SQLGeometry} */
     region_points = null;
 
+    static INSERT_STATEMENT_STARTER = `INSERT INTO \`region\` (\`region_id\`, \`region_name\`, \`region_type\`, \`region_parent_id\`, \`region_points\`) VALUES \n`;
+
     /**
      * Constructor given Region object data
      * @param {Region} data 
@@ -21,7 +23,7 @@ module.exports = class Region {
         this.region_name = data.region_name;
         this.region_type = data.region_type;
         this.region_parent_id = data.region_parent_id;
-        this.region_points = data.region_points;
+        this.region_points = SQLGeometry.createAnyType( data.region_points );
     }
 
     /**
@@ -30,5 +32,14 @@ module.exports = class Region {
      */
     insertStatement() {
         return `INSERT INTO \`region\` (\`region_id\`, \`region_name\`, \`region_parent_id\`, \`region_points\`) VALUES (${this.region_id}, "${this.region_name}", ${this.region_parent_id}, ${this.region_points.toQueryStringWrapped()});`;
+    }
+    insertStatementLn() {
+        return `${this.insertStatement()}\n`;
+    }
+    insertStatement_valuesOnly() {
+        return `(${this.region_id}, "${this.region_name}", "${this.region_parent_id}", ${this.region_points.toQueryStringWrapped()}),`
+    }
+    insertStatementLn_valuesOnly() {
+        return `${this.insertStatement_valuesOnly()}\n`;
     }
 };

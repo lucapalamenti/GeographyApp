@@ -14,6 +14,7 @@ const { SQLGeometry, SQLPolygon, SQLMultiPolygon } = require('../models/SQLGeome
 const FrontendMapRegion = require('../models/FrontendMapRegion.js');
 const { FeatureCollection } = require('../models/FeatureCollection.js');
 const TemplateMap = require('../models/TemplateMap.js');
+const Region = require('../models/Region.js');
 
 const UploadAPIRouter = express.Router();
 UploadAPIRouter.use( express.json() );
@@ -131,18 +132,19 @@ UploadAPIRouter.post('/mapfile/create', BackendPayloadManager.chunkMiddleware, a
     });
 });
 
-UploadAPIRouter.post('/generateFiles', async (req, res) => {
-    MapDAO.getMaps( "template", "is_template", "DESC" ).then( returnedMaps => {
-        const filename = `./src/api/generatedFiles/03-maps.sql`;
-        fs.appendFileSync( filename, MMap.INSERT_STATEMENT_STARTER );
+UploadAPIRouter.post('/generateTemplateFiles', async (req, res) => {
+    MapDAO.getMaps( "template" ).then( async returnedMaps => {
         for ( const map of returnedMaps ) {
-            fs.appendFileSync( filename, map.insertStatementLn_valuesOnly() );
+            const filename = `./src/api/test/03-map${map.map_id}.sql`;
+            fs.appendFileSync( filename, map.insertStatementLn().concat("\n") );
+            await RegionDAO.getRegionsByTemplateId( map.map_id ).then( returnedRegions => {
+                fs.appendFileSync( filename, Region.INSERT_STATEMENT_STARTER );
+                for ( const region of returnedRegions ) {
+                    fs.appendFileSync( filename, region.insertStatementLn_valuesOnly() );
+                }
+            });
         }
-        console.log( `Generated INSERT statements for ${returnedMaps.length} map rows. Created file "${filename}"` );
     });
-    // RegionDAO.getRegions().then( returnedRegions => {
-    //     const filename = `./src/api/generatedFiles/03-maps.sql`;
-    // });
     res.json({ message : "done" });
 });
 

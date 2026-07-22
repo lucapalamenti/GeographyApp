@@ -259,8 +259,8 @@ const createTemplateMap = async ( data ) => {
  * Generate file with SQL INSERT statements for existing database data 
  * @returns {}
  */
-const generateFiles = async () => {
-    return await clientHandler( HTTPClient.post, `${BASE_API_PATH}/upload/generateFiles`);
+const generateTemplateFiles = async () => {
+    return await clientHandler( HTTPClient.post, `${BASE_API_PATH}/upload/generateTemplateFiles`);
 }
 
 export default {
@@ -287,5 +287,5 @@ export default {
     uploadThumbnail,
     processMapfile,
     createTemplateMap,
-    generateFiles
+    generateTemplateFiles
 }

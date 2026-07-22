@@ -62,6 +62,22 @@ const getRegionsByMapId = async ( mapRegion_map_id ) => {
 
 /**
  * 
+ * @param {number} region_mapTemplate_id 
+ * @returns {Promise<Array<Region>>}
+ */
+const getRegionsByTemplateId = async ( region_mapTemplate_id ) => {
+    return await database.query(`
+        SELECT * FROM Region
+        WHERE region_mapTemplate_id = ?
+        `, [region_mapTemplate_id]).then( rows => {
+            return rows.map( row => {
+                return new Region( row );
+            });
+    });
+};
+
+/**
+ * 
  * @param {Region} region 
  * @returns {Promise<Region>}
  */
@@ -223,6 +239,7 @@ module.exports = {
     getRegions,
     getRegionById,
     getRegionsByMapId,
+    getRegionsByTemplateId,
     getMapRegion,
     createRegion,
     setRegionParentId_range,

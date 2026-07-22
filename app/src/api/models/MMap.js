@@ -42,7 +42,7 @@ module.exports = class MMap {
     }
 
     insertStatement() {
-        return `INSERT INTO \`map\` (\`map_id\`, \`map_name\`, \`map_thumbnail\`, \`map_primary_color_R\`, \`map_primary_color_G\`, \`map_primary_color_B\`, \`map_is_template\`, \`map_is_custom\`) VALUES (${this.map_id}, "${this.map_name}", "${this.map_thumbnail}", ${this.map_primary_color_R}, ${this.map_primary_color_G}, ${this.map_primary_color_B}, ${Number( this.map_is_template )}, ${Number( this.map_is_custom )})`;
+        return `INSERT INTO \`map\` (\`map_id\`, \`map_name\`, \`map_thumbnail\`, \`map_primary_color_R\`, \`map_primary_color_G\`, \`map_primary_color_B\`, \`map_is_template\`, \`map_is_custom\`) VALUES\n(${this.map_id}, "${this.map_name}", "${this.map_thumbnail}", ${this.map_primary_color_R}, ${this.map_primary_color_G}, ${this.map_primary_color_B}, ${Number( this.map_is_template )}, ${Number( this.map_is_custom )});`;
     }
     insertStatementLn() {
         return `${this.insertStatement()}\n`;
