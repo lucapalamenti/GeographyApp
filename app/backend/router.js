@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const frontendRouter = require('./frontend/frontendRoutes.js');
+const frontendRouter = require('./frontendRoutes.js');
 const CustomAPIRouter = require('./api/APIRoutes/CustomRoutes.js');
 const MapAPIRouter = require('./api/APIRoutes/MapRoutes.js');
 const RegionAPIRouter = require('./api/APIRoutes/RegionRoutes.js');

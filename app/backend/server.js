@@ -1,5 +1,5 @@
 const express = require('express');
-const routes = require('./routes');
+const router = require('./router');
 const path = require('path');
 const fs = require("fs");
 
@@ -7,7 +7,7 @@ const PORT = process.env.PORT || 3000;
 
 const app = express();
 app.use( express.json({ limit: '10mb' }) );
-app.use( routes );
+app.use( router );
 app.use( "/uploads", express.static( path.join( process.cwd(), "uploads" ) ) );
 
 ensureDirectory( path.join(  "uploads", "thumbnails", "custom" ) );

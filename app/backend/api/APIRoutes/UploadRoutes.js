@@ -135,7 +135,7 @@ UploadAPIRouter.post('/mapfile/create', BackendPayloadManager.chunkMiddleware, a
 UploadAPIRouter.post('/generateTemplateFiles', async (req, res) => {
     MapDAO.getMaps( "template" ).then( async returnedMaps => {
         for ( const map of returnedMaps ) {
-            const filename = `./src/api/test/03-map${map.map_id}.sql`;
+            const filename = `./backend/api/test/03-map${map.map_id}.sql`;
             fs.appendFileSync( filename, map.insertStatementLn().concat("\n") );
             await RegionDAO.getRegionsByTemplateId( map.map_id ).then( returnedRegions => {
                 fs.appendFileSync( filename, Region.INSERT_STATEMENT_STARTER );

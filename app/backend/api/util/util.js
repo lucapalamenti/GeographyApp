@@ -29,7 +29,7 @@ function copyQueryToFile( query, params, fileName ) {
         }
         build = build.join(' ');
     }
-    fs.appendFileSync(`./src/api/db/backend/test/queries/${fileName}.sql`, build.trim().concat('\n') );
+    fs.appendFileSync(`./backend/api/db/backend/test/queries/${fileName}.sql`, build.trim().concat('\n') );
 }
 
 /**

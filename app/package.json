@@ -2,10 +2,10 @@
   "name": "geographyapp",
   "version": "1.0.0",
   "description": "",
-  "main": "src/server.js",
+  "main": "backend/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon -L src/server.js"
+    "start": "nodemon -L backend/server.js"
   },
   "keywords": [],
   "author": "",
