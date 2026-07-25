@@ -8,8 +8,7 @@ services:
       - 3000:3000
     volumes:
       - ./app/backend:/app/backend
-      - ./app/static:/app/static
-      - ./app/templates:/app/templates
+      - ./app/frontend:/app/frontend
       - ./app/uploads:/app/uploads
     env_file:
       - .env
