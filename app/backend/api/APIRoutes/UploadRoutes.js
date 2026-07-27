@@ -11,7 +11,6 @@ const Kml2Geojson = require('../util/kml2geojson.js');
 
 const MMap = require('../models/MMap.js');
 const { SQLGeometry, SQLPolygon, SQLMultiPolygon } = require('../models/SQLGeometry.js');
-const FrontendMapRegion = require('../models/FrontendMapRegion.js');
 const { FeatureCollection } = require('../models/FeatureCollection.js');
 const TemplateMap = require('../models/TemplateMap.js');
 const Region = require('../models/Region.js');
@@ -117,11 +116,11 @@ UploadAPIRouter.post('/mapfile/create', BackendPayloadManager.chunkMiddleware, a
     });
 
     const creationResponses = await Promise.all( objectResponses.map( region => {
-        return RegionDAO.createMapRegion( new FrontendMapRegion({
+        return RegionDAO.createMapRegion({
             mapRegion_map_id : map.map_id,
             mapRegion_region_id : region.region_id,
             mapRegion_type : "enabled"
-        }) );
+        });
     })).catch( err => {
         res.status(400).json({ message: "Couldn't create mapRegions for map", err });
     });
@@ -135,9 +134,9 @@ UploadAPIRouter.post('/mapfile/create', BackendPayloadManager.chunkMiddleware, a
 UploadAPIRouter.post('/generateTemplateFiles', async (req, res) => {
     MapDAO.getMaps( "template" ).then( async returnedMaps => {
         for ( const map of returnedMaps ) {
-            const filename = `./backend/api/test/03-map${map.map_id}.sql`;
+            const filename = `./backend/api/test/03-map_${map.map_id}.sql`;
             fs.appendFileSync( filename, map.insertStatementLn().concat("\n") );
-            await RegionDAO.getRegionsByTemplateId( map.map_id ).then( returnedRegions => {
+            await RegionDAO.getRegionsByMapId( map.map_id ).then( returnedRegions => {
                 fs.appendFileSync( filename, Region.INSERT_STATEMENT_STARTER );
                 for ( const region of returnedRegions ) {
                     fs.appendFileSync( filename, region.insertStatementLn_valuesOnly() );

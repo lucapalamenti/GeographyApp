@@ -3,7 +3,6 @@ const MapDAO = require('./MapDAO.js');
 const util = require('../util/util.js');
 
 const BackendMapRegion = require('../models/BackendMapRegion.js');
-const FrontendMapRegion = require('../models/FrontendMapRegion.js');
 const Region = require('../models/Region.js');
 
 const FILENAME_PREFIX = "04-Map-";
@@ -56,22 +55,6 @@ const getRegionsByMapId = async ( mapRegion_map_id ) => {
         `, [mapRegion_map_id]).then( rows => {
             return rows.map( row => {
                 return new BackendMapRegion( row );
-            });
-    });
-};
-
-/**
- * 
- * @param {number} region_mapTemplate_id 
- * @returns {Promise<Array<Region>>}
- */
-const getRegionsByTemplateId = async ( region_mapTemplate_id ) => {
-    return await database.query(`
-        SELECT * FROM Region
-        WHERE region_mapTemplate_id = ?
-        `, [region_mapTemplate_id]).then( rows => {
-            return rows.map( row => {
-                return new Region( row );
             });
     });
 };
@@ -169,7 +152,7 @@ const deleteMapRegion_range = async ( startId, endId ) => {
 /**
  * Returns a MapRegion given its ID
  * @param {Number} mapRegion_id 
- * @returns {Promise<FrontendMapRegion>}
+ * @returns {Promise<MapRegionJoinData>}
  */
 const getMapRegionById = async ( mapRegion_id ) => {
     return await database.query(`
@@ -177,7 +160,7 @@ const getMapRegionById = async ( mapRegion_id ) => {
         WHERE mapRegion_id = ?;
         `, [mapRegion_id]).then( rows => {
             if ( rows.length === 1 ) {
-                return new FrontendMapRegion( rows[0] );
+                return rows[0];
             }
             throw new Error("MapRegion not found!");
         });
@@ -196,7 +179,7 @@ const getMapRegion = async ( mapRegion_map_id, mapRegion_region_id ) => {
 };
 
 /**
- * @param {FrontendMapRegion} mapRegion
+ * @param {MapRegionJoinData} mapRegion
  * @returns {Promise<BackendMapRegion>}
  */
 const createMapRegion = async ( mapRegion ) => {
@@ -239,7 +222,6 @@ module.exports = {
     getRegions,
     getRegionById,
     getRegionsByMapId,
-    getRegionsByTemplateId,
     getMapRegion,
     createRegion,
     setRegionParentId_range,

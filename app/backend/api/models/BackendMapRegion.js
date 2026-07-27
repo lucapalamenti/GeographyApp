@@ -1,40 +1,19 @@
-const { SQLGeometry } = require("./SQLGeometry.js");
-
+const MapRegion = require("./MapRegion.js");
+const Region = require("./Region.js");
+ 
 module.exports = class BackendMapRegion {
-    /** @type {number} */
-    region_id = null;
-    /** @type {string} */
-    region_name = null;
-    /** @type {string} */
-    region_type = null;
-    /** @type {number} */
-    region_parent_id = null;
-    /** @type {SQLGeometry} */
-    region_points = null;
-
-    /** @type {number} */
-    mapRegion_id = null;
-    /** @type {number} */
-    mapRegion_map_id = null;
-    /** @type {number} */
-    mapRegion_region_id = null;
-    /** @type {string} */
-    mapRegion_type = null;
-    
+    /** @type {Region} */
+    region = null;
+    /** @type {MapRegion} */
+    mapRegion = null;
+   
     /**
-     * Constructor given MapRegion object data
-     * @param {BackendMapRegion} data 
+     * Constructor given fields for Region and MapRegion objects
+     * @param {Region & MapRegion} data
      */
     constructor ( data ) {
-        this.region_id = data.region_id
-        this.region_name = data.region_name;
-        this.region_type = data.region_type;
-        this.region_parent_id = data.region_parent_id;
-        this.region_points = SQLGeometry.createAnyType( data.region_points );
-
-        this.mapRegion_id = data.mapRegion_id;
-        this.mapRegion_map_id = data.mapRegion_map_id;
-        this.mapRegion_region_id = data.mapRegion_region_id;
-        this.mapRegion_type = String( data.mapRegion_type );
+        // constructors will() will only use necessary fields
+        this.region = new Region( data );
+        this.mapRegion = new MapRegion( data );
     }
 }

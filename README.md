@@ -76,6 +76,7 @@
 - Handlebars partials to serve partial html and combine into complete html
 - scrollwheel zoom
 - zoom sensitivity
+- *** BackendMapRegion in frontend is not the same as the backend
 
 # Changelog
 
