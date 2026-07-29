@@ -18,7 +18,7 @@ module.exports = class MapRegion {
      * @param {Region & MapRegionJoinData} data 
      */
     constructor ( data ) {
-        // constructors will() will only use necessary fields
+        // constructor will() will only use necessary fields
         this.region = new Region( data );
 
         this.mapRegion_id = data.mapRegion_id;

@@ -1,9 +1,8 @@
 import HTTPClient from "./HTTPClient.js";
 
 import MMap from "./models/MMap.js";
-import MapRegion from "./models/MapRegion.js";
 import MapData from "./models/MapData.js"
-import BackendMapRegion from "./models/BackendMapRegion.js"
+import MapRegion from "./models/MapRegion.js"
 import Region from "./models/Region.js";
 import { FrontendPayloadManager, PayloadChunk, SentinelChunk } from "./models/FrontendPayloadManager.js";
 

@@ -1,8 +1,8 @@
-import BackendMapRegion from "./BackendMapRegion.js";
+import MapRegion from "./MapRegion.js";
 import Region from "./Region.js";
 
 export default class MapData {
-    /** @type {Array<BackendMapRegion>} */
+    /** @type {Array<MapRegion>} */
     mapRegions = null;
     /** @type {Array<Region>} */
     parentRegions = null;
@@ -12,7 +12,7 @@ export default class MapData {
      * @param {MapData} data 
      */
     constructor ( data ) {
-        this.mapRegions = data.mapRegions.map( e => new BackendMapRegion( e ) );
+        this.mapRegions = data.mapRegions.map( e => new MapRegion( e ) );
         this.parentRegions = data.parentRegions.map( e => new Region( e ) );
     }
 

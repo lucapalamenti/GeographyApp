@@ -2,8 +2,8 @@ const database = require('./databaseConnections.js');
 const MapDAO = require('./MapDAO.js');
 const util = require('../util/util.js');
 
-const BackendMapRegion = require('../models/BackendMapRegion.js');
 const Region = require('../models/Region.js');
+const MapRegion = require('../models/MapRegion.js');
 
 const FILENAME_PREFIX = "04-Map-";
 const COPY_TO_FILE = false;
@@ -44,7 +44,7 @@ const getRegionById = async ( region_id ) => {
 /**
  * 
  * @param {number} mapRegion_map_id 
- * @returns {Promise<Array<BackendMapRegion>>}
+ * @returns {Promise<Array<MapRegion>>}
  */
 const getRegionsByMapId = async ( mapRegion_map_id ) => {
     return await database.query(`
@@ -54,7 +54,7 @@ const getRegionsByMapId = async ( mapRegion_map_id ) => {
         ORDER BY region_name;
         `, [mapRegion_map_id]).then( rows => {
             return rows.map( row => {
-                return new BackendMapRegion( row );
+                return new MapRegion( row );
             });
     });
 };
@@ -149,30 +149,13 @@ const deleteMapRegion_range = async ( startId, endId ) => {
         });
 };
 
-/**
- * Returns a MapRegion given its ID
- * @param {Number} mapRegion_id 
- * @returns {Promise<MapRegionJoinData>}
- */
-const getMapRegionById = async ( mapRegion_id ) => {
-    return await database.query(`
-        SELECT * FROM mapRegion
-        WHERE mapRegion_id = ?;
-        `, [mapRegion_id]).then( rows => {
-            if ( rows.length === 1 ) {
-                return rows[0];
-            }
-            throw new Error("MapRegion not found!");
-        });
-}
-
 const getMapRegion = async ( mapRegion_map_id, mapRegion_region_id ) => {
     return await database.query(`
         SELECT * FROM mapRegion
         WHERE mapRegion_map_id = ? AND mapRegion_region_id = ?;
         `, [mapRegion_map_id, mapRegion_region_id]).then( rows => {
             if ( rows.length ) {
-                return new BackendMapRegion( rows[0] );
+                return new MapRegion( rows[0] );
             }
             throw new Error("MapRegion not found!");
         });
@@ -180,7 +163,7 @@ const getMapRegion = async ( mapRegion_map_id, mapRegion_region_id ) => {
 
 /**
  * @param {MapRegionJoinData} mapRegion
- * @returns {Promise<BackendMapRegion>}
+ * @returns {Promise<number>}
  */
 const createMapRegion = async ( mapRegion ) => {
     const query = `
@@ -194,7 +177,7 @@ const createMapRegion = async ( mapRegion ) => {
                     const map = await MapDAO.getMapById( mapRegion.mapRegion_map_id );
                     util.copyQueryToFile( query, params, `${FILENAME_PREFIX}${map.map_name.split(' ').join('_')}` );
                 }
-                return await getMapRegionById( rows.insertId );
+                return rows.insertId;
             }
             throw new Error("mapRegion could not be created!");
         });

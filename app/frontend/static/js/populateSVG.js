@@ -26,13 +26,13 @@ export default async function populateSVG( map, svg ) {
     let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
     for ( const mapRegion of mapData.mapRegions ) {
         if ( FOCUS_STATES.includes( mapRegion.mapRegion_type ) ) {
-            const thisMinX = mapRegion.region_points.minXValue();
+            const thisMinX = mapRegion.region.region_points.minXValue();
             if ( thisMinX < minX ) minX = thisMinX;
-            const thisMaxX = mapRegion.region_points.maxXValue();
+            const thisMaxX = mapRegion.region.region_points.maxXValue();
             if ( thisMaxX > maxX ) maxX = thisMaxX;
-            const thisMinY = mapRegion.region_points.minYValue();
+            const thisMinY = mapRegion.region.region_points.minYValue();
             if ( thisMinY < minY ) minY = thisMinY;
-            const thisMaxY = mapRegion.region_points.maxYValue();
+            const thisMaxY = mapRegion.region.region_points.maxYValue();
             if ( thisMaxY > maxY ) maxY = thisMaxY;
         }
     }
@@ -68,8 +68,8 @@ export default async function populateSVG( map, svg ) {
 
     const regionMap = new ParentChildMap( mapData.parentRegions[0].region_type );
     for ( const mapRegion of mapData.mapRegions ) {
-        const parentId = util.inputToId( mapData.getParentRegion( mapRegion.region_parent_id ).region_name );
-        const regionId = util.inputToId( mapRegion.region_name );
+        const parentId = util.inputToId( mapData.getParentRegion( mapRegion.region.region_parent_id ).region_name );
+        const regionId = util.inputToId( mapRegion.region.region_name );
         // If there doesn't exist a group for the region's parent, create it
         let parentGroup = svg.querySelector(`:scope > #${parentId}`);
         if ( !parentGroup ) {
@@ -88,9 +88,9 @@ export default async function populateSVG( map, svg ) {
         let childPath = createPathElement( regionId );
         typeGroup.appendChild( childPath );
         if ( mapRegion.mapRegion_type === "enabled" ) {
-            regionMap.addChild( parentId, regionId, mapRegion.region_id );
+            regionMap.addChild( parentId, regionId, mapRegion.region.region_id );
         }
-        childPath.setAttribute('d', mapRegion.region_points.toPathDString());
+        childPath.setAttribute('d', mapRegion.region.region_points.toPathDString());
     };
     return regionMap;
 }
