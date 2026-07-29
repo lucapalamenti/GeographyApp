@@ -21,6 +21,6 @@ export default class Region {
         this.region_name = data.region_name;
         this.region_type = data.region_type;
         this.region_parent_id = data.region_parent_id;
-        this.region_points = data.region_points;
+        this.region_points = SQLGeometry.createAnyType( data.region_points );
     }
 };
