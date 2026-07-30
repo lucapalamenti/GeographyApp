@@ -7,6 +7,7 @@ export const createButton = document.getElementById('create-button');
 
 export const showOutline = document.getElementById('show-outline');
 export const stateButtonsPanel = document.getElementById('state-buttons-panel');
+export const stepButtonsPanel = document.getElementById('step-buttons-panel');
 
 export const mapContainer = document.getElementById('map-container');
 export const svg = document.getElementById('templateMap');

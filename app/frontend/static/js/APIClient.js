@@ -147,8 +147,13 @@ const setRegionParentId_range = async ( startId, endId, region_parent_id ) => {
     return await clientHandler( HTTPClient.put, `${BASE_API_PATH}/regions/setParent/${startId}/${endId}/${region_parent_id}` );
 }
 
-const createMapRegion = async ( mapRegionData ) => {
-    return await clientHandler( HTTPClient.post, `${BASE_API_PATH}/mapRegion`, mapRegionData );
+/**
+ * 
+ * @param {MapRegionJoinData} mapRegionJoinData 
+ * @returns 
+ */
+const createMapRegion = async ( mapRegionJoinData ) => {
+    return await clientHandler( HTTPClient.post, `${BASE_API_PATH}/mapRegion`, mapRegionJoinData );
 };
 
 /**

@@ -76,6 +76,7 @@
 - Handlebars partials to serve partial html and combine into complete html
 - scrollwheel zoom
 - zoom sensitivity
+- When creating a map, "deselecting" a region causes an error when attempting to create the map
 
 # Changelog
 

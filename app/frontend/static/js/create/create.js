@@ -8,7 +8,7 @@ import MapRegion from "../models/MapRegion.js";
 import MMap from "../models/MMap.js";
 
 import { navBar } from "../documentElements.js";
-import { mapName, mapTemplate, mapColor, mapThumbnail, showOutline, stateButtonsPanel, mapContainer, svg, mapOutline, loadingScreen, selectedList, createForm } from "./documentElements-create.js";
+import { mapName, mapTemplate, mapColor, mapThumbnail, showOutline, stateButtonsPanel, stepButtonsPanel, mapContainer, svg, mapOutline, loadingScreen, selectedList, createForm } from "./documentElements-create.js";
 import { SVG_WIDTH, SVG_HEIGHT, SVG_PADDING } from "../variables.js";
 import ParentChildMap from "../models/ParentChildMap.js";
 
@@ -55,6 +55,7 @@ mapTemplate.addEventListener('change', async e => {
     mapOutline.style.display = "none";
     selectedList.style.display = "none";
     stateButtonsPanel.style.display = "none";
+    stepButtonsPanel.style.display = "none";
     if ( mapTemplate.value >= 0 ) {
         // Get the chosen map and display it
         map = new MMap( await APIClient.getMapById( mapTemplate.value ) );
@@ -68,6 +69,7 @@ mapTemplate.addEventListener('change', async e => {
             });
         }
         stateButtonsPanel.style.display = "flex";
+        stepButtonsPanel.style.display = "grid";
         mapContainer.hidden = false;
     } else {
         mapContainer.hidden = true;
@@ -218,11 +220,12 @@ async function createCustomMap( e ) {
         for ( const pathElement of svg.querySelectorAll(`PATH.${typeName}`) ) {
             const parentId = pathElement.parentElement.parentElement.id;
             // Create the mapRegion
-            const mapRegion = new MapRegion({
+            /** @type {MapRegionJoinData} */
+            const mapRegion = {
                 mapRegion_map_id : mapData.map_id,
                 mapRegion_region_id : regionMap.getChild( parentId, pathElement.id ),
                 mapRegion_type : typeName
-            });
+            };
             await APIClient.createMapRegion( mapRegion ).then( returnedMapRegion => {}).catch( async err => {
                 // await APIClient.deleteMap( mapData.map_id ).then( res => {
                 //     console.log( "Map creation aborted, deleted all data." );

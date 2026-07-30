@@ -49,6 +49,23 @@
                 <button type="button" id="disabled-btn" class="btn-icon"><aside>Disable</aside></button>
                 <button type="button" id="outside-btn" class="btn-icon"><aside>Outside</aside></button>
             </aside>
+
+            <aside id="step-buttons-panel" class="form-1 flex-col gap-5">
+                <div id="large-step-panel" class="directional-panel">
+                    <button type="button" id="large-step-north" class="btn-turquoise hover-fade north"></button>
+                    <button type="button" id="large-step-east"  class="btn-turquoise hover-fade east"></button>
+                    <button type="button" id="large-step-south" class="btn-turquoise hover-fade south"></button>
+                    <button type="button" id="large-step-west"  class="btn-turquoise hover-fade west"></button>
+                </div>
+                <div id="small-step-panel" class="directional-panel">
+                    <button type="button" id="small-step-north" class="btn-turquoise hover-fade north"></button>
+                    <button type="button" id="small-step-east"  class="btn-turquoise hover-fade east"></button>
+                    <button type="button" id="small-step-south" class="btn-turquoise hover-fade south"></button>
+                    <button type="button" id="small-step-west"  class="btn-turquoise hover-fade west"></button>
+                </div>
+                <button type="button" id="shrink-btn" class="btn-grey hover-fade">Shrink</button>
+                <button type="button" id="grow-btn" class="btn-grey hover-fade">Grow</button>
+            </aside>
         </form>
 
         <div hidden id="map-container" class="">
