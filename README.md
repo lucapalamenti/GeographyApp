@@ -77,6 +77,7 @@
 - scrollwheel zoom
 - zoom sensitivity
 - When creating a map, "deselecting" a region causes an error when attempting to create the map
+- instead of svg templates use createElementNS and const SVG_NS = "http://www.w3.org/2000/svg";
 
 # Changelog
 
