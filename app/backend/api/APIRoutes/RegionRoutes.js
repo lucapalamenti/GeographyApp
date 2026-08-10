@@ -29,8 +29,8 @@ RegionAPIRouter.get('/regions/:regionId', (req, res) => {
 RegionAPIRouter.get('/regions/map/:mapId', (req, res) => {
     RegionDAO.getRegionsByMapId( req.params.mapId ).then( async mapRegions => {
         const parentIds = new Set( mapRegions.map( mapRegion => mapRegion.region.region_parent_id ) );
-        const parentRegions = await Promise.all( [...parentIds].map( id => {
-            return RegionDAO.getRegionById( id );
+        const parentRegions = await Promise.all( [...parentIds].map( async id => {
+            return await RegionDAO.getRegionById( id );
         }));
         res.json({
             mapRegions : mapRegions,
@@ -39,6 +39,14 @@ RegionAPIRouter.get('/regions/map/:mapId', (req, res) => {
     })
     .catch( err => {
         res.status(500).json({error:err, message: 'Error with GET request to /regions/map/:mapId'});
+    });
+});
+
+RegionAPIRouter.get('/regions/parents/:mapId', (req, res) => {
+    RegionDAO.getParentRegionsByMapId( Number( req.params.mapId ) ).then( parents => {
+        res.json( parents );
+    }).catch( err => {
+        res.status(500).json({error:err, message: 'Error with GET request to /regions/parents/:mapId'});
     });
 });
 

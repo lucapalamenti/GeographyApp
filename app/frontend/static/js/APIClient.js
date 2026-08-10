@@ -124,11 +124,20 @@ const getMapRegion = async ( mapRegion_map_id, mapRegion_region_id ) => {
 };
 
 /**
- * @param {Number} map_id 
+ * @param {number} map_id 
  * @returns {MapData}
  */
 const getRegionsByMapId = async ( map_id ) => {
     return new MapData( await clientHandler( HTTPClient.get, `${BASE_API_PATH}/regions/map/${map_id}` ) );
+};
+
+/**
+ * Returns an array of all the parent region names for 
+ * @param {number} map_id 
+ * @returns {Array<MapRegion>}
+ */
+const getParentRegionsByMapId = async ( map_id ) => {
+    return await clientHandler( HTTPClient.get, `${BASE_API_PATH}/regions/parents/${map_id}` );
 };
 
 const createRegion = async ( regionData ) => {
@@ -274,6 +283,7 @@ export default {
     getRegions,
     getRegionById,
     getRegionsByMapId,
+    getParentRegionsByMapId,
     getMapRegion,
     createRegion,
     setRegionParentId_range,

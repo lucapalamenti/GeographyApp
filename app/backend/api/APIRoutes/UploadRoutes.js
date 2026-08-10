@@ -124,10 +124,10 @@ UploadAPIRouter.post('/mapfile/create', BackendPayloadManager.chunkMiddleware, a
     })).catch( err => {
         res.status(400).json({ message: "Couldn't create mapRegions for map", err });
     });
-
+    console.log( creationResponses );
     res.status(200).json({
         responses : objectResponses,
-        mapRegions : creationResponses
+        // mapRegions : creationResponses
     });
 });
 

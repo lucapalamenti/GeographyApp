@@ -61,6 +61,30 @@ const getRegionsByMapId = async ( mapRegion_map_id ) => {
 
 /**
  * 
+ * @param {number} map_id 
+ * @returns {Promise<Array<string>>}
+ */
+const getParentRegionsByMapId = async ( map_id ) => {
+    const query = `
+        SELECT DISTINCT
+            parent.region_id,
+            parent.region_name
+        FROM mapRegion
+            JOIN region AS child
+                ON mapRegion.mapRegion_region_id = child.region_id
+            JOIN region AS parent
+                ON parent.region_id = child.region_parent_id
+            WHERE mapRegion.mapRegion_map_id = ?;
+        `;
+    const params = [map_id];
+    return await database.query( query, params ).then( rows => {
+        console.log( rows );
+        return rows;
+    });
+}
+
+/**
+ * 
  * @param {Region} region 
  * @returns {Promise<Region>}
  */
@@ -205,6 +229,7 @@ module.exports = {
     getRegions,
     getRegionById,
     getRegionsByMapId,
+    getParentRegionsByMapId,
     getMapRegion,
     createRegion,
     setRegionParentId_range,
