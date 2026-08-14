@@ -68,12 +68,15 @@ const getParentRegionsByMapId = async ( map_id ) => {
     const query = `
         SELECT DISTINCT
             parent.region_id,
-            parent.region_name
-        FROM mapRegion
-            JOIN region AS child
-                ON mapRegion.mapRegion_region_id = child.region_id
-            JOIN region AS parent
-                ON parent.region_id = child.region_parent_id
+            parent.region_name,
+            parent.region_type,
+            parent.region_parent_id,
+            parent.region_points
+            FROM region AS child
+                JOIN mapRegion
+                    ON child.region_id = mapRegion.mapRegion_region_id
+                JOIN region AS parent
+                    ON parent.region_id = child.region_parent_id
             WHERE mapRegion.mapRegion_map_id = ?;
         `;
     const params = [map_id];
