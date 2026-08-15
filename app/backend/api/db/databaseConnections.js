@@ -5,7 +5,7 @@ const mariadb = require('mariadb');
  */
 let pool;
 
-const getDatabaseConnection = () => {
+const getDatabasePool = () => {
     if ( !pool ) {
         pool = mariadb.createPool({
             host: process.env.DB_HOST,
@@ -26,8 +26,8 @@ const getDatabaseConnection = () => {
  * @returns 
  */
 const query = (query, params = []) => {
-    const pool = getDatabaseConnection();
-    return pool.query(query, params).catch(err => {
+    const pool = getDatabasePool();
+    return pool.query( query, params ).catch(err => {
         console.log( err );
         throw err; 
     });
@@ -41,7 +41,7 @@ const close = () => {
 };
 
 module.exports = {
-    getDatabaseConnection,
+    getDatabasePool,
     query,
     close
 };
