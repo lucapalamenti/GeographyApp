@@ -30,9 +30,12 @@ RegionAPIRouter.get('/regions/:regionId', (req, res) => {
 RegionAPIRouter.get('/regions/map/:mapId', (req, res) => {
     RegionDAO.getRegionsByMapId( req.params.mapId ).then( async mapRegions => {
         const parentIds = new Set( mapRegions.map( mapRegion => mapRegion.region.region_parent_id ) );
-        const parentRegions = await Promise.all( [...parentIds].map( async id => {
+        parentIds.delete( null );
+        let parentRegions = null;
+        parentRegions = await Promise.all( [...parentIds].map( async id => {
             return await RegionDAO.getRegionById( id );
         }));
+        
         res.json({
             mapRegions : mapRegions,
             parentRegions : parentRegions

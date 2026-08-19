@@ -86,21 +86,6 @@ UploadAPIRouter.post('/mapfile/create', BackendPayloadManager.chunkMiddleware, a
         return;
     }
 
-
-    // Confirm that all Region and Polygon objects were successfully created
-    const objectResponses = await Promise.all( featureCollection.features.map( feature => {
-        // Create a Region from each feature
-        return RegionDAO.createRegion({
-            region_name : feature.properties[fieldData.region_name_key],
-            region_type : fieldData.region_type,
-            region_parent_id : null,
-            region_points : SQLGeometry.createAnyType( feature["geometry"] )
-        });
-    })).catch( err => {
-        res.status(400).json({ message: "Couldn't create Regions from file", err });
-    });
-    if ( !objectResponses ) return;
-    
     // Create a map for the new data to be seen in
     const map = await MapDAO.createMap( new MMap({
         map_id : null,
@@ -115,6 +100,21 @@ UploadAPIRouter.post('/mapfile/create', BackendPayloadManager.chunkMiddleware, a
         res.status(400).json({ message: "Couldn't create map", err });
     });
 
+    // Confirm that all Region and Polygon objects were successfully created
+    const objectResponses = await Promise.all( featureCollection.features.map( feature => {
+        // Create a Region from each feature
+        return RegionDAO.createRegion({
+            region_name : feature.properties[fieldData.region_name_key],
+            region_type : fieldData.region_type,
+            region_parent_id : null,
+            region_template_id : map.map_id,
+            region_points : SQLGeometry.createAnyType( feature["geometry"] )
+        });
+    })).catch( err => {
+        res.status(400).json({ message: "Couldn't create Regions from file", err });
+    });
+    if ( !objectResponses ) return;
+    
     const creationResponses = await Promise.all( objectResponses.map( region => {
         return RegionDAO.createMapRegion({
             mapRegion_map_id : map.map_id,
@@ -124,7 +124,7 @@ UploadAPIRouter.post('/mapfile/create', BackendPayloadManager.chunkMiddleware, a
     })).catch( err => {
         res.status(400).json({ message: "Couldn't create mapRegions for map", err });
     });
-    console.log( creationResponses );
+    
     res.status(200).json({
         responses : objectResponses,
         // mapRegions : creationResponses

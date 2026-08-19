@@ -55,10 +55,13 @@ CREATE TABLE IF NOT EXISTS `region` (
   `region_name` varchar(128) NOT NULL DEFAULT '',
   `region_type` varchar(128) DEFAULT NULL,
   `region_parent_id` int(10) DEFAULT 1,
+  `region_template_id` int(10) DEFAULT 1,
   `region_points` geometry NOT NULL,
   PRIMARY KEY (`region_id`) USING BTREE,
   KEY `FK_region_region` (`region_parent_id`),
-  CONSTRAINT `FK_region_region` FOREIGN KEY (`region_parent_id`) REFERENCES `region` (`region_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `FK_region_map` (`region_template_id`),
+  CONSTRAINT `FK_region_region` FOREIGN KEY (`region_parent_id`) REFERENCES `region` (`region_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_region_map` FOREIGN KEY (`region_template_id`) REFERENCES `map` (`map_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 -- Data exporting was unselected.

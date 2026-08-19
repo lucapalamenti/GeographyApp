@@ -71,6 +71,7 @@ const getParentRegionsByMapId = async ( map_id ) => {
             parent.region_name,
             parent.region_type,
             parent.region_parent_id,
+            parent.region_template_id,
             parent.region_points
             FROM region AS child
                 JOIN mapRegion
@@ -94,12 +95,12 @@ const getParentRegionsByMapId = async ( map_id ) => {
  * @returns {Promise<Region>}
  */
 const createRegion = async ( region ) => {
-    const { region_name, region_type, region_parent_id, region_points } = region;
+    const { region_name, region_type, region_parent_id, region_template_id, region_points } = region;
     const query = `
-        INSERT INTO region (region_name, region_type, region_parent_id, region_points)
-        VALUES (?, ?, ?, ST_GEOMFROMTEXT(?));
+        INSERT INTO region (region_name, region_type, region_parent_id, region_template_id, region_points)
+        VALUES (?, ?, ?, ?, ST_GEOMFROMTEXT(?));
         `;
-    const params = [region_name, region_type, region_parent_id, region_points.toQueryString()];
+    const params = [region_name, region_type, region_parent_id, region_template_id, region_points.toQueryString()];
     return await database.query( query, params ).then( rows => {
         if ( rows.affectedRows === 1 ) {
             return getRegionById( rows.insertId );
