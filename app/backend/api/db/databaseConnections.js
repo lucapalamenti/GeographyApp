@@ -19,6 +19,33 @@ const getDatabasePool = () => {
     return pool;
 };
 
+const getConnection = () => {
+    return getDatabasePool().getConnection();
+};
+
+/**
+ * 
+ * @param {(...params) => Promise<>} method 
+ * @param {...Array<*>} paramArrays
+ */
+const transaction = async ( method, ...paramArrays ) => {
+    const connection = await getConnection();
+
+    try {
+        await connection.beginTransaction();
+        for ( let i = 0; i < params[0].length; i++ ) {
+            const params = paramArrays.map( arr => arr[i] );
+            await method( connection, ...params );
+        }
+        await connection.commit();
+    } catch ( err ) {
+        await connection.rollback();
+        throw err;
+    }
+
+    connection.release();
+};
+
 /**
  * Querys the database
  * @param {String} query An SQL query
