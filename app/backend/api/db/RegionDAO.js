@@ -86,6 +86,8 @@ const getParentRegionsByMapId = async ( map_id ) => {
     });
 }
 
+// ----- <<<<< INSERT STATEMENTS >>>>> -----
+
 /**
  * 
  * @param {Region} region 
@@ -204,7 +206,7 @@ const createMapRegion = async ( mapRegion ) => {
                     const map = await MapDAO.getMapById( mapRegion.mapRegion_map_id );
                     util.copyQueryToFile( query, params, `${FILENAME_PREFIX}${map.map_name.split(' ').join('_')}` );
                 }
-                return rows.insertId;
+                return Number( rows.insertId );
             }
             throw new Error("mapRegion could not be created!");
         });

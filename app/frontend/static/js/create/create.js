@@ -171,7 +171,7 @@ createForm.addEventListener('submit', async e => {
     if ( mapName.value && mapTemplate.value && svg.querySelectorAll('PATH.enabled').length > 1 ) {
         loadingScreen.style.display = "flex";
         await createCustomMap( e ).then( map => {
-            document.location = "../";
+            // document.location = "../";
         }).catch( err => {
             console.error( err );
         });
@@ -188,9 +188,6 @@ async function createCustomMap( e ) {
         await APIClient.uploadThumbnail( e.target ).then( async res => {
             res = await res.json();
             thumbnail = res.filename;
-        }).catch( err => {
-            console.error( err );
-            return;
         });
     }
     
