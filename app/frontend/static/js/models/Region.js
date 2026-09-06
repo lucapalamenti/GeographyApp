@@ -9,6 +9,8 @@ export default class Region {
     region_type = null;
     /** @type {Number} */
     region_parent_id = null;
+    /** @type {Number} */
+    region_template_id = null;
     /** @type {SQLGeometry} */
     region_points = null;
 
@@ -21,6 +23,7 @@ export default class Region {
         this.region_name = data.region_name;
         this.region_type = data.region_type;
         this.region_parent_id = data.region_parent_id;
+        this.region_template_id = data.region_template_id;
         this.region_points = SQLGeometry.createAnyType( data.region_points );
     }
 };

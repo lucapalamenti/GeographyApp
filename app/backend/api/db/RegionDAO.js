@@ -68,12 +68,16 @@ const getParentRegionsByMapId = async ( map_id ) => {
     const query = `
         SELECT DISTINCT
             parent.region_id,
-            parent.region_name
-        FROM mapRegion
-            JOIN region AS child
-                ON mapRegion.mapRegion_region_id = child.region_id
-            JOIN region AS parent
-                ON parent.region_id = child.region_parent_id
+            parent.region_name,
+            parent.region_type,
+            parent.region_parent_id,
+            parent.region_template_id,
+            parent.region_points
+            FROM region AS child
+                JOIN mapRegion
+                    ON child.region_id = mapRegion.mapRegion_region_id
+                JOIN region AS parent
+                    ON parent.region_id = child.region_parent_id
             WHERE mapRegion.mapRegion_map_id = ?;
         `;
     const params = [map_id];
@@ -83,18 +87,20 @@ const getParentRegionsByMapId = async ( map_id ) => {
     });
 }
 
+// ----- <<<<< INSERT STATEMENTS >>>>> -----
+
 /**
  * 
  * @param {Region} region 
  * @returns {Promise<Region>}
  */
 const createRegion = async ( region ) => {
-    const { region_name, region_type, region_parent_id, region_points } = region;
+    const { region_name, region_type, region_parent_id, region_template_id, region_points } = region;
     const query = `
-        INSERT INTO region (region_name, region_type, region_parent_id, region_points)
-        VALUES (?, ?, ?, ST_GEOMFROMTEXT(?));
+        INSERT INTO region (region_name, region_type, region_parent_id, region_template_id, region_points)
+        VALUES (?, ?, ?, ?, ST_GEOMFROMTEXT(?));
         `;
-    const params = [region_name, region_type, region_parent_id, region_points.toQueryString()];
+    const params = [region_name, region_type, region_parent_id, region_template_id, region_points.toQueryString()];
     return await database.query( query, params ).then( rows => {
         if ( rows.affectedRows === 1 ) {
             return getRegionById( rows.insertId );
@@ -201,7 +207,7 @@ const createMapRegion = async ( mapRegion ) => {
                     const map = await MapDAO.getMapById( mapRegion.mapRegion_map_id );
                     util.copyQueryToFile( query, params, `${FILENAME_PREFIX}${map.map_name.split(' ').join('_')}` );
                 }
-                return rows.insertId;
+                return Number( rows.insertId );
             }
             throw new Error("mapRegion could not be created!");
         });

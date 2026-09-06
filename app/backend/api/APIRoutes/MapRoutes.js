@@ -65,6 +65,11 @@ MapAPIRouter.delete('/maps/:mapId', async (req, res) => {
         return res.status(404).json( err );
     });
 
+    // If the map is a template then we also need to delete all maps that reference regions from this template
+    if ( returnedMap.map_is_template ) {
+
+    }
+
     await MapDAO.deleteMap( mapId ).catch( err => {
         return res.status(500).json({error:err, message: 'Error with DELETE request to /maps/:mapId'});
     });

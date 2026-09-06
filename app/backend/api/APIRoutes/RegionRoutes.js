@@ -4,6 +4,7 @@ const RegionDAO = require('../db/RegionDAO.js');
 const BackendPayloadManager = require('../../middleware/BackendPayloadManager.js');
 
 const Region = require('../models/Region.js');
+const MapRegion = require('../models/MapRegion.js');
 
 const RegionAPIRouter = express.Router();
 RegionAPIRouter.use( express.json() );
@@ -29,9 +30,12 @@ RegionAPIRouter.get('/regions/:regionId', (req, res) => {
 RegionAPIRouter.get('/regions/map/:mapId', (req, res) => {
     RegionDAO.getRegionsByMapId( req.params.mapId ).then( async mapRegions => {
         const parentIds = new Set( mapRegions.map( mapRegion => mapRegion.region.region_parent_id ) );
-        const parentRegions = await Promise.all( [...parentIds].map( async id => {
+        parentIds.delete( null );
+        let parentRegions = null;
+        parentRegions = await Promise.all( [...parentIds].map( async id => {
             return await RegionDAO.getRegionById( id );
         }));
+        
         res.json({
             mapRegions : mapRegions,
             parentRegions : parentRegions
@@ -79,8 +83,13 @@ RegionAPIRouter.post('/regions', BackendPayloadManager.chunkMiddleware, (req, re
 });
 
 RegionAPIRouter.post('/mapRegion', BackendPayloadManager.chunkMiddleware, (req, res) => {
-    const mapRegion = new Region( req.body );
-    RegionDAO.createMapRegion( mapRegion ).then( mapRegion => {
+    console.log( req.body );
+    /**
+     * @type {MapRegionJoinData}
+     */
+    const mapRegionData = req.body;
+
+    RegionDAO.createMapRegion( mapRegionData ).then( mapRegion => {
         res.json( mapRegion );
     })
     .catch( err => {
@@ -103,7 +112,7 @@ RegionAPIRouter.delete('/regions/start/:start/end/:end', (req, res) => {
     const startId = Number( req.params.start );
     const endId = Number( req.params.end );
     RegionDAO.deleteRegion_range( startId, endId ).then( affectedRows => {
-        res.json({ affectedRows : affectedRows.affectedRows });
+        res.json({ affectedRows : affectedRows });
     })
     .catch( err => {
         res.status(500).json({error:err, message: 'Error with DELETE request to /regions/map/:mapId'});

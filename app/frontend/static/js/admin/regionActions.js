@@ -22,7 +22,7 @@ setParentButton.addEventListener("click", async e => {
     const start = regionIdStart.value;
     const end = regionIdEnd.value;
     const region_parent_id = parentRegionId.value;
-    await APIClient.setRegionParentId_range( start, end, region_parent_id );
+    await action( APIClient.setRegionParentId_range );
 });
 
 // Submits the Set Region Parent form
@@ -30,9 +30,13 @@ deleteRegionButton.addEventListener("click", async e => {
     e.preventDefault();
     const start = regionIdStart.value;
     const end = regionIdEnd.value ? regionIdEnd.value : undefined;
-    await APIClient.deleteRegion_range( start, end );
+    await action( APIClient.deleteRegion_range );
 });
 
-function action() {
-    
+/**
+ * 
+ * @param {(number) => Promise<>} method 
+ */
+async function action( method ) {
+    return await method( regionIdStart.value, regionIdEnd.value, parentRegionId.value );
 }

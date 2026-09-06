@@ -1,3 +1,5 @@
+const ROUND_DIGITS = 6;
+
 /**
  * Abstract class for SQL Geometry data types.
  * Subclasses include:
@@ -154,6 +156,16 @@ export class SQLGeometry {
                 throw new TypeError( `Invalid SQLGeometry type - "${sqlGeometry.type}"` );
         }
     }
+
+    /**
+     * 
+     * @param {number} x 
+     * @param {number} y 
+     * @returns {string}
+     */
+    static XY_rounded( x, y ) {
+        return `${x.toFixed( ROUND_DIGITS )} ${-1 * y.toFixed( ROUND_DIGITS )}`;
+    }
 }
 
 /**
@@ -215,7 +227,7 @@ export class SQLPoint extends SQLGeometry {
     }
 
     toPathDString() {
-        return `M${this.coordinates[0]} ${-1 * this.coordinates[1]} Z`;
+        return `M${SQLGeometry.XY_rounded( this.coordinates[0], this.coordinates[1] )} Z`;
     }
 
     /**
@@ -291,7 +303,7 @@ export class SQLMultiPoint extends SQLGeometry {
     toPathDString() {
         return `M${
             this.coordinates.map( point => {
-                return `${point[0]} ${-1 * point[1]}`;
+                return SQLGeometry.XY_rounded( point[0], point[1] );
             }).join(" Z M")
         } Z`;
     }
@@ -353,7 +365,7 @@ export class SQLLineString extends SQLGeometry {
     toPathDString() {
         return `M${
             this.coordinates.map( point => {
-                return `${point[0]} ${-1 * point[1]}`;
+                return SQLGeometry.XY_rounded( point[0], point[1] );
             }).join(" L")
         }`;
     }
@@ -440,7 +452,7 @@ export class SQLMultiLineString extends SQLGeometry {
         return `M${
             this.coordinates.map( lineString => {
                 return lineString.map( point => {
-                    return `${point[0]} ${-1 * point[1]}`;
+                    return SQLGeometry.XY_rounded( point[0], point[1] );
                 }).join(" L");
             }).join(" M")
         }`;
@@ -512,7 +524,7 @@ export class SQLPolygon extends SQLGeometry {
         return `M${
             this.coordinates.map( lineString => {
                 return lineString.map( point => {
-                    return `${point[0]} ${-1 * point[1]}`;
+                    return SQLGeometry.XY_rounded( point[0], point[1] );
                 }).join(" L");
             }).join(" M")
         } Z`;
@@ -609,7 +621,7 @@ export class SQLMultiPolygon extends SQLGeometry {
             this.coordinates.map( polygon => {
                 return polygon.map( lineString => {
                     return lineString.map( point => {
-                        return `${point[0]} ${-1 * point[1]}`;
+                        return SQLGeometry.XY_rounded( point[0], point[1] );
                     }).join(" L");
                 }).join(" M");
             }).join(" Z M")
