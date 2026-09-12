@@ -79,6 +79,7 @@
 - When creating a map, "deselecting" a region causes an error when attempting to create the map
 - instead of svg templates use createElementNS and const SVG_NS = "http://www.w3.org/2000/svg";
 - e.target.closest( "SVG" ); this selected the nearest ancester with the given selector
+- Use CSS transform tag to move regions like Alaska rather than changing it's coordinates
 
 # Changelog
 
