@@ -1,27 +1,26 @@
-const express = require('express');
-const multer = require('multer');
-const Path = require("path");
-const { JSDOM } = require('jsdom');
-const fs = require('fs');
+import { Router, json } from 'express';
+import multer, { diskStorage, memoryStorage } from 'multer';
+import { join } from "path";
+import { JSDOM } from 'jsdom';
+import { appendFileSync } from 'fs';
 
-const MapDAO = require('../db/MapDAO.js');
-const RegionDAO = require('../db/RegionDAO.js');
-const BackendPayloadManager = require('../../middleware/BackendPayloadManager.js');
-const Kml2Geojson = require('../util/kml2geojson.js');
+import { createMap, getMaps } from '../db/MapDAO.js';
+import { createRegion, createMapRegion, getRegionsByMapId } from '../db/RegionDAO.js';
+import BackendPayloadManager from '../../middleware/BackendPayloadManager.js';
+import Kml2Geojson from '../util/kml2geojson.js';
 
-const MMap = require('../models/MMap.js');
-const { SQLGeometry, SQLPolygon, SQLMultiPolygon } = require('../models/SQLGeometry.js');
-const { FeatureCollection } = require('../models/FeatureCollection.js');
-const TemplateMap = require('../models/TemplateMap.js');
-const Region = require('../models/Region.js');
+import MMap from '../models/MMap.js';
+import Region from '../models/Region.js';
+import { SQLGeometry } from '../models/SQLGeometry.js';
+import TemplateMap from '../models/TemplateMap.js';
 
-const UploadAPIRouter = express.Router();
-UploadAPIRouter.use( express.json() );
+const UploadAPIRouter = Router();
+UploadAPIRouter.use( json() );
 
-const thumbnailStorage = multer.diskStorage({
+const thumbnailStorage = diskStorage({
     // directory to store in
     destination: ( req, file, callback ) => {
-        callback( null, Path.join(process.cwd(), "uploads", "thumbnails", "custom") );
+        callback( null, join(process.cwd(), "uploads", "thumbnails", "custom") );
     },
     // name of file
     filename: ( req, file, callback ) => {
@@ -43,7 +42,7 @@ UploadAPIRouter.post('/thumbnail', thumbnailUpload.single('thumbnail'), (req, re
 
 // ----- <<<<< MAPFILE >>>>> -----
 
-const mapfileUpload = multer({ storage: multer.memoryStorage() });
+const mapfileUpload = multer({ storage: memoryStorage() });
 UploadAPIRouter.post('/mapfile/process', mapfileUpload.single('mapfile'), async (req, res) => {
     // Check that a file was uploaded
     if ( !req.file ) {
@@ -87,7 +86,7 @@ UploadAPIRouter.post('/mapfile/create', BackendPayloadManager.chunkMiddleware, a
     }
 
     // Create a map for the new data to be seen in
-    const map = await MapDAO.createMap( new MMap({
+    const map = await createMap( new MMap({
         map_id : null,
         map_name : fieldData.map_name,
         map_thumbnail : "default/Template_Map_Thumbnail.png",
@@ -103,7 +102,7 @@ UploadAPIRouter.post('/mapfile/create', BackendPayloadManager.chunkMiddleware, a
     // Confirm that all Region and Polygon objects were successfully created
     const objectResponses = await Promise.all( featureCollection.features.map( feature => {
         // Create a Region from each feature
-        return RegionDAO.createRegion({
+        return createRegion({
             region_name : feature.properties[fieldData.region_name_key],
             region_type : fieldData.region_type,
             region_parent_id : null,
@@ -116,7 +115,7 @@ UploadAPIRouter.post('/mapfile/create', BackendPayloadManager.chunkMiddleware, a
     if ( !objectResponses ) return;
     
     const creationResponses = await Promise.all( objectResponses.map( region => {
-        return RegionDAO.createMapRegion({
+        return createMapRegion({
             mapRegion_map_id : map.map_id,
             mapRegion_region_id : region.region_id,
             mapRegion_type : "enabled"
@@ -132,14 +131,14 @@ UploadAPIRouter.post('/mapfile/create', BackendPayloadManager.chunkMiddleware, a
 });
 
 UploadAPIRouter.post('/generateTemplateFiles', async (req, res) => {
-    MapDAO.getMaps( "template" ).then( async returnedMaps => {
+    getMaps( "template" ).then( async returnedMaps => {
         for ( const map of returnedMaps ) {
             const filename = `./backend/api/test/03-map_${map.map_id}.sql`;
-            fs.appendFileSync( filename, map.insertStatementLn().concat("\n") );
-            await RegionDAO.getRegionsByMapId( map.map_id ).then( returnedRegions => {
-                fs.appendFileSync( filename, Region.INSERT_STATEMENT_STARTER );
+            appendFileSync( filename, map.insertStatementLn().concat("\n") );
+            await getRegionsByMapId( map.map_id ).then( returnedRegions => {
+                appendFileSync( filename, Region.INSERT_STATEMENT_STARTER );
                 for ( const region of returnedRegions ) {
-                    fs.appendFileSync( filename, region.insertStatementLn_valuesOnly() );
+                    appendFileSync( filename, region.insertStatementLn_valuesOnly() );
                 }
             });
         }
@@ -147,4 +146,4 @@ UploadAPIRouter.post('/generateTemplateFiles', async (req, res) => {
     res.json({ message : "done" });
 });
 
-module.exports = UploadAPIRouter;
+export default UploadAPIRouter;

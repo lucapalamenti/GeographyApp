@@ -1,6 +1,6 @@
-const Region = require("./Region");
+import Region from "./Region.js";
 
-module.exports = class MapRegion {
+export default class MapRegion {
     /** @type {Region} */
     region = null;
 

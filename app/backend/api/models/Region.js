@@ -1,6 +1,6 @@
-const { SQLGeometry } = require("./SQLGeometry.js");
+import { SQLGeometry } from "./SQLGeometry.js";
 
-module.exports = class Region {
+export default class Region {
     /** @type {Number} */
     region_id = null;
     /** @type {String} */

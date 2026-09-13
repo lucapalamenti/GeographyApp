@@ -1,12 +1,12 @@
-const express = require('express');
+import { Router, json } from 'express';
 
-const CustomDAO = require('../db/CustomDAO.js');
+import { custom, printRegionInsertQuery } from '../db/CustomDAO.js';
 
-const CustomAPIRouter = express.Router();
-CustomAPIRouter.use( express.json() );
+const CustomAPIRouter = Router();
+CustomAPIRouter.use( json() );
 
 CustomAPIRouter.get('/custom', (req, res) => {
-    CustomDAO.custom().then( r => {
+    custom().then( r => {
         res.json( r );
     })
     .catch( err => {
@@ -15,11 +15,11 @@ CustomAPIRouter.get('/custom', (req, res) => {
 });
 
 CustomAPIRouter.post('/customPrint', (req, res) => {
-    CustomDAO.printRegionInsertQuery().then( r => {
+    printRegionInsertQuery().then( r => {
         res.json( r );
     }).catch ( err => {
         res.status(500).json({error:err, message: 'Error with GET request to /customPrint'});
     });
 });
 
-module.exports = CustomAPIRouter;
+export default CustomAPIRouter;

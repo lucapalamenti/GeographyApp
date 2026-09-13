@@ -1,6 +1,6 @@
 /**
- * Abstract class for SQL Geometry data types.
- * Subclasses include:
+ * Abstract export class for SQL Geometry data types.
+ * Subexport classes include:
  * @see {SQLPoint}
  * @see {SQLMultiPoint}
  * @see {SQLLineString}
@@ -10,7 +10,7 @@
  * 
  * @typedef {String} SQLGeometryType Valid values for SQLGeometry.type
  */
-class SQLGeometry {
+export class SQLGeometry {
     /** @type {Array<SQLGeometryType>} */
     static #types = ["Point", "MultiPoint", "LineString", "MultiLineString", "Polygon", "MultiPolygon"];
     /** @type {String} */
@@ -63,13 +63,13 @@ class SQLGeometry {
     #subclassCheck( method ) {
         if ( new.target === SQLGeometry ) {
             const name = method === undefined ? "" : `${method.name}()`;
-            throw new Error( `Cannot call ${name} method on abstract SQLGeometry class!` );
+            throw new Error( `Cannot call ${name} method on abstract SQLGeometry export class!` );
         }
     }
 
     /**
      * Creates an SQLGeometry object from the given data. Must contain the "type" field of
-     * an SQLGeometry subclass
+     * an SQLGeometry subexport class
      * @param {SQLGeometry} sqlGeometry 
      * @returns {SQLGeometry}
      */
@@ -96,7 +96,7 @@ class SQLGeometry {
 /**
  * Javascript representation of the SQL "POINT" data type
  */
-class SQLPoint extends SQLGeometry {
+export class SQLPoint extends SQLGeometry {
     /** @type {Array<Number>} */
     coordinates = null;
 
@@ -141,7 +141,7 @@ class SQLPoint extends SQLGeometry {
 /**
  * Javascript representation of the SQL "MULTIPOINT" data type
  */
-class SQLMultiPoint extends SQLGeometry {
+export class SQLMultiPoint extends SQLGeometry {
     /** @type {Array<Array<Number>>} */
     coordinates = null;
 
@@ -174,7 +174,7 @@ class SQLMultiPoint extends SQLGeometry {
 /**
  * Javascript representation of the SQL "LINESTRING" data type
  */
-class SQLLineString extends SQLGeometry {
+export class SQLLineString extends SQLGeometry {
     /** @type {Array<Array<Number>>} */
     coordinates = null;
 
@@ -223,7 +223,7 @@ class SQLLineString extends SQLGeometry {
 /**
  * Javascript representation of the SQL "MULTILINESTRING" data type
  */
-class SQLMultiLineString extends SQLGeometry {
+export class SQLMultiLineString extends SQLGeometry {
     /** @type {Array<Array<Array<Number>>>} */
     coordinates = null;
 
@@ -258,7 +258,7 @@ class SQLMultiLineString extends SQLGeometry {
 /**
  * Javascript representation of the SQL "POLYGON" data type
  */
-class SQLPolygon extends SQLGeometry {
+export class SQLPolygon extends SQLGeometry {
     /** @type {Array<Array<Array<Number>>>} */
     coordinates = null;
     
@@ -309,7 +309,7 @@ class SQLPolygon extends SQLGeometry {
 /**
  * Javascript representation of the SQL "MULTIPOLYGON" data type
  */
-class SQLMultiPolygon extends SQLGeometry {
+export class SQLMultiPolygon extends SQLGeometry {
     /** @type {Array<Array<Array<Array<Number>>>>} */
     coordinates = null;
     
@@ -342,13 +342,3 @@ class SQLMultiPolygon extends SQLGeometry {
         })))`;
     }
 }
-
-module.exports = {
-    SQLGeometry,
-    SQLPoint,
-    SQLMultiPoint,
-    SQLLineString,
-    SQLMultiLineString,
-    SQLPolygon,
-    SQLMultiPolygon
-};
