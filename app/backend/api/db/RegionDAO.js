@@ -53,9 +53,7 @@ const getRegionsByMapId = async ( mapRegion_map_id ) => {
         WHERE mapRegion_map_id = ?
         ORDER BY region_name;
         `, [mapRegion_map_id]).then( rows => {
-            return rows.map( row => {
-                return new MapRegion( row );
-            });
+            return rows.map( row => new MapRegion( row ) );
     });
 };
 
@@ -73,12 +71,12 @@ const getParentRegionsByMapId = async ( map_id ) => {
             parent.region_parent_id,
             parent.region_template_id,
             parent.region_points
-            FROM region AS child
-                JOIN mapRegion
-                    ON child.region_id = mapRegion.mapRegion_region_id
-                JOIN region AS parent
-                    ON parent.region_id = child.region_parent_id
-            WHERE mapRegion.mapRegion_map_id = ?;
+        FROM region AS child
+            JOIN mapRegion
+                ON child.region_id = mapRegion.mapRegion_region_id
+            JOIN region AS parent
+                ON parent.region_id = child.region_parent_id
+        WHERE mapRegion.mapRegion_map_id = ?;
         `;
     const params = [map_id];
     return await database.query( query, params ).then( rows => {

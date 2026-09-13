@@ -27,23 +27,15 @@ RegionAPIRouter.get('/regions/:regionId', (req, res) => {
     });
 });
 
-RegionAPIRouter.get('/regions/map/:mapId', (req, res) => {
-    RegionDAO.getRegionsByMapId( req.params.mapId ).then( async mapRegions => {
-        const parentIds = new Set( mapRegions.map( mapRegion => mapRegion.region.region_parent_id ) );
-        parentIds.delete( null );
-        let parentRegions = null;
-        parentRegions = await Promise.all( [...parentIds].map( async id => {
-            return await RegionDAO.getRegionById( id );
-        }));
-        
+RegionAPIRouter.get('/regions/map/:mapId', async (req, res) => {
+    try {
         res.json({
-            mapRegions : mapRegions,
-            parentRegions : parentRegions
+            mapRegions : await RegionDAO.getRegionsByMapId( req.params.mapId ),
+            parentRegions : await RegionDAO.getParentRegionsByMapId( req.params.mapId )
         });
-    })
-    .catch( err => {
+    } catch ( err ) {
         res.status(500).json({error:err, message: 'Error with GET request to /regions/map/:mapId'});
-    });
+    }
 });
 
 RegionAPIRouter.get('/regions/parents/:mapId', (req, res) => {
