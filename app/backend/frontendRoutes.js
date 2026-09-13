@@ -1,4 +1,4 @@
-const express = require('express');
+import express from 'express';
 const frontendRouter = express.Router();
 
 // Designate the static folder as serving static resources
@@ -22,4 +22,4 @@ frontendRouter.get('/admin', (req, res) => {
     res.sendFile(`${templates_dir}admin.html`);
 });
 
-module.exports = frontendRouter;
+export default frontendRouter;

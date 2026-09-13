@@ -1,6 +1,6 @@
-const fs = require('fs');
-const fsp = require('fs/promises');
-const path = require('path');
+import { appendFileSync } from 'fs';
+import { unlink, readdir } from 'fs/promises';
+import { join } from 'path';
 
 /**
  * Writes an SQL query to a file in the backend.
@@ -29,7 +29,7 @@ function copyQueryToFile( query, params, fileName ) {
         }
         build = build.join(' ');
     }
-    fs.appendFileSync(`./backend/api/db/backend/test/queries/${fileName}.sql`, build.trim().concat('\n') );
+    appendFileSync(`./backend/api/db/backend/test/queries/${fileName}.sql`, build.trim().concat('\n') );
 }
 
 /**
@@ -39,7 +39,7 @@ function copyQueryToFile( query, params, fileName ) {
  */
 async function deleteFileFromDirectory( directory, filename ) {
     try {
-        fsp.unlink( path.join( directory, filename ) );
+        unlink( join( directory, filename ) );
     } catch ( err ) {
         console.error( `Error deleting file ${filename} in directory ${directory}`, err );
     }
@@ -51,12 +51,12 @@ async function deleteFileFromDirectory( directory, filename ) {
  */
 async function deleteAllFilesInDirectory( directory ) {
     try {
-        const files = await fsp.readdir( directory );
+        const files = await readdir( directory );
         // Asynchronously delete each file
         if ( files.length !== 0 ) {
             // Wait for all promises to complete
             await Promise.all( files.forEach( file => {
-                return fsp.unlink( path.join( directory, file ) );
+                return unlink( join( directory, file ) );
             }));
         }
     } catch ( err ) {
@@ -64,7 +64,7 @@ async function deleteAllFilesInDirectory( directory ) {
     }
 }
 
-module.exports = {
+export default {
     copyQueryToFile,
     deleteFileFromDirectory,
     deleteAllFilesInDirectory

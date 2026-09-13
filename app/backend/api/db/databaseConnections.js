@@ -1,4 +1,4 @@
-const mariadb = require('mariadb');
+import { createPool } from 'mariadb';
 
 /**
  * @type {import('mariadb').Pool}
@@ -7,7 +7,7 @@ let pool;
 
 const getDatabasePool = () => {
     if ( !pool ) {
-        pool = mariadb.createPool({
+        pool = createPool({
             host: process.env.DB_HOST,
             port: process.env.DB_PORT,
             user: process.env.MYSQL_USER,
@@ -67,7 +67,7 @@ const close = () => {
     }
 };
 
-module.exports = {
+export default {
     getDatabasePool,
     query,
     close

@@ -4,7 +4,7 @@
  * 
  * @typedef {Number} PayloadGroupId The index of the group in the PayloadManager's groupCluster that this chunk is a part of
  */
-module.exports = class BackendPayloadManager {
+export default class BackendPayloadManager {
     /** @type {Array<PayloadGroup>} */
     static #groupCluster = [];
 
