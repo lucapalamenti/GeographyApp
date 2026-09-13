@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Map Quiz</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+
+    <link rel="stylesheet" href="css/all.css" />
+    <link rel="stylesheet" href="css/header.css" />
+    <link rel="stylesheet" href="css/index.css" />
+
+    <script src="js/index.js" type="module"></script>
+    <script src="js/components/header.js"></script>
+</head>
+<body>
+    <app-header></app-header>
+    <main class="flex-col-center gap-5">
+        <section id="map-section" class="flex-col-center gap-5">
+            <nav class="flex-row gap-5">
+                <a href="create" class="btn-1 btn-hover-effect">Create Custom Map</a>
+                <button id="delete-map-btn" class="btn-1 btn-hover-effect">Delete Custom Map</button>
+                <button id="delete-all-maps-btn" class="btn-1 btn-hover-effect">Delete ALL Custom Maps</button>
+                <a href="admin" class="btn-1 btn-hover-effect">Admin Panel</a>
+            </nav>
+            <div class="flex-row-center gap-5">
+                <select name="filter-maps" id="filter-maps">
+                    <option value="all">Filter Maps</option>
+                    <option value="default">Default Only</option>
+                    <option value="custom">Custom Only</option>
+                    <option value="template">Templates</option>
+                </select>
+                <select name="sort-maps" id="sort-maps">
+                    <option value="id">Sort Maps</option>
+                    <option value="id DESC">Newest</option>
+                    <option value="id">Oldest</option>
+                    <option value="name">A -> Z</option>
+                    <option value="name DESC">Z -> A</option>
+                </select>
+            </div>
+            <nav id="map-navigation" class="flex-row-center gap-5"></nav>
+            <h5 id="delete-popup" class="flex-col">Click on Custom Map to Delete</h5>
+        </section>
+    </main>
+
+
+    <!-- Templates -->
+    <template id="map-button-template">
+        <a href="" class="map-button-container btn-hover-effect">
+            <img src="images/x.svg" alt="Couldn't load x.svg" class="x-bg">
+            <div class="map-button-top flex-col gap-5">
+                <h4 class="map-button-label"></h4>
+            </div>
+            <div class="map-button-bottom"></div>
+        </a>
+    </template>
+</body>
+</html>

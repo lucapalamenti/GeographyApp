@@ -1,3 +1,5 @@
+name: geographyapp
+
 services:
   app:
     build: ./app
@@ -5,9 +7,8 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - ./app/src:/app/src
-      - ./app/static:/app/static
-      - ./app/templates:/app/templates
+      - ./app/backend:/app/backend
+      - ./app/frontend:/app/frontend
       - ./app/uploads:/app/uploads
     env_file:
       - .env

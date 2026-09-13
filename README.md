@@ -76,6 +76,10 @@
 - Handlebars partials to serve partial html and combine into complete html
 - scrollwheel zoom
 - zoom sensitivity
+- When creating a map, "deselecting" a region causes an error when attempting to create the map
+- instead of svg templates use createElementNS and const SVG_NS = "http://www.w3.org/2000/svg";
+- e.target.closest( "SVG" ); this selected the nearest ancester with the given selector
+- Use CSS transform tag to move regions like Alaska rather than changing it's coordinates
 
 # Changelog
 
@@ -93,6 +97,7 @@
 - SVG map zooming now works with any size viewbox
 - Removed "Herring" region type
 - Error when attempting to delete all thumbnails for custom maps when there are none
+- Rework to GET API for filtering & sorting maps
 
 ### Bug Fixes
 - SQLPolygon class is incorrectly storing the "coordinates" attribute as a 2D array instead of a 3D array

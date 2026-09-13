@@ -39,11 +39,6 @@ CREATE TABLE IF NOT EXISTS `mapRegion` (
   `mapRegion_id` int(10) NOT NULL AUTO_INCREMENT,
   `mapRegion_map_id` int(10) NOT NULL DEFAULT 0,
   `mapRegion_region_id` int(10) NOT NULL DEFAULT 0,
-  `mapRegion_parent` varchar(64) NOT NULL DEFAULT 'Earth',
-  `mapRegion_offsetX` decimal(10,6) NOT NULL DEFAULT 0.000000,
-  `mapRegion_offsetY` decimal(10,6) NOT NULL DEFAULT 0.000000,
-  `mapRegion_scaleX` decimal(10,6) NOT NULL DEFAULT 1.000000,
-  `mapRegion_scaleY` decimal(10,6) NOT NULL DEFAULT 1.000000,
   `mapRegion_type` enum('enabled','disabled','outside') NOT NULL DEFAULT 'enabled',
   PRIMARY KEY (`mapRegion_id`) USING BTREE,
   KEY `FK_mapRegion_map` (`mapRegion_map_id`) USING BTREE,
@@ -58,12 +53,15 @@ CREATE TABLE IF NOT EXISTS `mapRegion` (
 CREATE TABLE IF NOT EXISTS `region` (
   `region_id` int(10) NOT NULL AUTO_INCREMENT,
   `region_name` varchar(128) NOT NULL DEFAULT '',
-  `region_type` varchar(128) NOT NULL DEFAULT 'Other',
-  `region_parent_id` int(10) DEFAULT NULL,
+  `region_type` varchar(128) DEFAULT NULL,
+  `region_parent_id` int(10) DEFAULT 1,
+  `region_template_id` int(10) DEFAULT 1,
   `region_points` geometry NOT NULL,
   PRIMARY KEY (`region_id`) USING BTREE,
   KEY `FK_region_region` (`region_parent_id`),
-  CONSTRAINT `FK_region_region` FOREIGN KEY (`region_parent_id`) REFERENCES `region` (`region_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `FK_region_map` (`region_template_id`),
+  CONSTRAINT `FK_region_region` FOREIGN KEY (`region_parent_id`) REFERENCES `region` (`region_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_region_map` FOREIGN KEY (`region_template_id`) REFERENCES `map` (`map_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 -- Data exporting was unselected.
