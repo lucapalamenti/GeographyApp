@@ -6,10 +6,8 @@ import MMap from "./models/MMap.js";
 import { SVG_WIDTH, SVG_HEIGHT, FOCUS_STATES } from "./variables.js";
 import ParentChildMap from "./models/ParentChildMap.js";
 
+const SVG_NS = "http://www.w3.org/2000/svg";
 const SVG_PADDING = 0.02; // 2 Percent margins
-
-const gTemplate = document.getElementById('svg-g-template').content;
-const pathTemplate = document.getElementById('svg-path-template').content;
 
 /**
  * Load regions for a given map into an SVG element
@@ -101,7 +99,7 @@ export default async function populateSVG( map, svg ) {
  * @returns {SVGGElement}
  */
 function createGElement( id, classList ) {
-    let group = gTemplate.cloneNode( true ).querySelector('G');
+    const group = document.createElementNS( SVG_NS, "g" );
     // Remove empty polygon element
     group.innerHTML = "";
     if ( id ) group.setAttribute('id', id);
@@ -117,7 +115,7 @@ function createGElement( id, classList ) {
  * @returns {SVGPathElement}
  */
 function createPathElement( id ) {
-    const path = pathTemplate.cloneNode(true).querySelector('PATH');
+    const path = document.createElementNS( SVG_NS, "path" );
     path.setAttribute('id', id);
     return path;
 }

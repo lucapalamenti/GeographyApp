@@ -1,6 +1,6 @@
 import { FeatureCollection } from "./models/FeatureCollection.js";
 
-const pathTemplate = document.getElementById('svg-path-template').content;
+const SVG_NS = "http://www.w3.org/2000/svg";
 
 /**
  * 
@@ -43,7 +43,7 @@ export default async function populateSVGfc( featureCollection, svg ) {
  * @returns {SVGPathElement}
  */
 function createPathElement( id ) {
-    const path = pathTemplate.cloneNode(true).querySelector('PATH');
+    const path = document.createElementNS( SVG_NS, "path" );
     path.setAttribute('id', id);
     return path;
 }
