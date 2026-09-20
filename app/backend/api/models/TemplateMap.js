@@ -1,6 +1,6 @@
-const { FeatureCollection } = require("./FeatureCollection");
+import { FeatureCollection } from "./FeatureCollection.js";
 
-module.exports = class TemplateMap {
+export default class TemplateMap {
     /** @type {string} */
     map_name = null;
     /** @type {string} */

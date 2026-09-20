@@ -1,6 +1,6 @@
-const { SQLGeometry } = require("./SQLGeometry");
+import { SQLGeometry } from "./SQLGeometry.js";
 
-class FeatureCollection {
+export class FeatureCollection {
     /** @type {String} */
     type = "FeatureCollection";
     /** @type {Array<Feature>} */
@@ -40,10 +40,6 @@ class Feature {
      */
     constructor ( data ) {
         this.properties = data.properties;
-        this.geometry = SQLGeometry.createAnyType( data.geometry );
+        this.geometry = SQLGeometry.SQLGeometry.createAnyType( data.geometry );
     }
 }
-
-module.exports = {
-    FeatureCollection
-};

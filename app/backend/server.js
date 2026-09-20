@@ -1,7 +1,7 @@
-const express = require('express');
-const router = require('./router');
-const path = require('path');
-const fs = require("fs");
+import express from "express";
+import router from "./router.js";
+import path from "path";
+import fs from "fs";
 
 const PORT = process.env.PORT || 3000;
 

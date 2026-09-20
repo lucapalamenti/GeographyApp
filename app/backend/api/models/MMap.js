@@ -1,4 +1,4 @@
-module.exports = class MMap {
+export default class MMap {
     /** @type {Number} */
     map_id = null;
     /** @type {String} */

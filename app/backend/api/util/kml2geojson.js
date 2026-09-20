@@ -1,4 +1,4 @@
-const { SQLGeometry, SQLLineString, SQLPoint, SQLPolygon } = require("../models/SQLGeometry.js");
+import { SQLGeometry, SQLLineString, SQLPoint, SQLPolygon } from "../models/SQLGeometry.js";
 
 const ROUND_PLACES = 6;
 
@@ -155,6 +155,6 @@ function string2fixedNumber( str ) {
     return Number( Number( str ).toFixed( ROUND_PLACES ) );
 }
 
-module.exports = {
+export default {
     parse
 }
