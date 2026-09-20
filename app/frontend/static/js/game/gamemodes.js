@@ -1,4 +1,4 @@
-import util from "../util/util.js";
+import {idToInput, inputToId} from "../util/util.js";
 import gameUtil from "./gameUtil.js";
 import { unzoom } from "../mapManipulations.js";
 
@@ -65,7 +65,7 @@ function click ( regionMap, disappear ) {
         const path = e.target;
         if ( path.classList.contains('clickable') ) {
             // Correct region clicked
-            if ( path.getAttribute('id') === currentPrompt.rID ) {
+            if ( path.id === currentPrompt.rID ) {
                 if ( guesses === 0 ) numCorrect++;
                 gameUtil.playSound( ATTEMPT_SOUNDS[guesses] );
                 next( path );
@@ -128,7 +128,7 @@ function typeGamemodes( regionMap ) {
 function listGamemodes( regionMap ) {
     for ( const parentName of gameUtil.getOrderedParents( regionMap ) ) {
         const h3 = document.createElement('H3');
-        h3.textContent = util.idToInput( parentName );
+        h3.textContent = idToInput( parentName );
         const div = document.createElement('DIV');
         div.setAttribute('id', parentName);
         for ( const childName of regionMap.getChildNames( parentName ) ) {
@@ -152,46 +152,47 @@ function type( regionMap ) {
     promptLabel.textContent = "Name all regions";
     promptTally.style.display = "none";
 
-    input.addEventListener('keypress', e => {
-        // If enter key is pressed
-        if ( e.key === 'Enter' ) {
-            // Check for valid input parameters
-            if ( gameUtil.inputCheck() ) {
-                // Initially set to 'incorrect' color
-                let color = ATTEMPT_COLORS[3];
-                const myInput = util.inputToId( input.value.trim() );
-                // If the user input matches a region's name
-                if ( regionMap.hasChild( selectParent.value, myInput ) ) {
-                    color = REPEAT_COLOR;
-                    const path = svg.querySelector(`G#${selectParent.value} G PATH#${CSS.escape( myInput )}`);
-                    // The user has not yet typed this region
-                    if ( !path.classList.contains('typed') ) {
-                        // Update map
-                        path.classList.add('typed');
-                        path.classList.add('guesses0');
-                        // Update list
-                        const correctNode = noMapArea.querySelector(`#${selectParent.value} #${myInput}`);
-                        correctNode.textContent = util.idToInput( myInput );
-                        correctNode.style["background-color"] = ATTEMPT_COLORS[0];
-                        correctNode.style["border"] = "1px solid green";
-                        input.value = "";
-                        numCorrect++;
-                        color = ATTEMPT_COLORS[0];
-                        gameUtil.playSound( ATTEMPT_SOUNDS[0] );
+    input.addEventListener('keypress', key => {
+        switch ( key.key ) {
+            case "Enter":
+                // Check for valid input parameters
+                if ( gameUtil.inputCheck() ) {
+                    // Initially set to 'incorrect' color
+                    let color = ATTEMPT_COLORS[3];
+                    const myInput = inputToId( input.value.trim() );
+                    // If the user input matches a region's name
+                    if ( regionMap.hasChild( selectParent.value, myInput ) ) {
+                        color = REPEAT_COLOR;
+                        const path = svg.querySelector(`G#${selectParent.value} G PATH#${CSS.escape( myInput )}`);
+                        // The user has not yet typed this region
+                        if ( !path.classList.contains('typed') ) {
+                            // Update map
+                            path.classList.add( "typed", "guesses0" );
+                            // Update list
+                            const correctNode = noMapArea.querySelector(`#${selectParent.value} #${myInput}`);
+                            correctNode.textContent = idToInput( myInput );
+                            correctNode.style["background-color"] = ATTEMPT_COLORS[0];
+                            correctNode.style["border"] = "1px solid green";
+                            input.value = "";
+                            numCorrect++;
+                            color = ATTEMPT_COLORS[0];
+                            gameUtil.playSound( ATTEMPT_SOUNDS[0] );
+                        }
+                        // The user has already typed this region
+                        else {
+                            gameUtil.regionDisappearTrigger( path, REPEAT_COLOR, false, 0 );
+                            gameUtil.pulseElementBG( noMapArea.querySelector(`#${selectParent.value} #${myInput}`), ATTEMPT_COLORS[0], color );
+                            gameUtil.playSound( ATTEMPT_SOUNDS[1] );
+                        }
+                    } else {
+                        gameUtil.playSound( ATTEMPT_SOUNDS[3] );
                     }
-                    // The user has already typed this region
-                    else {
-                        gameUtil.regionDisappearTrigger( path, REPEAT_COLOR, false, 0 );
-                        gameUtil.pulseElementBG( noMapArea.querySelector(`#${selectParent.value} #${myInput}`), ATTEMPT_COLORS[0], color );
-                        gameUtil.playSound( ATTEMPT_SOUNDS[1] );
-                    }
-                } else {
-                    gameUtil.playSound( ATTEMPT_SOUNDS[3] );
+                    gameUtil.pulseElementBG( input, "white", color );
+                    updateLabels( regionMap, false );
+                    if ( numCorrect === numPrompts ) gameUtil.endGame();
                 }
-                gameUtil.pulseElementBG( input, "white", color );
-                updateLabels( regionMap, false );
-                if ( numCorrect === numPrompts ) gameUtil.endGame();
-            }
+                break;
+            default:
         }
     });
 }
@@ -210,26 +211,29 @@ function typeHard( regionMap ) {
     currentGroup.classList.add('typeCurrent');
     gameUtil.moveToLastInSVG( currentGroup );
 
-    input.addEventListener('keypress', e => {
-        if ( e.key === 'Enter' ) {
-            // Only check if the user has typed something in the input box
-            if ( input.value !== '' ) {
-                // If input is correct
-                if ( gameUtil.compareInputActual( input.value, currentPrompt.rInput ) ) {
-                    gameUtil.pulseElementBG( input, "white", ATTEMPT_COLORS[guesses] );
-                    next( Math.min( guesses, 3 ) );
-                // If input is incorrect
-                } else {
-                    guesses++;
-                    gameUtil.pulseElementBG( input, "white", ATTEMPT_COLORS[3] );
-                    gameUtil.playSound( ATTEMPT_SOUNDS[3] );
-                    // If too many guesses have been given
-                    if ( guesses === maxGuesses ) {
-                        next( 4 );
+    input.addEventListener('keypress', key => {
+        switch ( key.key ) {
+            case "Enter":
+                // Only check if the user has typed something in the input box
+                if ( input.value !== '' ) {
+                    // If input is correct
+                    if ( gameUtil.compareInputActual( input.value, currentPrompt.rInput ) ) {
+                        gameUtil.pulseElementBG( input, "white", ATTEMPT_COLORS[guesses] );
+                        next( Math.min( guesses, 3 ) );
+                    // If input is incorrect
+                    } else {
+                        guesses++;
+                        gameUtil.pulseElementBG( input, "white", ATTEMPT_COLORS[3] );
+                        gameUtil.playSound( ATTEMPT_SOUNDS[3] );
+                        // If too many guesses have been given
+                        if ( guesses === maxGuesses ) {
+                            next( 4 );
+                        }
                     }
+                    updateLabels( regionMap, false );
                 }
-                updateLabels( regionMap, false );
-            }
+                break;
+            default:
         }
     });
     function next( soundIndex ) {
@@ -323,42 +327,45 @@ function noList( regionMap ) {
         }
     }
 
-    input.addEventListener('keypress', e => {
-        if ( e.key === 'Enter' ) {
-            const parentValue = selectParent.value;
-            // Check for valid input parameters
-            if ( gameUtil.inputCheck() ) {
-                const myInput = util.inputToId( input.value.trim() );
-                input.value = "";
-                gameUtil.playSound( ATTEMPT_SOUNDS[1] );
-                // If the user input matches a region's name
-                if ( regionMap.hasChild( parentValue, myInput ) ) {
-                    const group = svg.querySelector(`G#${selectParent.value} G PATH#${CSS.escape( myInput )}`);
-                    // The user has not yet typed this region
-                    if ( !group.classList.contains('typed') ) {
-                        // Remove the region from missedRegions
-                        missedRegions.get( parentValue ).splice( missedRegions.get( parentValue ).indexOf( myInput ), 1 );
-                        // Update map
-                        group.classList.add('typed');
-                        group.classList.add('guesses0');
-                        // Update list
-                        const correctNode = noMapArea.querySelector(`#${parentValue} #${myInput}`);
-                        correctNode.textContent = util.idToInput( myInput );
-                        correctNode.style["background-color"] = ATTEMPT_COLORS[0];
-                        correctNode.style["border"] = "1px solid green";
-                        numCorrect++;
+    input.addEventListener('keypress', key => {
+        switch ( key.key ) {
+            case "Enter":
+                const parentValue = selectParent.value;
+                // Check for valid input parameters
+                if ( gameUtil.inputCheck() ) {
+                    const myInput = inputToId( input.value.trim() );
+                    input.value = "";
+                    gameUtil.playSound( ATTEMPT_SOUNDS[1] );
+                    // If the user input matches a region's name
+                    if ( regionMap.hasChild( parentValue, myInput ) ) {
+                        const group = svg.querySelector(`G#${selectParent.value} G PATH#${CSS.escape( myInput )}`);
+                        // The user has not yet typed this region
+                        if ( !group.classList.contains('typed') ) {
+                            // Remove the region from missedRegions
+                            missedRegions.get( parentValue ).splice( missedRegions.get( parentValue ).indexOf( myInput ), 1 );
+                            // Update map
+                            group.classList.add('typed');
+                            group.classList.add('guesses0');
+                            // Update list
+                            const correctNode = noMapArea.querySelector(`#${parentValue} #${myInput}`);
+                            correctNode.textContent = idToInput( myInput );
+                            correctNode.style["background-color"] = ATTEMPT_COLORS[0];
+                            correctNode.style["border"] = "1px solid green";
+                            numCorrect++;
+                        }
+                        // The user has already typed this region
+                        else {
+                            duplicateRegionInMap( duplicateRegions, parentValue, myInput );
+                        }
                     }
-                    // The user has already typed this region
+                    // User input doesn't match a region's name
                     else {
-                        duplicateRegionInMap( duplicateRegions, parentValue, myInput );
+                        duplicateRegionInMap( unknownRegions, parentValue, myInput );
                     }
+                    gameUtil.pulseElementBG( input, "white", ATTEMPT_COLORS[1] );
                 }
-                // User input doesn't match a region's name
-                else {
-                    duplicateRegionInMap( unknownRegions, parentValue, myInput );
-                }
-                gameUtil.pulseElementBG( input, "white", ATTEMPT_COLORS[1] );
-            }
+                break;
+            default:
         }
     });
     function duplicateRegionInMap( map, parentVal, input ) {
@@ -371,7 +378,6 @@ function noList( regionMap ) {
     const regionAreas = [ noListArea.querySelector('#unknown-regions'), noListArea.querySelector('#duplicate-regions'), ];
     endGameButton.addEventListener('click', e => {
         const endGameRegionsTemplate = document.getElementById('endGame-regions-template');
-        // Display map and list
         // For each map of region correctness
         for ( let i = 0; i < maps.length; i++ ) {
             // For each parent and their regions
@@ -379,11 +385,11 @@ function noList( regionMap ) {
                 const containerInstance = endGameRegionsTemplate.content.cloneNode(true);
                 const containerElement = containerInstance.querySelector('DIV');
                 const parentLabel = containerElement.querySelector('H5');
-                parentLabel.textContent = util.idToInput( parent );
+                parentLabel.textContent = idToInput( parent );
                 const nameContainer = containerElement.querySelector('DIV');
                 for ( const regionName of regions ) {
                     const p = document.createElement('P');
-                    p.textContent = util.idToInput( regionName );
+                    p.textContent = idToInput( regionName );
                     nameContainer.appendChild( p );
                 }
                 regionAreas[i].appendChild( containerElement );

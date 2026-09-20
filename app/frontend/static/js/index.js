@@ -73,8 +73,11 @@ deleteMapButton.addEventListener('click', e => {
 });
 
 document.addEventListener('keydown', key => {
-    if ( key.key === 'Escape' ) {
-        if ( inDeleteMode ) exitDeleteMode();
+    switch ( key.key ) {
+        case "Escape":
+            if ( inDeleteMode ) exitDeleteMode();
+            break;
+        default:
     }
 });
 
@@ -96,11 +99,7 @@ function exitDeleteMode() {
 mapNavigation.addEventListener('click', async e => {
     if ( inDeleteMode ) {
         e.preventDefault();
-        let node = e.target;
-        // Iterate parents until map-button-container is reached
-        while ( node.nodeName !== "A" && node.nodeName !== "NAV" ) {
-            node = node.parentNode;
-        }
+        const node = e.target.closest( ".map-button-container" );
         // Only if you click a custom map
         if ( node.classList.contains("custom-map") ) {
             // Delete the map

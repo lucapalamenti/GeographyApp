@@ -2,7 +2,7 @@ import APIClient from "../APIClient.js";
 import { gamemodeMap } from "./gamemodes.js";
 import populateSVG from "../populateSVG.js";
 import gameUtil from "./gameUtil.js";
-import util from "../util/util.js";
+import {idToInput} from "../util/util.js";
 import { zoom } from "../mapManipulations.js";
 
 import { html, svg, navBar, gamemodePanel, selectButton, gameEndPanel, playAgainButton, reviewMapButton, homeButton, bottomGameBar, tooltip, parentType } from "./documentElements-game.js";
@@ -62,11 +62,13 @@ reviewMapButton.addEventListener('click', () => {
     tooltip.removeChild( tooltip.firstChild );
     tooltip.style.fontWeight = "bold";
     svg.addEventListener('mousemove', e => {
-        if ( e.target.tagName === "path" ) {
-            tooltip.textContent = util.idToInput( e.target.id );
-            tooltip.style.display = "block" ;
-        } else {
-            tooltip.style.display = "none" ;
+        switch ( e.target.tagName ) {
+            case "path":
+                tooltip.textContent = idToInput( e.target.id );
+                tooltip.style.display = "block" ;
+                break;
+            default:
+                tooltip.style.display = "none" ;
         }
     });
 });
@@ -78,5 +80,5 @@ homeButton.addEventListener('click', () => {
 // Right click to zoom, Escape to unzoom
 svg.addEventListener( 'contextmenu', e => {
     e.preventDefault();
-    zoom( e, svg );
+    zoom( e, svg );``
 });

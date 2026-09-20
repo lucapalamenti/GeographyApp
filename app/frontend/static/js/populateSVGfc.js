@@ -1,5 +1,3 @@
-import util from "./util/util.js";
-
 import { FeatureCollection } from "./models/FeatureCollection.js";
 
 const pathTemplate = document.getElementById('svg-path-template').content;

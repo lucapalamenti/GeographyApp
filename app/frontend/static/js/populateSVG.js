@@ -1,8 +1,7 @@
 import APIClient from "./APIClient.js";
-import util from "./util/util.js";
+import {inputToId} from "./util/util.js";
 
 import MMap from "./models/MMap.js";
-import MapRegion from "./models/MapRegion.js";
 
 import { SVG_WIDTH, SVG_HEIGHT, FOCUS_STATES } from "./variables.js";
 import ParentChildMap from "./models/ParentChildMap.js";
@@ -68,8 +67,8 @@ export default async function populateSVG( map, svg ) {
 
     const regionMap = new ParentChildMap( mapData.parentRegions[0].region_type );
     for ( const mapRegion of mapData.mapRegions ) {
-        const parentId = util.inputToId( mapData.getParentRegion( mapRegion.region.region_parent_id ).region_name );
-        const regionId = util.inputToId( mapRegion.region.region_name );
+        const parentId = inputToId( mapData.getParentRegion( mapRegion.region.region_parent_id ).region_name );
+        const regionId = inputToId( mapRegion.region.region_name );
         // If there doesn't exist a group for the region's parent, create it
         let parentGroup = svg.querySelector(`:scope > #${parentId}`);
         if ( !parentGroup ) {
@@ -98,7 +97,7 @@ export default async function populateSVG( map, svg ) {
 /**
  * Creates and returns an SVG G element
  * @param {String} id
- * @param {Array<String>} classList
+ * @param {Array<String> | undefined} classList
  * @returns {SVGGElement}
  */
 function createGElement( id, classList ) {
@@ -106,10 +105,8 @@ function createGElement( id, classList ) {
     // Remove empty polygon element
     group.innerHTML = "";
     if ( id ) group.setAttribute('id', id);
-    if ( classList ) {
-        for ( const className of classList ) {
-            group.classList.add( className );
-        }
+    for ( const className of classList || [] ) {
+        group.classList.add( className );
     }
     return group;
 }

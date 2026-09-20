@@ -1,6 +1,6 @@
 import APIClient from "../APIClient.js";
 import populateSVG from "../populateSVG.js";
-import util from "../util/util.js";
+import {capitalizeFirst, idToInput} from "../util/util.js";
 import createUtil from "./createUtil.js";
 import { zoom } from "../mapManipulations.js";
 
@@ -132,7 +132,7 @@ function displaySelection() {
             if ( regions.length ) {
                 // Create type header
                 const h3 = document.createElement('H3');
-                h3.textContent = util.capitalizeFirst( type );
+                h3.textContent = capitalizeFirst( type );
                 selectedList.appendChild(h3);
                 // Add regions to its parent's list
                 regions.forEach( pathElement => {
@@ -144,7 +144,7 @@ function displaySelection() {
                 Object.entries( sort ).forEach( ([parentName, regionNames]) => {
                     // Create header
                     const h5 = document.createElement('H5');
-                    h5.textContent = `${util.idToInput( parentName )} (${regionNames.length})`;
+                    h5.textContent = `${idToInput( parentName )} (${regionNames.length})`;
                     selectedList.appendChild( h5 );
                     // Create div list section
                     const div = document.createElement('DIV');
@@ -153,7 +153,7 @@ function displaySelection() {
                     // Add each selected region to the list
                     for ( const name of regionNames ) {
                         const p = document.createElement('P');
-                        p.textContent = util.idToInput( name );
+                        p.textContent = idToInput( name );
                         div.appendChild( p );
                     };
                 });

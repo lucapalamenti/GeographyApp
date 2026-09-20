@@ -1,4 +1,4 @@
-import util from "../util/util.js";
+import {idToInput, debounce} from "../util/util.js";
 
 import { html, tooltip, svg, input, selectParent, showNames, endGameButton, gameEndPanel, noMapArea, promptTally } from "./documentElements-game.js";
 import { ATTEMPT_COLORS, ATTEMPT_SOUNDS } from "../variables.js";
@@ -73,7 +73,7 @@ const pulseElementBG = ( element, colorOrig, colorPulse ) => {
 const showLabel = ( path, e, center, timeout ) => {
     const p = document.createElement('P');
     p.classList.add('clickLabel');
-    p.textContent = util.idToInput( path.getAttribute('id') );
+    p.textContent = idToInput( path.getAttribute('id') );
     if ( center ) {
         const rect = path.getBoundingClientRect();
         p.style.transform = `translate( calc( -50% + ${rect.left + rect.width / 2 + scrollX}px ), calc( -50% + ${rect.top + rect.height / 2 + scrollY}px ) )`;
@@ -95,10 +95,10 @@ const showLabel = ( path, e, center, timeout ) => {
  * Moves tooltip with cursor
  * @param {Event} e 
  */
-const moveToolTip = ( e ) => {
+const moveToolTip = debounce( e => {
     tooltip.style.display = "block";
     tooltip.style.transform = `translate( calc( -50% + ${e.clientX}px ), calc( 60% + ${e.clientY + window.scrollY}px ) )`;
-}
+}, 20);
 
 /**
  * Enables the tooltip to follow mouse
@@ -126,9 +126,9 @@ const shuffleRegionMap = ( regionMap ) => {
         for ( const childName of regionMap.getChildNames( parentName ) ) {
             arr.push({
                 pID : parentName,
-                pinput : util.idToInput( parentName ),
+                pinput : idToInput( parentName ),
                 rID : childName,
-                rInput : util.idToInput( childName )
+                rInput : idToInput( childName )
             });
         }
     }
@@ -167,7 +167,7 @@ const populateSelect = ( regionMap ) => {
     for ( const name of orderedParents ) {
         const option = document.createElement('OPTION');
         option.value = name.toLowerCase();
-        option.innerText = util.idToInput( name );
+        option.innerText = idToInput( name );
         selectParent.appendChild( option );
     }
     // Auto select the parent if there is only one with enabled regions
@@ -197,7 +197,7 @@ showNames.addEventListener('change', e => {
  */
 function fillTable() {
     for ( const cell of noMapArea.querySelectorAll('P') ) {
-        cell.textContent = util.idToInput( cell.id );
+        cell.textContent = idToInput( cell.id );
     }
 }
 
@@ -265,10 +265,8 @@ const endGame = () => {
     }
     fillTable();
     // Reappear colors at the end
-    svg.classList.remove("invisible-mode");
-    svg.classList.remove("invisible-mode-hard");
-    svg.classList.add("showGuesses");
-    svg.classList.add('gameEnd');
+    svg.classList.remove("invisible-mode", "invisible-mode-hard");
+    svg.classList.add("showGuesses", "gameEnd");
     console.log( "YOU WIN!" );
 }
 endGameButton.addEventListener('click', endGame);
