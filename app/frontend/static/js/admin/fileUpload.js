@@ -8,7 +8,7 @@ const fileUploadDropdownHeader = document.querySelector("#file-upload-dropdown H
 const fileUploadDropdownBody = document.getElementById("file-upload-dropdown-body");
 const uploadForm = document.getElementById("upload-form");
 const fileInput = document.getElementById("file-input");
-const preview = document.getElementById("preview");
+const preview = document.getElementById("properties");
 const mapPreview = document.getElementById("map-preview");
 
 const moveWestBtn = document.getElementById("move-west-btn");

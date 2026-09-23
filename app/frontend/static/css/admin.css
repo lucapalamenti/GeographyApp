@@ -77,6 +77,11 @@ button {
     }
 }
 
+#properties {
+    max-height: 50vh;
+    overflow-y: scroll;
+}
+
 #load-map-btn {
     background-color: var(--green-1);
     border: 2px solid var(--green-4);
