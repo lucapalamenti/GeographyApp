@@ -1,4 +1,4 @@
-import fs from "fs";
+const fs = require("fs");
 
 const RegionDAO = require('./RegionDAO.js');
 const database = require('./databaseConnections.js');
