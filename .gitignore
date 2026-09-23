@@ -3,7 +3,6 @@ node_modules/
 .env
 
 # App
-/app/src/api/db/CustomDAO.js
 /app/src/api/db/backend/test
 /app/src/api/db/usableQueries.txt
 /app/uploads/thumbnails/custom
