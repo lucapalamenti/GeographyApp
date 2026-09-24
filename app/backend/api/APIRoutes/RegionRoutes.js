@@ -1,6 +1,6 @@
 import { Router, json } from 'express';
 
-import { getRegions, getRegionById, getRegionsByMapId, getParentRegionsByMapId, getMapRegionStates, getMapRegion, createRegion, createMapRegion, setRegionParentId_range, deleteRegion_range } from '../db/RegionDAO.js';
+import RegionDAO from '../db/RegionDAO.js';
 import BackendPayloadManager from '../../middleware/BackendPayloadManager.js';
 
 import Region from '../models/Region.js';
@@ -10,7 +10,7 @@ const RegionAPIRouter = Router();
 RegionAPIRouter.use( json() );
 
 RegionAPIRouter.get('/regions', (req, res) => {
-    getRegions().then( regions => {
+    RegionDAO.getRegions().then( regions => {
         res.json( regions );
     })
     .catch( err => {
@@ -19,7 +19,7 @@ RegionAPIRouter.get('/regions', (req, res) => {
 });
 
 RegionAPIRouter.get('/regions/:regionId', (req, res) => {
-    getRegionById( req.params.regionId ).then( region => {
+    RegionDAO.getRegionById( req.params.regionId ).then( region => {
         res.json( region );
     })
     .catch( err => {
@@ -30,8 +30,8 @@ RegionAPIRouter.get('/regions/:regionId', (req, res) => {
 RegionAPIRouter.get('/regions/map/:mapId', async (req, res) => {
     try {
         res.json({
-            mapRegions : await getRegionsByMapId( req.params.mapId ),
-            parentRegions : await getParentRegionsByMapId( req.params.mapId )
+            mapRegions : await RegionDAO.getRegionsByMapId( req.params.mapId ),
+            parentRegions : await RegionDAO.getParentRegionsByMapId( req.params.mapId )
         });
     } catch ( err ) {
         res.status(500).json({error:err, message: 'Error with GET request to /regions/map/:mapId'});
@@ -39,7 +39,7 @@ RegionAPIRouter.get('/regions/map/:mapId', async (req, res) => {
 });
 
 RegionAPIRouter.get('/regions/parents/:mapId', (req, res) => {
-    getParentRegionsByMapId( Number( req.params.mapId ) ).then( parents => {
+    RegionDAO.getParentRegionsByMapId( Number( req.params.mapId ) ).then( parents => {
         res.json( parents );
     }).catch( err => {
         res.status(500).json({error:err, message: 'Error with GET request to /regions/parents/:mapId'});
@@ -47,7 +47,7 @@ RegionAPIRouter.get('/regions/parents/:mapId', (req, res) => {
 });
 
 RegionAPIRouter.get('/mapRegion/states', (req, res) => {
-    getMapRegionStates().then( states => {
+    RegionDAO.getMapRegionStates().then( states => {
         res.json( states );
     })
     .catch( err => {
@@ -56,7 +56,7 @@ RegionAPIRouter.get('/mapRegion/states', (req, res) => {
 });
 
 RegionAPIRouter.get('/mapRegion/:mapId/:regionId', (req, res) => {
-    getMapRegion( req.params.mapId, req.params.regionId ).then( region => {
+    RegionDAO.getMapRegion( req.params.mapId, req.params.regionId ).then( region => {
         res.json( region );
     })
     .catch( err => {
@@ -66,7 +66,7 @@ RegionAPIRouter.get('/mapRegion/:mapId/:regionId', (req, res) => {
 
 RegionAPIRouter.post('/regions', BackendPayloadManager.chunkMiddleware, (req, res) => {
     const region =  new Region( req.body );
-    createRegion( region ).then( region => {
+    RegionDAO.createRegion( region ).then( region => {
         res.json( region );
     })
     .catch( err => {
@@ -81,7 +81,7 @@ RegionAPIRouter.post('/mapRegion', BackendPayloadManager.chunkMiddleware, (req, 
      */
     const mapRegionData = req.body;
 
-    createMapRegion( mapRegionData ).then( mapRegion => {
+    RegionDAO.createMapRegion( mapRegionData ).then( mapRegion => {
         res.json( mapRegion );
     })
     .catch( err => {
@@ -92,7 +92,7 @@ RegionAPIRouter.put('/regions/setParent/:start/:end/:parentId', async (req, res)
     const startId = Number( req.params.start );
     const endId = Number( req.params.end );
     const region_parent_id = Number( req.params.parentId );
-    await setRegionParentId_range( startId, endId, region_parent_id ).then( affectedRows => {
+    await RegionDAO.setRegionParentId_range( startId, endId, region_parent_id ).then( affectedRows => {
         res.json({ affectedRows: affectedRows });
     }).catch( err => {
         res.status(500).json({error:err, message: 'Error with PUT request to /regions/setParent/:start/:end/:parentId'});
@@ -103,7 +103,7 @@ RegionAPIRouter.delete('/regions/start/:start/end/:end', (req, res) => {
     console.log( req.params );
     const startId = Number( req.params.start );
     const endId = Number( req.params.end );
-    deleteRegion_range( startId, endId ).then( affectedRows => {
+    RegionDAO.deleteRegion_range( startId, endId ).then( affectedRows => {
         res.json({ affectedRows : affectedRows });
     })
     .catch( err => {

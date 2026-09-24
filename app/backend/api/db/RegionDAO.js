@@ -13,7 +13,7 @@ const COPY_TO_FILE = false;
  * Gets all Region objects from the database
  * @returns {Promise<Array<Region>>}
  */
-export const getRegions = async () => {
+const getRegions = async () => {
     return await DBC.query(`
         SELECT * FROM region;
         `, [])
@@ -27,7 +27,7 @@ export const getRegions = async () => {
  * @param {Number} region_id 
  * @returns {Promise<Region>}
  */
-export const getRegionById = async ( region_id ) => {
+const getRegionById = async ( region_id ) => {
     return await DBC.query(`
         SELECT * FROM region
         WHERE region_id = ?;
@@ -45,7 +45,7 @@ export const getRegionById = async ( region_id ) => {
  * @param {number} mapRegion_map_id 
  * @returns {Promise<Array<MapRegion>>}
  */
-export const getRegionsByMapId = async ( mapRegion_map_id ) => {
+const getRegionsByMapId = async ( mapRegion_map_id ) => {
     return await DBC.query(`
         SELECT * FROM mapRegion
         JOIN region ON mapRegion_region_id = region_id
@@ -61,7 +61,7 @@ export const getRegionsByMapId = async ( mapRegion_map_id ) => {
  * @param {number} map_id 
  * @returns {Promise<Array<string>>}
  */
-export const getParentRegionsByMapId = async ( map_id ) => {
+const getParentRegionsByMapId = async ( map_id ) => {
     const query = `
         SELECT DISTINCT
             parent.region_id,
@@ -91,7 +91,7 @@ export const getParentRegionsByMapId = async ( map_id ) => {
  * @param {Region} region 
  * @returns {Promise<Region>}
  */
-export const createRegion = async ( region ) => {
+const createRegion = async ( region ) => {
     const { region_name, region_type, region_parent_id, region_template_id, region_points } = region;
     const query = `
         INSERT INTO region (region_name, region_type, region_parent_id, region_template_id, region_points)
@@ -114,7 +114,7 @@ export const createRegion = async ( region ) => {
  * @param {number} region_parent_id
  * @returns {Promise<number>} the number of affected Regions
  */
-export const setRegionParentId_range = async ( startId, endId, region_parent_id ) => {
+const setRegionParentId_range = async ( startId, endId, region_parent_id ) => {
     if ( isNaN( startId ) ) startId = 0;
     if ( isNaN( endId ) ) endId = Number.MAX_SAFE_INTEGER;
     try {
@@ -138,7 +138,7 @@ export const setRegionParentId_range = async ( startId, endId, region_parent_id 
  * @param {number} region_id 
  * @returns {Promise<>}
  */
-export const deleteRegion = async ( region_id ) => {
+const deleteRegion = async ( region_id ) => {
     return await DBC.query(`
         DELETE FROM region
         WHERE region_id = ?;
@@ -153,7 +153,7 @@ export const deleteRegion = async ( region_id ) => {
  * @param {number} endId 
  * @returns {Promise<>}
  */
-export const deleteRegion_range = async ( startId, endId ) => {
+const deleteRegion_range = async ( startId, endId ) => {
     if ( isNaN( startId ) ) startId = 0;
     if ( isNaN( endId ) ) endId = Number.MAX_SAFE_INTEGER;
     await deleteMapRegion_range( startId, endId );
@@ -165,7 +165,7 @@ export const deleteRegion_range = async ( startId, endId ) => {
         });
 };
 
-export const deleteMapRegion_range = async ( startId, endId ) => {
+const deleteMapRegion_range = async ( startId, endId ) => {
     if ( isNaN( startId ) ) startId = 0;
     if ( isNaN( endId ) ) endId = Number.MAX_SAFE_INTEGER;
     return await DBC.query(`
@@ -176,7 +176,7 @@ export const deleteMapRegion_range = async ( startId, endId ) => {
         });
 };
 
-export const getMapRegion = async ( mapRegion_map_id, mapRegion_region_id ) => {
+const getMapRegion = async ( mapRegion_map_id, mapRegion_region_id ) => {
     return await DBC.query(`
         SELECT * FROM mapRegion
         WHERE mapRegion_map_id = ? AND mapRegion_region_id = ?;
@@ -192,7 +192,7 @@ export const getMapRegion = async ( mapRegion_map_id, mapRegion_region_id ) => {
  * @param {MapRegionJoinData} mapRegion
  * @returns {Promise<number>}
  */
-export const createMapRegion = async ( mapRegion ) => {
+const createMapRegion = async ( mapRegion ) => {
     const query = `
         INSERT INTO mapRegion (mapRegion_map_id, mapRegion_region_id, mapRegion_type)
         VALUES (?, ?, ?);
@@ -214,7 +214,7 @@ export const createMapRegion = async ( mapRegion ) => {
  * 
  * @returns {Promise<Array<String>>}
  */
-export const getMapRegionStates = async () => {
+const getMapRegionStates = async () => {
     return await DBC.query(`
         SELECT COLUMN_TYPE
         FROM INFORMATION_SCHEMA.COLUMNS
@@ -227,3 +227,18 @@ export const getMapRegionStates = async () => {
             return str.substring(6, str.length - 2).split("','");
         });
 };
+
+export default {
+    getRegions,
+    getRegionById,
+    getRegionsByMapId,
+    getParentRegionsByMapId,
+    createRegion,
+    setRegionParentId_range,
+    deleteRegion,
+    deleteRegion_range,
+    deleteMapRegion_range,
+    getMapRegion,
+    createMapRegion,
+    getMapRegionStates
+}

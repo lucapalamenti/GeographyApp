@@ -4,8 +4,7 @@ import { join } from "path";
 import { JSDOM } from 'jsdom';
 import { appendFileSync } from 'fs';
 
-import { createMap, getMaps } from '../db/MapDAO.js';
-import { createRegion, createMapRegion, getRegionsByMapId } from '../db/RegionDAO.js';
+import RegionDAO from '../db/RegionDAO.js';
 import BackendPayloadManager from '../../middleware/BackendPayloadManager.js';
 import Kml2Geojson from '../util/kml2geojson.js';
 
@@ -86,7 +85,7 @@ UploadAPIRouter.post('/mapfile/create', BackendPayloadManager.chunkMiddleware, a
     }
 
     // Create a map for the new data to be seen in
-    const map = await createMap( new MMap({
+    const map = await RegionDAO.createMap( new MMap({
         map_id : null,
         map_name : fieldData.map_name,
         map_thumbnail : "default/Template_Map_Thumbnail.png",
@@ -102,7 +101,7 @@ UploadAPIRouter.post('/mapfile/create', BackendPayloadManager.chunkMiddleware, a
     // Confirm that all Region and Polygon objects were successfully created
     const objectResponses = await Promise.all( featureCollection.features.map( feature => {
         // Create a Region from each feature
-        return createRegion({
+        return RegionDAO.createRegion({
             region_name : feature.properties[fieldData.region_name_key],
             region_type : fieldData.region_type,
             region_parent_id : null,
@@ -115,7 +114,7 @@ UploadAPIRouter.post('/mapfile/create', BackendPayloadManager.chunkMiddleware, a
     if ( !objectResponses ) return;
     
     const creationResponses = await Promise.all( objectResponses.map( region => {
-        return createMapRegion({
+        return RegionDAO.createMapRegion({
             mapRegion_map_id : map.map_id,
             mapRegion_region_id : region.region_id,
             mapRegion_type : "enabled"
@@ -131,11 +130,11 @@ UploadAPIRouter.post('/mapfile/create', BackendPayloadManager.chunkMiddleware, a
 });
 
 UploadAPIRouter.post('/generateTemplateFiles', async (req, res) => {
-    getMaps( "template" ).then( async returnedMaps => {
+    RegionDAO.getMaps( "template" ).then( async returnedMaps => {
         for ( const map of returnedMaps ) {
             const filename = `./backend/api/test/03-map_${map.map_id}.sql`;
             appendFileSync( filename, map.insertStatementLn().concat("\n") );
-            await getRegionsByMapId( map.map_id ).then( returnedRegions => {
+            await RegionDAO.getRegionsByMapId( map.map_id ).then( returnedRegions => {
                 appendFileSync( filename, Region.INSERT_STATEMENT_STARTER );
                 for ( const region of returnedRegions ) {
                     appendFileSync( filename, region.insertStatementLn_valuesOnly() );

@@ -1,10 +1,10 @@
 import fs from "fs";
 
-const RegionDAO = require('./RegionDAO.js');
-const database = require('./databaseConnections.js');
-// const US_Counties_Parse = require('./backend/test/US_Counties-parse.js');
-// const US_States_Parse = require('./backend/test/US_States-Parse.js');
-// const US_States_Polygon_Parse = require('./backend/test/US_States_Polygon-parse.js');
+import RegionDAO from "./RegionDAO.js";
+import database from "./databaseConnections.js";
+// import US_Counties_Parse from './backend/test/US_Counties-parse.js';
+// import US_States_Parse from './backend/test/US_States-Parse.js';
+// import US_States_Polygon_Parse from './backend/test/US_States_Polygon-parse.js';
 const US_States_Polygon_Parse = 1;
 const mapIdCode = {
     "Alabama": "53",
@@ -110,12 +110,7 @@ const printRegionInsertQuery = () => {
     return database.query(`SELECT * FROM region WHERE region_id = 1`);
 };
 
-const printPolygons = async () => {
-    
-};
-
-module.exports = {
+export {
     custom,
-    printRegionInsertQuery,
-    printPolygons
+    printRegionInsertQuery
 };
