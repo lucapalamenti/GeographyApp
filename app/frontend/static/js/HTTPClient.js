@@ -1,6 +1,12 @@
-function processJSONResponse(res) {
+/**
+ * 
+ * @param {Response} res 
+ * @returns {JSON}
+ */
+async function processJSONResponse(res) {
     if ( !res.ok ) {
-        const error = new Error(`This request was not successful: ${res.statusText} (${res.status})`);
+        const resObj = JSON.stringify( await res.json() );
+        const error = new Error(`This request was not successful: ${res.statusText} (${res.status})\nResponse:\n${resObj}\n`);
         error.status = res.status;
         throw error;
     }
@@ -8,7 +14,7 @@ function processJSONResponse(res) {
 };
 
 function handleError(err) {
-    console.error('Error in fetch', err);
+    // console.error('Error in fetch', err);
     throw err;
 };
 
