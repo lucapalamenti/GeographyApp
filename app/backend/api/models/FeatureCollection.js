@@ -40,6 +40,6 @@ class Feature {
      */
     constructor ( data ) {
         this.properties = data.properties;
-        this.geometry = SQLGeometry.SQLGeometry.createAnyType( data.geometry );
+        this.geometry = SQLGeometry.createAnyType( data.geometry );
     }
 }

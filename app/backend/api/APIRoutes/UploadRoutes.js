@@ -73,7 +73,7 @@ UploadAPIRouter.post('/mapfile/create', BackendPayloadManager.chunkMiddleware, a
     try {
         fieldData = new TemplateMap( req.body );
     } catch ( err ) {
-        res.status(400).json({ message: 'All required TemplateMap fields are not populated!' });
+        res.status(400).json({ message: err.message });
         return;
     }
 
