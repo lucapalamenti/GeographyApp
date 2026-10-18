@@ -1,6 +1,6 @@
 import { Router, json } from 'express';
 
-import { getMaps, getMapById, createMap, updateMap, deleteAllCustomMaps, deleteMap } from '../db/MapDAO.js';
+import MapDAO from '../db/MapDAO.js';
 import BackendPayloadManager from '../../middleware/BackendPayloadManager.js';
 import MMap from '../models/MMap.js';
 import util from '../util/util.js';
@@ -10,7 +10,7 @@ MapAPIRouter.use( json() );
 
 MapAPIRouter.get('/maps/type/:type/sort/:sort/desc/:desc', (req, res) => {
     const p = req.params;
-    getMaps( p.type, p.sort, p.desc ).then( maps => {
+    MapDAO.getMaps( p.type, p.sort, p.desc ).then( maps => {
         res.json( maps );
     })
     .catch( err => {
@@ -19,7 +19,7 @@ MapAPIRouter.get('/maps/type/:type/sort/:sort/desc/:desc', (req, res) => {
 });
 
 MapAPIRouter.get('/maps/:mapId', (req, res) => {
-    getMapById( req.params.mapId ).then( map => {
+    MapDAO.getMapById( req.params.mapId ).then( map => {
         res.json( map );
     })
     .catch( err => {
@@ -29,7 +29,7 @@ MapAPIRouter.get('/maps/:mapId', (req, res) => {
 
 MapAPIRouter.post('/maps', BackendPayloadManager.chunkMiddleware, (req, res) => {
     const map = new MMap( req.body );
-    createMap( map ).then( returnedMap => {
+    MapDAO.createMap( map ).then( returnedMap => {
         res.json( returnedMap );
     })
     .catch( err => {
@@ -39,7 +39,7 @@ MapAPIRouter.post('/maps', BackendPayloadManager.chunkMiddleware, (req, res) => 
 
 MapAPIRouter.put('/maps', BackendPayloadManager.chunkMiddleware, (req, res) => {
     const map = new MMap( req.body );
-    updateMap( map ).then( map => {
+    MapDAO.updateMap( map ).then( map => {
         res.json( map );
     })
     .catch( err => {
@@ -48,7 +48,7 @@ MapAPIRouter.put('/maps', BackendPayloadManager.chunkMiddleware, (req, res) => {
 });
 
 MapAPIRouter.delete('/maps', (req, res) => {
-    deleteAllCustomMaps().then( deletedMapCount => {
+    MapDAO.deleteAllCustomMaps().then( deletedMapCount => {
         // Remove all thumbnails for custom maps
         util.deleteAllFilesInDirectory( "/app/uploads/thumbnails/custom" );
         res.json({ message: `All ${deletedMapCount} custom maps deleted` });
@@ -61,7 +61,7 @@ MapAPIRouter.delete('/maps', (req, res) => {
 MapAPIRouter.delete('/maps/:mapId', async (req, res) => {
     const mapId = req.params.mapId;
     // First get the map so we know what thumbnail to delete
-    const returnedMap = await getMapById( mapId ).catch( err => {
+    const returnedMap = await MapDAO.getMapById( mapId ).catch( err => {
         return res.status(404).json( err );
     });
 
@@ -70,7 +70,7 @@ MapAPIRouter.delete('/maps/:mapId', async (req, res) => {
 
     }
 
-    await deleteMap( mapId ).catch( err => {
+    await MapDAO.deleteMap( mapId ).catch( err => {
         return res.status(500).json({error:err, message: 'Error with DELETE request to /maps/:mapId'});
     });
 

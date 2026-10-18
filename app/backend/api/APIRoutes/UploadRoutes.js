@@ -4,6 +4,7 @@ import { join } from "path";
 import { JSDOM } from 'jsdom';
 import { appendFileSync } from 'fs';
 
+import MapDAO from '../db/MapDAO.js';
 import RegionDAO from '../db/RegionDAO.js';
 import BackendPayloadManager from '../../middleware/BackendPayloadManager.js';
 import Kml2Geojson from '../util/kml2geojson.js';
@@ -86,7 +87,7 @@ UploadAPIRouter.post('/mapfile/create', BackendPayloadManager.chunkMiddleware, a
     }
 
     // Create a map for the new data to be seen in
-    const map = await RegionDAO.createMap( new MMap({
+    const map = await MapDAO.createMap( new MMap({
         map_id : null,
         map_name : fieldData.map_name,
         map_thumbnail : "default/Template_Map_Thumbnail.png",

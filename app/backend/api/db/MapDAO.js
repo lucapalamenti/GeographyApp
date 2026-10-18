@@ -15,7 +15,7 @@ const COPY_TO_FILE = false;
  * @param {"DESC"} DESC order results descending if present
  * @returns {Promise<Array<MMap>>}
  */
-export const getMaps = async ( filter, sort, DESC ) => {
+const getMaps = async ( filter, sort, DESC ) => {
     let query = "SELECT * FROM map\n";
     // Append filter clause
     switch ( filter ) {
@@ -51,7 +51,7 @@ export const getMaps = async ( filter, sort, DESC ) => {
  * @param {Number} map_id 
  * @returns {Promise<MMap>}
  */
-export const getMapById = async ( map_id ) => {
+const getMapById = async ( map_id ) => {
     if ( map_id ) {
         const rows = await DBC.query(`
             SELECT * FROM map
@@ -72,7 +72,7 @@ export const getMapById = async ( map_id ) => {
  * @param {MMap} map 
  * @returns {Promise<MMap>}
  */
-export const createMap = async ( map ) => {
+const createMap = async ( map ) => {
     const query = `
         INSERT INTO \`map\` (\`map_name\`, \`map_thumbnail\`, \`map_primary_color_R\`, \`map_primary_color_G\`, \`map_primary_color_B\`, \`map_is_template\`, \`map_is_custom\`)
         VALUES (?, ?, ?, ?, ?, ?, ?);
@@ -95,7 +95,7 @@ export const createMap = async ( map ) => {
  * @param {MMap} map 
  * @returns {Promise<MMap>}
  */
-export const updateMap = async ( map ) => {
+const updateMap = async ( map ) => {
     const query = `
         UPDATE \`Map\`
         SET \`map_id\` = ?, \`map_name\` = ?, \`map_thumbnail\` = ?, \`map_primary_color_R\` = ?, \`map_primary_color_G\` = ?, \`map_primary_color_B\` = ?, \`map_is_template\` = ?, \`map_is_custom\` = ?
@@ -119,7 +119,7 @@ export const updateMap = async ( map ) => {
  * @param {Number} map_id 
  * @returns 
  */
-export const deleteMap = async ( map_id ) => {
+const deleteMap = async ( map_id ) => {
     await DBC.query(`
         DELETE FROM mapRegion
         WHERE mapRegion_map_id = ?;
@@ -135,7 +135,7 @@ export const deleteMap = async ( map_id ) => {
  * Deletes all custom maps 
  * @returns {number} the number of custom maps that were deleted
  */
-export const deleteAllCustomMaps = async () => {
+const deleteAllCustomMaps = async () => {
     await DBC.query(`
         DELETE mapRegion FROM mapRegion JOIN map
         ON mapRegion_map_id = map_id
@@ -145,4 +145,13 @@ export const deleteAllCustomMaps = async () => {
         DELETE FROM map
         WHERE map_is_custom = 1;
     `, []).affectedRows;
+}
+
+export default {
+    getMaps,
+    getMapById,
+    createMap,
+    updateMap,
+    deleteMap,
+    deleteAllCustomMaps
 }
