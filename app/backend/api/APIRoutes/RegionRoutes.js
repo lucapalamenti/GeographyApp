@@ -6,6 +6,8 @@ import BackendPayloadManager from '../../middleware/BackendPayloadManager.js';
 import Region from '../models/Region.js';
 import MapRegion from '../models/MapRegion.js';
 
+import { MapRegionJoinData } from '../typeDefs/MapRegionJoinData.js'
+
 const RegionAPIRouter = Router();
 RegionAPIRouter.use( json() );
 
@@ -75,7 +77,6 @@ RegionAPIRouter.post('/regions', BackendPayloadManager.chunkMiddleware, (req, re
 });
 
 RegionAPIRouter.post('/mapRegion', BackendPayloadManager.chunkMiddleware, (req, res) => {
-    console.log( req.body );
     /**
      * @type {MapRegionJoinData}
      */
@@ -100,7 +101,6 @@ RegionAPIRouter.put('/regions/setParent/:start/:end/:parentId', async (req, res)
 });
 
 RegionAPIRouter.delete('/regions/start/:start/end/:end', (req, res) => {
-    console.log( req.params );
     const startId = Number( req.params.start );
     const endId = Number( req.params.end );
     RegionDAO.deleteRegion_range( startId, endId ).then( affectedRows => {
