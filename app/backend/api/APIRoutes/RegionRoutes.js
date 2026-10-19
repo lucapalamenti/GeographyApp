@@ -6,8 +6,6 @@ import BackendPayloadManager from '../../middleware/BackendPayloadManager.js';
 import Region from '../models/Region.js';
 import MapRegion from '../models/MapRegion.js';
 
-import { MapRegionJoinData } from '../typeDefs/MapRegionJoinData.js'
-
 const RegionAPIRouter = Router();
 RegionAPIRouter.use( json() );
 
@@ -78,7 +76,7 @@ RegionAPIRouter.post('/regions', BackendPayloadManager.chunkMiddleware, (req, re
 
 RegionAPIRouter.post('/mapRegion', BackendPayloadManager.chunkMiddleware, (req, res) => {
     /**
-     * @type {MapRegionJoinData}
+     * @type {import('../typeDefs/MapRegionJoinData.js').MapRegionJoinData}
      */
     const mapRegionData = req.body;
 
