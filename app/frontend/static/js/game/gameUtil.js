@@ -1,4 +1,4 @@
-import {idToInput, debounce} from "../util/util.js";
+import {idToInput, throttle} from "../util/util.js";
 
 import { html, tooltip, svg, input, selectParent, showNames, endGameButton, gameEndPanel, noMapArea, promptTally } from "./documentElements-game.js";
 import { ATTEMPT_COLORS, ATTEMPT_SOUNDS } from "../variables.js";
@@ -95,7 +95,7 @@ const showLabel = ( path, e, center, timeout ) => {
  * Moves tooltip with cursor
  * @param {Event} e 
  */
-const moveToolTip = debounce( e => {
+const moveToolTip = throttle( e => {
     tooltip.style.display = "block";
     tooltip.style.transform = `translate( calc( -50% + ${e.clientX}px ), calc( 60% + ${e.clientY + window.scrollY}px ) )`;
 }, 20);
