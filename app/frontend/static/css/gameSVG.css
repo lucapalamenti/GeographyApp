@@ -20,45 +20,40 @@
     &.gameEnd {
         g g path {
             transition: fill 0s !important;
+            filter: brightness(0.9);
         }
         g g.enabled path {
             fill: grey;
-        }
-        g g.disabled path {
-            fill: rgb(100, 100, 100);
-        }
-        g g.outside path {
-            fill: rgb(77, 77, 77);
         }
     }
 
     &.showGuesses {
         g g {
             path.guesses0 {
-                fill: rgb(106, 235, 89);
+                fill: var(--svg-guesses0)
             }
             path.guesses1 {
-                fill: rgb(240, 219, 35);
+                fill: var(--svg-guesses1)
             }
             path.guesses2 {
-                fill: rgb(243, 148, 24);
+                fill: var(--svg-guesses2)
             }
             path.guesses3 {
-                fill: rgb(235, 89, 89);
+                fill: var(--svg-guesses3)
             }
         }
         &.invisible-mode g g {
             path.guesses0 {
-                stroke: rgb(106, 235, 89);
+                stroke: var(--svg-guesses0)
             }
             path.guesses1 {
-                stroke: rgb(240, 219, 35);
+                stroke: var(--svg-guesses1)
             }
             path.guesses2 {
-                stroke: rgb(243, 148, 24);
+                stroke: var(--svg-guesses2)
             }
             path.guesses3 {
-                stroke: rgb(235, 89, 89);
+                stroke: var(--svg-guesses3)
             }
         }
     }
@@ -76,11 +71,14 @@
         }
 
         &.typeCurrent {
-            fill: rgb(0, 255, 213);
+            fill: var(--svg-type-current);
         }
     }
 
     g g.disabled path {
-        fill: grey;
+        fill: var(--svg-land-disabled);
+    }
+    g g.outside path {
+        fill: var(--svg-land-outside);
     }
 }

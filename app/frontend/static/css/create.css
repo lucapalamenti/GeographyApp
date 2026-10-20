@@ -4,30 +4,30 @@ path {
     stroke: black;
 }
 g g path:hover {
-    fill: rgb(210, 211, 117);
+    fill: var(--svg-land-enabled-hover);
 }
 
 g g path.enabled {
-    fill: rgb(106, 235, 89);
+    fill: var(--svg-selected);
 }
 g g path.enabled:hover {
-    fill: rgb(86, 215, 69);
+    fill: var(--svg-selected-hover);
 }
 
 g g path.disabled {
-    fill: grey;
+    fill: var(--svg-land-disabled);
     stroke-width: 0.05%;
 }
 g g path.disabled:hover {
-    fill: rgb(108, 108, 108);
+    fill: var(--svg-land-disabled-hover);
 }
 
 g g path.outside {
-    fill: rgb(77, 77, 77);
+    fill: var(--svg-land-outside);
     stroke-width: 0.05%;
 }
 g g path.outside:hover {
-    fill: rgb(54, 54, 54);
+    fill: var(--svg-land-outside-hover);
 }
 
 #map-outline {
@@ -65,37 +65,37 @@ g g path.outside:hover {
             display: none;
         }
     }
-}
 
-#enabled-btn {
-    background-color: rgb(106, 235, 89);
-    
-    &:hover {
-        background-color: rgb(86, 215, 69);
+    #deselect-btn {
+        background-color: var(--svg-land-enabled);
+
+        &:hover {
+            background-color: var(--svg-land-enabled-hover);
+        }
     }
-}
 
-#deselect-btn {
-    background-color: var(--svg-land-enabled);
-
-    &:hover {
-        background-color: rgb(210, 211, 117);
+    #enabled-btn {
+        background-color: var(--svg-selected);
+        
+        &:hover {
+            background-color: var(--svg-selected-hover);
+        }
     }
-}
 
-#disabled-btn {
-    background-color: grey;
+    #disabled-btn {
+        background-color: var(--svg-land-disabled);
 
-    &:hover {
-        background-color: rgb(108, 108, 108);
+        &:hover {
+            background-color: var(--svg-land-disabled-hover);
+        }
     }
-}
 
-#outside-btn {
-    background-color: rgb(77, 77, 77);
+    #outside-btn {
+        background-color: var(--svg-land-outside);
 
-    &:hover {
-        background-color: rgb(54, 54, 54);
+        &:hover {
+            background-color: var(--svg-land-outside-hover);
+        }
     }
 }
 
@@ -106,53 +106,7 @@ g g path.outside:hover {
     display: none;
     transform: translate( calc(100% + 40px), -10px );
     padding: 10px;
-    grid:
-        'largeStep largeStep smallStep smallStep' 1fr
-        'largeStep largeStep smallStep smallStep' 1fr
-        'shrink shrink grow grow' 1fr
-        / 1fr 1fr 1fr 1fr;
 }
-
-.directional-panel {
-    display: grid;
-    grid:
-        'north east'
-        'west south';
-    aspect-ratio: 1;
-    rotate: 45deg;
-    padding: 15px;
-    .north { grid-area: north; }
-    .east {
-        grid-area: east;
-        rotate: 90deg;
-    }
-    .south {
-        grid-area: south;
-        rotate: 180deg;
-    }
-    .west {
-        grid-area: west;
-        rotate: 270deg;
-    }
-    & > button {
-        background-image: url("../images/arrow.svg");
-    }
-}
-
-#move-west-btn { grid-area: west; }
-#move-east-btn { grid-area: east; }
-#delete-btn { grid-area: delete; }
-#large-step-panel {
-    grid-area: largeStep;
-    & > button {
-        background-image: url("../images/doubleArrow.svg");
-    }
-}
-#small-step-panel {
-    grid-area: smallStep;
-}
-#shrink-btn { grid-area: shrink; }
-#grow-btn { grid-area: grow; }
 
 svg.zoom-1 path { stroke-width: 0.25px; }
 svg.zoom-2 path { stroke-width: 0.20px; }

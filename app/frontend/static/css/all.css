@@ -6,6 +6,20 @@
 
     --svg-ocean : rgb(141, 209, 226);
     --svg-land-enabled : rgb(230, 231, 137);
+    --svg-land-enabled-hover : rgb(210, 211, 117);
+    --svg-land-disabled : rgb(128, 128, 128);
+    --svg-land-disabled-hover : rgb(108, 108, 108);
+    --svg-land-outside : rgb(77, 77, 77);
+    --svg-land-outside-hover : rgb(57, 57, 57);
+
+    --svg-selected : rgb(106, 235, 89);
+    --svg-selected-hover : rgb(86, 215, 69);
+
+    --svg-guesses0 : rgb(106, 235, 89);
+    --svg-guesses1 : rgb(240, 219, 35);
+    --svg-guesses2 : rgb(243, 148, 24);
+    --svg-guesses3 : rgb(235, 89, 89);
+    --svg-type-current : rgb(0, 255, 213);
 }
 
 * {
