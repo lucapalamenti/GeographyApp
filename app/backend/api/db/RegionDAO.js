@@ -78,10 +78,7 @@ const getParentRegionsByMapId = async ( map_id ) => {
         WHERE mapRegion.mapRegion_map_id = ?;
         `;
     const params = [map_id];
-    return await DBC.query( query, params ).then( rows => {
-        console.log( rows );
-        return rows;
-    });
+    return await DBC.query( query, params );
 }
 
 // ----- <<<<< INSERT STATEMENTS >>>>> -----

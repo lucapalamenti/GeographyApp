@@ -32,8 +32,8 @@ g g path.outside:hover {
 
 #map-outline {
     fill: none;
-    stroke: red;
-    stroke-width: 2px;
+    stroke: rgba(255, 0, 0, 0.5);
+    stroke-width: 0.25%;
 }
 
 /* Region Type Button panel */

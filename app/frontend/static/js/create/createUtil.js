@@ -13,7 +13,7 @@ const getCenteredRegions = () => {
  * Find the minium and maximum X & Y values for all "enabled" and "disabled" regions
  */
 const findMinMax = () => {
-    let mapMinX = Infinity, mapMaxX = 0, mapMinY = Infinity, mapMaxY = 0;
+    let mapMinX = Infinity, mapMaxX = -Infinity, mapMinY = Infinity, mapMaxY = -Infinity;
     for ( const path of getCenteredRegions() ) {
         const svgRect = path.getBBox();
         if ( svgRect.x < mapMinX ) mapMinX = svgRect.x;
@@ -31,6 +31,7 @@ const findMinMax = () => {
 
 const createOutline = () => {
     const minMax = findMinMax();
+    console.log(minMax)
     const minX = minMax.mapMinX, maxX = minMax.mapMaxX, minY = minMax.mapMinY, maxY = minMax.mapMaxY;
     let tempWidth = maxX - minX;
     let tempHeight = maxY - minY;
