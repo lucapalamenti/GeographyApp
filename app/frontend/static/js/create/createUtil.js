@@ -31,7 +31,6 @@ const findMinMax = () => {
 
 const createOutline = () => {
     const minMax = findMinMax();
-    console.log(minMax)
     const minX = minMax.mapMinX, maxX = minMax.mapMaxX, minY = minMax.mapMinY, maxY = minMax.mapMaxY;
     let tempWidth = maxX - minX;
     let tempHeight = maxY - minY;
