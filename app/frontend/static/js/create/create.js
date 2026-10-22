@@ -171,7 +171,7 @@ createForm.addEventListener('submit', async e => {
     if ( mapName.value && mapTemplate.value && svg.querySelectorAll('PATH.enabled').length > 1 ) {
         loadingScreen.style.display = "flex";
         await createCustomMap( e ).then( map => {
-            // document.location = "../";
+            document.location = "../";
         }).catch( err => {
             console.error( err );
         });
@@ -217,7 +217,7 @@ async function createCustomMap( e ) {
         for ( const pathElement of svg.querySelectorAll(`PATH.${typeName}`) ) {
             const parentId = pathElement.parentElement.parentElement.id;
             // Create the mapRegion
-            /** @type {MapRegionJoinData} */
+            /** @type {import('../typeDefs/MapRegionJoinData.js').MapRegionJoinData} */
             const mapRegion = {
                 mapRegion_map_id : mapData.map_id,
                 mapRegion_region_id : regionMap.getChild( parentId, pathElement.id ),

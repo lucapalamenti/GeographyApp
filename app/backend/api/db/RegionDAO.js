@@ -186,7 +186,7 @@ const getMapRegion = async ( mapRegion_map_id, mapRegion_region_id ) => {
 };
 
 /**
- * @param {MapRegionJoinData} mapRegion
+ * @param {import('../typeDefs/MapRegionJoinData.js').MapRegionJoinData} mapRegion
  * @returns {Promise<number>}
  */
 const createMapRegion = async ( mapRegion ) => {

@@ -75,9 +75,7 @@ RegionAPIRouter.post('/regions', BackendPayloadManager.chunkMiddleware, (req, re
 });
 
 RegionAPIRouter.post('/mapRegion', BackendPayloadManager.chunkMiddleware, (req, res) => {
-    /**
-     * @type {import('../typeDefs/MapRegionJoinData.js').MapRegionJoinData}
-     */
+    /** @type {import('../typeDefs/MapRegionJoinData.js').MapRegionJoinData} */
     const mapRegionData = req.body;
 
     RegionDAO.createMapRegion( mapRegionData ).then( mapRegion => {

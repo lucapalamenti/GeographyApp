@@ -19,6 +19,12 @@ export default async function populateSVG( map, svg ) {
     svg.replaceChildren();
     // Get all mapRegions for this map 
     let mapData = await APIClient.getRegionsByMapId( map.map_id );
+    // definitely need to move this error check into the API call somehow
+    if ( mapData.parentRegions.length === 0 ) {
+        console.error( "Whoops! It looks like you forgot to set the parent for these regions!");
+        return;
+    }
+
     // Get width and height of map for centering on the page
     let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
     for ( const mapRegion of mapData.mapRegions ) {
