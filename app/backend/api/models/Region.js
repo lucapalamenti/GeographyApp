@@ -33,16 +33,16 @@ export default class Region {
      * Returns the SQL insert statement for this Region object
      * @returns {String}
      */
-    insertStatement() {
+    SQLInsertStatement() {
         return `${Region.INSERT_STATEMENT_STARTER}(${this.region_id}, "${this.region_name}", "${this.region_type}", ${this.region_parent_id}, ${this.region_template_id}, ${this.region_points.toQueryStringWrapped()});`;
     }
-    insertStatementLn() {
-        return `${this.insertStatement()}\n`;
+    SQLInsertStatementLn() {
+        return `${this.SQLInsertStatement()}\n`;
     }
-    insertStatement_valuesOnly() {
+    SQLInsertStatement_valuesOnly() {
         return `(${this.region_id}, "${this.region_name}", "${this.region_type}", ${this.region_parent_id}, ${this.region_template_id}, ${this.region_points.toQueryStringWrapped()}),`
     }
-    insertStatementLn_valuesOnly() {
-        return `${this.insertStatement_valuesOnly()}\n`;
+    SQLInsertStatementLn_valuesOnly() {
+        return `${this.SQLInsertStatement_valuesOnly()}\n`;
     }
 };

@@ -135,11 +135,11 @@ UploadAPIRouter.post('/generateTemplateFiles', async (req, res) => {
     MapDAO.getMaps( "template" ).then( async returnedMaps => {
         for ( const map of returnedMaps ) {
             const filename = `./backend/api/test/03-map_${map.map_id}.sql`;
-            appendFileSync( filename, map.insertStatementLn().concat("\n") );
+            appendFileSync( filename, map.SQLInsertStatementLn().concat("\n") );
             await RegionDAO.getRegionsByMapId( map.map_id ).then( returnedRegions => {
                 appendFileSync( filename, Region.INSERT_STATEMENT_STARTER );
                 for ( const mapRegion of returnedRegions ) {
-                    appendFileSync( filename, mapRegion.region.insertStatementLn_valuesOnly() );
+                    appendFileSync( filename, mapRegion.region.SQLInsertStatementLn_valuesOnly() );
                 }
             });
         }

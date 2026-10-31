@@ -41,16 +41,16 @@ export default class MMap {
         return [this.map_name, this.map_thumbnail, this.map_primary_color_R, this.map_primary_color_G, this.map_primary_color_B, this.map_is_template, this.map_is_custom];
     }
 
-    insertStatement() {
+    SQLInsertStatement() {
         return `${MMap.INSERT_STATEMENT_STARTER}(${this.map_id}, "${this.map_name}", "${this.map_thumbnail}", ${this.map_primary_color_R}, ${this.map_primary_color_G}, ${this.map_primary_color_B}, ${Number( this.map_is_template )}, ${Number( this.map_is_custom )});`;
     }
-    insertStatementLn() {
-        return `${this.insertStatement()}\n`;
+    SQLInsertStatementLn() {
+        return `${this.SQLInsertStatement()}\n`;
     }
-    insertStatement_valuesOnly() {
+    SQLInsertStatement_valuesOnly() {
         return `(${this.map_id}, "${this.map_name}", "${this.map_thumbnail}", ${this.map_primary_color_R}, ${this.map_primary_color_G}, ${this.map_primary_color_B}, ${Number( this.map_is_template )}, ${Number( this.map_is_custom )}),`
     }
-    insertStatementLn_valuesOnly() {
-        return `${this.insertStatement_valuesOnly()}\n`;
+    SQLInsertStatementLn_valuesOnly() {
+        return `${this.SQLInsertStatement_valuesOnly()}\n`;
     }
 };  

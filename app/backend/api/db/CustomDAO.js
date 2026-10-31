@@ -83,7 +83,7 @@ const custom3 = async () => {
             fs.appendFileSync(`./src/api/db/backend/test/queries/${filename}.sql`, '\n' );
             fs.appendFileSync(`./src/api/db/backend/test/queries/${filename}.sql`, rContent.concat('\n') );
         }
-        let pContent = p.insertStatement();
+        let pContent = p.SQLInsertStatement();
         fs.appendFileSync(`./src/api/db/backend/test/queries/${filename}.sql`, pContent.concat('\n') );
     }
     return database.query(`SELECT * FROM polygon WHERE polygon_id = 2073;`);
