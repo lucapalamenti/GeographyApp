@@ -132,14 +132,14 @@ UploadAPIRouter.post('/mapfile/create', BackendPayloadManager.chunkMiddleware, a
 });
 
 UploadAPIRouter.post('/generateTemplateFiles', async (req, res) => {
-    RegionDAO.getMaps( "template" ).then( async returnedMaps => {
+    MapDAO.getMaps( "template" ).then( async returnedMaps => {
         for ( const map of returnedMaps ) {
             const filename = `./backend/api/test/03-map_${map.map_id}.sql`;
             appendFileSync( filename, map.insertStatementLn().concat("\n") );
             await RegionDAO.getRegionsByMapId( map.map_id ).then( returnedRegions => {
                 appendFileSync( filename, Region.INSERT_STATEMENT_STARTER );
-                for ( const region of returnedRegions ) {
-                    appendFileSync( filename, region.insertStatementLn_valuesOnly() );
+                for ( const mapRegion of returnedRegions ) {
+                    appendFileSync( filename, mapRegion.region.insertStatementLn_valuesOnly() );
                 }
             });
         }

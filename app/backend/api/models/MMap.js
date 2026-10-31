@@ -42,7 +42,7 @@ export default class MMap {
     }
 
     insertStatement() {
-        return `${INSERT_STATEMENT_STARTER}(${this.map_id}, "${this.map_name}", "${this.map_thumbnail}", ${this.map_primary_color_R}, ${this.map_primary_color_G}, ${this.map_primary_color_B}, ${Number( this.map_is_template )}, ${Number( this.map_is_custom )});`;
+        return `${MMap.INSERT_STATEMENT_STARTER}(${this.map_id}, "${this.map_name}", "${this.map_thumbnail}", ${this.map_primary_color_R}, ${this.map_primary_color_G}, ${this.map_primary_color_B}, ${Number( this.map_is_template )}, ${Number( this.map_is_custom )});`;
     }
     insertStatementLn() {
         return `${this.insertStatement()}\n`;

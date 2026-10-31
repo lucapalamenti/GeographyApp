@@ -34,7 +34,7 @@ export default class Region {
      * @returns {String}
      */
     insertStatement() {
-        return `${INSERT_STATEMENT_STARTER}(${this.region_id}, "${this.region_name}", "${this.region_type}", ${this.region_parent_id}, ${this.region_template_id}, ${this.region_points.toQueryStringWrapped()});`;
+        return `${Region.INSERT_STATEMENT_STARTER}(${this.region_id}, "${this.region_name}", "${this.region_type}", ${this.region_parent_id}, ${this.region_template_id}, ${this.region_points.toQueryStringWrapped()});`;
     }
     insertStatementLn() {
         return `${this.insertStatement()}\n`;

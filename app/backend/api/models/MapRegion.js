@@ -18,7 +18,7 @@ export default class MapRegion {
      * @param {Region & import('../typeDefs/MapRegionJoinData.js').MapRegionJoinData} data 
      */
     constructor ( data ) {
-        // constructor will() will only use necessary fields
+        // constructor will only use necessary fields
         this.region = new Region( data );
 
         this.mapRegion_id = data.mapRegion_id;

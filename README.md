@@ -78,6 +78,7 @@
 - zoom sensitivity
 - When creating a map, "deselecting" a region causes an error when attempting to create the map
 - Use CSS transform tag to move regions like Alaska rather than changing it's coordinates
+- Change insertStatement() object functions to SQLInsertStatement
 
 # Changelog
 
