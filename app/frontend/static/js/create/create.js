@@ -4,11 +4,10 @@ import {capitalizeFirst, idToInput} from "../util/util.js";
 import createUtil from "./createUtil.js";
 import { zoom } from "../mapManipulations.js";
 
-import MapRegion from "../models/MapRegion.js";
 import MMap from "../models/MMap.js";
 
 import { navBar } from "../documentElements.js";
-import { mapName, mapTemplate, mapColor, mapThumbnail, showOutline, stateButtonsPanel, stepButtonsPanel, mapContainer, svg, mapOutline, loadingScreen, selectedList, createForm } from "./documentElements-create.js";
+import { mapName, mapTemplate, mapColor, mapThumbnail, showOutline, stateButtonsPanel, modificationButtonsPanel, mapContainer, svg, mapOutline, loadingScreen, selectedList, createForm } from "./documentElements-create.js";
 import { SVG_WIDTH, SVG_HEIGHT, SVG_PADDING } from "../variables.js";
 import ParentChildMap from "../models/ParentChildMap.js";
 
@@ -35,27 +34,15 @@ window.onload = async () => {
     regionTypes.push("deselect");
 }
 
-// Handle user selecting a new region type selector
-stateButtonsPanel.addEventListener('click', e => {
-    if ( e.target.tagName === "BUTTON" ) {
-        // If the user selects a new button
-        if ( !e.target.classList.contains('icon-selected') ) {
-            stateButtonsPanel.querySelector(`#${selectedType}-btn`).classList.remove('icon-selected');
-            selectedType = e.target.id.substring( 0, e.target.id.length - 4 );
-            stateButtonsPanel.querySelector(`#${selectedType}-btn`).classList.add('icon-selected');
-        }
-    }
-});
-
 let dragging = false;
 let map;
 /** @type {ParentChildMap} */
 let regionMap;
+
 mapTemplate.addEventListener('change', async e => {
     mapOutline.style.display = "none";
     selectedList.style.display = "none";
     stateButtonsPanel.style.display = "none";
-    stepButtonsPanel.style.display = "none";
     if ( mapTemplate.value >= 0 ) {
         // Get the chosen map and display it
         map = new MMap( await APIClient.getMapById( mapTemplate.value ) );
@@ -69,12 +56,25 @@ mapTemplate.addEventListener('change', async e => {
             });
         }
         stateButtonsPanel.style.display = "flex";
-        stepButtonsPanel.style.display = "grid";
         mapContainer.hidden = false;
     } else {
         mapContainer.hidden = true;
     }
 });
+
+// Handle user selecting a new region type selector
+stateButtonsPanel.addEventListener('click', e => {
+    if ( e.target.tagName === "BUTTON" ) {
+        // If the user selects a new button
+        if ( !e.target.classList.contains('icon-selected') ) {
+            stateButtonsPanel.querySelector(`#${selectedType}-btn`).classList.remove('icon-selected');
+            selectedType = e.target.id.substring( 0, e.target.id.length - 4 );
+            stateButtonsPanel.querySelector(`#${selectedType}-btn`).classList.add('icon-selected');
+        }
+    }
+});
+
+// ----- <<<<< SVG CONTAINER >>>>> -----
 
 svg.addEventListener('mousedown', mouse => {
     dragging = true;
@@ -109,14 +109,15 @@ showOutline.addEventListener('change', e => {
 });
 
 /**
- * Handles changing the state of a region after a user mouses over it
+ * Handles changing the state of a region after a user mouses over it by
+ * updating its class to reflect the new type
  * @param {MouseEvent} mouse 
  */
 function changeRegionType( mouse ) {
     const region = mouse.target;
     // Remove existing class from the region and add the new one
-    region.classList.remove( region.classList[0] )
-    region.classList.add( selectedType )
+    region.classList.remove( region.classList[0] );
+    region.classList.add( selectedType );
 }
 
 /**

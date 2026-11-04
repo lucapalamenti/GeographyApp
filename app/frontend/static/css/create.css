@@ -1,139 +1,142 @@
-path {
-    fill: var(--svg-land-enabled);
-    stroke-width: 0.05%;
-    stroke: black;
-}
-g g path:hover {
-    fill: var(--svg-land-enabled-hover);
+main {
+    padding-bottom: 20px;
 }
 
-g g path.enabled {
-    fill: var(--svg-selected);
-}
-g g path.enabled:hover {
-    fill: var(--svg-selected-hover);
-}
-
-g g path.disabled {
-    fill: var(--svg-land-disabled);
-    stroke-width: 0.05%;
-}
-g g path.disabled:hover {
-    fill: var(--svg-land-disabled-hover);
-}
-
-g g path.outside {
-    fill: var(--svg-land-outside);
-    stroke-width: 0.05%;
-}
-g g path.outside:hover {
-    fill: var(--svg-land-outside-hover);
-}
-
-#map-outline {
-    fill: none;
-    stroke: rgba(255, 0, 0, 0.5);
-    stroke-width: 0.25%;
-}
-
-/* Region Type Button panel */
-
-#state-buttons-panel {
-    position: absolute;
-    transform: translate( calc(-50% - 50px) );
-    display: none;
-
-    button {
-        position: relative;
-
-        &:hover aside {
-            position: absolute;
-            top: 0;
-            left: -100%;
-            transform: translate(calc(-100% + 15px), -2px);
-            display: block;
-            background-color: var(--green-1);
-            border: 3px solid var(--green-2);
-            border-radius: 5px;
-            padding: 1px;
-            padding-right: 5px;
-            padding-left: 5px;
-        }
-
-        /* For tooltips */
-        aside {
-            display: none;
-        }
-    }
-
-    #deselect-btn {
-        background-color: var(--svg-land-enabled);
-
-        &:hover {
-            background-color: var(--svg-land-enabled-hover);
-        }
-    }
-
-    #enabled-btn {
-        background-color: var(--svg-selected);
-        
-        &:hover {
-            background-color: var(--svg-selected-hover);
-        }
-    }
-
-    #disabled-btn {
-        background-color: var(--svg-land-disabled);
-
-        &:hover {
-            background-color: var(--svg-land-disabled-hover);
-        }
-    }
-
-    #outside-btn {
-        background-color: var(--svg-land-outside);
-
-        &:hover {
-            background-color: var(--svg-land-outside-hover);
-        }
-    }
-}
-
-#step-buttons-panel {
+#modification-buttons-panel {
     width: 250px;
-    align-self: last baseline;
-    position: absolute;
-    display: none;
-    transform: translate( calc(100% + 40px), -10px );
+    flex-direction: column;
     padding: 10px;
-}
 
-svg.zoom-1 path { stroke-width: 0.25px; }
-svg.zoom-2 path { stroke-width: 0.20px; }
-svg.zoom-3 path { stroke-width: 0.16px; }
-svg.zoom-4 path { stroke-width: 0.13px; }
-svg.zoom-5 path { stroke-width: 0.10px; }
+    button.selected {
+        border: white;
+        color: white;
+    }
+
+    #state-buttons-panel {
+        position: absolute;
+        transform: translate( 0, calc() );
+        display: none;
+
+        button {
+            position: relative;
+
+            &:hover aside {
+                position: absolute;
+                top: 0;
+                left: -100%;
+                transform: translate(calc(-100% + 15px), -2px);
+                display: block;
+                background-color: var(--green-1);
+                border: 3px solid var(--green-2);
+                border-radius: 5px;
+                padding: 1px;
+                padding-right: 5px;
+                padding-left: 5px;
+            }
+
+            /* For tooltips */
+            aside {
+                display: none;
+            }
+        }
+
+        #deselect-btn {
+            background-color: var(--svg-land-enabled);
+
+            &:hover {
+                background-color: var(--svg-land-enabled-hover);
+            }
+        }
+
+        #enabled-btn {
+            background-color: var(--svg-selected);
+            
+            &:hover {
+                background-color: var(--svg-selected-hover);
+            }
+        }
+
+        #disabled-btn {
+            background-color: var(--svg-land-disabled);
+
+            &:hover {
+                background-color: var(--svg-land-disabled-hover);
+            }
+        }
+
+        #outside-btn {
+            background-color: var(--svg-land-outside);
+
+            &:hover {
+                background-color: var(--svg-land-outside-hover);
+            }
+        }
+
+        .icon-selected {
+            background-image: url("../images/check.png");
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+        }
+    }
+}
 
 #map-container {
-    flex-direction: column;
-    align-items: center;
     width: 90%;
     max-width: 1200px;
 
-    input[type="range"] {
-        width: 150px;
+    #top-map-bar {
+        width: 100%;
+        display: flex;
+        gap: 5px;
     }
-}
 
+    svg#templateMap {
+        background-color: var(--svg-ocean);
 
-#top-map-bar {
-    width: 100%;
-    display: flex;
-    gap: 5px;
-}
+        path {
+            fill: var(--svg-land-enabled);
+            stroke-width: 0.05%;
+            stroke: black;
+        }
+        g g path:hover {
+            fill: var(--svg-land-enabled-hover);
+        }
 
-#templateMap {
-    background-color: var(--svg-ocean);
+        g g path.enabled {
+            fill: var(--svg-selected);
+        }
+        g g path.enabled:hover {
+            fill: var(--svg-selected-hover);
+        }
+
+        g g path.disabled {
+            fill: var(--svg-land-disabled);
+            stroke-width: 0.05%;
+        }
+        g g path.disabled:hover {
+            fill: var(--svg-land-disabled-hover);
+        }
+
+        g g path.outside {
+            fill: var(--svg-land-outside);
+            stroke-width: 0.05%;
+        }
+        g g path.outside:hover {
+            fill: var(--svg-land-outside-hover);
+        }
+
+        &.zoom-1 path { stroke-width: 0.25px; }
+        &.zoom-2 path { stroke-width: 0.20px; }
+        &.zoom-3 path { stroke-width: 0.16px; }
+        &.zoom-4 path { stroke-width: 0.13px; }
+        &.zoom-5 path { stroke-width: 0.10px; }
+
+        #map-outline {
+            fill: none;
+            stroke: rgba(255, 0, 0, 0.5);
+            stroke-width: 0.25%;
+        }
+    }
 }
 
 #selected-list {
@@ -142,7 +145,6 @@ svg.zoom-5 path { stroke-width: 0.10px; }
     flex-direction: column;
     align-items: center;
     gap: 0;
-    margin-bottom: 50px;
 
     h5 {
         color: var(--green-4);
@@ -153,12 +155,6 @@ svg.zoom-5 path { stroke-width: 0.10px; }
         flex-direction: row;
         justify-content: center;
     }
-}
-
-.icon-selected {
-    background-image: url("../images/check.png");
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
 }
 
 #loading-screen {
