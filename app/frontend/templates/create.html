@@ -45,10 +45,12 @@
                     <a href="../" class="btn-grey">Cancel</a>
                 </nav>
             </form>
-            <div id="modification-buttons-panel" class="form-1 flex-col gap-5">
-                <button type="button" id="select-regions-btn" class="btn-grey hover-fade">Select Regions</button>
-                <button type="button" id="move-regions-btn" class="btn-grey hover-fade">Move Regions</button>
-                <button type="button" id="set-region-type-btn" class="btn-grey hover-fade">Set Region Type</button>
+            <div class="flex-col-center gap-5">
+                <div id="modification-buttons-panel" class="form-1 flex-col gap-5">
+                    <button type="button" id="select-regions-btn" class="btn-grey hover-fade">Select Regions</button>
+                    <button type="button" id="move-regions-btn" class="btn-grey hover-fade">Move Regions</button>
+                    <button type="button" id="set-region-type-btn" class="btn-grey hover-fade">Set Region Type</button>
+                </div>
                 <aside id="state-buttons-panel" class="flex-row gap-5">
                     <button type="button" id="deselect-btn" class="btn-icon"><aside>Deselect</aside></button>
                     <button type="button" id="enabled-btn" class="btn-icon icon-selected"><aside>Enable</aside></button>
@@ -56,6 +58,7 @@
                     <button type="button" id="outside-btn" class="btn-icon"><aside>Outside</aside></button>
                 </aside>
             </div>
+            
         </section>
 
         <div hidden id="map-container" class="flex-col-center">

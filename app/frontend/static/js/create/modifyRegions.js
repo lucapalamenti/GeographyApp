@@ -1,6 +1,7 @@
-import { modificationButtonsPanel, selectRegionsBtn, moveRegionsBtn } from "./documentElements-create.js";
+import { stateButtonsPanel, modificationButtonsPanel, selectRegionsBtn, moveRegionsBtn, setRegionTypeBtn } from "./documentElements-create.js";
 
 let selecting = false;
+let setting = false;
 let selectedRegions = [];
 
 modificationButtonsPanel.addEventListener('click', e => {
@@ -14,8 +15,18 @@ modificationButtonsPanel.addEventListener('click', e => {
 
 selectRegionsBtn.addEventListener('click', e => {
     selecting = true;
+    setting = false;
+    stateButtonsPanel.style.visibility = "hidden";
 });
 
 moveRegionsBtn.addEventListener('click', e => {
     selecting = false;
+    setting = false;
+    stateButtonsPanel.style.visibility = "hidden";
+});
+
+setRegionTypeBtn.addEventListener('click', e => {
+    selecting = false;
+    setting = true;
+    stateButtonsPanel.style.visibility = "visible";
 });

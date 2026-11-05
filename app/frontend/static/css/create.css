@@ -8,75 +8,73 @@ main {
     padding: 10px;
 
     button.selected {
-        border: white;
+        border: 3px solid white;
         color: white;
     }
+}
 
-    #state-buttons-panel {
-        position: absolute;
-        transform: translate( 0, calc() );
-        display: none;
+#state-buttons-panel {
+    visibility: hidden;
 
-        button {
-            position: relative;
+    button {
+        position: relative;
 
-            &:hover aside {
-                position: absolute;
-                top: 0;
-                left: -100%;
-                transform: translate(calc(-100% + 15px), -2px);
-                display: block;
-                background-color: var(--green-1);
-                border: 3px solid var(--green-2);
-                border-radius: 5px;
-                padding: 1px;
-                padding-right: 5px;
-                padding-left: 5px;
-            }
-
-            /* For tooltips */
-            aside {
-                display: none;
-            }
+        &:hover aside {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            transform: translate(calc(-100% + 15px), -2px);
+            display: block;
+            background-color: var(--green-1);
+            border: 3px solid var(--green-2);
+            border-radius: 5px;
+            padding: 1px;
+            padding-right: 5px;
+            padding-left: 5px;
         }
 
-        #deselect-btn {
-            background-color: var(--svg-land-enabled);
-
-            &:hover {
-                background-color: var(--svg-land-enabled-hover);
-            }
+        /* For tooltips */
+        aside {
+            display: none;
         }
+    }
 
-        #enabled-btn {
-            background-color: var(--svg-selected);
-            
-            &:hover {
-                background-color: var(--svg-selected-hover);
-            }
+    #deselect-btn {
+        background-color: var(--svg-land-enabled);
+
+        &:hover {
+            background-color: var(--svg-land-enabled-hover);
         }
+    }
 
-        #disabled-btn {
-            background-color: var(--svg-land-disabled);
-
-            &:hover {
-                background-color: var(--svg-land-disabled-hover);
-            }
+    #enabled-btn {
+        background-color: var(--svg-selected);
+        
+        &:hover {
+            background-color: var(--svg-selected-hover);
         }
+    }
 
-        #outside-btn {
-            background-color: var(--svg-land-outside);
+    #disabled-btn {
+        background-color: var(--svg-land-disabled);
 
-            &:hover {
-                background-color: var(--svg-land-outside-hover);
-            }
+        &:hover {
+            background-color: var(--svg-land-disabled-hover);
         }
+    }
 
-        .icon-selected {
-            background-image: url("../images/check.png");
-            background-size: 100% 100%;
-            background-repeat: no-repeat;
+    #outside-btn {
+        background-color: var(--svg-land-outside);
+
+        &:hover {
+            background-color: var(--svg-land-outside-hover);
         }
+    }
+
+    .icon-selected {
+        background-image: url("../images/check.png");
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
     }
 }
 

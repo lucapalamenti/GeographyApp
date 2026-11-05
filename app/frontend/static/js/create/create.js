@@ -42,7 +42,6 @@ let regionMap;
 mapTemplate.addEventListener('change', async e => {
     mapOutline.style.display = "none";
     selectedList.style.display = "none";
-    stateButtonsPanel.style.display = "none";
     if ( mapTemplate.value >= 0 ) {
         // Get the chosen map and display it
         map = new MMap( await APIClient.getMapById( mapTemplate.value ) );
@@ -55,7 +54,6 @@ mapTemplate.addEventListener('change', async e => {
                 }
             });
         }
-        stateButtonsPanel.style.display = "flex";
         mapContainer.hidden = false;
     } else {
         mapContainer.hidden = true;
