@@ -23,6 +23,17 @@ export function inputToId( input ) {
 
 /**
  * 
+ * @param {string} className class name to remove
+ * @param {Element} parent parent element to remove className from all its children
+ */
+export function removeClassAll( className, parent ) {
+    for ( const child of parent.querySelectorAll( `.${className}` ) ) {
+        child.classList.remove( className );
+    }
+}
+
+/**
+ * 
  * @param {() => {}} cb 
  * @param {number} delay 
  * @returns {() => {}}
