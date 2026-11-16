@@ -12,13 +12,13 @@
     <link rel="stylesheet" href="css/create.css" />
 
     <script src="js/create/create.js" type="module"></script>
-    <script src="js/create/modifyRegions.js" type="module"></script>
+    <script src="js/create/mapInteraction.js" type="module"></script>
     <script src="js/components/header.js"></script>
 </head>
 <body>
     <app-header></app-header>
     <main class="flex-col-center gap-5">
-        <section class="flex-row-center gap-5">
+        <section class="flex-row-center-start gap-5">
             <form id="create-form" class="flex-col gap-5 form-1">
                 <h3>Create Custom Map</h3>
                 <div class="input-label">
@@ -41,27 +41,27 @@
                 </div>
                 
                 <nav class="flex-row gap-5">
-                    <button type="submit" id="create-button" class="btn-green">Create</button>
-                    <a href="../" class="btn-grey">Cancel</a>
+                    <button type="submit" id="create-button" class="btn-green hover-fade">Create</button>
+                    <a href="../" class="btn-grey hover-fade">Cancel</a>
                 </nav>
             </form>
-            <div class="flex-col-center gap-5">
-                <div id="modification-buttons-panel" class="form-1 flex-col gap-5">
-                    <button type="button" id="select-regions-btn" class="btn-grey hover-fade">Select Regions</button>
-                    <button type="button" id="move-regions-btn" class="btn-grey hover-fade">Move Regions</button>
-                    <button type="button" id="set-region-type-btn" class="btn-grey hover-fade">Set Region Type</button>
+            <div id="modification-buttons-panel" class="flex-col-center gap-5">
+                <div id="main-buttons" class="form-1 flex-col gap-5">
+                    <button type="button" id="reset-selection-btn" class="btn-red hover-fade">Deselect All</button>
+                    <button type="button" value="moving" id="move-regions-btn" class="btn-grey hover-fade">Move Regions</button>
+                    <button type="button" value="setting" id="set-region-type-btn" class="btn-grey hover-fade">Set Region Type</button>
                 </div>
-                <aside id="state-buttons-panel" class="flex-row gap-5">
-                    <button type="button" id="deselect-btn" class="btn-icon"><aside>Deselect</aside></button>
-                    <button type="button" id="enabled-btn" class="btn-icon icon-selected"><aside>Enable</aside></button>
-                    <button type="button" id="disabled-btn" class="btn-icon"><aside>Disable</aside></button>
-                    <button type="button" id="outside-btn" class="btn-icon"><aside>Outside</aside></button>
-                </aside>
+                <div id="set-region-type-panel" class="flex-row gap-5">
+                    <button type="button" id="invisible-btn" class="btn-icon"><p><b>Invisible - </b>Regions won't show up on map</p></button>
+                    <button type="button" id="enabled-btn" class="btn-icon"><p><b>Enabled - </b>Regions the user is prompted for</p></button>
+                    <button type="button" id="disabled-btn" class="btn-icon"><p><b>Disabled - </b>Regions affect map centering, but user is not prompted for them</p></button>
+                    <button type="button" id="outside-btn" class="btn-icon"><p><b>Outside - </b>Regions dont't affect map centering & are not prompted for</p></button>
+                </div>
             </div>
             
         </section>
 
-        <div hidden id="map-container" class="flex-col-center">
+        <section hidden id="map-container" class="flex-col-center">
             <div id="top-map-bar" class="game-bar">
                 <div class="input-label">
                     <input type="checkbox" id="show-outline">
@@ -73,8 +73,9 @@
             <svg viewBox="0 0 1600 900" preserveAspectRatio="none" id="templateMap" class="container-1">
                 <rect id="map-outline"></rect>
             </svg>
-        </div>
+        </section>
         
+        <!-- Displayed after selecting regions -->
         <div id="selected-list" class="form-1"></div>
     </main>
 

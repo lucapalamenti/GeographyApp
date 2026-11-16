@@ -1,23 +1,28 @@
 import APIClient from "../APIClient.js";
 import populateSVG from "../populateSVG.js";
-import {capitalizeFirst, idToInput} from "../util/util.js";
 import createUtil from "./createUtil.js";
-import { zoom } from "../mapManipulations.js";
 
 import MMap from "../models/MMap.js";
 
 import { navBar } from "../documentElements.js";
-import { mapName, mapTemplate, mapColor, mapThumbnail, showOutline, stateButtonsPanel, modificationButtonsPanel, mapContainer, svg, mapOutline, loadingScreen, selectedList, createForm } from "./documentElements-create.js";
-import { SVG_WIDTH, SVG_HEIGHT, SVG_PADDING } from "../variables.js";
+import { mapName, mapTemplate, mapColor, mapThumbnail, showOutline, setRegionTypePanel, modificationButtonsPanel, mapContainer, svg, mapOutline, loadingScreen, selectedList, createForm } from "./documentElements-create.js";
 import ParentChildMap from "../models/ParentChildMap.js";
+import mapInteraction from "./mapInteraction.js";
 
-let regionTypes;
-let selectedType = "enabled";
+/**
+ * @type {Array<string>}
+ */
+globalThis.regionTypes = [];
+/**
+ * @type {"selecting" | "moving" | "setting"}
+ */
+globalThis.option = "selecting";
 
 window.onload = async () => {
     const pageName = document.createElement("P");
     pageName.textContent = "Create";
     navBar.appendChild( pageName );
+    modificationButtonsPanel.style.visibility = "hidden";
 
     await APIClient.getMaps( "template", undefined, false ).then( maps => {
         // Populate "Choose Template" selection panel
@@ -31,10 +36,9 @@ window.onload = async () => {
         console.error( err );
     });
     regionTypes = await APIClient.getMapRegionStates();
-    regionTypes.push("deselect");
+    regionTypes.push("invisible");
 }
 
-let dragging = false;
 let map;
 /** @type {ParentChildMap} */
 let regionMap;
@@ -46,55 +50,20 @@ mapTemplate.addEventListener('change', async e => {
         // Get the chosen map and display it
         map = new MMap( await APIClient.getMapById( mapTemplate.value ) );
         regionMap = await populateSVG( map, svg );
-        svg.appendChild( mapOutline );
-        for ( const path of svg.querySelectorAll('PATH') ) {
-            path.addEventListener('mouseover', mouse => {
-                if ( mouse.button === 0 && dragging ) {
-                    changeRegionType( mouse );
-                }
-            });
+        for ( const path of svg.querySelectorAll("PATH") ) {
+            path.classList.add( "invisible" );
         }
+        svg.appendChild( mapOutline );
+        mapInteraction.addRegionEventListeners();
+        modificationButtonsPanel.style.visibility = "visible";
         mapContainer.hidden = false;
     } else {
+        modificationButtonsPanel.style.visibility = "hidden";
+        setRegionTypePanel.style.display = "none";
         mapContainer.hidden = true;
     }
-});
-
-// Handle user selecting a new region type selector
-stateButtonsPanel.addEventListener('click', e => {
-    if ( e.target.tagName === "BUTTON" ) {
-        // If the user selects a new button
-        if ( !e.target.classList.contains('icon-selected') ) {
-            stateButtonsPanel.querySelector(`#${selectedType}-btn`).classList.remove('icon-selected');
-            selectedType = e.target.id.substring( 0, e.target.id.length - 4 );
-            stateButtonsPanel.querySelector(`#${selectedType}-btn`).classList.add('icon-selected');
-        }
-    }
-});
-
-// ----- <<<<< SVG CONTAINER >>>>> -----
-
-svg.addEventListener('mousedown', mouse => {
-    dragging = true;
-    if ( mouse.button === 0 && mouse.target.tagName === "path" ) {
-        changeRegionType( mouse );
-    }
-});
-// Right click to zoom, Escape to unzoom
-svg.addEventListener( 'contextmenu', e => {
-    e.preventDefault();
-    zoom( e, svg );
-});
-
-document.addEventListener('mouseup', e => {
-    dragging = false;
-    if ( createUtil.getCenteredRegions().length > 0 ) {
-        displaySelection();
-        if ( showOutline.checked ) {
-            createUtil.createOutline();
-            mapOutline.style.display = "block";
-        }
-    }
+    mapInteraction.updateBtnSelection( document.getElementById("set-region-type-btn") );
+    globalThis.option = "selecting";
 });
 
 showOutline.addEventListener('change', e => {
@@ -105,65 +74,6 @@ showOutline.addEventListener('change', e => {
         mapOutline.style.display = "none";
     }
 });
-
-/**
- * Handles changing the state of a region after a user mouses over it by
- * updating its class to reflect the new type
- * @param {MouseEvent} mouse 
- */
-function changeRegionType( mouse ) {
-    const region = mouse.target;
-    // Remove existing class from the region and add the new one
-    region.classList.remove( region.classList[0] );
-    region.classList.add( selectedType );
-}
-
-/**
- * Reset selected regions list and add all currently selected regions
- */
-function displaySelection() {
-    selectedList.innerHTML = "";
-    selectedList.style.display = "flex";
-    for ( const type of regionTypes ) {
-        const sort = {};
-        if ( type != "deselect" ) {
-            const regions = svg.querySelectorAll(`PATH.${type}`);
-            if ( regions.length ) {
-                // Create type header
-                const h3 = document.createElement('H3');
-                h3.textContent = capitalizeFirst( type );
-                selectedList.appendChild(h3);
-                // Add regions to its parent's list
-                regions.forEach( pathElement => {
-                    let parentGroupId = pathElement.parentElement.parentElement.id;
-                    // If this parent doesnt yet have any selected regions, initialize its array
-                    sort[parentGroupId] = sort[parentGroupId] ? sort[parentGroupId].concat( pathElement.id ) : [pathElement.id];
-                });
-                // Iterate through selected regions and desplay them
-                Object.entries( sort ).forEach( ([parentName, regionNames]) => {
-                    // Create header
-                    const h5 = document.createElement('H5');
-                    h5.textContent = `${idToInput( parentName )} (${regionNames.length})`;
-                    selectedList.appendChild( h5 );
-                    // Create div list section
-                    const div = document.createElement('DIV');
-                    div.classList.add("list-1");
-                    selectedList.appendChild( div );
-                    // Add each selected region to the list
-                    for ( const name of regionNames ) {
-                        const p = document.createElement('P');
-                        p.textContent = idToInput( name );
-                        div.appendChild( p );
-                    };
-                });
-            }
-            
-        }
-    }
-    
-    // If no regions are selected, hide container
-    if ( selectedList.innerHTML === "" ) selectedList.style.display = "none";
-}
 
 createForm.addEventListener('submit', async e => {
     e.preventDefault();
@@ -205,13 +115,9 @@ async function createCustomMap( e ) {
         // Update map_id using retrieved Map
         mapData.map_id = returnedMap.map_id
     });
-    
-    // Find min and max X & Y values
-    const minMax = createUtil.findMinMax();
-    let mapMinX = minMax.mapMinX, mapMaxX = minMax.mapMaxX, mapMinY = minMax.mapMinY, mapMaxY = minMax.mapMaxY;
 
     // For each region type
-    for ( const typeName of regionTypes ) {
+    for ( const typeName of regionTypes.filter( t => t !== "invisible" ) ) {
         // For each selected region of this type
         for ( const pathElement of svg.querySelectorAll(`PATH.${typeName}`) ) {
             const parentId = pathElement.parentElement.parentElement.id;
@@ -236,4 +142,3 @@ async function createCustomMap( e ) {
         console.error( err );
     });
 }
-

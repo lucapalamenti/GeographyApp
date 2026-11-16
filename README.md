@@ -76,20 +76,22 @@
 - Handlebars partials to serve partial html and combine into complete html
 - scrollwheel zoom
 - zoom sensitivity
-- When creating a map, "deselecting" a region causes an error when attempting to create the map
 - Use CSS transform tag to move regions like Alaska rather than changing it's coordinates
 - look into changing button panels to Radio buttons
 
 # Changelog
 
-## Ongoing
+## Ongoing - Unreleased
 
 ### Frontend
 - If a thumbnail is not selected for a custom map then a default thumbnail is used
 - Input in Type gamemodes can now contain leading & trailing whitespace
 - "Show region names" button now only shows labels for "enabled" regions
 - Updated zoom/unzoom functionality for map creation to match that of gameplay
-- Unzooming doesnt work properly when the SVG dimensions change while zoomed
+- Rework for map creation UI
+    - New region selection system
+    - Added "Move Regions" capabilities
+    - Moved region type buttons
 
 ### Backend/Technical
 - Polygon database table replaced with region.region_points column of type GEOMETRY
@@ -100,6 +102,8 @@
 
 ### Bug Fixes
 - SQLPolygon class is incorrectly storing the "coordinates" attribute as a 2D array instead of a 3D array
+- When creating a map, "deselecting" a region causes an error when attempting to create the map
+- Unzooming doesnt work properly when the SVG dimensions change while zoomed
 
 ## Beta 1.3.260321
 
@@ -202,4 +206,5 @@ Once all Chunks are sent, a Sentinel Chunk is sent to tell the backend how many 
 - in order to use SVG elements like <polygon> etc, i have to clone them from a template. is there a better way to do this?
 
 - Why does the frontend use ESM modules while the backend uses Common JS modules?
-    - Jest is only compatible with CJS. Is it worth writing tests?
+- Jest is only compatible with CJS. Is it worth writing tests?
+- is there an "addEventListenerAll()"?

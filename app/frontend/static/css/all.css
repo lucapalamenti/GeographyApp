@@ -124,6 +124,12 @@ select {
     justify-content: space-between;
     align-items: start;
 }
+.flex-row-center-start {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: start;
+}
 
 .flex-col {
     display: flex;
@@ -262,13 +268,13 @@ button {
     box-shadow: 2px 4px 6px black;
 }
 
-.btn-hover-effect:hover {
+.btn-hover-effect:hover:not(:disabled) {
     position: relative;
     top: 1px;
     left: 1px;
 }
 
-.hover-fade:hover {
+.hover-fade:hover:not(:disabled) {
     filter: brightness( 0.8 );
     transition: filter 0.25s;
     &:active {
