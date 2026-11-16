@@ -48,7 +48,7 @@
             <div id="modification-buttons-panel" class="flex-col-center gap-5">
                 <div id="main-buttons" class="form-1 flex-col gap-5">
                     <button type="button" id="reset-selection-btn" class="btn-red hover-fade">Deselect All</button>
-                    <button type="button" value="moving" id="move-regions-btn" class="btn-grey hover-fade">Move Regions</button>
+                    <button type="button" value="moving" id="move-regions-btn" class="btn-grey hover-fade">Move/Resize Regions</button>
                     <button type="button" value="setting" id="set-region-type-btn" class="btn-grey hover-fade">Set Region Type</button>
                 </div>
                 <div id="set-region-type-panel" class="flex-row gap-5">
@@ -72,6 +72,9 @@
             
             <svg viewBox="0 0 1600 900" preserveAspectRatio="none" id="templateMap" class="container-1">
                 <rect id="map-outline"></rect>
+                <g id="move-resize-regions-outline">
+
+                </g>
             </svg>
         </section>
         

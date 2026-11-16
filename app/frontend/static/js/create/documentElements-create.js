@@ -14,5 +14,6 @@ export const resetSelectionBtn = document.getElementById('reset-selection-btn');
 export const mapContainer = document.getElementById('map-container');
 export const svg = document.getElementById('templateMap');
 export const mapOutline = document.getElementById('map-outline');
+export const moveResizeRegionsOutline = document.getElementById('move-resize-regions-outline');
 export const loadingScreen = document.getElementById('loading-screen');
 export const selectedList = document.getElementById('selected-list');
