@@ -1,4 +1,4 @@
-import { svg, mapOutline } from "./documentElements-create.js";
+import { svg, mapOutline, moveResizeRegionsOutline } from "./documentElements-create.js";
 import { SVG_WIDTH, SVG_HEIGHT, SVG_PADDING } from "../variables.js";
 
 /**
@@ -29,7 +29,7 @@ const findMinMax = () => {
     };
 };
 
-const createOutline = () => {
+const updateOutline = () => {
     const minMax = findMinMax();
     const minX = minMax.mapMinX, maxX = minMax.mapMaxX, minY = minMax.mapMinY, maxY = minMax.mapMaxY;
     let tempWidth = maxX - minX;
@@ -61,5 +61,5 @@ const createOutline = () => {
 export default {
     getCenteredRegions,
     findMinMax,
-    createOutline
+    updateOutline
 }

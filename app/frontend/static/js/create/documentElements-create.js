@@ -10,6 +10,7 @@ export const modificationButtonsPanel = document.getElementById('modification-bu
 export const mainButtons = document.getElementById('main-buttons');
 export const setRegionTypePanel = document.getElementById('set-region-type-panel');
 export const resetSelectionBtn = document.getElementById('reset-selection-btn');
+export const moveResizeRegionsBtn = document.getElementById('move-resize-regions-btn');
 
 export const mapContainer = document.getElementById('map-container');
 export const svg = document.getElementById('templateMap');

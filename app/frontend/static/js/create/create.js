@@ -44,7 +44,7 @@ let map;
 let regionMap;
 
 mapTemplate.addEventListener('change', async e => {
-    mapOutline.style.display = "none";
+    mapOutline.style.visibility = "hidden";
     selectedList.style.display = "none";
     if ( mapTemplate.value >= 0 ) {
         // Get the chosen map and display it
@@ -68,10 +68,9 @@ mapTemplate.addEventListener('change', async e => {
 
 showOutline.addEventListener('change', e => {
     if ( showOutline.checked && createUtil.getCenteredRegions().length ) {
-        createUtil.createOutline();
-        mapOutline.style.display = "block";
+        mapOutline.style.visibility = "visible";
     } else {
-        mapOutline.style.display = "none";
+        mapOutline.style.visibility = "hidden";
     }
 });
 
