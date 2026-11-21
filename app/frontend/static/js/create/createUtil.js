@@ -5,12 +5,11 @@ import { SVG_WIDTH, SVG_HEIGHT, SVG_PADDING } from "../variables.js";
  * Returns all Path elements that should be centered and visible on screen
  * @returns {Array<SVGPathElement>}
  */
-const getCenteredRegions = () => {
-    return svg.querySelectorAll('PATH:is(.enabled, .disabled)');
-}
+const getCenteredRegions = () => svg.querySelectorAll('PATH:is(.enabled, .disabled)');
 
 /**
  * Find the minium and maximum X & Y values for all "enabled" and "disabled" regions
+ * @returns {import("../typeDefs/Types.js").MapBounds}
  */
 const findMinMax = () => {
     let mapMinX = Infinity, mapMaxX = -Infinity, mapMinY = Infinity, mapMaxY = -Infinity;
