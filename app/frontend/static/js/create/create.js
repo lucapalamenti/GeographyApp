@@ -11,6 +11,10 @@ import mapInteraction from "./mapInteraction.js";
 
 /** @type {Array<string>} */
 globalThis.regionTypes = [];
+/** @type {MMap} */
+let map;
+/** @type {ParentChildMap} */
+let regionMap;
 
 window.onload = async () => {
     const pageName = document.createElement("P");
@@ -32,10 +36,6 @@ window.onload = async () => {
     regionTypes = await APIClient.getMapRegionStates();
     regionTypes.push("invisible");
 }
-
-let map;
-/** @type {ParentChildMap} */
-let regionMap;
 
 mapTemplate.addEventListener('change', async e => {
     mapOutline.style.visibility = "hidden";
@@ -81,7 +81,7 @@ createForm.addEventListener('submit', async e => {
 });
 
 /**
- * 
+ * Handles database queries for map creation
  * @param {SubmitEvent} e 
  */
 async function createMap( e ) {
@@ -109,7 +109,7 @@ async function createMap( e ) {
         mapData.map_id = returnedMap.map_id
     });
 
-    // For each region type
+    // Create MapRegion join data 
     for ( const typeName of regionTypes.filter( t => t !== "invisible" ) ) {
         // For each selected region of this type
         for ( const pathElement of svg.querySelectorAll(`PATH.${typeName}`) ) {
@@ -121,7 +121,7 @@ async function createMap( e ) {
                 mapRegion_region_id : regionMap.getChild( parentId, pathElement.id ),
                 mapRegion_type : typeName
             };
-            await APIClient.createMapRegion( mapRegion ).then( returnedMapRegion => {}).catch( async err => {
+            await APIClient.createMapRegion( mapRegion ).catch( async err => {
                 // await APIClient.deleteMap( mapData.map_id ).then( res => {
                 //     console.log( "Map creation aborted, deleted all data." );
                 //     return;

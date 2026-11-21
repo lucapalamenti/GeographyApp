@@ -8,7 +8,7 @@ import { SVG_WIDTH, SVG_HEIGHT, SVG_PADDING } from "../variables.js";
 const getCenteredRegions = () => svg.querySelectorAll('PATH:is(.enabled, .disabled)');
 
 /**
- * Find the minium and maximum X & Y values for all "enabled" and "disabled" regions
+ * Find the minium and maximum X & Y values for all "centered" regions
  * @returns {import("../typeDefs/Types.js").MapBounds}
  */
 const findMinMax = () => {

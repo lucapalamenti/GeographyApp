@@ -1,3 +1,6 @@
+/**
+ * Defines how a Region is used in a given map
+ */
 export interface MapRegionJoinData {
     mapRegion_map_id: number;
     mapRegion_region_id: number;
