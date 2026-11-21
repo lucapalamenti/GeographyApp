@@ -1,5 +1,6 @@
-import { svg, mapOutline } from "./documentElements-create.js";
+import { svg, mapName, mapTemplate, mapOutline } from "./documentElements-create.js";
 import { SVG_WIDTH, SVG_HEIGHT, SVG_PADDING } from "../variables.js";
+import { removeClassAll } from "../util/util.js";
 
 /**
  * Returns all Path elements that should be centered and visible on screen
@@ -28,15 +29,17 @@ const findMinMax = () => {
     };
 };
 
+/**
+ * Conditions for whether the map is ready to be created
+ * @returns {boolean}
+ */
 function readyToCreate() {
     return mapName.value
         && mapTemplate.value
         && svg.querySelectorAll('PATH.enabled').length > 1;
 }
 
-function deselectAll() {
-    removeClassAll( "selected", svg );
-}
+const deselectAll = () => removeClassAll( "selected", svg );
 
 const updateOutline = () => {
     const minMax = findMinMax();

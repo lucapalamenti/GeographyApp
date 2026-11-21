@@ -5,7 +5,7 @@ import createUtil from "./createUtil.js";
 import MMap from "../models/MMap.js";
 
 import { navBar } from "../documentElements.js";
-import { mapName, mapTemplate, mapColor, mapThumbnail, showOutline, setRegionTypePanel, modificationButtonsPanel, mapContainer, svg, mapOutline, loadingScreen, selectedList, createForm } from "./documentElements-create.js";
+import { mapName, mapTemplate, mapColor, mapThumbnail, setRegionTypePanel, modificationButtonsPanel, mapContainer, svg, mapOutline, loadingScreen, selectedList, createForm } from "./documentElements-create.js";
 import ParentChildMap from "../models/ParentChildMap.js";
 import mapInteraction from "./mapInteraction.js";
 
@@ -34,7 +34,6 @@ window.onload = async () => {
         console.error( err );
     });
     regionTypes = await APIClient.getMapRegionStates();
-    regionTypes.push("invisible");
 }
 
 mapTemplate.addEventListener('change', async e => {
@@ -59,14 +58,6 @@ mapTemplate.addEventListener('change', async e => {
     mapInteraction.updateBtnSelection( document.getElementById("set-region-type-btn") );
 });
 
-showOutline.addEventListener('change', e => {
-    if ( showOutline.checked && createUtil.getCenteredRegions().length ) {
-        mapOutline.style.visibility = "visible";
-    } else {
-        mapOutline.style.visibility = "hidden";
-    }
-});
-
 createForm.addEventListener('submit', async e => {
     e.preventDefault();
     if ( createUtil.readyToCreate() ) {
@@ -85,6 +76,7 @@ createForm.addEventListener('submit', async e => {
  * @param {SubmitEvent} e 
  */
 async function createMap( e ) {
+    // Create thumbnail file
     let thumbnail = "default/Test_Map_Thumbnail.png";
     if ( mapThumbnail.files.length === 1 ) {
         await APIClient.uploadThumbnail( e.target ).then( async res => {
@@ -93,7 +85,8 @@ async function createMap( e ) {
         });
     }
     
-    const mapData = new MMap({
+    // Create Map
+    const mapData = await APIClient.createMap({
         map_id : null,
         map_name : mapName.value,
         map_thumbnail : thumbnail,
@@ -103,35 +96,20 @@ async function createMap( e ) {
         map_is_template : 0,
         map_is_custom : 1
     });
-    // Create Map
-    await APIClient.createMap( mapData ).then( returnedMap => {
-        // Update map_id using retrieved Map
-        mapData.map_id = returnedMap.map_id
-    });
 
-    // Create MapRegion join data 
-    for ( const typeName of regionTypes.filter( t => t !== "invisible" ) ) {
-        // For each selected region of this type
+    // Create MapRegion join data for each region type
+    for ( const typeName of regionTypes ) {
         for ( const pathElement of svg.querySelectorAll(`PATH.${typeName}`) ) {
-            const parentId = pathElement.parentElement.parentElement.id;
             // Create the mapRegion
             /** @type {import('../typeDefs/Types.js').MapRegionJoinData} */
             const mapRegion = {
                 mapRegion_map_id : mapData.map_id,
-                mapRegion_region_id : regionMap.getChild( parentId, pathElement.id ),
+                mapRegion_region_id : regionMap.getChild( pathElement.parentElement.parentElement.id, pathElement.id ),
                 mapRegion_type : typeName
             };
-            await APIClient.createMapRegion( mapRegion ).catch( async err => {
-                // await APIClient.deleteMap( mapData.map_id ).then( res => {
-                //     console.log( "Map creation aborted, deleted all data." );
-                //     return;
-                // });
+            await APIClient.createMapRegion( mapRegion ).catch( err => {
                 console.error( err );
             });
         }
     }
-
-    await APIClient.updateMap( mapData ).catch( err => {
-        console.error( err );
-    });
 }

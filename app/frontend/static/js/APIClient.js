@@ -167,7 +167,7 @@ const createMapRegion = async ( mapRegionJoinData ) => {
 
 /**
  * Retrieves the enum values of mapRegion_state in an array of strings
- * @returns {Array<String>} 
+ * @returns {Promise<Array<string>>} 
  */
 const getMapRegionStates = async () => {
     return await clientHandler( HTTPClient.get, `${BASE_API_PATH}/mapRegion/states` );
@@ -191,7 +191,7 @@ const deleteRegion_range = async ( startId, endId ) => {
  * @param {"all" | "default" | "custom" | "template"} filter 
  * @param {"id" | "name"} sort
  * @param {boolean} DESC order results asending if false, descending if true 
- * @returns {Array<MMap>}
+ * @returns {Promise<Array<MMap>>}
  */
 const getMaps = async ( filter, sort, DESC ) => {
     return await clientHandler( HTTPClient.get, `${BASE_API_PATH}/maps/type/${filter}/sort/${sort}/desc/${DESC}` );
