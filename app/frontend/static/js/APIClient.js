@@ -158,7 +158,7 @@ const setRegionParentId_range = async ( startId, endId, region_parent_id ) => {
 
 /**
  * 
- * @param {import('../typeDefs/MapRegionJoinData.js').MapRegionJoinData} mapRegionJoinData 
+ * @param {import('../typeDefs/Types.js').MapRegionJoinData} mapRegionJoinData 
  * @returns 
  */
 const createMapRegion = async ( mapRegionJoinData ) => {

@@ -121,7 +121,7 @@ async function createCustomMap( e ) {
         for ( const pathElement of svg.querySelectorAll(`PATH.${typeName}`) ) {
             const parentId = pathElement.parentElement.parentElement.id;
             // Create the mapRegion
-            /** @type {import('../typeDefs/MapRegionJoinData.js').MapRegionJoinData} */
+            /** @type {import('../typeDefs/Types.js').MapRegionJoinData} */
             const mapRegion = {
                 mapRegion_map_id : mapData.map_id,
                 mapRegion_region_id : regionMap.getChild( parentId, pathElement.id ),
