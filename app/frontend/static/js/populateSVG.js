@@ -48,26 +48,26 @@ export default async function populateSVG( map, svg ) {
     let startX = minX;
     let startY = minY;
     let svgWidth, svgHeight;
-    // // Width ratio is less than height ratio
-    // if ( mapWidth / SVG_WIDTH < mapHeight / SVG_HEIGHT ) {
-    //     svgWidth = mapHeight * SVG_WIDTH / SVG_HEIGHT;
-    //     svgHeight = mapHeight;
-    //     startX -= ( svgWidth - mapWidth ) / 2;
-    // }
-    // // Height ratio is less than width ratio
-    // else if ( mapHeight / SVG_HEIGHT < mapWidth / SVG_WIDTH ) {
-    //     svgWidth = mapWidth;
-    //     svgHeight = mapWidth * SVG_HEIGHT / SVG_WIDTH;
-    //     startY -= ( svgHeight - mapHeight ) / 2;
-    // }
+    // Width ratio is less than height ratio
+    if ( mapWidth / SVG_WIDTH < mapHeight / SVG_HEIGHT ) {
+        svgWidth = mapHeight * SVG_WIDTH / SVG_HEIGHT;
+        svgHeight = mapHeight;
+        startX -= ( svgWidth - mapWidth ) / 2;
+    }
+    // Height ratio is less than width ratio
+    else if ( mapHeight / SVG_HEIGHT < mapWidth / SVG_WIDTH ) {
+        svgWidth = mapWidth;
+        svgHeight = mapWidth * SVG_HEIGHT / SVG_WIDTH;
+        startY -= ( svgHeight - mapHeight ) / 2;
+    }
 
-    // startX -= mapWidth * SVG_PADDING / 2;
-    // startY -= mapHeight * SVG_PADDING / 2;
-    // svgWidth *= 1 + SVG_PADDING;
-    // svgHeight *= 1 + SVG_PADDING;
+    startX -= mapWidth * SVG_PADDING / 2;
+    startY -= mapHeight * SVG_PADDING / 2;
+    svgWidth *= 1 + SVG_PADDING;
+    svgHeight *= 1 + SVG_PADDING;
 
-    // svg.setAttribute( 'viewBox', `${startX} ${startY} ${svgWidth} ${svgHeight}` );
-    svg.setAttribute( 'viewBox', `${startX} ${startY} ${mapWidth} ${mapHeight}` );
+    svg.setAttribute( 'viewBox', `${startX} ${startY} ${svgWidth} ${svgHeight}` );
+    // svg.setAttribute( 'viewBox', `${startX} ${startY} ${mapWidth} ${mapHeight}` );
 
     const regionMap = new ParentChildMap( mapData.parentRegions[0].region_type );
     for ( const mapRegion of mapData.mapRegions ) {
