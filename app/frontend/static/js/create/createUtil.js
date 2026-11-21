@@ -28,6 +28,16 @@ const findMinMax = () => {
     };
 };
 
+function readyToCreate() {
+    return mapName.value
+        && mapTemplate.value
+        && svg.querySelectorAll('PATH.enabled').length > 1;
+}
+
+function deselectAll() {
+    removeClassAll( "selected", svg );
+}
+
 const updateOutline = () => {
     const minMax = findMinMax();
     const minX = minMax.mapMinX, maxX = minMax.mapMaxX, minY = minMax.mapMinY, maxY = minMax.mapMaxY;
@@ -60,5 +70,7 @@ const updateOutline = () => {
 export default {
     getCenteredRegions,
     findMinMax,
+    readyToCreate,
+    deselectAll,
     updateOutline
 }

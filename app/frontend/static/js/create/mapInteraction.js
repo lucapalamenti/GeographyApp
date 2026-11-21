@@ -12,7 +12,7 @@ mainButtons.addEventListener('click', e => {
     }
 });
 
-resetSelectionBtn.onclick = () => { deselectAll(); };
+resetSelectionBtn.onclick = () => { createUtil.deselectAll(); };
 
 // Handle user selecting a new region type selector
 setRegionTypePanel.addEventListener('click', e => {
@@ -25,7 +25,7 @@ setRegionTypePanel.addEventListener('click', e => {
             }
             createUtil.updateOutline();
             updateSelectionList();
-            deselectAll();
+            createUtil.deselectAll();
         }
     }
 });
@@ -112,7 +112,6 @@ function updateBtnSelection( btn ) {
     const selected = mainButtons.querySelector('.selected');
     if ( selected ) selected.classList.remove("selected");
     btn.classList.add("selected");
-    globalThis.option = btn.value;
     setRegionTypePanel.style.visibility = "hidden";
     switch ( btn.value ) {
         case "moving":
@@ -133,10 +132,6 @@ function addRegionEventListeners() {
             }
         });
     }
-}
-
-function deselectAll() {
-    removeClassAll( "selected", svg );
 }
 
 export default {

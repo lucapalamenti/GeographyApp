@@ -9,14 +9,8 @@ import { mapName, mapTemplate, mapColor, mapThumbnail, showOutline, setRegionTyp
 import ParentChildMap from "../models/ParentChildMap.js";
 import mapInteraction from "./mapInteraction.js";
 
-/**
- * @type {Array<string>}
- */
+/** @type {Array<string>} */
 globalThis.regionTypes = [];
-/**
- * @type {"selecting" | "moving" | "setting"}
- */
-globalThis.option = "selecting";
 
 window.onload = async () => {
     const pageName = document.createElement("P");
@@ -63,7 +57,6 @@ mapTemplate.addEventListener('change', async e => {
         mapContainer.hidden = true;
     }
     mapInteraction.updateBtnSelection( document.getElementById("set-region-type-btn") );
-    globalThis.option = "selecting";
 });
 
 showOutline.addEventListener('change', e => {
@@ -76,11 +69,12 @@ showOutline.addEventListener('change', e => {
 
 createForm.addEventListener('submit', async e => {
     e.preventDefault();
-    if ( mapName.value && mapTemplate.value && svg.querySelectorAll('PATH.enabled').length > 1 ) {
+    if ( createUtil.readyToCreate() ) {
         loadingScreen.style.display = "flex";
-        await createCustomMap( e ).then( map => {
+        await createMap( e ).then( () => {
             document.location = "../";
         }).catch( err => {
+            loadingScreen.style.display = "none";
             console.error( err );
         });
     }
@@ -90,7 +84,7 @@ createForm.addEventListener('submit', async e => {
  * 
  * @param {SubmitEvent} e 
  */
-async function createCustomMap( e ) {
+async function createMap( e ) {
     let thumbnail = "default/Test_Map_Thumbnail.png";
     if ( mapThumbnail.files.length === 1 ) {
         await APIClient.uploadThumbnail( e.target ).then( async res => {
@@ -103,9 +97,9 @@ async function createCustomMap( e ) {
         map_id : null,
         map_name : mapName.value,
         map_thumbnail : thumbnail,
-        map_primary_color_R : parseInt( mapColor.value.substr(1,2), 16 ),
-        map_primary_color_G : parseInt( mapColor.value.substr(3,2), 16 ),
-        map_primary_color_B : parseInt( mapColor.value.substr(5,2), 16 ),
+        map_primary_color_R : parseInt( mapColor.value.substring(1,2), 16 ),
+        map_primary_color_G : parseInt( mapColor.value.substring(3,2), 16 ),
+        map_primary_color_B : parseInt( mapColor.value.substring(5,2), 16 ),
         map_is_template : 0,
         map_is_custom : 1
     });

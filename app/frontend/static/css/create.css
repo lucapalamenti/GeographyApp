@@ -142,7 +142,7 @@ main {
             visibility: visible;
 
             rect.corner {
-
+                fill: red;
             }
             rect#resize-top-left {
                 
