@@ -132,9 +132,36 @@ main {
         &.zoom-5 path { stroke-width: 0.10px; }
 
         #map-outline {
+            visibility: hidden;
             fill: none;
             stroke: rgba(255, 0, 0, 0.5);
             stroke-width: 0.25%;
+        }
+
+        g#move-resize-regions-outline {
+            visibility: visible;
+
+            rect.corner {
+
+            }
+            rect#resize-top-left {
+                
+            }
+            rect#resize-top-right {
+                
+            }
+            rect#resize-bottom-left {
+                
+            }
+            rect#resize-bottom-right {
+                
+            }
+
+            rect#resize-border {
+                stroke: red;
+                stroke-width: 2px;
+                /* stroke-dasharray: "5,5"; */
+            }
         }
     }
 }

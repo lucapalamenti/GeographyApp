@@ -18,7 +18,7 @@
 <body>
     <app-header></app-header>
     <main class="flex-col-center gap-5">
-        <section class="flex-row-center-start gap-5">
+        <div class="flex-row-center-start gap-5">
             <form id="create-form" class="flex-col gap-5 form-1">
                 <h3>Create Custom Map</h3>
                 <div class="input-label">
@@ -48,7 +48,7 @@
             <div id="modification-buttons-panel" class="flex-col-center gap-5">
                 <div id="main-buttons" class="form-1 flex-col gap-5">
                     <button type="button" id="reset-selection-btn" class="btn-red hover-fade">Deselect All</button>
-                    <button type="button" value="moving" id="move-regions-btn" class="btn-grey hover-fade">Move/Resize Regions</button>
+                    <button type="button" value="moving" id="move-resize-regions-btn" class="btn-grey hover-fade">Move/Resize Regions</button>
                     <button type="button" value="setting" id="set-region-type-btn" class="btn-grey hover-fade">Set Region Type</button>
                 </div>
                 <div id="set-region-type-panel" class="flex-row gap-5">
@@ -58,10 +58,10 @@
                     <button type="button" id="outside-btn" class="btn-icon"><p><b>Outside - </b>Regions dont't affect map centering & are not prompted for</p></button>
                 </div>
             </div>
-            
-        </section>
+        </div>
 
-        <section hidden id="map-container" class="flex-col-center">
+        <!-- Map Panel and border elements -->
+        <div hidden id="map-container" class="flex-col-center">
             <div id="top-map-bar" class="game-bar">
                 <div class="input-label">
                     <input type="checkbox" id="show-outline">
@@ -72,11 +72,17 @@
             
             <svg viewBox="0 0 1600 900" preserveAspectRatio="none" id="templateMap" class="container-1">
                 <rect id="map-outline"></rect>
-                <g id="move-resize-regions-outline">
-
+                <g id="transform-regions-outline">
+                    <!-- 4 Square Corners -->
+                    <rect id="resize-top-left" class="corner"></rect>
+                    <rect id="resize-top-right" class="corner"></rect>
+                    <rect id="resize-bottom-left" class="corner"></rect>
+                    <rect id="resize-bottom-right" class="corner"></rect>
+                    <!-- Dashed Border -->
+                    <rect id="resize-border"></rect>
                 </g>
             </svg>
-        </section>
+        </div>
         
         <!-- Displayed after selecting regions -->
         <div id="selected-list" class="form-1"></div>
