@@ -1,4 +1,4 @@
-import { svg, mapOutline, moveResizeRegionsOutline } from "./documentElements-create.js";
+import { svg, mapOutline } from "./documentElements-create.js";
 import { SVG_WIDTH, SVG_HEIGHT, SVG_PADDING } from "../variables.js";
 
 /**

@@ -1,6 +1,6 @@
 import createUtil from "./createUtil.js";
 
-import { showOutline, setRegionTypePanel, resetSelectionBtn, mapOutline, svg, selectedList, mainButtons } from "./documentElements-create.js";
+import { showOutline, setRegionTypePanel, mainButtons, resetSelectionBtn, mapOutline, svg, selectedList } from "./documentElements-create.js";
 import { zoom } from "../mapManipulations.js";
 import { capitalizeFirst, idToInput, removeClassAll } from "../util/util.js";
 
@@ -23,12 +23,14 @@ setRegionTypePanel.addEventListener('click', e => {
                 path.classList.remove( ...globalThis.regionTypes );
                 path.classList.add( e.target.id.substring( 0, e.target.id.length - 4 ) );
             }
-            createUtil.createOutline();
+            createUtil.updateOutline();
             updateSelectionList();
             deselectAll();
         }
     }
 });
+
+
 
 svg.addEventListener('mousedown', mouse => {
     dragging = true;
@@ -50,7 +52,7 @@ document.addEventListener('mouseup', e => {
         if ( createUtil.getCenteredRegions().length > 0 ) {
             updateSelectionList();
             if ( showOutline.checked ) {
-                createUtil.createOutline();
+                createUtil.updateOutline();
                 mapOutline.style.display = "block";
             }
         }
